@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <jnlp spec="1.0+"
+ codebase="http://localhost/~luzs/jnlp/"  href="plugins.jnlp">
+ <information>
+<title>modnlp/teccli plugins</title>
+<vendor>TCD</vendor>
+ </information>
+<resources>
+<jar href="wordleconc.jar" download="eager"/>
+<jar href="mosaic.jar" download="eager"/> 
+</resources>
+ <component-desc/>
+</jnlp> 
