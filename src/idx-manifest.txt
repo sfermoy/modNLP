@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Created-By: 1.3.0 (Sun Microsystems Inc.)
+Class-Path: . je.jar antlr-2.7.6.jar commons-pool-1.2.jar exist-modules.jar exist.jar jgroups-all.jar log4j-1.2.14.jar resolver.jar sunxacml.jar xmldb.jar xmlrpc-1.2-patched.jar
+Main-Class: modnlp.idx.IndexManager

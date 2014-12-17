@@ -1,0 +1,43 @@
+#modnlp.idx.IndexManager's properties (tailored to LATIN corpus
+# corelat indexing) This illustrates a setup where header information
+# is included in the text file, not stored separately as in TEC or
+# ECPC.
+#
+# elements to be ignored by the text indexer
+tokeniser.ignore.elements=(omit|ignore)
+## should punctuation count as tokens?
+index.punctuation=false
+## index metadata for subcorpus selection (header files)?
+index.headers=true
+## which element should be indexed (i.e. text within elements
+## specified here will be indexed and can form subcorpora if xquery
+## restrictions are applied. Format: a regexp grouping 
+subcorpusindexer.element=(body)
+## which attribute from the element above will we use to uniquely
+## identify the text segments. Attribute mus be of xml type ID
+subcorpusindexer.attribute=id
+## specify 'root' xml element, relative to which the xqueries will be
+## formulated
+xquery.root.element.path=//corelat
+## the element to be returned by xquery to select which indexed texts
+## should be included in the inverted-index query
+xquery.return.attribute.path=body/@id
+## specs and paths all relative to xquery.root.element.path
+## form: description_1;path_1;description_2;path_2,...
+xquery.attribute.chooser.specs=Library;header/library;Genre;header/genre;Phase;header/latin;Time;header/time;Place;header/place;Author;header/author;Gender;header/gender;Title;header/title
+header.extension=xml
+## the maximum number of subcorpus constraint query results to be stored (by HeaderDBManager)
+xquery.max.cache.size=23
+file.encoding=UTF8
+## element relative to which the xquery descriptions below will be generated
+xquery.root.filedescription.path=/corelat/header
+## xquery expression that returns a (human-readable) file description (for the corpus description plugin); 
+## $s stands for the xquery.root.filedescription.path
+## NB: Because of the way the CorpusDescriptionBrowser is setup, we need this property to be
+## FILENAME (or something similar <sep/> SUBCORPUS <sep/> TEXTUAL DESCRIPTION 
+xquery.file.description.return={data($s/genre)}<sep/>{data($s/library)}<sep/>{data($s/author)}, {data($s/title)}, {data($s/place)}, {data($s/time)}
+## the language to be indexed (determines the choice of
+## tokeniser). Currently supported languages are LATIN (EN) and JP; EN
+## should make reasonably educated guesses for all European Languages
+## (including some non-Latin scripted ones, such as Greek).
+language=EN

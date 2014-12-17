@@ -1,0 +1,8 @@
+To compile the modnlp package as a whole, type
+
+  % make build
+
+Individual modules (modules-idx, modules-tc, ...) can be compiled from
+their respective directories (idx, tc, ...)
+
+See also the README file

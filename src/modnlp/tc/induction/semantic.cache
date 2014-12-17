@@ -1,0 +1,15 @@
+;; Object induction/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "induction/"
+  :tables (list 
+   (semanticdb-table "MakeProbabilityModel.java"
+    :major-mode 'jde-mode
+    :tags '(("tc.induction" package nil nil [1 22]) ("tc.dstruct.*" include nil (dependency-file none) [23 43]) ("tc.parser.*" include nil (dependency-file none) [44 63]) ("tc.tsr.*" include nil (dependency-file none) [64 80]) ("tc.util.*" include nil (dependency-file none) [81 98]) ("java.io.*" include nil (dependency-file none) [99 116]) ("java.util.Enumeration" include nil (dependency-file none) [117 146]) ("java.util.Set" include nil (dependency-file none) [147 168]) ("java.util.Arrays" include nil (dependency-file none) [169 193]) ("MakeProbabilityModel" type (:typemodifiers ("public") :members (("clist" variable (:typemodifiers ("private" "static") :type "CorpusList") (reparse-symbol class_member_declaration) [1697 1736]) ("swlist" variable (:typemodifiers ("private" "static") :type "StopWordList") (reparse-symbol class_member_declaration) [1739 1781]) ("aggressiveness" variable (:typemodifiers ("private" "static") :type "int") (reparse-symbol class_member_declaration) [1784 1821]) ("MakeProbabilityModel" function (:constructor-flag t :typemodifiers ("public") :arguments (("clist" variable (:type "String") (reparse-symbol formal_parameters) [1910 1922]) ("swlist" variable (:type "String") (reparse-symbol formal_parameters) [1924 1937]) ("aggr" variable (:type "String") (reparse-symbol formal_parameters) [1939 1950]))) (reparse-symbol class_member_declaration) [1881 2124]) ("parse" function (:throws ("Exception") :typemodifiers ("public") :arguments (("filename" variable (:type "String") (reparse-symbol formal_parameters) [2459 2474]) ("plugin" variable (:type "String") (reparse-symbol formal_parameters) [2476 2489])) :type "ParsedCorpus") (reparse-symbol class_member_declaration) [2432 2728]) ("computeScores" function (:typemodifiers ("private") :arguments (("tf" variable (:type "TermFilter") (reparse-symbol formal_parameters) [2763 2776]) ("methodOrCat" variable (:type "String") (reparse-symbol formal_parameters) [2778 2796])) :type "void") (reparse-symbol class_member_declaration) [2735 3187]) ("filter" function (:throws ("Exception") :typemodifiers ("public") :arguments (("method" variable (:type "String") (reparse-symbol formal_parameters) [3210 3223]) ("pm" variable (:type "ProbabilityModel") (reparse-symbol formal_parameters) [3225 3244]) ("categ" variable (:type "String") (reparse-symbol formal_parameters) [3246 3258])) :type "Set") (reparse-symbol class_member_declaration) [3192 4061]) ("main" function (:typemodifiers ("public" "static") :arguments (("args" variable (:type "String[]") (reparse-symbol formal_parameters) [4090 4103])) :type "void") (reparse-symbol class_member_declaration) [4066 6820])) :type "class") nil [1659 6822]))
+    :file "MakeProbabilityModel.java"
+    :pointmax 8118
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre1"
+  :semanticdb-version "2.0pre1"
+  )

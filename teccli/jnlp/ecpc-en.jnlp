@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- JNLP File for TEC Browser -->
+<jnlp
+  spec="1.0+"
+  codebase="http://ecpc2.xtrad.uji.es/concECPC/en/"
+  href="ecpc-en.jnlp">
+  <information>
+    <title>ConcECPC Browser</title>
+    <vendor>UJI, Spain</vendor>
+    <homepage href="http://modnlp.berlios.de/tec-tools.html"/>
+    <description>ECPC European Parliamentary Comparable and Parallel Corpora, English version</description>
+    <description kind="short">ConcECPC Concordancing Tool</description>
+    <icon href="modnlp-small.jpg"/>
+    <offline-allowed/>
+  </information>
+  <security>
+      <all-permissions/>
+  </security>
+  <resources>
+    <property name="tec.client.runmode" value="jnlp"/>
+    <j2se version="1.5+" initial-heap-size="256m" max-heap-size="528m"/>
+    <jar href="teccli.jar" download="eager"/>
+    <jar href="idx.jar" download="eager"/>
+    <!-- other support libs needed by je.jar and exist.jar -->
+    <!-- Databases: je.jar (Berkeley) and exist.jar (XML native, XQuery support) -->
+    <jar href="je.jar" download="lazy"/>
+    <jar href="exist.jar" download="lazy"/>
+    <jar href="exist-modules.jar" download="lazy"/>
+    <!-- a tiny XML parser -->
+    <jar href="MinML2.jar" download="lazy"/>
+    <!-- other support libs needed by je.jar and exist.jar -->
+    <jar href="xmldb.jar" download="lazy"/>
+    <jar href="antlr-2.7.6.jar" download="lazy"/>
+    <jar href="commons-pool-1.2.jar" download="lazy"/>
+    <jar href="jgroups-all.jar" download="lazy"/>
+    <jar href="log4j-1.2.14.jar" download="lazy"/>
+    <jar href="resolver.jar" download="lazy"/>
+    <jar href="sunxacml.jar" download="lazy"/>
+    <jar href="prefuse.jar" download="lazy"/>
+    <jar href="xmlrpc-1.2-patched.jar" download="lazy"/>
+<!--
+    <extension name="3rd party libs" href="3rdparty.jnlp"/>  
+-->
+  </resources>
+  <application-desc main-class="modnlp.tec.client.Browser">
+    <argument>ecpc2.xtrad.uji.es:1240</argument> 
+  </application-desc>  
+</jnlp>

@@ -1,0 +1,34 @@
+* So much to do I don't even know where to start. Here's a
+  couple of things that come to mind:
+
+BUG FIXES:
+
+* Proper treatment of error conditions for new corpus selection (taken
+   some initial steps, e.g. handling of ConnectException in
+   GraphicalSubcorpusSelector and Browser.setRemoteCorpus() but lots
+   more remain to be done)
+
+ENHANCEMENTS:
+
+* implement merging of corpus sources (i.e. the ability to spawn
+  several ConcordanceThread's and collate the downloads into a single
+  ConcArray for display by a single ListDisplay
+
+* Implement visualisation and direct manipulation plugins (for
+  subcorpus selection etc)
+
+
+DONE:
+
+* Re-activate plugins; implement JE-based subcorpus selection to
+  replace SQL server on tec-server
+
+* separate GUI from Browser (move GUI into gui/ package)
+
+* re-implement ConcArray based on a ('growable') collection class
+  rather than array
+
+* fix scrollbars in ListDisplay (draw list renderers on a
+  ScrollablePane) 
+
+

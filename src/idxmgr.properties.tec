@@ -1,0 +1,38 @@
+#modnlp.idx.IndexManager's properties (tailored to TEC indexing)
+#Wed May 16 15:29:14 IST 2007
+tokeniser.ignore.elements=(omit)
+## should punctuation count as tokens?
+index.punctuation=false
+## index metadata for subcorpus selection (header files)?
+index.headers=true
+## which element should be indexed (i.e. text within elements
+## specified here will be indexed and can form subcorpora if xquery
+## restrictions are applied. Format: a regexp grouping 
+subcorpusindexer.element=(section)
+## which attribute from the element above will we use to uniquely
+## identify the text segments. Attribute must be of xml type ID
+subcorpusindexer.attribute=id
+## specify 'root' xml element, relative to which the xqueries will be
+## formulated
+xquery.root.element.path=/techeader/section
+## the element to be returned by xquery to select which indexed texts
+## should be included in the inverted-index query
+xquery.return.attribute.path=/@id
+## specs and paths all relative to xquery.root.element.path
+## form: description_1;path_1;description_2;path_2,...
+xquery.attribute.chooser.specs=File name;../title/@filename;Subcorpus;../title/@subcorpusid;Source;sourceText/language;Pub. date;sourceText/date/@year;Author;author/name;Author's gender;author/@gender;Author's nationality;author/nationality/@description;Translator;translator/name;Translator's gender;translator/@gender;Translator's nationality;translator/nationality/@description
+## extension of the header files (e.g. .hed, .xml etc)
+header.extension=hed
+## the maximum number of subcorpus constraint query results to be stored (by HeaderDBManager)
+xquery.max.cache.size=23
+## root of the file description path
+xquery.root.filedescription.path=/techeader
+## xquery expression that returns a (human-readable) file description 
+xquery.file.description.return={data($s/title/@filename)}<sep/>{data($s/title/@subcorpusid)}<sep/>{data($s/title/collection)} {if ($s/title/editor!="") then ", editor: " else ""} { data($s/title/editor)}
+## the encoding for characters in files to be indexed. Make sure your text files match this
+file.encoding=UTF8
+## the language to be indexed (determines the choice of
+## tokeniser). Currently supported languages are LATIN (EN) and JP; EN
+## should make reasonably educated guesses for all European Languages
+## (including some non-Latin scripted ones, such as Greek).
+language=EN

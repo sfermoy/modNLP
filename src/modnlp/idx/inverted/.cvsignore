@@ -1,0 +1,6 @@
+IntegerSet.class
+PositionSet.class
+TokenMap.class
+Tokeniser.class
+TokeniserGNU.class
+TokeniserRegex.class

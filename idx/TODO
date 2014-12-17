@@ -1,0 +1,12 @@
+* [DONE] replace sequential search in the posa loops in matchConcordance() by
+  binary search to make them more efficient: currently linear on the
+  number of tokens in the file (posa.length) when it could be
+  logarithmic.
+
+* Implement preferences pane for modnlp.idx.IndexManager, including
+  settings for local header directory, header's  URL (for external
+  access), tag ignore regexp, tokenisation regexp etc.
+
+* Implement disjunctions in modnlp.idx.query.WordQuery
+  (e.g. coffee|tea); alternatively, implement an option for entering
+  regular expressions directly (e.g. !REGEX:(cofee|tea) ).

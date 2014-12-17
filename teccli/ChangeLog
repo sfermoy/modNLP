@@ -1,0 +1,133 @@
+2012-11-27  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* release 0.7.1: Bug-fixing release: fixed subcorpus selection bug
+	  (added workaround for empty string elements in header files)
+	  (e.g. <name></name>). Added experimental WordleConc plugin as
+	  external package (see plugins/ subdirectory)
+
+2011-05-06  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* release 0.7.0: Added supported for  Japanese; incorporated simple
+	Japanese tokeniser (indexing now fully functional), adapted word
+	splitting for ListDisplay, ListDisplayRenderer and ConcordanceTree
+	etc. Fixed minor bugs in ConcordanceThread.java.
+
+2010-07-05  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* release 0.6.2: Upgraded je.jar to version 4. The new index
+	format yields considerable performance gains and is about 15% more
+	space efficient. The database format changed but the library is
+	backward compatible, so clients and indexer using this version
+	will be able to access databases created with je version 3. The
+	reverse is not true, however. So, dbs created with modnlp-idx >=
+	0.1.6 will not be accessible from modnlp-idx <= 0.1.5. 
+	Added a brief tutorial.
+
+2009-11-09  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* Browser.java, HeaderXMLHandler.java: fixed parsing of XML
+	headers (now displays indented text, without XML tags); fixed
+	retrieval of headers on Windows platforms (usse '/' rather that
+	java.io.File.separator). Version 0.6.1b
+
+2009-04-30  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* idx, teccli, tecser: New release coincinding with the first
+	release of the TEC Corpus (v2). A Corpus description plugin
+	(CorpusDescriptionBrowser.java) has been added, many bugs have
+	been fixed, the client has been made compatible with JNLP,
+	resource files have been created in modnlp/teccli/jnlp.
+
+2008-11-25  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* New release of teccli. Browser has been completely revamped.
+	  Legacy code entirely removed; Re-activated plugins; implemented
+	  JE-based subcorpus selection to replace SQL server on
+	  tec-server; separated GUI from Browser (moved GUI into gui/
+	  package); re-implemented ConcArray based on a
+	  ('growable') collection class rather than array; fixed
+	  scrollbars in ListDisplay (draw list renderers on a
+	  ScrollablePane)
+
+2008-10-03  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* FqListBrowser, Dictionary, FreqTable, etc (release 0.5.4): performance
+	improvements, a few bug fixes. 
+
+2008-07-18  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* FqListBrowser: Added subcorpus-selection sensitivity
+
+2007-09-21  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* GraphicalSubcorpusSelector, MultipleAttributeSelection,
+	AttributeChooser: implemented basic GUI subcorpus selector, fixed
+	bugs, tested on HC and CD corpora. Backward compatibility with old
+	TEC system has been abadoned as of teccli-0.5.2.
+
+2007-06-25  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* modnlp-idx: Incorporated XMLDB subcospus selection
+	functionality (through eXist)
+
+2006-07-20 Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* tec-client (Repository): implemented 'stand-alone' mode,
+	accessing local modnlp.idx.database.Dictionary; TecClient renamed
+	to Browser; de-activated sub-corpus selection plugin
+	
+2003-08-06 Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* tec-client (Repository): added simple frequency list plugin and
+	  splash screen; fixed minor bugs.
+
+2003-06-22 Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* tec-client (Repository): * Both client and server have been
+	revamped. The main changes are:
+
+	o client now requires java 1.3
+	
+	o The query language has been improved: wildcards are back,
+	  sequence queries now work correctly (number of intervening words
+	  now mean just that); (take a look at the browser's new help
+	  function for a description of the syntax)
+
+	o retrieval efficiency (server side) has been improved: the search
+	  engine now chooses the least frequent word to guide the search;
+
+        o Noel's SQL search code (sub-corpus specification) has been
+	  cleaned up and fixed (the browser now responds dynamically to
+	  server-side changes on the metadata by querying the server at
+	  start-up, with the undesirable but unavoidable side-effect of
+	  increasing start-up time);
+
+        o the client interface has been improved; new features include menus
+          and infrastructure for help files;
+    
+        o we've move one step closer to a proper plug-in architecture
+
+2001-10-24 Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* INSTALL: Added documentation on how to set up a sample server on
+	localhost 
+
+2001-07-31 Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* tec-client (Repository): Changed the client to tunnel all
+	connections through HTTP, in order to allow the client to use HTTP
+	proxies on machines located behing firewalls. Created code to
+	support automatic deployment with Java Web Start (jnlp). Minor bug
+	fixes 
+
+2000-07-07 Saturnino Luz  <luzs@acm.org>
+	* Added configire, Makefiles etc. Tidied up code.
+	  Packed the first release (0.2) of the new client.
+
+2000-04-12 Saturnino Luz  <luzs@acm.org>
+
+        * Started version 0.2. Swing replaces AWT.  New (log time) Merger
+	  sort algoritm replaces polynomial-time quicksort algorithm 
+	  (...tecclient.TecQSort.java). ListDisplay now has its own 
+	  cell renderer ListDisplayRenderer, which highlights keywords,
+	  colorizes sort words and other bells and whistles.   

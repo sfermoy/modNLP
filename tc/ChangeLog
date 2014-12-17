@@ -1,0 +1,26 @@
+2009-05-17  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* modnlp/tc/util/MakeTermByDocMatrix.java: added utility to create
+	term x doc matrices in CSV or ARFF formats
+
+2007-08-17  S. Luz  <luzs@cs.tcd.ie>
+
+	* TCProbabilityModel.java, BVProbabilityModel.java: Fixed bugs,
+	moved some general stuff brom BVProbabilityModel up to
+	TCProbabilityModel; renamed package modnlp-tc; added option for
+	Laplace smoothing;
+
+2006-07-30  Saturnino Luz  <luzs@acm.org>
+
+	Revamped modnlp and implemented better integration between
+	modnlp-tc and the nlp suite. Replaced modnlp.tc.parser.Tokenizer by
+	basic tokeniser modnlp.util.Tokeniser (moved from
+	modnlp.idx.inverted); moved a few general classes from
+	modnlp.tc.util into modnlp.util and did the same for
+	modnlp.tc.dstruct (into modnlp.dstruct).  
+	
+2005-05-17  Saturnino Luz  <luzs@acm.org>
+
+	Initial release.
+
+	

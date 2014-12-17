@@ -1,0 +1,30 @@
+<pre>
+<font color='red'>#modnlp.idx.IndexManager's properties (tailored to ECPC indexing)
+#Wed May 16 15:29:14 IST 2007</font>
+tokeniser.ignore.elements=(omit|ignore|header|chair|heading|post|name)
+<font color='red'>## index header files?</font>
+index.headers=true
+<font color='red'>## which element should be indexed (i.e. text within elements
+## specified here will be indexed and can form subcorpora if xquery
+## restrictions are applied. Format: a regexp grouping</font>
+subcorpusindexer.element=(speech|writing)
+<font color='red'>## which attribute from the element above will we use to uniquely
+## identify the text segments. Attribute mus be of xml type ID</font>
+subcorpusindexer.attribute=ref
+<font color='red'>## specify 'root' xml element, relative to which the xqueries will be
+## formulated</font>
+xquery.root.element.path=//intervention
+<font color='red'>## the element to be returned by xquery to select which indexed texts
+## should be included in the inverted-index query</font>
+xquery.return.attribute.path=(speech|writing)/@ref
+<font color='red'>## specs and paths all relative to xquery.root.element.path
+## form: description_1;path_1;description_2;path_2,...</font>
+xquery.attribute.chooser.specs=File name;../../header/@filename;Spoken language;speech/@language;Written language;writing/@language;Affiliation;(speaker|writer)/affiliation/@EPparty
+header.extension=hed
+<font color='red'>## the maximum number of subcorpus constraint query results to be stored (by HeaderDBManager)</font>
+xquery.max.cache.size=23
+file.encoding=UTF8
+xquery.root.filedescription.path=/header
+<font color='red'>## xquery expression that returns a (human-readable) file description </font>
+xquery.file.description.return={data($s/@filename)}<sep/>{data($s/@language)}<sep/>{data($s/index/label)}, {data($s/index/place)}, {data($s/index/date)}, {data($s/index/edition)}
+</pre>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- JNLP File for TEC Browser -->
+<jnlp
+  spec="1.0+"
+  codebase="http://localhost/~luzs/jnlp/"
+  href="tec-local.jnlp">
+  <information>
+    <title>TEC Browser</title>
+    <vendor>TCD, Dept of Computer Science &amp; Univ. of Manchester</vendor>
+    <homepage href="http://localhost/~luzs/jnlp/"/>
+    <description>TEC Browser: An Open-Source Concordancing Tool</description>
+    <description kind="short">TEC Concordancing Tool</description>
+    <icon href="tec.jpg"/>
+    <offline-allowed/>
+  </information>
+  <security>
+      <all-permissions/>
+  </security>
+  <resources>
+    <property name="tec.client.runmode" value="jnlp"/>
+    <j2se version="1.5+" initial-heap-size="256m" max-heap-size="528m"/>
+    <jar href="teccli.jar" download="eager"/>
+    <jar href="idx.jar" download="lazy"/>
+   <!-- Databases: je.jar (Berkeley) and exist.jar (XML native, XQuery support) -->
+    <jar href="je.jar" download="lazy"/>
+    <jar href="exist.jar" download="lazy"/>
+    <jar href="exist-modules.jar" download="lazy"/>
+    <!-- a tiny XML parser -->
+    <jar href="MinML2.jar" download="lazy"/>
+    <!-- other support libs needed by je.jar and exist.jar -->
+    <jar href="xmldb.jar" download="lazy"/>
+    <jar href="antlr-2.7.6.jar" download="lazy"/>
+    <jar href="commons-pool-1.2.jar" download="lazy"/>
+    <jar href="jgroups-all.jar" download="lazy"/>
+    <jar href="log4j-1.2.14.jar" download="lazy"/>
+    <jar href="resolver.jar" download="lazy"/>
+    <jar href="sunxacml.jar" download="lazy"/>
+    <jar href="xmlrpc-1.2-patched.jar" download="lazy"/>
+    <extension name="Plugins" href="plugins-local.jnlp"/>
+  </resources>
+  <application-desc main-class="modnlp.tec.client.Browser">
+    <argument>localhost:1240</argument> 
+  </application-desc>  
+</jnlp>

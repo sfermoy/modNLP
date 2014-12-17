@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- JNLP File for TEC Browser -->
+<jnlp
+  spec="1.0+"
+  codebase="http://ronaldo.cs.tcd.ie/tec2/jnlp/"
+  href="3rdparty.jnlp">
+  <information>
+    <title>TEC Browser 3rd Party Libraries</title>
+    <vendor>Several</vendor>
+    <offline-allowed/>
+  </information>
+  <security>
+      <all-permissions/>
+  </security>
+  <resources>
+    <!-- Databases: je.jar (Berkeley) and exist.jar (XML native, XQuery support) -->
+    <jar href="je.jar" download="lazy"/>
+    <jar href="exist.jar" download="lazy"/>
+    <jar href="exist-modules.jar" download="lazy"/>
+    <!-- a tiny XML parser -->
+    <jar href="MinML2.jar" download="lazy"/>
+    <!-- other support libs needed by je.jar and exist.jar -->
+    <jar href="xmldb.jar" download="lazy"/>
+    <jar href="antlr-2.7.6.jar" download="lazy"/>
+    <jar href="commons-pool-1.2.jar" download="lazy"/>
+    <jar href="jgroups-all.jar" download="lazy"/>
+    <jar href="log4j-1.2.14.jar" download="lazy"/>
+    <jar href="resolver.jar" download="lazy"/>
+    <jar href="sunxacml.jar" download="lazy"/>
+    <jar href="prefuse.jar" download="lazy"/>
+    <jar href="xmlrpc-1.2-patched.jar" download="lazy"/>
+  </resources>
+<component-desc/>
+    <argument>ronaldo.cs.tcd.ie:1240</argument> 
+  </application-desc>  
+</jnlp>

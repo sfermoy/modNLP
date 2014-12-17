@@ -1,0 +1,122 @@
+Brief tutorial: creating a mini-corpus
+--------------------------------------
+
+The modnlp corpus management suite, which consist of modnlp-idx (the
+indexer), modnlp-teccli (the corpus/concordance browser) and
+modnlp-tecser (the corpus server), were originally developed to allow
+free access to linguistic material over the Internet.
+
+The indexer, modnlp-idx, allows you to create an index, which you can
+later access through the TEC browser (modnlp-teccli). The corpus
+will usually contain data (e.g. text-oriented XML files, which we
+refer to as text files) and "meta-data" (perhaps stored as separate
+XML files) which we refer to as "header files". It is not essential that
+data and meta-data be stored in separate files or encoded in
+XML. However, if you would like to be able to select sub-corpora, for
+instance, in order to make the concordancer display only concordances
+coming from texts that share certain features (e.g. all texts written
+by a given author), you need to create meta-data files
+describing the features of interest and link them back to the
+appropriate sections of the text files. 
+
+Unless you have downloaded the TEC- or ECPC-specific version of idx
+(i.e. modnlp-idx-0.1.6-bin-tec.tar.gz or
+modnlp-idx-0.1.6-bin-ecpc.tar.gz), this folder will contain a file
+named:
+
+   idxmgr.properties.PLEASEEDIT
+
+For the purposes of this tutorial, you can simply make a copy of this
+file and rename it to idxmgr.properties. The index manager program
+(rdx.jar) will use this file.  It contains the settings which
+determine how the indexer tokenises the file, which sections of text
+it will not index, which element should be indexed and constitute
+parts of sub-corpora, etc. The properties in this file have been set
+for the mini copus in the data/ folder. The data folder contains the
+following sub-folders:
+
+  ep/: which contains the main text files (XML text files),  and 
+
+  eph/: which contains the header files corresponding to the above
+        mentioned text files.
+
+Both directories also contain the DTDs that define the syntax of the
+text and header files. If you are planning on creating a corpus,
+defining the syntax for the data encoding should probably be your
+first job. 
+
+The following files, found in the data/ep/ and data/eph/ folders
+illustrate a typical pair of corpus text and header files:
+
+    * EN20050110.xml is the text file (borrowed from the ECPC corpus),
+      though it also contains meta-data. Things can be arranged so
+      that only the text between pre-specified tags will be
+      indexed. These tags are specified in the property file of
+      modnlp-idx. Property settings that would be suitable for this
+      kind of data are shown in idxmgr.properties.PLEASEEDIT. 
+
+      The following lines, for instance, state that the only the text
+      within 'speech' and 'writing' element pairs will be indexed, and
+      that they will be uniquely identified by the value of their
+      attribute 'ref' (ideally, a suitable DTD should also guarantee
+      that the elements and attributes exist and that the uniqueness
+      of 'ref' values is enforced) :
+
+      subcorpusindexer.element=(speech|writing)
+      subcorpusindexer.attribute=ref
+
+      The following line specifies which text will NOT be indexed. The
+      specification is done through a regular-expression matching
+      element names that surround text which one does not wish to
+      index:
+
+      tokeniser.ignore.elements=(omit|ignore|header|chair|heading|post|name)
+
+    * EN20050110.hed is the header file. The modnlp tools allows the
+      meta-data encoded in the header files to be "queried" in
+      XQuery. This is used to select sub-corpora. The following lines
+      in idxmgr.properties.PLEASEEDIT define how sub-corpora are
+      selected for the ECPC files:
+
+      xquery.root.filedescription.path=/header
+      xquery.attribute.chooser.specs=File name;../../header/@filename;Spoken language;speech/@language;Written language;writing/@language;Affiliation;(speaker|writer)/affiliation/@EPparty
+
+      The first line specifies the topmost level of the header file
+      (it's root element). The second line Contains XML "paths" to the
+      features which we would like to use to define sub-corpora
+      (preceeded by a human-readable description of the same).
+
+      Similarly, the last line specifies part of an XQuery expression
+      which the system uses to present a description of each file in
+      the corpus to the user.
+
+      xquery.file.description.return={data($s/@filename)}{data($s/@language)}{data($s/index/label)}, {data($s/index/place)}, {data($s/index/date)}, {data($s/index/edition)}
+
+In order to index the files, simply click on the idx.jar file (it
+might simply appear as idx in your computer) or run 'java -jar
+idx.jar' from a command prompt. A window will appear asking you to
+specify a location for your index (i.e. where you would like idx.jar
+to store the index used in concordance searches etc). Open the data/
+folder and create a new folder, call it epi. Choose this folder for
+the index.  Next, the system will ask you to choose the folder where
+the headers are stored. Choose eph/ in the data/ folder. Finally, it
+will ask for a URL for public access to the header files. This is in
+case you want to make corpus searches available to other users. For
+this tutorial, simply press OK to accept the default URL. The main
+window should now appear. Click on 'Index new files' and choose the
+XML files in the data/ep/ folder (EN20050110.xml and EN20050127.xml).
+
+If you would like to test and/or use the software, a binary
+distribution of the client (which also run in stand-alone mode, using
+a local index creted by idx), download the modnlp-teccli module. After
+downloading modnlp-teccli, uncompress the archive, open the folder
+thus generated, and click on teccli.jar (or teccli). A window will ask
+you to select a corpus (the default is the TEC corpus, accessible over
+the Internet). Choose 'Choose new corpus' and select the folder where
+you saved the index as described above (i.e. data/epi/). The
+concordancer will appear. Type in the word 'this' to see all
+concordances for it in the files you indexed. 
+
+If you want to make corpus data and concordances (though not
+necessarily your full texts) available to the community over the
+Internet your should download the modnlp-tecser module. 

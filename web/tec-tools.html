@@ -1,0 +1,167 @@
+<HEAD>
+<TITLE> MODNLP: tec-tools </TITLE>
+<LINK REL="stylesheet" HREF="modnlp.css">
+</HEAD>
+<body>
+
+<div id="content">
+<h3> MODNLP-tec: A corpus management suite</h3>
+
+<p>
+The <b>modnlp</b>
+corpus management suite, which consist of modnlp-idx (the indexer),
+modnlp-teccli (the corpus/concordance browser)
+and modnlp-tecser (the corpus server), were originally
+developed to allow free access to linguistic material over the 
+Internet. 
+
+<p> The indexer, <a href="idx.html">modnlp-idx</a>, allows you to
+create an index, which you can later access through the
+  TEC<a href="#tec"><sup>*</sup></a>/ECPC  browser
+(modnlp-teccli). The corpus will usually contain data (e.g.
+text-orienteds XML files, which we refer to as <em>text files</em>)
+and "meta-data" (perhaps stored as separate XML files, which we refer
+to as <em>header files</em>. It is not essential that data and
+meta-data be stored in separate files or encoded in XML. However, if
+you would like to be able to select sub-corpora, for instance, in
+order to make the concordancer display only concordances coming from
+texts that share certain features (e.g. all texts whose source
+language is Japanese), you need to create meta-data files describing
+the features of interest and link them back to the appropriate
+sections of the text files. The following files illustrate a typical pair
+of corpus text and header files:
+
+<ul>
+<li> <a href="EN20050110.xml.html">EN20050110.xml</a> is the text file
+  (borrowed from the <a href="http://www.ecpc.uji.es/">ECPC corpus</a>), though it also
+  contains meta-data. Things can be arranged so that only the text
+  between pre-specified tags will be indexed. These tags are specified
+  in the property file of modnlp-idx. Property settings that
+  would be suitable for this kind of data are shown
+  in <a href="idxmgr.properties">this property file</a>. The following 
+  lines, for instance, state that the  only the text within 'speech'
+  and 'writing' element pairs will be indexed, and that they will be
+  uniquely identified by the value of their attribute 'ref' (ideally, a
+  suitable DTD should also guarantee that the elements and attributes
+  exist and that the uniqueness of 'ref' values is enforced) :
+<pre>
+subcorpusindexer.element=(speech|writing)
+subcorpusindexer.attribute=ref
+</pre>
+  The following line specifies which text will NOT be indexed. The
+  specification is done through a
+  regular-expression matching element names that surround text which
+  one does not wish to index:
+<pre>
+tokeniser.ignore.elements=(omit|ignore|header|chair|heading|post|name)
+</pre>
+
+
+<li><a href="EN20050110.hed.html">EN20050110.hed</a> is the header
+  file. The modnlp tools allows the meta-data encoded in the header files 
+  to be "queried" in <a href="http://www.w3.org/TR/xquery/">XQuery</a>. This is used to select
+  sub-corpora. The following lines in the idxmgr.properties files
+  define how sub-corpora are selected for the ECPC files:
+
+<pre>
+xquery.root.filedescription.path=/header
+xquery.attribute.chooser.specs=File name;../../header/@filename;Spoken language;speech/@language;Written language;writing/@language;Affiliation;(speaker|writer)/affiliation/@EPparty
+</pre>
+  
+  The first line specifies the topmost level of the header file (it's
+  root element). The second line Contains
+  XML <a href="http://www.w3.org/TR/xpath">"paths"</a> to the features
+  which we would like to use to define sub-corpora (preceeded by a
+  human-readable description of the same).
+
+  <p> Similarly, the last line specifies part of an XQuery expression
+  which the system uses to present a description of each file in the
+  corpus to the user.
+
+<pre>
+xquery.file.description.return={data($s/@filename)}<sep/>{data($s/@language)}<sep/>{data($s/index/label)}, {data($s/index/place)}, {data($s/index/date)}, {data($s/index/edition)}
+</pre>
+</ul>
+
+
+<p>If you would like to test and/or use the software, a binary
+  distribution of the client (which also run in stand-alone mode,
+  using a local index creted by idx), download the
+<a href="teccli.html">modnlp-teccli</a> module. 
+
+
+
+<p>
+If you want to make corpus data and concordances (though not
+necessarily your full texts) available to the community over the
+Internet your should download the
+<a href="tecser.html">modnlp-tecser</a> module. 
+
+
+
+<p>
+In addition, the entire suit is 
+  <a
+     href="http://developer.berlios.de/project/showfiles.php?group_id=3661">available
+     for downloading</a>.  Simply uncompress the archives and follow
+     the instructions in the README file.
+
+
+<p>
+A live example of these tools in action is the <a
+href="http://ronaldo.cs.tcd.ie/tec2/jnlp/">TEC Corpus Broser</a>, available
+on the web, where you can try the concordancer prototype and a few of
+its "plug-ins", via Java Web Start.
+
+<p>
+More information on the TEC client/server architecture can be found in
+the following paper:
+<table>
+<tr valign="top">
+<td align="right">
+[<a name="bib:LuzLREC2000">1</a>]
+</td>
+<td>
+S.&nbsp;Luz.
+  A software toolkit for sharing and accessing corpora over the
+  Internet.
+  In M.&nbsp;Gavrilidou, G.&nbsp;Carayannis, S.&nbsp;Markantonatou, S.&nbsp;Piperidis, and
+  G.&nbsp;Stainhauer, editors, <em>Proceedings of the Second International
+  Conference on Language Resources and Evaluation: LREC-2000</em>, pages
+  1749-1754, May 2000.<br />
+[ <a href="./bib_bib.html#bib:LuzLREC2000">bib</a> | 
+<a href="./LuzLREC2000.pdf">.pdf</a> ]
+
+</td>
+</tr>
+</table>
+
+<p>
+<hr>
+<a name="tec">
+<sup>*</sup></a>The suite is named after "TEC", the project for which it
+was originally developed. TEC (short for "Translational English
+Corpus") is a computerised collection of contemporary translational
+English text collected and maintained
+at <a href="http://www.llc.manchester.ac.uk/ctis/research/english-corpus/">The
+University of Manchester</a> and made available on the Internet by
+<a
+href="http://ronaldo.cs.tcd.ie/tec2/">Trinity College Dublin</a>. 
+
+
+
+ <table class="borderless" width="100%"><tr>
+ <td align="left">
+ © 2005, <a href="https://www.cs.tcd.ie/~luzs/">S. Luz</a>
+ </td>
+ <td align="right">
+ <font size="-1">This project is hosted by <a href="http://developer.berlios.de">
+ <img src="http://developer.berlios.de/bslogo.php?group_id=0&type=1" width="124"
+ height="32" border="0" alt="BerliOS Logo"></A></font>
+ </td>
+ </tr></table>
+
+
+</body>
+</html>
+

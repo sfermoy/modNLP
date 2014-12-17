@@ -1,0 +1,1 @@
+../../../bin/runidx.sh

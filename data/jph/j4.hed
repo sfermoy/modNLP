@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE techeader SYSTEM "techeader.dtd">
+<techeader>
+  <title subcorpusid="fiction" filename="fn000020">
+    <subcorpus>fiction</subcorpus>
+    <collection>第五囘　胸算違ひから見一無法な難題</collection>
+  </title>
+  <section id="s1">
+  <author gender="male">
+      <name>Bodo Kirchhoff</name>
+      <nationality description="German"/>
+  </author>
+</section>
+</techeader>

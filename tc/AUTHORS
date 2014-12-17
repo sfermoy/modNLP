@@ -1,0 +1,8 @@
+--
+Copyright (c) 2005-2006 Saturnino Luz  <lusz@acm.org>
+--
+XML support used SAX, by David Megginson (http://www.megginson.com/)
+MinML2 XML parser by John Wilson (tug@wilson.co.uk) (c) 1999. 
+--
+
+

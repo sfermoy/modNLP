@@ -1,0 +1,12 @@
+To compile the the source for the indexer type
+
+  % make build
+
+The command 
+
+  % make test
+
+runs a series of test on a tiny corpus: it indexes the files and 
+'dump' the index onto the stdout.
+
+See also the README file

@@ -1,0 +1,42 @@
+modnlp-tecser: TEC SERVER - Concordance server
+==============================================
+
+Compile the server by typing
+
+ % make build 
+
+To start the server, first edit lib/server.properties so that
+index.dir points to the directory where you keep the index
+(see modules-idx): that should normally be the value of
+dictionaty.environment.home in dictionaty.properties in the index
+directory. Now, change directory to lib and run
+
+java -jar tecser.jar
+
+ABOUT TEC
+==========
+
+TEC is a project aimed at gathering a corpus of translational English
+and building tools for indexing, storing, sharing and browsing
+concorcances in the texts.
+
+The tools being developed in the project are available under the terms
+of the Gnu Public License (see COPYING, in this directory).  The set
+of TEC corpus tools is now part of modnlp and has been divided into
+two packages: a server (modnlp-tecser) and a client (modnlp-teccli).
+The files in this directory and its sub-directories form part of
+teccli.  After the package is built (see INSTALL), you will be able to
+see an executable file in the ./bin directory (folder): "tecli".
+This file runs the TEC client.
+
+Due to copyright restrictions, the TEC corpus itself has not been made
+publicly available. However, you can use the client provided to access
+the corpus (held at http://ronaldo.cs.tcd.ie) over the internet. The
+file INSTALL contains instructions on how to build and run the
+software.
+
+A long-term goal of the this project is to establish standards for
+storage and remote access of distributed corpora in a peer-to-peer
+architecture.
+
+-- S. Luz (luzs@cs.tcd.ie)

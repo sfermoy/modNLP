@@ -1,0 +1,78 @@
+<HEAD>
+<TITLE> TEC Help: Main </TITLE>
+
+<body class="mine" BGCOLOR="#FFFFFF" LINK="#0A0BFF" vlink="#0A0BFF">
+
+<h2> Help </h2>
+
+<h4> Query Language </h4>
+
+<h5>Syntax:</h5>
+
+  <center><i>word_1[+[[no_of_intervening]]word_2...].</i></center>
+
+<h5>Description:</h5>
+
+The following options are currently supported by the keyword search box:
+
+
+<ul>
+
+<li> <b>Single keywords</b>: just enter type the word into the keyword box. 
+<dl><dt>Example:</dt><dd>
+
+If you type <i><font color="blue">test</font></i>, for
+instance, the tool will retrieve all occurrences of the word <i><font
+color="blue">test</font></i> in the whole corpus (unless you restrict
+the search by selecting a sub-corpus). The search is case-insensitive
+by default (i.e. it will retrieve <i><font
+color="blue">Test</font></i>, <I><FONT COLOR="BLUE">TEST</FONT></I>
+etc). You can specify case-sensitive search by ticking the appropriate
+box on the <i><font color="blue">Options</font></i> menu.
+
+</dd></dl>
+
+<li> "<b>Wildcards</b>": this allows you to select  prefixes. 
+<dl><dt>Example:</dt><dd>
+Typing
+in <i><font color="blue">test*</font></i> will retrive all words wich start with <i><font color="blue">test</font></i> (e.g. <i><font color="blue">test</font></i>,
+<i><font color="blue">tests</font></i>, <i><font color="blue">testament</font></i>, etc).
+</dd></dl>
+
+<li> "<b>Regular expressions</b>": this allows you to select any
+  string that matches a regular expression (i.e. an element of a
+  regular language). Regular expressions need to be enclosed in double
+  quotation symbols (e.g. "regexp") 
+<dl><dt>Example:</dt><dd>
+Typing
+in <i><font color="blue">".*less"</font></i> will retrive all words wich start with <i><font color="blue">test</font></i> (e.g. <i><font color="blue">test</font></i>,
+<i><font color="blue">tests</font></i>, <i><font color="blue">testament</font></i>, etc).
+</dd></dl>
+
+<li> <b>sequences</b>: this allows you to specify sequences os key
+words, and/or wildcards, and the maximum number of intervening words
+you wish to allow between each element in the sequence. <br>
+<p>Examples:
+<ul> 
+<li> Entering <i><font color="blue">seen+before</font></i> will find <i><font color="blue">...never
+seen before...</font></i> etc; 
+<li> entering <i><font color="blue">seen+[1]before</font></i> finds, in addition,  <i><font color="blue">...seen her
+before...</font></i>, <i><font color="blue">...seen ie before...</font></i>, and all sequences in which
+there is at most one word between <i><font color="blue">seen</font></i> and <i><font color="blue">before</font></i>. 
+<li> Combinations of words and wildcards are also allowed, so 
+entering <i><font color="blue">know+before*</font></i> will find <i><font color="blue">...know before...</font></i>, <i><font color="blue">...know
+beforehand</font></i>, etc.  
+</ul>
+</p>
+</ul>
+
+<h4> Sub-corpus selection </h4>
+
+to be written...
+
+<h4> Preferences </h4>
+
+to be written...
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+#Corpus Browser's properties
+#Thu May 24 17:32:46 IST 2007
+tec.client.port=1240
+tec.client.server=ronaldo.cs.tcd.ie
+last.index.dir=/tmp/ecpcindex
+stand.alone=yes
+tec.client.headers=http\://ronaldo.cs.tcd.ie/tec/headers
+browser.brand=modnlp/concECPC Browser
+tokeniser.regexp=\\p{L}[\\p{L}-.]*'?s?
+ignore.xml.tags=true

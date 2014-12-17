@@ -1,0 +1,31 @@
+<!-- tectext.dtd: TEC text file description $Revision: 1.2 $ -->
+<!ELEMENT tectext (#PCDATA|p|br|collection|include|omit|title|frontmatter|chapter|sbhead|head|backmatter|footnote|endnote|caption|section)*>
+ <!-- this is a very unconstrained definition of what has been coded
+ so far, one way or another; Even this rather liberal DTD, however, 
+ should be enought to catch a number of errors and
+ inconsistencies. NOTE that section is now a required child-element of
+ tecttext so as to link to the relevant sections in the header files. -->
+<!ELEMENT section (#PCDATA|p|br|include|omit|title|frontmatter|chapter|sbhead|head|backmatter|footnote|endnote|caption)*>
+<!ATTLIST section id NMTOKEN #REQUIRED>
+
+<!ELEMENT omit (#PCDATA|section|p|endnote|footnote|omit|title|frontmatter|chapter|sbhead|head|backmatter|caption|comment)*>
+<!-- find out if 'bodytext' should be allowed as an attribute value for 'omit' --> 
+<!ATTLIST omit desc ( 
+frontmatter | backmatter | footnote | caption |
+ original | picture | synopsis | title | endnote | other | bodytext|comment) #IMPLIED>
+<!ELEMENT chapter (#PCDATA|section|p|include|omit|footnote|title|endnote|frontmatter|sbhead|head|backmatter|caption)*>
+<!ATTLIST chapter n CDATA #IMPLIED>
+
+<!ELEMENT include EMPTY>
+<!ATTLIST include filename NMTOKEN #REQUIRED>
+<!ELEMENT p EMPTY>
+<!ELEMENT br EMPTY>
+<!ELEMENT title  (#PCDATA)*>
+<!ELEMENT collection  (#PCDATA)*>
+<!ELEMENT caption  (#PCDATA|p|omit)*>
+<!ELEMENT endnote  (#PCDATA|p|omit|head)*>
+<!ELEMENT footnote  (#PCDATA|p|omit)*>
+<!ELEMENT frontmatter (#PCDATA|section|p|omit|endnote|footnote|title|sbhead|head)*>
+<!ELEMENT sbhead (#PCDATA|p|omit|title|footnote|endnote)*>
+<!ELEMENT head (#PCDATA|p|omit|title|sbhead|footnote|endnote)*>
+<!ELEMENT backmatter (#PCDATA|section|p|omit|title|sbhead|head)*>

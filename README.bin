@@ -1,0 +1,116 @@
+MODNLP - User (binary) distribution
+-----------------------------------
+
+This distribution includes the core modnlp applications for indexing,
+searching, concordancing and classification. The instructions below
+refer mainly to the software needed for indexing and concordancing:
+idx and teccli. 
+
+Let's suppose you have created a directory (folder) named 'mycorpus',
+containing the following sub-directories: 'data', 'headers ' and
+'index'.  Assume you have stored a collection of text files (a corpus)
+in 'data', and a set of (XML-encoded) 'header files' containing
+meta-data about the corpus files in 'headers'. 'index' is currently
+empty, so the structure of 'mycorpus' might look like this:
+
+    mycorpus --
+              |--- data |
+              |         |-- EN20050110.xml
+              |         |-- EN20050111.xml
+              |
+              |--- headers |
+              |            |-- EN20050110.hed
+              |            |-- EN20050111.hed
+              |
+              ---- index
+
+
+Now, suppose you want to create an index for the data files so that
+you can query them for concordances, frequency lists etc. You do that
+through the indexing utility.  In order to run the Indexing utility,
+go to the directory created by decompressing the distribution and
+click/double-click on idx.jar or, alternatively, at the command line,
+type:
+
+ % java -jar idx.jar
+
+A window should pop-up asking you to choose a location for the corpus
+index. Select, say, mycorpus/index. Another window will request that
+you enter the location for the header files. Choose, say,
+mycorpus/headers. Finally, you will be asked to enter a web address
+for public access to your header files (in case you want to share
+them.) If you don't have a web are or don't want to make the header
+files publicly available, just click OK. A larger window will then
+appear which shows the 'indexing log' (i.e. the output of all indexing
+or de-indexing tasks performed in a session), and a list of 'currently
+indexed files' (initially empty). Click on "index new files..." and
+choose a couple of data files to index, say
+mycorpus/data/EN20050110.xml and mycorpus/data/EN20050111.xml
+(multiple selections are usually made by holding down the CTRL or
+SHIFT keys and clicking on the required files.) Once you've selected
+the files the log screen should show messages indicating the various
+stages of indexing, e.g.:
+
+
+----- Processing: /tmp/mycorpus/data/EN20050110.xml ------
+-- Tokenising ...
+-- Indexing ...
+-- Done.
+
+and the indexed files will be added to the list (** see
+N.B. below). If you want to remove a file from the index, simply
+select it on the 'currently indexed files' list and click on 'De-index
+selected files' (at the bottom of the window.) Once you're done
+indexing files, click on 'Quit' and you will be ready to query the
+index through the concordance browser.
+
+You can run the concordancer by clicking/double-clicking on teccli.jar
+or by entering
+
+ % java -jar teccli.jar
+
+at a command line. You will initially be asked if you want to work in
+stand-alone mode. For the moment, say 'Yes'. This means the
+concordancer will consult a corpus an index stored in your own
+computer, rather than try to access a remote corpus server, such as
+TEC (ronaldo.cs.tcd.ie:1240). When asked for the location of the
+corpus index, choose the place where you stored the index created with
+idx.jar. You can now use the browser to query for concordances, sort,
+etc. An experimental 'plugin' is also available: a frequency
+list. Selecting 'Plugins->Frequency list' will bring up a window. Click
+on 'Go' to download the 500 most frequent words and their
+frequency. The frequency list can be sorted according to work, rank or
+frequency (in ascending or descending order) by clicking on the heading
+bars.
+
+Finally, you might want to share your corpus for use by other
+concordance tools on the network by starting a server. To start the
+server, first edit server.properties so that index.dir points to the
+directory where you keep the index (e.g. mycorpus/index/). That should
+normally be the value of dictionaty.environment.home in
+dictionaty.properties in the index directory. Now run
+
+java -jar tecser.jar
+
+In order to access a remote corpus server select on the main
+teccli.jar window 'File->New Internet Corpus...' and enter the IP
+address of the remote server (e.g. ronaldo.cs.tcd.ie:1240). All
+queries from that point on will be directed to the chosen corpus.
+ 
+For more details, updates, etc, see http://nlpmod.berlios.de/
+
+** N.B.: The indexer assumes that the text to be indexed is encoded in
+      UTF-8, though you can change that default value to any encoding
+      supported by the Java platform. This and other settings chosen
+      at the beginning of the indexing process are store in a
+      properties file which can be edited with any text editor. For
+      the example above, the index properties are stored in
+      mycorpus/index/dictionary.properties.
+
+
+
+-- S. Luz (luzs@cs.tcd.ie)
+
+
+The modnlp suite is distributed under the GNU General Public License
+(GPL v2). See COPYING for details.

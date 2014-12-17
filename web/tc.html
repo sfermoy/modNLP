@@ -1,0 +1,79 @@
+<HEAD>
+<TITLE> MODNLP/TC: an API and tools for text categorisation </TITLE>
+<LINK REL="stylesheet" HREF="modnlp.css">
+</HEAD>
+<body>
+
+<div id="content">
+<h3> MODNLP/TC: an API and tools for text categorisation </h3>
+
+
+ <b>modnlp/tc</b>: an API and tools for text categorisation,
+including, functionality for XML parsing, term set reduction (and
+basic keyword extraction), probabilistic classifier induction, two
+sample classification tools, and evaluation modules. The software is
+distributed under the <a href="">GNU General Public License</a>, and
+is fully compatible with the <a
+href="http://www.gnu.org/software/classpath/">GNU Classpath</a> It has
+been tested on a number of JVM's, including kaffe (v1.1.5), sablevm
+(v1.1.6), jamvm (v1.3) and Sun's JDK 1.4
+
+The functionality supported by the API include
+
+<ul>
+
+<li> General mechanisms for parsing and document storage (currently
+implemented <code>modnlp.tc.parser.Parser</code>s include a a parser
+for <a href="reuters21578.html">my XML version</a> of <a
+href="http://www.daviddlewis.com/resources/testcollections/reuters21578/">David
+Lewis' Reuters-21578 collection</a>, and another for <a
+href="http://www.aueb.gr/users/ion/">Ion Androutsopoulos'</a> Lingspam
+corpus for spam filter.)
+
+<li> a <a href="doc/modnlp/tc/tsr/package-summary.html">feature selection
+module</a> implementing several term set reduction (filtering)
+metrics, and a <a
+href="doc/modnlp/tc/tsr/MakeReducedTermSet.html">sample
+utility that illustrates its use</a>
+
+<li> a basic <a
+href="doc/modnlp/tc/induction/MakeProbabilityModel.html">probabilistic
+classifier induction program</a>, and
+
+<li> modules for 
+<a href="doc/modnlp/tc/classify/package-summary.html">classification</a> and
+<a href="doc/modnlp/tc/evaluation/package-summary.html">evaluation</a>.
+
+</ul>
+
+See the <a href="doc/">API documentation</a> for more details.
+
+<p>
+<a href="https://developer.berlios.de/project/showfiles.php?group_id=3661&release_id=5848">Download the latest version of modnlp/tc</a>. And have "fun". 
+</div>
+
+
+<p>
+See also the <a
+href="http://developer.berlios.de/projects/modnlp/">Developer's web
+page at BerliOS for downloads, CVS server information etc</a>
+
+
+
+
+
+
+<div id="footer">
+ <table class="borderless" width="100%"><tr>
+ <td align="left">
+ © 2005, <a href="https://www.cs.tcd.ie/~luzs/">S. Luz</a>
+ </td>
+ <td align="right">
+ <font size="-1">This project is hosted by <a href="http://developer.berlios.de">
+ <img src="http://developer.berlios.de/bslogo.php?group_id=0&type=1" width="124"
+ height="32" border="0" alt="BerliOS Logo"></A></font>
+ </td>
+ </tr></table>
+</div>
+</body>
+</html>

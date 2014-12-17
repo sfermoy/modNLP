@@ -1,0 +1,11 @@
+luzs.cer must be added to javaws's list of trusted
+certificates in order to avoid 'untrusted certificate' 
+warnings. Please check that the data (specially the
+certificate fingerprints) match those found in 
+my (S. Luz's) web page at 
+
+  http://www.cs.tcd.ie/Saturnino.Luz/
+
+(You can do that via javaws GUI or shell command 
+ 'keytool -printcert -file luzs.cer')
+

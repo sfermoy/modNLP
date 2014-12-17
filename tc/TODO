@@ -1,0 +1,10 @@
+- Make Makefile compatible with ../Makefile (i.e. add a rule for java
+  compilation and list files explicitly)
+
+- use gnu.getopt to handle our ever increasing set of options. 
+
+- split BVProbabilityModel into two separate classes one extending
+  TCProbabilityModel and one implementing TCInvertedIndex
+
+- implement a word-position event probability model (as in Mitchell,
+  1997) and a classifier that uses it

@@ -1,0 +1,75 @@
+
+* [DONE] Write a TODO list.
+
+- IDX module:
+=============
+
+* [DONE] replace sequential search in the posa loops in matchConcordance() by
+  binary search to make them more efficient: currently linear on the
+  number of tokens in the file (posa.length) when it could be
+  logarithmic.
+
+* Implement preferences pane for modnlp.idx.IndexManager, including
+  settings for local header directory, header's  URL (for external
+  access), tag ignore regexp, tokenisation regexp etc.
+
+* Implement disjunctions in modnlp.idx.query.WordQuery
+  (e.g. coffee|tea); alternatively, implement an option for entering
+  regular expressions directly (e.g. !REGEX:(cofee|tea) ).
+
+- TECCLI module:
+================
+
+* So much to do I don't even know where to start. Here's a
+  couple of things that come to mind:
+
+BUG FIXES:
+
+* fix concordance display for Japanese texts. 
+
+* Proper treatment of error conditions for new corpus selection (taken
+  some initial steps, e.g. handling of ConnectException in
+  GraphicalSubcorpusSelector and Browser.setRemoteCorpus() but lots
+  more remain to be done)
+
+ENHANCEMENTS:
+
+* implement collocation plugin
+
+* implement 'clustering' plugin
+
+* implement merging of corpus sources (i.e. the ability to spawn
+  several ConcordanceThread's and collate the downloads into a single
+  ConcArray for display by a single ListDisplay
+
+* Implement visualisation and direct manipulation plugins (for
+  subcorpus selection etc)
+
+* [DONE] Re-activate plugins; implement JE-based subcorpus selection to
+  replace SQL server on tec-server
+
+* [DONE] separate GUI from Browser (move GUI into gui/ package)
+
+* [DONE] re-implement ConcArray based on a ('growable') collection class
+  rather than array
+
+* [DONE] fix scrollbars in ListDisplay (draw list renderers on a
+  ScrollablePane) 
+
+- TC module
+============
+
+- Make Makefile compatible with ../Makefile (i.e. add a rule for java
+  compilation and list files explicitly)
+
+- use gnu.getopt to handle our ever increasing set of options. 
+
+- split BVProbabilityModel into two separate classes one extending
+  TCProbabilityModel and one implementing TCInvertedIndex
+
+- implement a word-position event probability model (as in Mitchell,
+  1997) and a classifier that uses it
+
+
+
+

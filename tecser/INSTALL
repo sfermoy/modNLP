@@ -1,0 +1,5 @@
+To compile the package, type
+
+  % make build
+
+See also the README file

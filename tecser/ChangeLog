@@ -1,0 +1,27 @@
+2013-07-15  Saturnino Luz  <luzs@acm.org>
+        * release 0.0.6: Maintanence release. Modified TecConnection.java
+	to respond with an HTTP/1.0 OK status line to inital URLConnect
+	requests so as to comply with JDK 1.7 (update 25)
+
+2010-07-05  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* release 0.0.4: Upgraded je.jar to version 4. The new index
+	format yields considerable performance gains and is about 15% more
+	space efficient. The database format changed but the library is
+	backward compatible, so clients and indexer using this version
+	will be able to access databases created with je version 3. The
+	reverse is not true, however. So, dbs created with modnlp-idx >=
+	0.1.6 will not be accessible from modnlp-idx <= 0.1.5.
+
+2009-04-30  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* tecser:  modnlp-tecser now provides the same functionality
+	as the local-corpus version of teccli.
+
+2007-09-21  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* TecConnection.java: implemented server-side subcorpus selection
+	and extended communication protocol. Backward compatibility with
+	old TEC system has been now been abandoned, though this version
+	(0.0.2) still preserves it.
+ 

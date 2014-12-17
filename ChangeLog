@@ -1,0 +1,129 @@
+2014-09-24  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* maintenance release: adapted Dictionary to support frequency
+	queries needed by Shane's concordance mosaic. Fixed some bugs in
+	IndexManager. Upgraded SVN format.
+
+2013-07-15  Saturnino Luz  <luzs@acm.org>
+	* release 0.1.2: Maintanence release. Modified tecser's
+	TecConnection.java to respond with an HTTP/1.0 OK status line to
+	inital URLConnect requests so as to comply with JDK 1.7 (update
+	25)
+
+2013-07-15  Saturnino Luz  <luzs@acm.org>
+
+	* release 0.1.1: maintenance release: included capte source code
+	but prevented it from compiling for the moment (in top level
+	Makefile); need to rethink the apache commons httpclient
+	code. Preparing to fix the tecser code related to java 7 http
+	response issue.
+
+2012-11-27  Saturnino Luz  <luzs@acm.org>
+
+	* release 0.1.0: Bug-fixing release: fixed subcorpus selection bug
+	  (added workaround for empty string elements in header files)
+	  (e.g. <name></name>). Added experimental WordleConc plugin as
+	  external package (see plugins/ subdirectory)
+
+2011-05-06  Saturnino Luz  <luzs@acm.org>
+
+	* release 0.0.8: First step towards making modnlp truly
+	multilingual. Generalised display of concordances to deal with
+	non-latin scripts (tested on Japanese); incorporated simple
+	Japanese tokeniser (indexing now fully functional), adapted word
+	splitting for ListDisplay, ListDisplayRenderer and ConcordanceTree
+	etc. Added init.d scripts to start/stop tec server on Linux
+	machines. Added scripts for command line indexing
+	(indexincoming.pl) and deindexing (deindex.pl). Fixed minor bugs.
+
+2010-07-05  Saturnino Luz  <luzs@acm.org>
+
+	* release 0.0.7: Upgraded je.jar to version 4. This change affects
+	the idx, teccli and tecser packages. The new index format yields
+	considerable performance gains and is about 15% more space
+	efficient. The database format changed but the library is backward
+	compatible, so clients and indexer using this version will be able
+	to access databases created with je version 3. The reverse is not
+	true, however. So, dbs created with modnlp-idx >= 0.1.6 will not
+	be accessible from modnlp-idx <= 0.1.5.
+
+	* idx: created a corpora/ directory to store templates for
+	self-contained corpus hierarchies. 'make tecdist', for instance,
+	creates a tec-xxx.tgz which contains a portable hierarchy (within
+	and between Unix and Windows environments). Indexing can be done
+	by puting the text files and headers to be indexed in incoming/
+	and running indexincoming.pl ../bin. The client can be run
+	directly from bin/. As it reads from the relative path ../index,
+	the corpus directory can be placed anywhere.
+
+2010-06-25  Saturnino Luz  <luzs@acm.org>
+
+	* idx: release 0.1.5: Bug fix release. Fixed bug in
+	SubcorpusDirectory.java. Now secondary key of SubcorpusTable gets
+	removed properly and error when re-indexing a previously
+	de-indexed file disappears. Also created some scripts
+	bin/indexincoming.pl and deindex.pl to automated command line
+	indexing and deindexing.
+
+2009-04-30  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* idx, teccli, tecser: New releases coincinding with the first
+	release of the TEC Corpus (v2). A Corpus description plugin
+	(CorpusDescriptionBrowser.java) has been added to teccli, many
+	bugs have been fixed, tecser now provides the same functionality
+	as the local-corpus version of teccli, the client has been made
+	compatible with JNLP, resource files have been created in
+	modnlp/teccli/jnlp. Fixed a bug in TokeniserRegex.java which
+	caused all text between empty ignorable tags (e.g. '<omit
+	desc="fig"/>') and the next matching closing tag for the same
+	element (e.g. '</omit>') not to be indexed. Added functionality to
+	Dictionary.java and HeaderDBManager.java which deals with corpus
+	file descriptions.
+
+2008-11-25  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* teccli: New release of teccli. Browser has been completely
+	revamped. Legacy code entirely removed.
+
+2008-07-18  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* Makefile (TOPDIR): fixed section tokenisation bug in
+	SubcorpusIndexer (dot regexp didn't extend across lines); added
+	subcorpus-selection sensitivity to the FqListBrowser (implemented
+	in Dictionary#printSortedFreqList(PrintWriter,int,SubcorpusConstraints));
+	fixed concordance line display (CorpusFile couldn't read past
+	non-ascii characters)
+
+2007-09-21  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* idx, teccli, tecser: improved subcorpus search, implemented
+	basic GUI subcorpus selector, fixed several bugs, tested on HC and
+	CD corpora, implemented server-side subcorpus selection and
+	extended protocol. Backward compatibility with old TEC system has
+	been abadoned as of idx-0.1.2 and teccli-0.5.2. 
+
+2007-08-20  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* Fixed some bugs in tc, added basic sub-corpus serch
+	functionality to idx, tec-server
+
+2007-06-07  S. Luz  <luzs@cs.tcd.ie>
+
+	* all: Fixed a number of bugs, improved performance of conjunctive
+	search.
+
+2006-11-28  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* modnlp/idx, modnlp/dstruct/CorpusFile.java: Fixed UTF-8 encoding
+	issues, fixed search, implemented frequency list plugin, fixed
+	minor bugs. 
+
+2006-08-23  S. Luz  <luzs@cs.tcd.ie>
+
+	* idx/Makefile, tc/Makefile, tec/Makefile (modnlp): tidied up
+	make files; tested sub-package builds.	
+
+2006-08-22  S. Luz  <luzs@cs.tcd.ie>
+
+	* ChangeLog (modnlp): added changelog.
+

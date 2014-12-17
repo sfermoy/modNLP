@@ -1,0 +1,14 @@
+BagOfWords.class
+CorpusList.class
+IdFrequencyPair.class
+NewsItemAsBooleanVector.class
+NewsItemAsOccurVector.class
+ParsedNewsItem.class
+ParsedText.class
+Probabilities.class
+ProbabilityModel.class
+SetOfWords.class
+StopWordList.class
+TSReducedText.class
+WordFrequencyPair.class
+WordScorePair.class

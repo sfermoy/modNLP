@@ -1,0 +1,15 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package modnlp.tec.client;
+
+/**
+ *
+ * @author shane
+ */
+public interface StateChanged {
+    public void concordanceStateChanged();
+}

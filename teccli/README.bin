@@ -1,0 +1,140 @@
+TEC-CLIENT - Translational English Concordancer
+===============================================
+
+Run the concordancer by clicking/double-clicking on teccli.jar
+or by entering 
+
+ % java -jar teccli.jar
+
+or (double) click on teccli.jar. 
+
+You have the options of working offline (using a corpus stored on your
+machine and an index built with modnlp-idx) or connecting to a remote
+server. You can select that through the File menu.
+
+There is a subcorpus selection 'plug-in' which lets you restrict the
+concordance search to subcorpora matching a specified criterion. At
+the moment, the user interface of this plug-in is rather primitive: a
+subcorpus is selected by entering a condition specified in XQuery
+syntax into a text window, where a variable $s is bound to the root
+element from which your subcorpus will be selected, as specified in
+dictionary.properties (xquery.root.element.path). Technically, this
+condition corresponds to a 'where' clause of an XQuery FLOWR
+expression.
+
+An example might help make things clearer. Let the 'intervention'
+element be the root element from which subcorpora are selected (as in
+ECPC), and let the following be a fragment of a corpus file:
+
+<intervention ref='65'>
+  <writer>
+   <name>Mr Schmidt</name>
+   <affiliation EPparty="IND-DEM"/>
+  </writer>
+  <writing ref='w9' language="ES">
+   Necessary resources must be prioritised, at both national and
+   international levels etc etc.  
+  </writing> 
+</intervention>
+
+<intervention ref='66'>
+  <writer>
+   <name>Mr Jones</name>
+   <affiliation EPparty="PPE-DE"/>
+  </writer>
+  <writing ref='w10' language="FR"> 
+   I have voted in favour of this resolution.  <omit>As we have seen,
+   it is not worth our while building along the coast.
+   </omit>
+  </writing> 
+</intervention>
+
+<intervention ref='67'>
+  <speaker>
+   <name>Mr Roy</name>
+   <affiliation EPparty="GUE-NGL"/>
+  </speaker>
+  <speech ref='s27' language="ES">
+   Capitalism is preparing to re-build the interests of the 
+   multinationals on top of the graves,
+  </speech> 
+</intervention>
+
+If you enter, for instance 
+
+  $s/speech/@language = 'FR'
+
+you will restrict the concordancer to returning words enclosed by 
+the writing element in intervention 66 (i.e. the block of text
+identified by 'w10').
+
+If you enter 
+
+ $s/speech/@language = 'ES'
+
+you will get all speeches delivered in Spanish (ES), block 's27' in
+the example above.
+
+You could also select all texts (speech and writing) in language ES by
+entering
+
+ $s/(speech|writing)/@language = 'ES'
+
+Similarly, you can select parties by changing the XPath:
+
+ $s/(speaker|writer)/affiliation/@EPparty = 'PPE-DE'
+
+(which in the example above would return "Mr Jones'" writing).
+
+Expressions can also be combined. For example, you could be interested
+in retrieving all texts (speech or writing) produced in French by
+members of PPE-DE. This can be specified as follows:
+
+ $s/(speaker|writer)/affiliation/@EPparty = 'PPE-DE' and 
+ $s/(speech|writing)/@language = 'FR'
+
+Or, all texts NOT produced in French by the same crowd:
+
+  $s/(speaker|writer)/affiliation/@EPparty = 'PPE-DE' and 
+  and $s/(speech|writing)/@language != 'FR'
+
+And, in case you got this impresssion from the examples above, search
+isn't restricted to attributes. You could also match against element
+contents, as in 
+
+   $s/(speaker|writer)/name = 'Mr Roy'
+
+As mentioned above, any expression that can appear in the WHERE clause
+of an XQuery FLOWR expression can be used to select subcorpora. So,
+consulting an XQuery reference manual might be a good idea. 
+
+
+
+
+ABOUT TEC
+==========
+
+TEC is a project aimed at gathering a corpus of translational English
+and building tools for indexing, storing, sharing and browsing
+concorcances in the texts.
+
+The tools being developed in the project are available under the terms
+of the Gnu Public License (see COPYING, in this directory).  The set
+of TEC corpus tools is now part of modnlp and has been divided into
+two packages: a server (modnlp-tecser) and a client (modnlp-teccli).
+The files in this directory and its sub-directories form part of
+teccli.  After the package is built (see INSTALL), you will be able to
+see an executable file in the ./bin directory (folder): "tecli".
+This file runs the TEC client.
+
+Due to copyright restrictions, the TEC corpus itself has not been made
+publicly available. However, you can use the client provided to access
+the corpus (held at http://ronaldo.cs.tcd.ie) over the internet. The
+file INSTALL contains instructions on how to build and run the
+software.
+
+A long-term goal of the this project is to establish standards for
+storage and remote access of distributed corpora in a peer-to-peer
+architecture.
+
+-- S. Luz (luzs@cs.tcd.ie)

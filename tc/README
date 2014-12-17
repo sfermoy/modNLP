@@ -1,0 +1,87 @@
+The modnlp text categorisation (modnlp-tc) suite is distributed under
+the GNU General Public License. See COPYING for details.
+
+modnlp-tc is fully compatible with the GNU Classpath
+(http://www.gnu.org/software/classpath/) and I intend to keep it that
+way.  It has been tested on a number of JVM's, including kaffe
+(v1.1.5), sablevm (v1.1.6), jamvm (v1.3) and Sun's JDK 1.4
+
+This directory contains:
+
+ o the source code for the text categorisation suite (src/) with
+   documentatioon (doc/)
+
+ o a minimalist, non-validating, SAX2 XML parser which
+   tc.parser.NewsParser user for parsing (my XML version of the)
+   REUTERS 21578 TC corpus (lib/MinML2.jar) The source code for
+   version 0.3 of MinML2 is also distributed for convenience
+   (lib/MinML2-src.tgz). MinML2 is covered by a BSD-style license. See
+   lib/MinML2-license.txt for details.
+
+ o some test data
+
+First of all, compile and test the programs by following the
+instructions in the INSTALL file. 
+
+Modules whose names start with 'Make' are stand-alone modules.
+modnlp.tc.tsr.MakeReducedTermSet, for instance, can be used to select
+features (terms) for text classfication and display them on the
+screen, along with the score they get from various term-set reduction
+metrics.  The following command line selects the 10% best-scoring
+terms for classification as 'acq' (acquisition news) from a small
+corpus.
+
+% ./run.sh modnlp.tc.tsr.MakeReducedTermSet testdata/tinycorpus.lst testdata/stopwds.txt 10 InfoGain acq
+
+You will notice that this small 'corpus' is in fact a tiny 138-term sample, 
+and the results of TSR are obviously unrepresentative. For a better example, 
+download reuters-21578-xml.tgz and run the program on its files.
+
+You can also use the TSR, induction and classification programs with other 
+types of files. All you need to do is implement an appropriate parser (in 
+modnlp.tc.parser) and integrate it with the appropriate programs. The function of 
+this parser (which in many cases will be no parser at all), is simply to 
+extract the category information and text from each file in your corpus and
+store them in a ParsedCorpus object. Parsers are integrated with the
+various modules as plugins loaded dynamically. 
+
+The term set reduction methods are also implemented by means of 'plugins',
+which extends abstract class TermFilter. Direcory src/tc/tsr/ contains
+a couple of TSR methods (InfoGain, for information gain; OddsRation,
+for odds ratio TSR; GSScoefficient, etc) implemented as examples. See
+the API documentation for more information on how to implement TSR
+plugins. 
+
+A typical text classification life cycle could be run through the
+following sequence of steps:
+
+ 1) INDUCTION: Generate a (Boolean-vector) probability model from a
+    training set (/tmp/train.lst is a file, each line of which should
+    contain the name of a REUTERS 21578 file in XML format):
+
+ % ./run.sh modnlp.tc.induction.MakeProbabilityModel /tmp/train.lst \
+            ../testdata/stopwds.txt 10 InfoGain acq /tmp/test.pm 
+
+ 2) CLASSIFICATION and EVALUATION: test the probability model by
+    running (/tmp/test.lst is similar to /tmp/train.lst and should
+    contain the files selected for the test set): 
+
+ % ./run.sh modnlp.tc.classify.BVBayes /tmp/test.lst acq /tmp/train.pm proportional
+
+The classifier will print a summary of clasification results on the
+stdout, and various evaluation scores for the test set
+(e.g. precision, recall, accuracy, fallout, etc).
+
+In addition, you can generate various kinds of ARFF files for use with
+WEKA (http://www.cs.waikato.ac.nz/~ml/weka/), an open-source, GPL'd
+machine learning toolkit. Representations currently supported include
+Boolean term vectors, TFIDF vectors, and proportional term weighting
+vectors. See src/tc/util/ARFFUtil.java for details. The following
+example illustrate this functionality:
+
+% ./run.sh tc/util/MakeARFF /tmp/train.lst ../testdata/stopwds.txt \
+         10 OddsRatio acq tfidf  >/tmp/tfidf.arff
+
+For more details, updates, etc, see http://nlpmod.berlios.de/
+
+-- S. Luz (luzs@cs.tcd.ie)

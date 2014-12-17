@@ -1,0 +1,100 @@
+modnlp-idx, binary distribution: 
+-------------------------------
+
+The modnlp text indexing suite is distributed under the
+GNU General Public License. See COPYING for details.
+
+modnlp-idx is fully compatible with the GNU Classpath
+(http://www.gnu.org/software/classpath/) and I intend to keep it that
+way.  It has been tested on a kaffe (v1.1.5), and partially tested on
+sablevm (v1.1.6), jamvm (v1.3), with the gnu.regexp package. It also
+runs on Sun's JDK version 1.4 or greater.
+
+The source code, API documentation is available from 
+
+  http://modnlp.berlios.de/
+
+Background
+----------
+
+The indexer, the technology employed in indexing, the expected
+XML structure of the files to be indexed (your corpus) and the teccli
+user interface for concordance visualisation, sub-corpus selection etc
+are described in the following paper:
+
+   S. Luz, “Web-based corpus software,” in Corpus-based Translation
+   Studies: Research and Applications (A. Kruger, K. Wallmach, and
+   J. Munday, eds.), Continuum, 2011. in press
+
+For a step-by-step example of how to index and search a corpus, see
+the file TUTORIAL.txt, in this folder. 
+
+Running the Index Manager:
+--------------------------
+
+In order to run the Indexing utility (to generate an index) simply
+click/double-click on idx.jar or, on the command line, type:
+
+ % java -jar idx.jar
+
+You can specify which XML elements (if any) should be ignored by the
+indexer by editing the file idxmgr.properties. Specifying, for
+instance 
+
+tokeniser.ignore.elements=(omit|ignore|header|chair|heading|post|name)
+
+will cause the indexer to ignore any text appearing between these XML
+tags. That is, a chunk of text such as
+
+"I will index this <omit desc='foo'> but I will ignore this </omit>
+ as well as <ignore> this, if </ignore> I can."
+
+will be effectively read indexed as:
+
+"I will index this   
+ as well as                             I can."
+
+If you want the header files to be indexed as an XML DB, for subcorpus
+search, set the following variables in idxmgr.properties:
+
+  index.headers=true
+
+(tell the indexer to index headers)
+
+  header.extension=hed
+
+(the file extension for header files; NB.: header files can be the
+same as the data files, if you have decided to keep data and metadata
+in the same file)
+
+  subcorpusindexer.element=(speech|writing)
+
+(the elements containing the subcorpora)
+
+  subcorpusindexer.attribute=ref
+
+(the attribute used in selecting subcorpus elements) 
+
+  xquery.root.element.path=//intervention
+  xquery.return.attribute.path=(speech|writing)/@ref
+
+(the element under which to select subcorpora [must be a parent of 
+ subcorpusindexer.element] and the attribute on which to select [must
+ match subcorpusindexer.attribute])
+
+
+Testing the index:
+------------------
+
+To query the index, type
+
+ % java -cp idx.jar:gnu-regexp-1.1.4.jar:je.jar modnlp.idx.Query INDEX-DIRECTORY -q
+
+and enter your query at the '>' prompt. E.g. 
+
+ > the
+
+should return lines containing the query term ("the")
+surrounded by its immediate context (50 chars). 
+
+-- S. Luz (luzs@cs.tcd.ie)

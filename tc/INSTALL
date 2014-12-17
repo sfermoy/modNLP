@@ -1,0 +1,33 @@
+To compile the the source for the learner and classifier type
+
+  % make build
+
+If that fails, try
+
+  % ##  compile the learner 
+  % ./compile.sh src/modnlp/tc/induction/MakeProbabilityModel.java
+  
+  % ## compile a (boolean-vector) Bayes classifier
+  % ./compile.sh src/modnlp/tc/classify/BVBayes.java                 
+
+If that also fails, you're probably missing a java compiler. You could
+try setting variables JAVAC and JAVA in your Makefile to whatever
+compiler/interpreter is installed in your machine. 
+ 
+If you're a lucky user of emacs+jdee (http://jdee.sunsite.dk/), prj.el
+files are supplied for each subdirectory which enable you to compile,
+run and debug straight from emacs.
+
+The command 
+
+  % make test
+
+runs a series of test on tiny corpus, including arff file generation,
+term set reduction, induction, classification and evaluation and saves
+the results in /tmp/tinycorpus.*
+
+After compilation you can test the programs by doing
+
+  % make test
+
+See also the README file

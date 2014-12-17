@@ -1,0 +1,70 @@
+2010-07-05  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* release 0.1.6: Upgraded je.jar to version 4. The new index
+	format yields considerable performance gains and is about 15% more
+	space efficient. The database format changed but the library is
+	backward compatible, so clients and indexer using this version
+	will be able to access databases created with je version 3. The
+	reverse is not true, however. So, dbs created with modnlp-idx >=
+	0.1.6 will not be accessible from modnlp-idx <= 0.1.5.
+
+2010-06-25  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* release 0.1.5: Bug fix release. Fixed bug in
+	SubcorpusDirectory.java. Now secondary key of SubcorpusTable gets
+	removed properly and error when re-indexing a previously
+	de-indexed file disappears.
+
+2010-02-24  Saturnino Luz  <luzs@acm.org>
+	* release 0.1.4b (DictProperties, IndexManager): fixed error in
+	index initialisation through command line mode of
+	IndexManager. DictProperties.getHeaderAbsoluteFilename() trimmed
+	off last character of base dir name when trailing '/' passed as
+	argument.
+
+2009-04-30  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* HeaderDBManager, Dictionary: Fixed a bug in TokeniserRegex.java
+	which caused all text between empty ignorable tags (e.g. '<omit
+	desc="fig"/>') and the next matching closing tag for the same
+	element (e.g. '</omit>') not to be indexed. Added functionality to
+	Dictionary.java and HeaderDBManager.java which deals with corpus
+	file descriptions.
+
+2008-07-18  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* SubcorpusIndexer: section tokenisation bug in
+	SubcorpusIndexer (dot regexp didn't extend across lines); 
+
+	* Dictionary: added subcorpus-selection sensitivity in
+	Dictionary#printSortedFreqList(PrintWriter,int,SubcorpusConstraints);
+	
+	* CorpusFile: fixed concordance line display (CorpusFile couldn't read past
+	non-ascii characters)
+
+2007-09-21  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	* HeaderDBManager, etc: improved subcorpus search, implemented a
+	basic form of subcorpus query caching, fixed a few bugs, tested on
+	HC and CD corpora
+	
+2007-06-25  Saturnino Luz  <luzs@cs.tcd.ie>
+
+	*  (modnlp-idx): Incorporated XMLDB subcospus selection
+	functionality (through eXist)
+
+2006-08-22  S. Luz  <luzs@cs.tcd.ie>
+
+	* (modnlp) Ready for SVN.
+
+2006-08-20  S. Luz  <luzs@cs.tcd.ie>
+
+	* (All) Moved modnlp.idx.{InterSet,WordForms} to modnlp.dstruct
+	  so they can be shared with tc and tec.
+
+2006-07-15  S. Luz  <luzs@cs.tcd.ie>
+
+	* (All) Started idx as a sub-module of modnlp, with its separate
+	  Makefile etc. Changed directory structure in preparation for
+	  SVN. 
+

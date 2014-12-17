@@ -1,0 +1,38 @@
+modnlp-idx: The modnlp text indexing suite is distributed under the
+GNU General Public License. See COPYING for details.
+
+modnlp-idx is fully compatible with the GNU Classpath
+(http://www.gnu.org/software/classpath/) and I intend to keep it that
+way.  It has been tested on a kaffe (v1.1.5), and partially tested on
+sablevm (v1.1.6), jamvm (v1.3), with the gnu.regexp package. It also
+runs on Sun's JDK version 1.4 or greater.
+
+This directory contains:
+
+ o the source code (src/) with documentatioon (doc/)
+
+ o the gnu-regexp library (see lib/GNUREGEXP-LICENSE) and the
+   Berkeley database library (lib/je.jar; see JE-LICENSE) 
+
+ o some test data (./data/) consisting of xml files annotated
+   according to the tec guidelines 
+
+First of all, compile and test the programs by following the
+instructions in the INSTALL file. 
+
+The programs in modnlp/idx are all executable.
+modnlp.idx.MakeTECIndex, for instance, indexes the files in data/.
+You can test the programs and library by running 
+
+  % make test
+
+You can also query the index bu running
+
+  % java -cp src:lib/gnu-regexp-1.1.4.jar:../lib/je.jar modnlp.idx.Query "the" 
+
+which should return lines containing the query term ("the")
+surrounded by its immediate context (50 chars). 
+
+
+
+-- S. Luz (luzs@cs.tcd.ie)

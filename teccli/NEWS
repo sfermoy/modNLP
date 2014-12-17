@@ -1,0 +1,32 @@
+
+* Both client and server have been revamped. The main changes are:
+						     (Jun 2003)
+
+  o The query language has been improved: wildcards are back, sequence
+    queries now work correctly (number of intervening words now mean
+    just that); (take a look at the browser's new help function for a
+    description of the syntax)
+
+  o retrieval efficiency (server side) has been improved: the search
+    engine now chooses the least frequent word to guide the search;
+
+  o Noel's SQL search code (sub-corpus specification) has been cleaned
+    up and fixed (the browser now responds dynamically to server-side
+    changes on the metadata by querying the server at start-up, with
+    the undesirable but unavoidable side-effect of increasing start-up
+    time); 
+
+  o the client interface has been improved; new features include menus
+    and infrastructure for help files;
+    
+  o we've move one step closer to a proper plug-in architecture
+
+* MySQL support for restricting search to sub-corpora determined by
+  author, translator etc added by FYP student Noel Skehan (May 2002)
+
+* GDBM based index replaced WordFarm. Server support for search
+  through intervening words added. (Jun 2001)
+
+Old News:
+
+* Java WebStart now used for quick deployment. 

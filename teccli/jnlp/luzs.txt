@@ -1,0 +1,9 @@
+Owner: CN=S Luz, OU=Dept of Computer Science, O=Trinity College, L=Dublin, ST=Dublin, C=IE
+Issuer: CN=S Luz, OU=Dept of Computer Science, O=Trinity College, L=Dublin, ST=Dublin, C=IE
+Serial number: 49f8b223
+Valid from: Wed Apr 29 21:01:39 IST 2009 until: Fri Jan 06 20:01:39 GMT 2023
+Certificate fingerprints:
+	 MD5:  74:EB:1C:B1:50:C9:2D:6F:D9:86:57:13:F7:27:49:89
+	 SHA1: E7:23:6F:BE:F4:5C:43:19:1F:6D:06:1D:82:19:3F:A8:62:34:C7:BA
+	 Signature algorithm name: SHA1withDSA
+	 Version: 3

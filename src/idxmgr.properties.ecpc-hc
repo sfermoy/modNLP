@@ -1,0 +1,24 @@
+#modnlp.idx.IndexManager's properties
+#Thu Sep 13 09:31:50 IST 2007
+## should punctuation count as tokens?
+index.punctuation=false
+## index metadata for subcorpus selection (header files)?
+index.headers=true
+xquery.return.attribute.path=speech/@ref
+tokeniser.ignore.elements=(omit|ignore|header|chair|heading|post|name|gender|status)
+subcorpusindexer.attribute=ref
+xquery.root.element.path=//intervention
+subcorpusindexer.element=(speech)
+header.extension=hed
+last.index.dir=/tmp/a
+xquery.max.cache.size=23
+xquery.attribute.chooser.specs=File name;../../header/@filename;Language;speech/@language;Affiliation;(speaker|writer)/affiliation/@nationalparty;Speaker;(speaker|writer)/name;Speaker gender;(speaker|writer)/gender;Post;(speaker|writer)/post
+file.encoding=UTF8
+xquery.root.filedescription.path=/header
+## xquery expression that returns a (human-readable) file description 
+xquery.file.description.return={data($s/@filename)}<sep/>{data($s/@language)}<sep/>{data($s/index/label)}, {data($s/index/place)}, {data($s/index/date)}, {data($s/index/edition)}
+## the language to be indexed (determines the choice of
+## tokeniser). Currently supported languages are LATIN (EN) and JP; EN
+## should make reasonably educated guesses for all European Languages
+## (including some non-Latin scripted ones, such as Greek).
+language=EN

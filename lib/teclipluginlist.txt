@@ -1,0 +1,5 @@
+modnlp.tec.client.plugin.FqListBrowser:Word frequency list:Browse the corpus word frequency list
+modnlp.tec.client.plugin.CorpusDescriptionBrowser:Corpus description browser:Display corpus metadata
+modnlp.tec.client.plugin.SubcorpusSelection:Subcorpus selector:Select subcorpus according to header file elements
+modnlp.tec.client.plugin.ConcordanceTreeViewer:Concordance tree viewer:Visualise a concordance tree
+modnlp.tec.client.plugin.ConcordanceMosaic:Concordance mosaic:Display a concordance mosaic

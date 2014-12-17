@@ -1,0 +1,7 @@
+#Application Parameters
+#Sat Mar 10 06:00:00 CET 2000
+#
+tec.client.server=ronaldo.cs.tcd.ie
+tec.client.headers=http://ronaldo.cs.tcd.ie/tec/headers
+tec.client.port=1240
+

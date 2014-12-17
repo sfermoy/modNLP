@@ -1,0 +1,33 @@
+#modnlp.idx.IndexManager's properties (tailored to ECPC indexing)
+#Wed May 16 15:29:14 IST 2007
+tokeniser.ignore.elements=(omit|ignore|header|chair|heading|post|name)
+## index header files?
+index.headers=true
+## which element should be indexed (i.e. text within elements
+## specified here will be indexed and can form subcorpora if xquery
+## restrictions are applied. Format: a regexp grouping 
+subcorpusindexer.element=(speech|writing)
+## which attribute from the element above will we use to uniquely
+## identify the text segments. Attribute mus be of xml type ID
+subcorpusindexer.attribute=ref
+## specify 'root' xml element, relative to which the xqueries will be
+## formulated
+xquery.root.element.path=//intervention
+## the element to be returned by xquery to select which indexed texts
+## should be included in the inverted-index query
+xquery.return.attribute.path=(speech|writing)/@ref
+## specs and paths all relative to xquery.root.element.path
+## form: description_1;path_1;description_2;path_2,...
+xquery.attribute.chooser.specs=File name;../../header/@filename;Spoken language;speech/@language;Written language;writing/@language;Affiliation;(speaker|writer)/affiliation/@EPparty
+header.extension=hed
+## the maximum number of subcorpus constraint query results to be stored (by HeaderDBManager)
+xquery.max.cache.size=23
+file.encoding=UTF8
+xquery.root.filedescription.path=/header
+## xquery expression that returns a (human-readable) file description 
+xquery.file.description.return={data($s/@filename)}<sep/>{data($s/@language)}<sep/>{data($s/index/label)}, {data($s/index/place)}, {data($s/index/date)}, {data($s/index/edition)}
+## the language to be indexed (determines the choice of
+## tokeniser). Currently supported languages are LATIN (EN) and JP; EN
+## should make reasonably educated guesses for all European Languages
+## (including some non-Latin scripted ones, such as Greek).
+language=EN
