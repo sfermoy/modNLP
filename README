@@ -3,10 +3,8 @@ License. See COPYING for details.
 
 modnlp aims to be fully compatible with the GNU Classpath
 (http://www.gnu.org/software/classpath/). The indexer (modnlp-idx) and
-text categorisation (modnlp-tc) have been tested on kaffe (v1.1.5),
-and partially tested on sablevm (v1.1.6), jamvm (v1.3), with the
-gnu.regexp package. modnlp also runs on Sun's JDK version 1.4 or
-greater.
+text categorisation (modnlp-tc) have been tested on IceTea6 as well as
+Oracle's JDK6.
 
 This directory contains:
 
@@ -21,19 +19,17 @@ This directory contains:
 
 To compile, follow the instructions in the INSTALL file.
 
-Access to the development version via SVN through anonymous HTTP with
-the following command:
+Access to the development version via GIT through sourceforge. 
+E.g.:
 
-svn checkout http://svn.berlios.de/svnroot/repos/modnlp/trunk
+git clone https://m....
 
-or 
+The required external libraries must be downloaded separately from
 
-svn checkout svn+ssh://yourloginname@svn.berlios.de/svnroot/repos/modnlp/trunk modnlp
+https://owncloud.scss.tcd.ie/public.php?service=files&t=17848f743a8dd0ef0bc95a84fa9ef3cd
 
-(if you are a developer)
+and uncompressed into directory lib/
 
 
-svn co https://developername@svn.berlios.de/svnroot/repos/modnlp/trunk modnlp/
-
--- S. Luz (luzs@cs.tcd.ie)
+-- S. Luz (luzs@acm.org)
 

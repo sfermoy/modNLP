@@ -1,3 +1,9 @@
+First, download the dependencies (external libraries) archive from
+
+https://owncloud.scss.tcd.ie/public.php?service=files&t=17848f743a8dd0ef0bc95a84fa9ef3cd
+
+and uncompressed it into directory lib/
+
 To compile the modnlp package as a whole, type
 
   % make build
