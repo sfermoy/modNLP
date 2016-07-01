@@ -21,7 +21,7 @@ import modnlp.Constants;
 import modnlp.tec.client.gui.HighlightString;
 import modnlp.dstruct.TokenIndex;
 import modnlp.idx.inverted.TokeniserRegex;
-import modnlp.idx.inverted.TokeniserJP;
+import modnlp.idx.inverted.TokeniserJPLucene;
 import modnlp.util.Tokeniser;
 
 import java.io.File;
@@ -135,7 +135,7 @@ public class ConcordanceObject {
       tkr = new TokeniserRegex("");
       break;
     case modnlp.Constants.LANG_JP:
-      tkr = new TokeniserJP("");
+      tkr = new TokeniserJPLucene("");
       break;
     default:
       tkr = new TokeniserRegex("");
@@ -235,6 +235,11 @@ public class ConcordanceObject {
   public final String getKeywordAndRightContext(){
     return concordance.substring(coVector.getHalfConcordance());
   }
+
+ public final String getKeyword(){
+   return keyword;
+  }
+
 
   public final int getSortContextHorizon(){
     return coVector.getSortContextHorizon();

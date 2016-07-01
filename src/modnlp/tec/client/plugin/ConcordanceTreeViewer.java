@@ -1,5 +1,5 @@
 /**
- *  (c) 2008 S Luz <luzs@acm.org>
+ *  (c) 2008-2016 S Luz <luzs@acm.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,14 +15,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
-package modnlp.tec.client.plugin;
+package org.modnlp.conctree;
 
 import modnlp.tec.client.Plugin;
 import modnlp.tec.client.ConcordanceBrowser;
 import modnlp.tec.client.ConcordanceObject;
 import modnlp.tec.client.gui.SubcorpusCaseStatusPanel;
 import modnlp.idx.inverted.TokeniserRegex;
-import modnlp.idx.inverted.TokeniserJP;
+import modnlp.idx.inverted.TokeniserJPLucene;
 import modnlp.util.Tokeniser;
 
 import java.awt.Color;
@@ -60,9 +60,6 @@ import prefuse.data.SpanningTree;
 import prefuse.util.ui.JFastLabel;
 import prefuse.util.FontLib;
 import prefuse.visual.VisualItem;
-
-
-
 
 /**
  *  Basic concordance tree generator. A concordance tree is a prefix
@@ -146,7 +143,7 @@ public class ConcordanceTreeViewer extends JFrame
           stop();
           setLeftContext(false);
           current_action = GROW;
-          start(); 
+          start();
           }});
 
     growTreeLeftButton.
@@ -156,8 +153,6 @@ public class ConcordanceTreeViewer extends JFrame
             current_action = GROW;
             stop(); start();
           }});
-
-
 
     JPanel cop = new JPanel();
     cop.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -329,7 +324,7 @@ public class ConcordanceTreeViewer extends JFrame
           ss = new TokeniserRegex("");
           break;
         case modnlp.Constants.LANG_JP:
-          ss = new TokeniserJP("");
+          ss = new TokeniserJPLucene("");
             break;
         default:
           ss = new TokeniserRegex("");

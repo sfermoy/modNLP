@@ -8,6 +8,7 @@
 <resources>
 <jar href="wordleconc.jar" download="eager"/>
 <jar href="mosaic.jar" download="eager"/> 
+<jar href="conctree.jar" download="eager"/> 
 </resources>
  <component-desc/>
 </jnlp> 

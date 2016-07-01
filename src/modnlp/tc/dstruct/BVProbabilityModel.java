@@ -268,9 +268,9 @@ implements TCInvertedIndex
     }
 
     double tc = (double) tgc * c;         // p(t,c)
-    double tnc = (double) t - tc;         // p(t,¬c)
-    double ntc = (double) (1 - tgc) * c;  // p(¬t,c)
-    double ntnc = (double) (1 - t) - ntc; // p(¬t,¬c)
+    double tnc = (double) t - tc;         // p(t,~c)
+    double ntc = (double) (1 - tgc) * c;  // p(~t,c)
+    double ntnc = (double) (1 - t) - ntc; // p(~t,~c)
     
     Probabilities p = new Probabilities(t,c,tc,tnc,ntc,ntnc);
     //System.out.println("-- ("+term+","+cat+") = "+p);
