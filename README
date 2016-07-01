@@ -26,13 +26,16 @@ git clone git://git.code.sf.net/p/modnlp/code modnlp-code
 
 or 
 
-git clone http://git.code.sf.net/p/modnlp/code modnlp-code
+git clone http://git.code.sf.net/p/modnlp/code modnlp
 
 (see http://sourceforge.net/p/modnlp/code/ci/master/tree/ )
 
-The required external libraries must be downloaded separately from
+The required external (3rd party) libraries must be downloaded
+separately from
 
-https://owncloud.scss.tcd.ie/public.php?service=files&t=17848f743a8dd0ef0bc95a84fa9ef3cd
+https://datasync.ed.ac.uk/index.php/s/UyVMiE3gW7WsFEL
+
+(password: modnlp)
 
 and uncompressed into directory lib/
 
