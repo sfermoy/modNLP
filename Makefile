@@ -28,7 +28,7 @@ JAVACFLAGS=-encoding UTF-8 -classpath $(SOURCEDIR):$(LIBSPATH)
 
 .PHONY: build jar test docs dist
 
-all: build jar test dist
+all: build jar test libs
 
 %.class: %.java
 		$(JAVAC) $(JAVACFLAGS) $?
@@ -54,18 +54,18 @@ dist: clean
 	tar cfvz /tmp/$(DISTDIR).tar.gz  --exclude-from=exclude.txt $(DISTDIR)
 	rm -rf $(DISTDIR)
 
-bindist:
+libs:
 	cd idx/ && make jar
 	cd tecser/ && make jar
 	cd teccli/ && make jar
 	cd tc/ && make jar
+
+bindist: libs
 	mkdir $(BINDISTDIR)
 	cp README.bin $(BINDISTDIR)/README
 	cp $(BINDISTFILES) $(BINDISTDIR)
 	tar cfvz /tmp/$(BINDISTDIR).tar.gz  --exclude-from=exclude.txt $(BINDISTDIR)
 	rm -rf $(BINDISTDIR)
-
-
 
 nosvn: clean
         tar cfvz /tmp/modnlp.tgz --exclude-from=exclude.txt .

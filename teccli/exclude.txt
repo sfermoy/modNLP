@@ -13,3 +13,10 @@
 */.svn
 */.svn/*
 doc/*
+*tecplugin.cer
+*tecplugin.cer.pass
+*.keystore
+*tecplugin.cer
+*tecplugin.cer.pass
+*luzs.cer
+*luzs.cer.pass
