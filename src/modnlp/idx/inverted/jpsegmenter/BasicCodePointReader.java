@@ -21,10 +21,10 @@ import java.io.PushbackReader;
 import java.io.Reader;
 
 /**
- * Readerを�(c)ップして、ひとつずつUnicodeコードポイントを
- * 取得するためのデコレータク�(c)ス。サロゲートペアを正しく認識する。<br>
+ * Readerをラップして、ひとつずつUnicodeコードポイントを
+ * 取得するためのデコレータクラス。サロゲートペアを正しく認識する。<br>
  * 
- * 不正なサロゲートペアは、{@link #getAlternativeCodePoint()}で得られる
+ * 不正なサロゲートペアは、{@link #getAlternationCodePoint()}で得られる
  * 代替コードポイントに置換される。
  */
 public class BasicCodePointReader implements CodePointReader
@@ -34,15 +34,15 @@ public class BasicCodePointReader implements CodePointReader
      */
     public static final int DEFAULT_ALTERNATION_CODEPOINT = '〓';
 
-    private PushbackReader reader = null;
-    private long position = 0;
-    private int alternationCodePoint = DEFAULT_ALTERNATION_CODEPOINT;
-    private boolean eos = false;
+    private PushbackReader reader;
+    private long position;
+    private int alternationCodePoint;
+    private boolean eos;
 
     /**
      * コードポイントイテレータを構築する。
      * 
-     * @param sequence
+     * @param reader
      *            ソースとなるcharのシーケンス
      */
     public BasicCodePointReader(Reader reader)
@@ -91,7 +91,7 @@ public class BasicCodePointReader implements CodePointReader
             ++position;
             if (ci < 0) {
                 // シーケンスがhigh surrogateで終わっている。
-                // 代替文字を返すと共に、EOSフ�(c)グをONにする。
+                // 代替文字を返すと共に、EOSフラグをONにする。
                 eos = true;
                 --position;
                 return alternationCodePoint;

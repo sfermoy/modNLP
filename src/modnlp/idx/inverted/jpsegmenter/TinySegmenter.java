@@ -119,8 +119,8 @@ public class TinySegmenter
         this(reader, DEFAULT_BUFFER_SIZE, DEFAULT_MAX_TOKEN_SIZE);
     }
     
-    /**
-     * コンスト�(c)クタ
+     /**
+     * コンストラクタ
      * @param reader CodePointReaderオブジェクト。
      * @param bufferSize バッファのサイズ。7以上でなければならない。
      * @param maxTokenSize トークンの最大サイズ。2以上でなければならない。
@@ -258,7 +258,7 @@ public class TinySegmenter
                 // 最初の文字をtokenBufferに格納
                 tokenBuffer[tokenPosition++] = buffer[position++];
             } else {
-                // �(c)�のストリーム
+                // 空のストリーム
                 done = true;
                 return null;
             }
@@ -358,7 +358,7 @@ public class TinySegmenter
         score += getScore(UQ1, p1 + c1.ctype);
         score += getScore(UQ2, p2 + c2.ctype);
         score += getScore(UQ3, p3 + c3.ctype);
-        //score += getScore(UQ1, p3 + c3.ctype); // オリジナルコード。UQ3の誤り？
+         //score += getScore(UQ1, p3 + c3.ctype); // オリジナルコード。UQ3の誤り？
         score += getScore(BQ1, p2 + c2.ctype + c3.ctype);
         score += getScore(BQ2, p2 + c3.ctype + c4.ctype);
         score += getScore(BQ3, p3 + c2.ctype + c3.ctype);
