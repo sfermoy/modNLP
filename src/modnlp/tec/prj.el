@@ -6,9 +6,10 @@
  '(jde-global-classpath (quote ("/home/luzs/lib/java/Prefuse/build/prefuse/classes" "./../.." "../../../lib/gnu-regexp.jar" "../../../lib/je.jar" "../../../lib/antlr-2.7.6.jar" "../../../lib/commons-pool-1.2.jar" "../../../lib/exist-modules.jar" "../../../lib/exist.jar" "../../../lib/jgroups-all.jar" "../../../lib/log4j-1.2.14.jar" "../../../lib/resolver.jar" "../../../lib/sunxacml.jar" "../../../lib/xmldb.jar" "../../../lib/MinML2.jar" "../../../lib/xmlrpc-1.2-patched.jar" "../../../lib/prefuse.jar" "./../../../lib/lucene-core-3.6.0.jar" "./../../../lib/lucene-analyzers-3.6.0.jar" "./../../../lib/lucene-kuromoji-3.6.0.jar"  
 ;"/tmp/libs/wordleconc.jar"
 "./../../../teccli/plugins/WordleConc/lib/wordleconc.jar"
-"./../../../teccli/org-modnlp/Mosaic/lib/mosaic.jar"
+;"./../../../teccli/org-modnlp/Mosaic/lib/mosaic.jar"
 ;"../../../teccli/org-modnlp/ConcTree/lib/conctree.jar"
 "./../../../teccli/org-modnlp/ConcTree/classes"
+"./../../../teccli/org-modnlp/Mosaic/classes"
 )))
  '(jde-run-working-directory "../../")
  '(jde-run-option-application-args nil)

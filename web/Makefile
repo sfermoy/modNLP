@@ -1,6 +1,6 @@
 SRCPATH=../tc/src#  :../idx/src
 SUBPACKS=modnlp.tc
-WWW=amaral@shell.berlios.de:/home/groups/modnlp/htdocs/
+WWW=luzs@web.sourceforge.net:/home/project-web/modnlp/htdocs/
 all:
 	@echo "***************************************************"
 	@echo "**                                              ***"  

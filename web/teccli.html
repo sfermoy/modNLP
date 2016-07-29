@@ -12,14 +12,13 @@ indexed by <a href="idx.html">modnlp-idx</a>.
 
 You can download the source code for the current beta distribution of
   modnlp-teccli, or the pre-compiled binaries from the
-<a href="http://developer.berlios.de/project/showfiles.php?group_id=3661&release_id=15498">the
-  project's download area</a>. The files ending in bin-tec.tar.gz,
+<a href="https://sourceforge.net/projects/modnlp/">the
+  project's development area at Sourceforge.net</a>. The files ending in bin-tec.tar.gz,
   bin-ep.tar.gz, contain the executable files prepared for use with
   ECPC or TEC corpora respectively. The only difference between those
   files is the teccli.property file. If you intend to use the software
   with your own corpora, you can download either binary and modify the
   property file to suite your own XML format.
-
 
 <p>
 If you chose the binary version, you can 
@@ -35,18 +34,22 @@ at a command line.
   and follow the instructions in the <code>README</code>
   and <code>INSTALL</code> files.
 
+<h3>Plug-ins</h3>
 
+The modnlp/teccli architecture supports plugins. Sample implemented
+plugins include a Corpus Description Browser, a Frequency List Browser
+etc. 
 
- <table class="borderless" width="100%"><tr>
- <td align="left">
- © 2005, <a href="https://www.cs.tcd.ie/~luzs/">S. Luz</a>
- </td>
- <td align="right">
- <font size="-1">This project is hosted by <a href="http://developer.berlios.de">
- <img src="http://developer.berlios.de/bslogo.php?group_id=0&type=1" width="124"
- height="32" border="0" alt="BerliOS Logo"></A></font>
- </td>
- </tr></table>
+<p>
+There is a separate set of plugins focusing on <b>text
+    visualisation</b> being developed for the <a href="http://genealogiesofknowledge.net/">Genealogies of Knowledge</a>
+    project. The source code for these plugins is available through a
+    separate Sourceforge.net
+    project, <a href="https://sourceforge.net/projects/plugins.modnlp.p/">modnlp-plugins</a>,
+    and include Concordance Tree visualisation and a Mosaic
+    Visualisation (both based on a graph abstraction of concordance
+    lists) as well as a 'Wordle-like' visualisation. 
+
 
 </body>
 </html>

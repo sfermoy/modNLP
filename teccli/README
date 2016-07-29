@@ -120,12 +120,21 @@ As mentioned above, any expression that can appear in the WHERE clause
 of an XQuery FLOWR expression can be used to select subcorpora. So,
 consulting an XQuery reference manual might be a good idea. 
 
-ABOUT TEC and ECPC
-==================
+ABOUT Genealogies of Knowledge, TEC and ECPC
+=============================================
 
-TEC is a project aimed at gathering a corpus of translational English
+TEC was a project aimed at gathering a corpus of translational English
 and building tools for indexing, storing, sharing and browsing
-concorcances in the texts.
+concordances in the texts. The Genealogies of Knowledge project
+"focuses on [the study of] translation phenomena involving three
+distinct lingua francas: medieval Arabic, early Latin and modern
+English. It engages with key historical moments that have brought
+about transformations in the interpretation of two constellations of
+concepts across the last 2500 years"
+(http://genealogiesofknowledge.net/). Corpus analysis and
+visualisation tools are core to this research. The modnlp and
+modnlp-plugins projects will provide the software infrastructure for
+Genealogies of Knowledge. 
 
 The tools being developed in the project are available under the terms
 of the Gnu Public License (see COPYING, in this directory).  The set
