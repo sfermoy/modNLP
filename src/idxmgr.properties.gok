@@ -1,0 +1,38 @@
+#modnlp.idx.IndexManager's properties (tailored to TEC indexing)
+#Wed May 16 15:29:14 IST 2007
+tokeniser.ignore.elements=(omit)
+## should punctuation count as tokens?
+index.punctuation=false
+## index metadata for subcorpus selection (header files)?
+index.headers=true
+## which element should be indexed (i.e. text within elements
+## specified here will be indexed and can form subcorpora if xquery
+## restrictions are applied. Format: a regexp grouping 
+subcorpusindexer.element=(section)
+## which attribute from the element above will we use to uniquely
+## identify the text segments. Attribute must be of xml type ID
+subcorpusindexer.attribute=id
+## specify 'root' xml element, relative to which the xqueries will be
+## formulated
+xquery.root.element.path=/gokheader/section
+## the element to be returned by xquery to select which indexed texts
+## should be included in the inverted-index query
+xquery.return.attribute.path=/@id
+## specs and paths all relative to xquery.root.element.path
+## form: description_1;path_1;description_2;path_2,...
+xquery.attribute.chooser.specs=File name;../book/@filename;Subcorpus;../book/@subcorpusid;Source;translation/source/@language;Pub. date;/@publication_date;Date accuracy;/@date_accuracy;Author;author/name
+## extension of the header files (e.g. .hed, .xml etc)
+header.extension=hed
+## the maximum number of subcorpus constraint query results to be stored (by HeaderDBManager)
+xquery.max.cache.size=23
+## root of the file description path
+xquery.root.filedescription.path=/gokheader
+## xquery expression that returns a (human-readable) file description 
+xquery.file.description.return={data($s/book/@filename)}<sep/>{data($s/book/@subcorpusid)}<sep/> {if ($s/book/collection!="") then {data($s/book/collection)} else { data($/section/tile) }  {if ($s/book/editor!="") then ", editor: " else ""} { data($s/book/editor)}
+## the encoding for characters in files to be indexed. Make sure your text files match this
+file.encoding=UTF8
+## the language to be indexed (determines the choice of
+## tokeniser). Currently supported languages are LATIN (EN) and JP; EN
+## should make reasonably educated guesses for all European Languages
+## (including some non-Latin scripted ones, such as Greek).
+language=EN

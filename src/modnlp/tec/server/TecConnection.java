@@ -1,8 +1,8 @@
 /** 
  * Project: MODNLP/TEC/SERVER.
  *
- * Copyright (c) 2009-2010 S Luz
- *           (c) 2006 S.Luz (TCD)
+ * Copyright (c) 2009-2016 S Luz
+ *           (c) 2006 S.Luz (luzs@acm.org)
  *           (with contributions by Noel Skehan)
  *           All Rights Reserved.
  *
@@ -183,6 +183,9 @@ public class TecConnection extends Thread {
       case Request.HEADERBASEURL:
         getHeaderBaseURL(os);
         break;
+        //case Request.HEADEREXT:
+        //getHeaderEXT(os);
+        //break;
       case Request.ATTCHOPTSPECS:
         sendAttributeChooserSpecs(os);
         break;
@@ -292,9 +295,11 @@ public class TecConnection extends Thread {
     os.println(dtab.getDictProps().getProperty("headers.url"));
     os.println(dtab.getDictProps().getProperty("file.encoding"));
     os.println(dtab.getDictProps().getLanguage());
+    os.println(dtab.getDictProps().getProperty("header.extension"));
     //if (lg != null)
     //os.flush();
   }
+
 
   /** Retrieve a (case-insensitive) frequency list
    *  

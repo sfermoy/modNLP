@@ -1,7 +1,7 @@
 /** 
  * Project: MODNLP/TEC/SERVER
  *
- * Copyright (c) 2006-2010 S.Luz (TCD)
+ * Copyright (c) 2006-2010 S.Luz (luzs@acm.org)
  *           All Rights Reserved.
  *
  *   This program is free software; you can redistribute it and/or

@@ -1,8 +1,9 @@
 #Corpus Browser's properties
 #Wed Feb 17 12:02:21 GMT 2010
 tokeniser.regexp=\\p{L}[\\p{L}-.]*'?s?
-browser.brand=modnlp/TEC Browser
-tec.client.port=1240
+browser.brand=modnlp/Genealogies of Knowledge Browser
+browser.icon=modnlp/tec/client/icons/gok-300.jpg
+tec.client.port=1241
 tec.client.server=genealogiesofknowledge.net
 ignore.xml.tags=true
 last.index.dir=/home/luzs/corpora/indices/tec

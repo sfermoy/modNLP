@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE gokheader SYSTEM "gokheader.dtd">
+<gokheader>
+  <book subcorpusid="modern" filename="mod000001">
+    <collection_title></collection_title>
+    <editor></editor>
+  </book>
+    <section id="s1"  publication_date='1966' date_accuracy='certain' outlet='website' format='book' period='twentieth century'
+           language='French'>
+           <title>Madness and Civilization: A History of Insanity in the age of Reason</title>
+           <author><name>Michel Foucault</name></author>
+    <translation status="translation">
+      <translator>
+        <name>Anonymous</name>
+      </translator>
+      <source><original_title>ththththt</original_title></source>
+    </translation>
+    <copyright status='public_domain'>
+      <terms>Not available for commercial purposes</terms>
+      <holder>Routledge</holder>
+    </copyright>
+    <comments></comments>
+   </section>
+</gokheader>

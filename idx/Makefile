@@ -175,6 +175,15 @@ bindist: jar
 	tar cfvz /tmp/$(BINDISTDIR).tar.gz  --exclude-from=exclude.txt $(BINDISTDIR)
 	rm -rf $(BINDISTDIR)
 
+bindistgok: jar
+	mkdir $(BINDISTDIR)-gok
+	cp README.bin $(BINDISTDIR)-gok/README
+	cp bin/runidx.sh $(BINDISTDIR)-gok
+	cp $(TOPDIR)src/idxmgr.properties.gok $(BINDISTDIR)-gok/idxmgr.properties
+	cp $(LIBS) $(JARTARGET) $(BINDISTXTRAS) $(BINDISTDIR)-gok
+	tar cfvz /tmp/$(BINDISTDIR)-gok.tar.gz  --exclude-from=exclude.txt $(BINDISTDIR)-gok
+	rm -rf $(BINDISTDIR)-gok
+
 bindistec: jar
 	mkdir $(BINDISTDIR)-tec
 	cp README.bin $(BINDISTDIR)-tec/README

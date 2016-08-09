@@ -3,11 +3,12 @@
  codebase="http://localhost/~luzs/jnlp/"  href="plugins.jnlp">
  <information>
 <title>modnlp/teccli plugins</title>
-<vendor>TCD</vendor>
+<vendor>UoE &amp; UoM</vendor>
  </information>
 <resources>
 <jar href="wordleconc.jar" download="eager"/>
-<jar href="mosaic.jar" download="eager"/> 
+<jar href="mosaic.jar" download="eager"/>
+<jar href="conctree.jar" download="eager"/>
 </resources>
  <component-desc/>
 </jnlp> 

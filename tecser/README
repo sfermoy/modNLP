@@ -13,10 +13,14 @@ directory. Now, change directory to lib and run
 
 java -jar tecser.jar
 
+Sample Unix (SystemV) startup scripts are included which can be
+adapted to your server (tecser-sysV-startup.sh for CentOS and 
+../bin/tecser-init.d.sh for Debian/Ubuntu).
+
 ABOUT TEC
 ==========
 
-TEC is a project aimed at gathering a corpus of translational English
+TEC was a project aimed at gathering a corpus of translational English
 and building tools for indexing, storing, sharing and browsing
 concorcances in the texts.
 
@@ -31,12 +35,12 @@ This file runs the TEC client.
 
 Due to copyright restrictions, the TEC corpus itself has not been made
 publicly available. However, you can use the client provided to access
-the corpus (held at http://ronaldo.cs.tcd.ie) over the internet. The
-file INSTALL contains instructions on how to build and run the
-software.
+the corpus (held at http://www.genealogiesofknowledge.net) over the
+internet. The file INSTALL contains instructions on how to build and
+run the software.
 
 A long-term goal of the this project is to establish standards for
 storage and remote access of distributed corpora in a peer-to-peer
 architecture.
 
--- S. Luz (luzs@cs.tcd.ie)
+-- S. Luz (luzs@acm.org)

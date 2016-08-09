@@ -1,0 +1,34 @@
+<!-- goktext.dtd: GOK minimal text file description -->
+<!ELEMENT goktext (section+)>
+<!-- this is a very unconstrained definition of what has been coded
+ so far, one way or another; Even this rather liberal DTD, however, 
+ should be enought to catch a number of errors and
+ inconsistencies. NOTE that section is now a required child-element of
+ tecttext so as to link to the relevant sections in the header files.
+ -->
+<!ELEMENT section (#PCDATA|p|br|title|table|list|frontmatter|preface|endorsements|introduction|acknowledgements|chapter|shead|backmatter|footnote|endnote|note|caption|img|diagram|a|i|b|u)*>
+<!ATTLIST section id ID #REQUIRED>
+<!ELEMENT title (#PCDATA)*>
+<!ELEMENT chapter (#PCDATA|p|br|title|shead|footnote|endnote|note|caption|img|diagram|table|a|i|b|u)*>
+<!ATTLIST chapter n CDATA #IMPLIED>
+
+<!ELEMENT p EMPTY>
+<!ELEMENT collection  (#PCDATA)*>
+<!ELEMENT caption  (#PCDATA|p|shead|br)*>
+<!ELEMENT endnote  (#PCDATA|p|shead|br)*>
+<!ELEMENT footnote  (#PCDATA|p|br)*>
+<!ELEMENT frontmatter (#PCDATA| epigraph| preface| introduction | endorsements | acknowledgements | table_contents | list)*>
+<!ELEMENT epigraph (#PCDATA|p|br|title|shead|footnote|endnote|note|caption|img|diagram|table|a|i|b|u)*>
+<!ELEMENT preface (#PCDATA|p|br|title|shead|footnote|endnote|note|caption|img|diagram|table|a|i|b|u)*>
+<!ATTLIST preface writer (author|translator|publisher|other) #IMPLIED>
+<!ELEMENT introduction (#PCDATA|p|br|title|shead|footnote|endnote|note|caption|img|diagram|table|a|i|b|u)*>
+<!ATTLIST introduction writer (author|translator|publisher|other) #IMPLIED>
+<!ELEMENT endorsements  (#PCDATA|p|br|title|shead|footnote|endnote|note|caption|img|diagram|table|a|i|b|u)*>
+<!ATTLIST endorsements writer CDATA #IMPLIED>
+<!ELEMENT acknowledgements  (#PCDATA|p|br|title|shead|footnote|endnote|note|caption|img|diagram|table|a|i|b|u)*>
+<!ELEMENT table_contents  (#PCDATA|p|br|title|shead|footnote|endnote|note|caption|img|diagram|table|a|i|b|u)*>
+<!ELEMENT list  (#PCDATA)*>
+<!ATTLIST list type (figures|tables|abbreviations|other)  #IMPLIED>
+
+<!ELEMENT shead (#PCDATA|p|omit|title|footnote|endnote)*>
+<!ELEMENT backmatter (#PCDATA|p|br|title|shead|footnote|endnote|note|caption|img|diagram|table|a|i|b|u)*>

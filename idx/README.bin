@@ -12,7 +12,7 @@ runs on Sun's JDK version 1.4 or greater.
 
 The source code, API documentation is available from 
 
-  http://modnlp.berlios.de/
+  http://modnlp.sf.net/
 
 Background
 ----------
@@ -97,4 +97,4 @@ and enter your query at the '>' prompt. E.g.
 should return lines containing the query term ("the")
 surrounded by its immediate context (50 chars). 
 
--- S. Luz (luzs@cs.tcd.ie)
+-- S. Luz (luzs@acm.org)

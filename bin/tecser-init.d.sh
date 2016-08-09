@@ -1,15 +1,15 @@
 #!/bin/sh
 # tecser.sh
-# Created Wed Apr 22 2009 by S Luz luzs@cs.tcd.ie
-# $Id$
-# $Log$
+# Created Wed Apr 22 2009 by S Luz luzs@acm.org
+# Debian/Ubuntu style init script.
+# 
 
 ## edit these for your server
-TEC_BIN=/disk2/TECv2/software/modnlp-tecser
+TEC_BIN=/disk2/gok/software/modnlp-tecser
 TEC_SERVER=/usr/bin/java
-#TEC_SERVER=/disk3/contrib/jre1.6.0_07/bin/java
 ARGS="-Xms400m -Xmx1000m -jar tecser.jar"
 PIDFILE=/var/run/tecser.pid
+
 export PATH=/disk3/contrib/jre1.6.0_07/bin:$PATH
 
 cd $TEC_BIN

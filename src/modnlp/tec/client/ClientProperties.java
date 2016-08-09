@@ -16,8 +16,11 @@
  * Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 package modnlp.tec.client;
+import java.io.InputStreamReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.*;
 import java.util.Properties;
 /**
@@ -38,25 +41,29 @@ public class ClientProperties extends Properties{
   {
     super();
     try {
-      //ClassLoader cl = this.getClass().getClassLoader();
-      //InputStream fis = ((cl.getResource("tecli.properties")).openConnection()).getInputStream();
       FileInputStream fis = new FileInputStream(FNAME);
       this.load(fis);
     }
-    catch (Exception e) {
-      System.err.println("Warning" + e);
-      System.err.println("Creating new property file" + FNAME);
-      System.err.println("Setting default to remote access to main TEC site");
-      setProperty("tec.client.server", DEF_SERVER);
-      setProperty("tec.client.port", DEF_PORT);
-      setProperty("tec.client.headers", DEF_HDURL);
-      setProperty("stand.alone", "no");
-      save();
-      //e.printStackTrace(System.out);
-      //System.exit(1);
+    catch (IOException ex){
+      ClassLoader cl = this.getClass().getClassLoader();
+      InputStreamReader fis = (new InputStreamReader(cl.getResourceAsStream("tecli.properties")));
+            try {
+      this.load(fis);
+      }
+      catch (Exception e) {
+        System.err.println("Warning" + e);
+        System.err.println("Creating new property file" + FNAME);
+        System.err.println("Setting default to remote access to main TEC site");
+        setProperty("tec.client.server", DEF_SERVER);
+        setProperty("tec.client.port", DEF_PORT);
+        setProperty("tec.client.headers", DEF_HDURL);
+        setProperty("stand.alone", "no");
+        save();
+        //e.printStackTrace(System.out);
+        //System.exit(1);
+      }
     }
-  }
-  
+      }
   public void save () {
     try {
       store(new FileOutputStream(FNAME), 

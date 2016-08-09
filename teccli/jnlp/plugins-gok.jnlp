@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
  <jnlp spec="1.0+"
- codebase="http://genealogiesofknowledge.net/tec/jnlp/"  href="plugins.jnlp">
+ codebase="http://genealogiesofknowledge.net/gok/jnlp"  href="plugins-gok.jnlp">
  <information>
 <title>modnlp/teccli plugins</title>
 <vendor>UoE &amp; UoM</vendor>

@@ -73,12 +73,13 @@ public class Browser
 {
 
   // constants
-  public static final String RELEASE = "0.7.1";
+  public static final String RELEASE = "0.7.4";
   public static final String REVISION = "$Revision: 1.9 $";
-  String BRANDNAME = "MODNLP/TEC";
+  String BRANDNAME = "MODNLP/T";
   private static final String PLGLIST = "teclipluginlist.txt";
   private static final boolean debug = true;
 
+  private String defaultIcon = "modnlp/tec/client/icons/modnlp-small.jpg";
   // properties, state
   private boolean standAlone = true;
   private boolean commandLineServer  = false;
@@ -90,6 +91,7 @@ public class Browser
   private int remotePort = 1240;
   /** Deafult URL where to find header files */
   private String headerBaseURL;
+  private String headerExt = "hed";
   private String keywordString;
   private String encoding = null;
   private String xquerywhere = null;
@@ -142,8 +144,14 @@ public class Browser
   }
 
   private final void init(){
+    //System.err.println("BRAND"+System.getProperty("jnlp.browser.brand"));
     if (clProperties.getProperty("browser.brand") != null) {
       setBrand(clProperties.getProperty("browser.brand"));
+      System.err.println("BRAND"+clProperties.getProperty("browser.brand"));
+    }
+    if (clProperties.getProperty("browser.icon") != null) {
+      defaultIcon = clProperties.getProperty("browser.icon");
+      System.err.println("ICON"+clProperties.getProperty("browser.icon"));
     }
 
     browserFrame.addWindowListener(new WindowAdapter() {
@@ -158,7 +166,7 @@ public class Browser
         initialCorpusSelection();
     
     splashScreen = new SplashScreen("Initialising. Please wait...", 20,
-                                    "modnlp/tec/client/icons/modnlp-small.jpg");
+                                    defaultIcon);
     incProgress();    
 
     browserFrame.initGUI();
@@ -448,7 +456,7 @@ public class Browser
   {
     String filename = sel.sfilename;
     String headerName = 
-      filename.substring(0,filename.lastIndexOf('.'))+".hed";
+      filename.substring(0,filename.lastIndexOf('.'))+headerExt;
     //int p = headerName.lastIndexOf(java.io.File.separator);
     //headerName = p < 0? headerName : headerName.substring(p);
     showHeader(headerName);
@@ -571,6 +579,7 @@ public class Browser
     setLocalHeadersDirectory(dictProps);
     encoding = dictProps.getProperty("file.encoding");
     language = dictProps.getLanguage();
+    headerExt = dictProps.getProperty("header.extension");
     if (guiSubcorpusSelector != null)
       stopSubCorpusSelectorGUI();
     guiSubcorpusSelector = null;
@@ -665,8 +674,12 @@ public class Browser
       else
         language = (new Integer(lg)).intValue();
       concVector.setLanguage(language);
+      lg = input.readLine();
+      if (lg != null && lg.length() > 0) 
+        headerExt = lg;
       System.err.println("language=>>>>"+language);
       System.err.println("encoding=>>>>"+encoding);
+      System.err.println("ext=>>>>"+headerExt);
       encoding = encoding == null? "---UTF8---" : encoding;
       clProperties.setProperty("tec.client.server",remoteServer);
       clProperties.setProperty("tec.client.port",remotePort+"");
@@ -759,6 +772,7 @@ public class Browser
         browserFrame.setTitle(getBrowserName()+": No index selected");
         break;
       }
+    System.err.println("Saving Client properties "+clProperties);
     clProperties.save();
   }
 

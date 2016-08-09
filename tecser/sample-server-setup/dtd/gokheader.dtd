@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- gokheader.dtd: Header file $Revision: 1.0 $ -->
+<!ELEMENT gokheader (book,section+)>
+ <!-- should any of the sub-elements be mandadory? -->
+<!ELEMENT book (collection_title?,editor?,place_publication?)> 
+<!ATTLIST book filename NMTOKEN #REQUIRED>
+<!-- admissible range of subcorpusid can be extended -->
+<!ATTLIST book subcorpusid
+  (premodern|modern|internet) #REQUIRED>
+<!-- If this is a single book, rather than a collection, leave
+  collection_title out and specifiy section_title, under section, as
+  the actual book title--> 
+<!ELEMENT collection_title (#PCDATA)>
+<!ELEMENT place_publication (#PCDATA)>
+<!-- leave editor out is this is not a collection -->
+<!ELEMENT editor (#PCDATA)>
+<!-- In section we allow for more than one author or translator -->
+<!ELEMENT section
+          (title,author+,translation,copyright,comments?)>
+<!ATTLIST section id ID #REQUIRED>
+<!ATTLIST section publication_date CDATA #REQUIRED>
+<!ATTLIST section date_accuracy
+  (certain|probable|very_likely|doubtful) #REQUIRED>
+<!ATTLIST section outlet
+  (publisher|website|blog|online_magazine|journal|other) #REQUIRED>
+<!ATTLIST section format
+          (manuscript|book|monograph|edited_collection|critical_edition|provisional_edition|manual|report_journal_article|book_chapter|lecture|online_magazine|blog) #REQUIRED>
+<!ATTLIST section period CDATA #REQUIRED>
+<!ATTLIST section language (Classical_Greek|Medieval_Arabic|Latin|English|French|German) #REQUIRED>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT author (name+)>
+<!ELEMENT translation (translator,source)>
+<!ATTLIST translation status (translation|retranslation|commentary|non-translation|uncertain|unknown) #REQUIRED>
+<!ELEMENT translator (name+)>
+<!ELEMENT source (original_title)>
+<!ATTLIST source filename CDATA #IMPLIED>
+<!ATTLIST source language (Classical_Greek|Medieval_Arabic|Latin|English|French|German) #IMPLIED>
+<!ELEMENT original_title (#PCDATA)>
+<!ELEMENT copyright (terms,holder)>
+<!ATTLIST copyright status (out_of_copyright|copyright_granted|public_domain) #REQUIRED>
+<!ELEMENT terms (#PCDATA)>
+<!ELEMENT holder (#PCDATA)>
+<!ELEMENT comments (#PCDATA)>
+<!ELEMENT name (#PCDATA)>

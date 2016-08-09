@@ -1,6 +1,6 @@
 TOPDIR=
 SOURCEDIR=$(TOPDIR)src/
-LIBSPATH=$(TOPDIR)lib/je.jar:$(TOPDIR)lib/idx.jar:$(TOPDIR)lib/jung.jar:$(TOPDIR)lib/antlr-2.7.6.jar:$(TOPDIR)lib/commons-pool-1.2.jar:$(TOPDIR)lib/exist-modules.jar:$(TOPDIR)lib/exist.jar:$(TOPDIR)lib/jgroups-all.jar:$(TOPDIR)lib/log4j-1.2.14.jar:$(TOPDIR)lib/resolver.jar:$(TOPDIR)lib/sunxacml.jar:$(TOPDIR)lib/xmldb.jar:$(TOPDIR)lib/xmlrpc-1.2-patched.jar:$(TOPDIR)lib/prefuse.jar:$(TOPDIR)lib/wordleconc.jar:$(TOPDIR)lib/mosaic.jar
+LIBSPATH=$(TOPDIR)lib/je.jar:$(TOPDIR)lib/idx.jar:$(TOPDIR)lib/jung.jar:$(TOPDIR)lib/antlr-2.7.6.jar:$(TOPDIR)lib/commons-pool-1.2.jar:$(TOPDIR)lib/exist-modules.jar:$(TOPDIR)lib/exist.jar:$(TOPDIR)lib/jgroups-all.jar:$(TOPDIR)lib/log4j-1.2.14.jar:$(TOPDIR)lib/resolver.jar:$(TOPDIR)lib/sunxacml.jar:$(TOPDIR)lib/xmldb.jar:$(TOPDIR)lib/xmlrpc-1.2-patched.jar:$(TOPDIR)lib/prefuse.jar:$(TOPDIR)lib/wordleconc.jar:$(TOPDIR)lib/mosaic.jar:$(TOPDIR)lib/conctree.jar
 LIBS=$(subst :, ,$(LIBSPATH))
 LIBLICENSES=$(TOPDIR)lib/COPYING-libs
 DOCS=$(TOPDIR)doc
@@ -86,6 +86,15 @@ bindistec: jar
 	cp src/tecli.properties.tec $(BINDISTDIR)-tec/tecli.properties
 	tar cfvz /tmp/$(BINDISTDIR)-tec.tar.gz  --exclude-from=exclude.txt $(BINDISTDIR)-tec
 	rm -rf $(BINDISTDIR)-tec
+
+bindistgok: jar
+	mkdir $(BINDISTDIR)-gok
+	cp README.bin $(BINDISTDIR)-gok/README
+	cp src/teclipluginlist.txt $(BINDISTDIR)-gok/
+	cp $(LIBS) $(JARTARGET) $(LIBLICENSES) $(BINDISTDIR)-gok
+	cp src/tecli.properties.gok $(BINDISTDIR)-gok/tecli.properties
+	tar cfvz /tmp/$(BINDISTDIR)-gok.tar.gz  --exclude-from=exclude.txt $(BINDISTDIR)-gok
+	rm -rf $(BINDISTDIR)-gok
 
 bindistecpc: jar
 	mkdir $(BINDISTDIR)-ecpc
