@@ -1,7 +1,7 @@
 /** 
  * Project: MODNLP/TEC/SERVER.
  *
- * Copyright (c) 2009-2016 S Luz
+ * Copyright (c) 2009-2016 S Luz, 2016 Shane Shehan
  *           (c) 2006 S.Luz (luzs@acm.org)
  *           (with contributions by Noel Skehan)
  *           All Rights Reserved.
@@ -105,8 +105,14 @@ public class TecConnection extends Thread {
         {		 
           os.println("HTTP/1.0 200 OK\n");
           //logf.logMsg("->"+inLine+"<-");
-          processInput(inLine, os);	    
-          logf.logMsg("["+inaddrr.getHostName()+"] "+inLine);
+          Request req = new Request(inLine);
+          processInput(req, os);
+          // limit logged size of very large column requests (to prevent log from growing too large)
+          if (req.typeOfRequest() == Request.COLUMNBATCH)
+            logf.logMsg("["+inaddrr.getHostName()+"] "+inLine.substring(0,inLine.lastIndexOf("column="))+"...");
+          else
+            logf.logMsg("["+inaddrr.getHostName()+"] "+inLine);
+
           os.println("");
           //os.println("____FINISHED___");
           os.flush(); 
@@ -150,17 +156,14 @@ public class TecConnection extends Thread {
   }
 	
   /** Select a request and perform appropriate action
-   * @param inStr  A string containing the clients request 
-   *               in a CGI-like format to be converted into
-   *               a <code>Request</code>
-   * @param os     the output stream (to be received by client)
+   * @param req   a <code>Request</code>
+   * @param os    the output stream (to be received by client)
    * @see Request
    */
-  private void processInput(String inStr, PrintWriter os) 
+  private void processInput(Request req, PrintWriter os) 
     throws IOException
   {
     String outStr = null;
-    Request req = new Request(inStr);
     switch (req.typeOfRequest())
       {
       case Request.CONCORD:
