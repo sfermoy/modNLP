@@ -1,6 +1,6 @@
 Please download the required jar files from 
 
-https://owncloud.scss.tcd.ie/public.php?service=files&t=17848f743a8dd0ef0bc95a84fa9ef3cd
+https://datasync.ed.ac.uk/index.php/s/UyVMiE3gW7WsFEL
 
 and uncompress it to this directory (i.e. modnlp/lib) in order to be
 able to compile and run the different modules.
