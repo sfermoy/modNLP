@@ -50,6 +50,7 @@ public class Request extends Hashtable {
   public static final int CDESCRIPTION = 9;
   public static final int FREQWORD = 10;
   public static final int NOOFTOKENS = 11;
+  public static final int COLUMNBATCH = 12;
   //public static final int SERVERINFO = 7;
   public static final int NOTREQ = 999;
   public String reqString = null;
@@ -113,6 +114,8 @@ public class Request extends Hashtable {
       return FREQWORD;
     if (rq.equalsIgnoreCase("nooftokens"))
       return NOOFTOKENS;
+    if (rq.equalsIgnoreCase("columnbatch"))
+      return COLUMNBATCH;
     // add more ifs here as your range of services grow
     return NOTREQ;
   }
