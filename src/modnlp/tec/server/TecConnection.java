@@ -43,6 +43,7 @@ import java.net.InetAddress;
 import java.io.OutputStreamWriter;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import static modnlp.tec.server.Request.COLUMNBATCH;
 
 /** Deal with client's requests for concordance and extracts through
  * the methods described below.
@@ -173,6 +174,9 @@ public class TecConnection extends Thread {
         break;
       case Request.FREQWORD:
         getFreqWord(req, os);
+        break;
+      case Request.COLUMNBATCH:
+        getFreqColumn(req, os);
         break;
       case Request.NOOFTOKENS:
         getTotalNoOfTokens(req, os);
@@ -369,6 +373,41 @@ public class TecConnection extends Thread {
       os.println(dtab.getFrequency(wquery.getKeyWordForms(),
                                    hdbm.getSubcorpusConstraints((String)req.get("xquerywhere"))));
   }
+  
+ 
+  public void  getFreqColumn(Request req,  PrintWriter os)
+  {
+    boolean cs;
+    WordQuery wquery = null;
+    String xquerywhere = null;
+    String colstr = (String) req.get("column");
+    String[] col = unmergeStrings(colstr);
+    int[] freqs= new int[col.length];
+    
+    for (int i = 0; i < col.length; i++) {
+        
+        try {
+          cs = ((String)req.get("casesensitive")).equalsIgnoreCase("TRUE");
+          wquery = new WordQuery (col[i], dtab, cs);
+          xquerywhere = (String)req.get("xquerywhere");
+        }
+        catch (Exception e){
+          // error: print entire fqlist
+          System.err.println("Exception caught: Retrieving word frequency: "+req);
+          dtab.printSortedFreqList(os);
+          return;
+        }
+        if (req.get("xquerywhere")==null )
+          freqs[i]=dtab.getFrequency(wquery.getKeyWordForms());
+        else
+           freqs[i]=dtab.getFrequency(wquery.getKeyWordForms(),
+                                       hdbm.getSubcorpusConstraints((String)req.get("xquerywhere")));
+        col[i]=""+freqs[i];
+    }
+      
+      os.println(mergeStrings(col));
+  }
+      
 
   /** Retrieve the toal number of tokens in corpus
    *
@@ -430,6 +469,21 @@ public class TecConnection extends Thread {
       return ctx;
     }
   }
+  private static final String STRING_SEPARATOR = "@|$|@";
+private static final String STRING_SEPARATOR_REGEX = "@\\|\\$\\|@";
+
+private String mergeStrings(String[] ss) {
+    StringBuilder sb = new StringBuilder();
+    for(String s : ss) {
+        sb.append(s);
+        sb.append(STRING_SEPARATOR);
+    }
+    return sb.toString();
+}
+
+private String[] unmergeStrings(String s) {
+    return s.split(STRING_SEPARATOR_REGEX);
+}
 	
 }
 
