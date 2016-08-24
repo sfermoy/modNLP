@@ -28,7 +28,7 @@
     <jar href="exist.jar" download="lazy"/>
     <jar href="exist-modules.jar" download="lazy"/>
     <!-- a tiny XML parser -->
-    <jar href="MinML2.jar" download="lazy"/>
+<!--    <jar href="MinML2.jar" download="lazy"/> -->
     <!-- other support libs needed by je.jar and exist.jar -->
     <jar href="xmldb.jar" download="lazy"/>
     <jar href="antlr-2.7.6.jar" download="lazy"/>

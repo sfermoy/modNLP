@@ -27,7 +27,7 @@ DISTFILES=AUTHORS COPYING Makefile README README.bin VERSION BUGS INSTALL TODO e
 	$(SOURCEDIR)modnlp/tec/client $(SOURCEDIR)$(MANIFEST) (SOURCEDIR)modnlp/tec/prj.el
 #JAVA=jamvm
 JAVA=java
-JAVAC=javac -target 1.5
+JAVAC=javac #-target 1.7
 #JAVAC=jikes-jsdk
 #JAVAC=jikes-classpath
 #JAVAC=jikes -bootclasspath /usr/lib/jvm/java-1.5.0-sun/jre/lib/rt.jar -source 1.5
@@ -87,6 +87,7 @@ bindistec: jar
 	tar cfvz /tmp/$(BINDISTDIR)-tec.tar.gz  --exclude-from=exclude.txt $(BINDISTDIR)-tec
 	rm -rf $(BINDISTDIR)-tec
 
+bindistgok: MANIFEST=teccli-manifest-gok.txt
 bindistgok: jar
 	mkdir $(BINDISTDIR)-gok
 	cp README.bin $(BINDISTDIR)-gok/README

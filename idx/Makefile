@@ -184,6 +184,15 @@ bindistgok: jar
 	tar cfvz /tmp/$(BINDISTDIR)-gok.tar.gz  --exclude-from=exclude.txt $(BINDISTDIR)-gok
 	rm -rf $(BINDISTDIR)-gok
 
+bindistaqua: jar
+	mkdir $(BINDISTDIR)-aqua
+	cp README.bin $(BINDISTDIR)-aqua/README
+	cp bin/runidx.sh $(BINDISTDIR)-aqua
+	cp $(TOPDIR)src/idxmgr.properties.aqua $(BINDISTDIR)-aqua/idxmgr.properties
+	cp $(LIBS) $(JARTARGET) $(BINDISTXTRAS) $(BINDISTDIR)-aqua
+	tar cfvz /tmp/$(BINDISTDIR)-aqua.tar.gz  --exclude-from=exclude.txt $(BINDISTDIR)-aqua
+	rm -rf $(BINDISTDIR)-aqua
+
 bindistec: jar
 	mkdir $(BINDISTDIR)-tec
 	cp README.bin $(BINDISTDIR)-tec/README

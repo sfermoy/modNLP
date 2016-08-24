@@ -454,9 +454,12 @@ public class Browser
    */
   public void showHeader(ConcordanceObject sel)
   {
-    String filename = sel.sfilename;
-    String headerName = 
-      filename.substring(0,filename.lastIndexOf('.'))+headerExt;
+    String filename = sel.filename;
+    System.err.println("fn="+filename);
+    String headerName =     (new File(filename)).getName();
+    //  filename.substring(filename.lastIndexOf('/')+1,filename.lastIndexOf('.'))
+    //  +"."+headerExt;
+    System.err.println("fn="+filename+"header="+headerName);
     //int p = headerName.lastIndexOf(java.io.File.separator);
     //headerName = p < 0? headerName : headerName.substring(p);
     showHeader(headerName);
@@ -464,6 +467,7 @@ public class Browser
 
  public void showHeader(String headerName)
   {
+    System.err.println("-"+headerBaseURL+"-"+headerName);
     int windowHeight = 600;
     int windowWidth = 500;
     String sep = java.io.File.separator;

@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Created-By: 1.3.0 (Sun Microsystems Inc.)
-Class-Path: . je.jar MinML2.jar idx.jar antlr-2.7.6.jar commons-pool-1.2.jar exist-modules.jar exist.jar jgroups-all.jar log4j-1.2.14.jar resolver.jar sunxacml.jar xmldb.jar xmlrpc-1.2-patched.jar prefuse.jar wordleconc.jar mosaic.jar conctree.jar
+Class-Path: . je.jar idx.jar antlr-2.7.6.jar commons-pool-1.2.jar exist-modules.jar exist.jar jgroups-all.jar log4j-1.2.14.jar resolver.jar sunxacml.jar xmldb.jar xmlrpc-1.2-patched.jar prefuse.jar wordleconc.jar mosaic.jar conctree.jar
 Main-Class: modnlp.tec.client.Browser
 Permissions: all-permissions
 Application-Name: modnlp/TECCLI

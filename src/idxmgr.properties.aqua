@@ -14,13 +14,13 @@ subcorpusindexer.element=(transcript)
 subcorpusindexer.attribute=id
 ## specify 'root' xml element, relative to which the xqueries will be
 ## formulated
-xquery.root.element.path=/ivws
+xquery.root.element.path=//transcript
 ## the element to be returned by xquery to select which indexed texts
 ## should be included in the inverted-index query
-xquery.return.attribute.path=/interview/transcript/@id
+xquery.return.attribute.path=/@id
 ## Specs and paths all relative to xquery.root.element.path.
 ## Format: description_1;path_1;description_2;path_2,...
-xquery.attribute.chooser.specs=File name;header/@filename;Dataset;/header/@dataset;Topic;/header/topics/topic/@label;Year;/header/date/@year;Location;/header/place;Speaker;/interview/transcript/@speaker;Dialogue Act;/interview/transcript/@act
+xquery.attribute.chooser.specs=Dataset;../../header/@dataset;Topic;../../header/topics/topic/@label;Year;../../header/date/@year;Location;../../header/place;Speaker;/@speaker;Dialogue Act;/@act;File name;../../header/@filename
 ## extension of the header files (e.g. .hed, .xml etc)
 header.extension=xml
 ## the maximum number of subcorpus constraint query s
@@ -29,7 +29,7 @@ xquery.max.cache.size=23
 ## root of the file description path
 xquery.root.filedescription.path=/ivws/header
 ## xquery expression that returns a (human-readable) file description 
-xquery.file.description.return={data($s/@filename)}<sep/>{data($s/@dataset)}<sep/>{data($s/place)}
+xquery.file.description.return={data($s/@filename)}<sep/>{data($s/@dataset)}<sep/>{data($s/topic@label)}
 ## {if ($s/title/editor!="") then ", editor: " else ""} { data($s/title/editor)}
 ## the encoding for characters in files to be indexed. Make sure your text files match this
 file.encoding=UTF8
