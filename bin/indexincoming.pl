@@ -126,8 +126,6 @@ sub AcceptableEncoding {
     return $enc =~ /(charset=us-ascii|charset=utf-8)/;
 }
 
-
-
 sub Remove {
     my @toremove = @_;
 
