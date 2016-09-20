@@ -73,7 +73,7 @@ public class Browser
 {
 
   // constants
-  public static final String RELEASE = "0.7.4";
+  public static final String RELEASE = "0.7.4a";
   public static final String REVISION = "$Revision: 1.9 $";
   String BRANDNAME = "MODNLP/T";
   private static final String PLGLIST = "teclipluginlist.txt";
@@ -456,9 +456,9 @@ public class Browser
   {
     String filename = sel.filename;
     System.err.println("fn="+filename);
-    String headerName =     (new File(filename)).getName();
-    //  filename.substring(filename.lastIndexOf('/')+1,filename.lastIndexOf('.'))
-    //  +"."+headerExt;
+    String headerName =  //   (new File(filename)).getName();
+      filename.substring(filename.lastIndexOf('/')+1,filename.lastIndexOf('.'))
+      +"."+headerExt;
     System.err.println("fn="+filename+"header="+headerName);
     //int p = headerName.lastIndexOf(java.io.File.separator);
     //headerName = p < 0? headerName : headerName.substring(p);
@@ -509,7 +509,7 @@ public class Browser
         parser.parse(is);
 
         content = new StringBuffer("<html><img src='"+img+"' height=183 width=128 alt='Book Cover'><pre>"+parser.getContent()+"</pre></html>");
-        System.err.println(content+"");
+        //System.err.println(content+"");
       }
     }
     catch (Exception e) {

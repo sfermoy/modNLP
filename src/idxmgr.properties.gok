@@ -20,7 +20,7 @@ xquery.root.element.path=/gokheader/section
 xquery.return.attribute.path=/@id
 ## specs and paths all relative to xquery.root.element.path
 ## form: description_1;path_1;description_2;path_2,...
-xquery.attribute.chooser.specs=File name;../book/@filename;Subcorpus;../book/@subcorpusid;Source;translation/source/@language;Pub. date;/@publication_date;Date accuracy;/@date_accuracy;Author;author/name
+xquery.attribute.chooser.specs=File name;../book/@filename;Subcorpus;../book/@subcorpusid;Source;translation/@language;Pub. date;/@publication_date;Date accuracy;/@date_accuracy;Author;author/name
 ## extension of the header files (e.g. .hed, .xml etc)
 header.extension=hed
 ## the maximum number of subcorpus constraint query results to be stored (by HeaderDBManager)
@@ -28,7 +28,7 @@ xquery.max.cache.size=23
 ## root of the file description path
 xquery.root.filedescription.path=/gokheader
 ## xquery expression that returns a (human-readable) file description 
-xquery.file.description.return={data($s/book/@filename)}<sep/>{data($s/book/@subcorpusid)}<sep/> {data($s/book/collection_title)}  {if ($s/book/editor!="") then ", editor: " else ""} { data($s/book/editor)} {concat(" '", data($s/section/title), ", ", data($s/section/author/name)), ". "} {if ($s/section/summary!="") then "Summary: " else ""} {data($s/section/summary)}
+xquery.file.description.return={data($s/book/@filename)}<sep/>{data($s/book/@subcorpusid)}<sep/> {concat("<html><i>",data($s/book/collection_title), "</i>")}  {if ($s/book/editor!="") then ", editor: " else ""} { data($s/book/editor)} {concat(" <i>", data($s/section/title), "</i>, <b>", data($s/section/author/name), "</b>. ",  data($s/section/@publication_date), ". <br/>")} {if ($s/section/summary!="") then " <b>Summary:</b> " else ""} {concat(data($s/section/summary), "</html>")}
 ## the encoding for characters in files to be indexed. Make sure your text files match this
 file.encoding=UTF8
 ## the language to be indexed (determines the choice of

@@ -27,7 +27,7 @@ thirdpartylibs:
 	xmlrpc-1.2-patched.jar
 
 teclibs:
-	tar cfvz /tmp/modnlp-teclibs.tgg idx.jar \
+	tar cfvz /tmp/modnlp-teclibs.tgz idx.jar \
 	modnlp.jar \
 	teccli.jar \
 	tecser.jar \

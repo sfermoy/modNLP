@@ -216,6 +216,8 @@ public class HeaderDBManager {
         String desc = (String)r.getContent();
         System.err.println(desc);
         desc = desc.substring(3,desc.lastIndexOf("</d>"));
+        desc = desc.replace("&lt;","<");
+        desc = desc.replace("&gt;",">");
         return desc.replace('\n',' ');
       }
       //}
