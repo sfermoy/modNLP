@@ -58,6 +58,8 @@ public interface ConcordanceBrowser {
 
   public void chooseNewRemoteCorpus();
 
+  public void setRemoteCorpus(String s, int p);
+    
   public void quit();
 
   public void incProgress();

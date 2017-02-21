@@ -1,3 +1,8 @@
+2017-02-21  Saturnino Luz  <luzs@acm.org>
+	* release 0.7.5: See git repo for detailed changes. Added corpus
+	switching to menu, new plugin sytem etc. Next step, replacing the
+	concordance renderer from text to html elements.  
+	
 2012-11-27  Saturnino Luz  <luzs@cs.tcd.ie>
 
 	* release 0.7.1: Bug-fixing release: fixed subcorpus selection bug

@@ -498,6 +498,25 @@ public class BrowserFrame extends BrowserGUI
       e.printStackTrace(System.err);
     }
   }
+
+  public void addRemoteCorpusMenuItem (final String server, int port, String mentry) {
+    JMenuItem mi = new JMenuItem(mentry);
+    fileMenu.add(mi, 3);
+    try {
+      mi.addActionListener(
+                            new ActionListener(){
+                              public void actionPerformed(ActionEvent event)
+                              {
+                                parent.setRemoteCorpus(server, port);
+                              }
+                            });
+    }
+    catch (Exception e) {
+      System.err.println("Warning (BrowserFrame): error loading plugin: "+e);
+      e.printStackTrace(System.err);
+    }
+  }
+  
     
   // ok
   public void itemStateChanged(ItemEvent e) {

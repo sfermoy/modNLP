@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-*/
+ */
 package modnlp.tec.client.plugin;
 
 import modnlp.Constants;
@@ -82,6 +82,8 @@ import java.util.HashMap;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.JEditorPane;
+import javax.swing.JTextPane;
 
 /**
  *  Basic corpus description browser
@@ -89,7 +91,7 @@ import javax.swing.SwingConstants;
  * @author  S Luz &#60;luzs@acm.org&#62;
  * @version <font size=-1>$Id: $</font>
  * @see  
-*/
+ */
 public class CorpusDescriptionBrowser extends JFrame
   implements  Runnable, Plugin, FocusListener, WindowFocusListener
 {
@@ -126,7 +128,7 @@ public class CorpusDescriptionBrowser extends JFrame
 
   private JProgressBar progressBar;
 
-  private static String title = new String("MODNLP Plugin: CorpusDescriptionBrowser 0.1"); 
+  private static String title = new String("MODNLP Plugin: CorpusDescriptionBrowser 0.2"); 
   private ConcordanceBrowser parent = null;
   private boolean guiLayoutDone = false;
 
@@ -167,7 +169,7 @@ public class CorpusDescriptionBrowser extends JFrame
     tcn.setCellRenderer(fnr);
     tct.setCellRenderer(fnr);
     tcr.setCellRenderer(pcr);
-    tcd.setCellRenderer(new TextAreaRenderer());
+    tcd.setCellRenderer(new HtmlTextAreaRenderer());
     table.setAutoCreateColumnsFromModel(false);
     
     table.setPreferredScrollableViewportSize(new Dimension(780, 500));
@@ -265,8 +267,8 @@ public class CorpusDescriptionBrowser extends JFrame
       int rank = 1;
       int ttok = 0;
       //if (parent.isStandAlone()) {
-        (new CDescPrinter()).start();
-        //}
+      (new CDescPrinter()).start();
+      //}
       sccsPanel.updateStatus();
       
       NumberFormat nf =  NumberFormat.getInstance(); 
@@ -349,8 +351,8 @@ public class CorpusDescriptionBrowser extends JFrame
         rq.setServerPORT(parent.getRemotePort());
         rq.put("request","corpusdesc");
         /** TODO
-        if (parent.isSubCorpusSelectionON())
-          rq.put("xquerywhere",parent.getXQueryWhere());
+            if (parent.isSubCorpusSelectionON())
+            rq.put("xquerywhere",parent.getXQueryWhere());
         */
         rq.put("casesensitive",parent.isCaseSensitive()?"TRUE":"FALSE");
         //}
@@ -393,66 +395,66 @@ public class CorpusDescriptionBrowser extends JFrame
     
 
   class ColumnSorter implements Comparator {
-        int colIndex;
-        boolean ascending;
-        ColumnSorter(int colIndex, boolean ascending) {
-            this.colIndex = colIndex;
-            this.ascending = ascending;
-        }
-
-        public int compare(Object a, Object b) {
-            Vector v1 = (Vector)a;
-            Vector v2 = (Vector)b;
-            Object o1 = v1.get(colIndex);
-            Object o2 = v2.get(colIndex);
-
-            //System.err.println("=="+o1+"=="+o2);
-            // Treat empty strings as null
-            if (o1 instanceof String && ((String)o1).length() == 0) {
-                o1 = null;
-            }
-            if (o2 instanceof String && ((String)o2).length() == 0) {
-                o2 = null;
-            }
-    
-            // Sort nulls so they appear last, regardless
-            // of sort order
-            if (o1 == null && o2 == null) {
-                return 0;
-            } else if (o1 == null) {
-                return 1;
-            } else if (o2 == null) {
-                return -1;
-            } else if (o1 instanceof Integer)  {
-              Integer io1;
-              Integer io2;
-              try {
-                io1 = new Integer(o1.toString());
-              }
-              catch (NumberFormatException ne) {
-                return 1;
-              }
-              try {
-                io2 = new Integer(o2.toString());
-              }
-              catch (NumberFormatException ne) {
-                return -1;
-              }
-              if (ascending) 
-                return io1.compareTo(io2);
-              else
-                return io2.compareTo(io1);
-            } else {
-              String s1 =  o1.toString().toLowerCase();
-              String s2 =  o2.toString().toLowerCase();
-              if (ascending) {
-                return s1.compareTo(s2);
-              } else {
-                return s2.compareTo(s1);
-              }
-            }
-        }
+    int colIndex;
+    boolean ascending;
+    ColumnSorter(int colIndex, boolean ascending) {
+      this.colIndex = colIndex;
+      this.ascending = ascending;
     }
+
+    public int compare(Object a, Object b) {
+      Vector v1 = (Vector)a;
+      Vector v2 = (Vector)b;
+      Object o1 = v1.get(colIndex);
+      Object o2 = v2.get(colIndex);
+
+      //System.err.println("=="+o1+"=="+o2);
+      // Treat empty strings as null
+      if (o1 instanceof String && ((String)o1).length() == 0) {
+        o1 = null;
+      }
+      if (o2 instanceof String && ((String)o2).length() == 0) {
+        o2 = null;
+      }
+    
+      // Sort nulls so they appear last, regardless
+      // of sort order
+      if (o1 == null && o2 == null) {
+        return 0;
+      } else if (o1 == null) {
+        return 1;
+      } else if (o2 == null) {
+        return -1;
+      } else if (o1 instanceof Integer)  {
+        Integer io1;
+        Integer io2;
+        try {
+          io1 = new Integer(o1.toString());
+        }
+        catch (NumberFormatException ne) {
+          return 1;
+        }
+        try {
+          io2 = new Integer(o2.toString());
+        }
+        catch (NumberFormatException ne) {
+          return -1;
+        }
+        if (ascending) 
+          return io1.compareTo(io2);
+        else
+          return io2.compareTo(io1);
+      } else {
+        String s1 =  o1.toString().toLowerCase();
+        String s2 =  o2.toString().toLowerCase();
+        if (ascending) {
+          return s1.compareTo(s2);
+        } else {
+          return s2.compareTo(s1);
+        }
+      }
+    }
+  }
 
 
   public class ColumnHeaderListener extends MouseAdapter {
@@ -516,11 +518,11 @@ public class CorpusDescriptionBrowser extends JFrame
               dlf.println("Rank order\tType\tFrequency");
               for (int i = 0; i < va.length ; i++) {
                 dlf.println(((Vector)va[i]).get(0)+"\t"
-                           +((Vector)va[i]).get(1)+"\t"
-                           +((Vector)va[i]).get(2)+"\t"
-                           +((Vector)va[i]).get(3)+"\t"
-                           +((Vector)va[i]).get(4)+"\t"
-                           +((Vector)va[i]).get(5));
+                            +((Vector)va[i]).get(1)+"\t"
+                            +((Vector)va[i]).get(2)+"\t"
+                            +((Vector)va[i]).get(3)+"\t"
+                            +((Vector)va[i]).get(4)+"\t"
+                            +((Vector)va[i]).get(5));
               }
               dlf.println("\nTOTAL:\t \t \t \t"+va.length+"\t"+notokens);
               dlf.close();
@@ -564,14 +566,14 @@ public class CorpusDescriptionBrowser extends JFrame
             fqlout.println(line);
           }
           /* ---- TODO: implement breadown by scorpus
-          if (parent.subCorpusSelected()){
-            HeaderDBManager hdbm = parent.getHeaderDBManager();
-            d.printSortedFreqList(fqlout, skipFirst, maxListSize,
-                                  hdbm.getSubcorpusConstraints(parent.getXQueryWhere()),
-                                  !parent.isCaseSensitive());
-          }
-          else
-            d.printSortedFreqList(fqlout,  skipFirst, maxListSize,!parent.isCaseSensitive());
+             if (parent.subCorpusSelected()){
+             HeaderDBManager hdbm = parent.getHeaderDBManager();
+             d.printSortedFreqList(fqlout, skipFirst, maxListSize,
+             hdbm.getSubcorpusConstraints(parent.getXQueryWhere()),
+             !parent.isCaseSensitive());
+             }
+             else
+             d.printSortedFreqList(fqlout,  skipFirst, maxListSize,!parent.isCaseSensitive());
           */
         } 
         else{
@@ -624,6 +626,131 @@ public class CorpusDescriptionBrowser extends JFrame
     }
   }
 
+  public class HtmlTextAreaRenderer extends JTextPane implements TableCellRenderer { 
+    private final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer(); 
+    
+    // Column heights are placed in this Map 
+    private final Map<JTable, Map<Object, Map<Object, Integer>>> tablecellSizes = new HashMap<JTable, Map<Object, Map<Object, Integer>>>(); 
+    
+    /** 
+     * Creates an HTML-style  text area renderer. 
+     */ 
+    public HtmlTextAreaRenderer() { 
+      //setPreferredSize(new Dimension(450,60));
+      setContentType("text/html");
+      //setLineWrap(true); 
+      //setWrapStyleWord(true);
+    } 
+    
+    /** 
+     * Returns the component used for drawing the cell.  This method is 
+     * used to configure the renderer appropriately before drawing. 
+     * 
+     * @param table      - JTable object 
+     * @param value      - the value of the cell to be rendered. 
+     * @param isSelected - isSelected   true if the cell is to be rendered with the selection highlighted; 
+     *                   otherwise false. 
+     * @param hasFocus   - if true, render cell appropriately. 
+     * @param row        - The row index of the cell being drawn. 
+     * @param column     - The column index of the cell being drawn. 
+     * @return - Returns the component used for drawing the cell. 
+     */ 
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, 
+                                                   boolean hasFocus, int row, int column) { 
+      // set the Font, Color, etc. 
+      renderer.getTableCellRendererComponent(table, value, 
+                                             isSelected, hasFocus, row, column); 
+      setForeground(renderer.getForeground()); 
+      setBackground(renderer.getBackground()); 
+      setBorder(renderer.getBorder()); 
+      setFont(renderer.getFont()); 
+      int h = getContentHeight(renderer.getText());        
+      TableColumnModel columnModel = table.getColumnModel(); 
+      setSize(columnModel.getColumn(column).getWidth(), h); 
+      setText(renderer.getText()); 
+
+      int height_wanted = (int) getPreferredSize().getHeight(); 
+      addSize(table, row, column, height_wanted); 
+      height_wanted = findTotalMaximumRowSize(table, row); 
+      if (height_wanted != table.getRowHeight(row)) { 
+        table.setRowHeight(row, height_wanted); 
+      } 
+      return this; 
+    } 
+      
+    /** 
+     * @param table  - JTable object 
+     * @param row    - The row index of the cell being drawn. 
+     * @param column - The column index of the cell being drawn. 
+     * @param height - Row cell height as int value 
+     *               This method will add size to cell based on row and column number 
+     */ 
+    private void addSize(JTable table, int row, int column, int height) { 
+      Map<Object, Map<Object, Integer>> rowsMap = tablecellSizes.get(table); 
+      if (rowsMap == null) { 
+        tablecellSizes.put(table, rowsMap = new HashMap<Object, Map<Object, Integer>>()); 
+      } 
+      Map<Object, Integer> rowheightsMap = rowsMap.get(row); 
+      if (rowheightsMap == null) { 
+        rowsMap.put(row, rowheightsMap = new HashMap<Object, Integer>()); 
+      } 
+      rowheightsMap.put(column, height); 
+    } 
+      
+    /** 
+     * Look through all columns and get the renderer.  If it is 
+     * also a HtmlTextAreaRenderer, we look at the maximum height in 
+     * its hash table for this row. 
+     * 
+     * @param table -JTable object 
+     * @param row   - The row index of the cell being drawn. 
+     * @return row maximum height as integer value 
+     */ 
+    private int findTotalMaximumRowSize(JTable table, int row) { 
+      int maximum_height = 0; 
+      Enumeration<TableColumn> columns = table.getColumnModel().getColumns(); 
+      while (columns.hasMoreElements()) { 
+        TableColumn tc = columns.nextElement(); 
+        TableCellRenderer cellRenderer = tc.getCellRenderer(); 
+        if (cellRenderer instanceof HtmlTextAreaRenderer) { 
+          HtmlTextAreaRenderer tar = (HtmlTextAreaRenderer) cellRenderer; 
+          maximum_height = Math.max(maximum_height, 
+                                    tar.findMaximumRowSize(table, row)); 
+        } 
+      } 
+      return maximum_height; 
+    } 
+      
+    /** 
+     * This will find the maximum row size 
+     * 
+     * @param table - JTable object 
+     * @param row   - The row index of the cell being drawn. 
+     * @return row maximum height as integer value 
+     */ 
+    private int findMaximumRowSize(JTable table, int row) { 
+      Map<Object, Map<Object, Integer>> rows = tablecellSizes.get(table); 
+      if (rows == null) return 0; 
+      Map<Object, Integer> rowheights = rows.get(row); 
+      if (rowheights == null) return 0; 
+      int maximum_height = 0; 
+      for (Map.Entry<Object, Integer> entry : rowheights.entrySet()) { 
+        int cellHeight = entry.getValue(); 
+        maximum_height = Math.max(maximum_height, cellHeight); 
+      } 
+      return maximum_height; 
+    } 
+  } // end HtmlTextAreaRenderer
+
+  public static int getContentHeight(String content) {
+    JTextPane t =new JTextPane();
+    t.setSize(100,Short.MAX_VALUE);
+    t.setText(content);
+      
+    return t.getPreferredSize().height;
+  }  
+
+
   public class TextAreaRenderer extends JTextArea implements TableCellRenderer { 
     private final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer(); 
     
@@ -661,19 +788,20 @@ public class CorpusDescriptionBrowser extends JFrame
       setBackground(renderer.getBackground()); 
       setBorder(renderer.getBorder()); 
       setFont(renderer.getFont()); 
-        setText(renderer.getText()); 
+      setText(renderer.getText()); 
  
-        TableColumnModel columnModel = table.getColumnModel(); 
-        setSize(columnModel.getColumn(column).getWidth(), 0); 
-        int height_wanted = (int) getPreferredSize().getHeight(); 
-        addSize(table, row, column, height_wanted); 
-        height_wanted = findTotalMaximumRowSize(table, row); 
-        if (height_wanted != table.getRowHeight(row)) { 
-            table.setRowHeight(row, height_wanted); 
-        } 
-        return this; 
+      TableColumnModel columnModel = table.getColumnModel(); 
+      setSize(columnModel.getColumn(column).getWidth(), 0); 
+      int height_wanted = (int) getPreferredSize().getHeight(); 
+      addSize(table, row, column, height_wanted); 
+      height_wanted = findTotalMaximumRowSize(table, row); 
+      if (height_wanted != table.getRowHeight(row)) { 
+        table.setRowHeight(row, height_wanted); 
+      } 
+      return this; 
     } 
- 
+
+
     /** 
      * @param table  - JTable object 
      * @param row    - The row index of the cell being drawn. 
@@ -682,17 +810,17 @@ public class CorpusDescriptionBrowser extends JFrame
      *               This method will add size to cell based on row and column number 
      */ 
     private void addSize(JTable table, int row, int column, int height) { 
-        Map<Object, Map<Object, Integer>> rowsMap = tablecellSizes.get(table); 
-        if (rowsMap == null) { 
-            tablecellSizes.put(table, rowsMap = new HashMap<Object, Map<Object, Integer>>()); 
-        } 
-        Map<Object, Integer> rowheightsMap = rowsMap.get(row); 
-        if (rowheightsMap == null) { 
-            rowsMap.put(row, rowheightsMap = new HashMap<Object, Integer>()); 
-        } 
-        rowheightsMap.put(column, height); 
+      Map<Object, Map<Object, Integer>> rowsMap = tablecellSizes.get(table); 
+      if (rowsMap == null) { 
+        tablecellSizes.put(table, rowsMap = new HashMap<Object, Map<Object, Integer>>()); 
+      } 
+      Map<Object, Integer> rowheightsMap = rowsMap.get(row); 
+      if (rowheightsMap == null) { 
+        rowsMap.put(row, rowheightsMap = new HashMap<Object, Integer>()); 
+      } 
+      rowheightsMap.put(column, height); 
     } 
- 
+      
     /** 
      * Look through all columns and get the renderer.  If it is 
      * also a TextAreaRenderer, we look at the maximum height in 
@@ -703,20 +831,20 @@ public class CorpusDescriptionBrowser extends JFrame
      * @return row maximum height as integer value 
      */ 
     private int findTotalMaximumRowSize(JTable table, int row) { 
-        int maximum_height = 0; 
-        Enumeration<TableColumn> columns = table.getColumnModel().getColumns(); 
-        while (columns.hasMoreElements()) { 
-            TableColumn tc = columns.nextElement(); 
-            TableCellRenderer cellRenderer = tc.getCellRenderer(); 
-            if (cellRenderer instanceof TextAreaRenderer) { 
-                TextAreaRenderer tar = (TextAreaRenderer) cellRenderer; 
-                maximum_height = Math.max(maximum_height, 
-                        tar.findMaximumRowSize(table, row)); 
-            } 
+      int maximum_height = 0; 
+      Enumeration<TableColumn> columns = table.getColumnModel().getColumns(); 
+      while (columns.hasMoreElements()) { 
+        TableColumn tc = columns.nextElement(); 
+        TableCellRenderer cellRenderer = tc.getCellRenderer(); 
+        if (cellRenderer instanceof TextAreaRenderer) { 
+          TextAreaRenderer tar = (TextAreaRenderer) cellRenderer; 
+          maximum_height = Math.max(maximum_height, 
+                                    tar.findMaximumRowSize(table, row)); 
         } 
-        return maximum_height; 
+      } 
+      return maximum_height; 
     } 
- 
+      
     /** 
      * This will find the maximum row size 
      * 
@@ -725,21 +853,18 @@ public class CorpusDescriptionBrowser extends JFrame
      * @return row maximum height as integer value 
      */ 
     private int findMaximumRowSize(JTable table, int row) { 
-        Map<Object, Map<Object, Integer>> rows = tablecellSizes.get(table); 
-        if (rows == null) return 0; 
-        Map<Object, Integer> rowheights = rows.get(row); 
-        if (rowheights == null) return 0; 
-        int maximum_height = 0; 
-        for (Map.Entry<Object, Integer> entry : rowheights.entrySet()) { 
-            int cellHeight = entry.getValue(); 
-            maximum_height = Math.max(maximum_height, cellHeight); 
-        } 
-        return maximum_height; 
+      Map<Object, Map<Object, Integer>> rows = tablecellSizes.get(table); 
+      if (rows == null) return 0; 
+      Map<Object, Integer> rowheights = rows.get(row); 
+      if (rowheights == null) return 0; 
+      int maximum_height = 0; 
+      for (Map.Entry<Object, Integer> entry : rowheights.entrySet()) { 
+        int cellHeight = entry.getValue(); 
+        maximum_height = Math.max(maximum_height, cellHeight); 
+      } 
+      return maximum_height; 
     } 
-}
+  } // end TextAreaRenderer
 
 
-
-
-}
-
+}// end CorpusDescriptionBrowser

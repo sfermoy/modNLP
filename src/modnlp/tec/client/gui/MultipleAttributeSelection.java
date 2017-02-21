@@ -66,7 +66,7 @@ public class MultipleAttributeSelection extends JPanel implements ActionListener
     // make it scrollable (since we don't know beforehand how many options there will be)
     final JScrollPane scrollPane = new JScrollPane(guiPane);
     scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    scrollPane.setPreferredSize( new Dimension(900, 290) );
+    scrollPane.setPreferredSize( new Dimension(900, 590) );
     guiPane.setSize(scrollPane.getPreferredSize());
     scrollPane.addComponentListener( new java.awt.event.ComponentAdapter()
       {

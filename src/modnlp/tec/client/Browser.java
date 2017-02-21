@@ -73,7 +73,7 @@ public class Browser
 {
 
   // constants
-  public static final String RELEASE = "0.7.4a";
+  public static final String RELEASE = "0.7.5";
   public static final String REVISION = "$Revision: 1.9 $";
   String BRANDNAME = "MODNLP/T";
   private static final String PLGLIST = "teclipluginlist.txt";
@@ -172,6 +172,7 @@ public class Browser
     browserFrame.initGUI();
     incProgress();
 
+    addRemoteCorpusMenu();
     loadPlugins();
     incProgress();
       
@@ -236,6 +237,29 @@ public class Browser
     splashScreen.incProgress();
   }
 
+  private void addRemoteCorpusMenu () {
+    String m = clProperties.getProperty("remote.corpora");
+    if (m == null){
+      System.err.println("addRemoteCorpusMenu: no remote corpus spec found in tecli.properties.");
+      return;
+    }
+    StringTokenizer st = new StringTokenizer(m, ";");
+    System.err.println("addRemoteCorpusMenu: setting remote corpus menu: "+ st);
+    while (st.hasMoreTokens()){
+      String s = st.nextToken();
+      StringTokenizer st2 = new StringTokenizer(s, ":");
+      if (st2.countTokens() != 3){
+        System.err.println("addRemoteCorpusMenu: wrong corpus spec in tecli.properties: "+ s);
+      }
+      else{
+        String menudesc = st2.nextToken();
+        String server = st2.nextToken();
+        int port = new Integer(st2.nextToken()).intValue();
+        browserFrame.addRemoteCorpusMenuItem(server, port, menudesc);
+      }
+    }
+  }
+    
   private void loadPlugins () {
     splashScreen.setMessage("Loading plugins...");
     splashScreen.incProgress();
@@ -643,7 +667,7 @@ public class Browser
     int p =  rcc.getPort();
     setRemoteCorpus(s,p);
   }
-
+  
   public void setRemoteCorpus(String s, int p){
     remoteServer = s;
     remotePort = p;

@@ -1,6 +1,19 @@
 * So much to do I don't even know where to start. Here's a
   couple of things that come to mind:
 
+URGENT:
+
+* General rendering for concordances (all languages and fonts)
+   Currently the keyword alignment relies on monospaced fonts. This
+   works finr for latin alphabets, but breaks down for different
+   writing systems (Arabic in particular, which is not even rendered
+   properly on the java graphics canvas).  Possible solution:
+   Implement a new modnlp.tec.client.gui.ListDisplayRenderer based on
+   an HTML component (which should render Arabic correctly) and split
+   the component into 3 cells (as in a table); the keyword will be in
+   the centre and the contexts on the left and right cells (this
+   should solve the alignment issue).
+
 BUG FIXES:
 
 * Proper treatment of error conditions for new corpus selection (taken
