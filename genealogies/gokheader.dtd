@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- gokheader.dtd: Header file $Revision: 1.0 $ -->
+<!ELEMENT ivws (header,interview)>
+<!-- Let's start with a very general 'header' element; the header contains data about the interview. -->
+<!ELEMENT header (topics?, date?, place?, time?, duration?, interviewees?, interviewers?)>
+<!-- the name of the data file --> 
+<!ATTLIST header filename CDATA #REQUIRED>
+<!-- the dataset (set of interviews) to which this file belongs: it needs to be exactly one of the options given in brackets --> 
+<!ATTLIST header dataset (ePrescribing|005_Transcripts|009_Transcripts|PINCER) #REQUIRED>
+<!-- the topics of the interview; a list of labels -->
+  <!ELEMENT topics (topic+)>
+    <!ELEMENT topic EMPTY>
+    <!-- topic label is unconstrained at present; we might want to limit allowable topic labels to a specific list at some point -->  
+    <!ATTLIST topic label CDATA #REQUIRED>
+  <!-- Date of interview; if available entered in standardised format -->
+  <!ELEMENT date (#PCDATA)>
+  <!ATTLIST date day (01 | 02 | 03 | 04 | 05 | 06 | 07 | 08 | 09 | 10 | 11 | 12 |
+                    13 | 14 | 15| 16| 17| 18| 19| 20| 21| 22| 23| 24| 
+                    25| 26| 27| 28| 29| 30| 31) #IMPLIED
+               month (01 | 02 | 03 | 04 | 05 | 06 | 07 | 08 | 09 |
+          1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12) #IMPLIED
+               year  NMTOKEN #REQUIRED >
+  <!ELEMENT place (#PCDATA)>
+  <!ATTLIST place setting (GP|HOS|Other) #IMPLIED>
+  <!ELEMENT time EMPTY>
+  <!ATTLIST time hour (00 | 01 | 02 | 03 | 04 | 05 | 06 | 07 | 08 | 09 | 10 | 11 | 12 |
+                    13 | 14 | 15| 16| 17| 18| 19| 20| 21| 22| 23 ) #REQUIRED
+                 min CDATA #REQUIRED
+                 sec CDATA #REQUIRED >
+  <!ELEMENT duration EMPTY>
+  <!ATTLIST duration hour (00 | 01 | 02 | 03 | 04 | 05 | 06 | 07 | 08 | 09 | 10 | 11 | 12 |
+                    13 | 14 | 15| 16| 17| 18| 19| 20| 21| 22| 23 ) #REQUIRED
+                 min CDATA #REQUIRED
+                 sec CDATA #REQUIRED >
+  <!ELEMENT interviewees (interviewee+)>
+    <!ELEMENT interviewee (#PCDATA)>
+    <!-- each interviewee will have a unique indetifier -->
+    <!ATTLIST interviewee id ID #REQUIRED>
+    <!ATTLIST interviewee role (Manager|HCP|Patient) #IMPLIED>
+  <!ELEMENT interviewers (interviewer+)>
+    <!-- each interviewer will have a unique indetifier -->
+    <!ELEMENT interviewer (#PCDATA)>
+    <!ATTLIST interviewer id ID #REQUIRED>
+<!ELEMENT interview (#PCDATA|transcript|annotation)*>
+<!-- transcript can be a question or an answer -->
+<!ELEMENT transcript (#PCDATA|annotation)*>
+<!-- speaker must be the ID of one of the interviewees or interviewer -->
+<!ATTLIST transcript speaker IDREF #REQUIRED>
+<!-- the kind of 'speech act' this transcript represents (either question or answer) -->
+<!ATTLIST transcript act (question|answer) #REQUIRED >
+<!ELEMENT annotation (#PCDATA)>
+<!ATTLIST annotation type CDATA #IMPLIED>

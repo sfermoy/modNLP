@@ -125,7 +125,7 @@ public class BrowserFrame extends BrowserGUI
 
   private JMenu  fileMenu = new JMenu("File");
   private JMenuItem nlcButton = new JMenuItem("New local corpus...");
-  private JMenuItem nrcButton = new JMenuItem("New Internet corpus...");    
+  private JMenuItem nrcButton = new JMenuItem("New remote corpus...");    
   private JMenuItem dldButton = new JMenuItem("Save concordances...");  
   private JMenuItem quitButton = new JMenuItem(QUITBUT);
 

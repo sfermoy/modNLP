@@ -92,12 +92,6 @@ public class GraphicalSubcorpusSelector extends JFrame {
       } catch (InterruptedException e) {
       }
     }
-    /* handled by parent only
-    if (hdbm != null){
-      hdbm.finalize();
-      hdbm = null;
-    }
-    */
     if (thread != null)
       thread = null;
     super.dispose();
@@ -141,8 +135,8 @@ public class GraphicalSubcorpusSelector extends JFrame {
     pa2.add(activeChecked);
 
     thisFrame.add(pa0, BorderLayout.NORTH);
-    //thisFrame.add(pa1, BorderLayout.CENTER);
-    thisFrame.add(pa2, BorderLayout.SOUTH);
+    thisFrame.add(pa2, BorderLayout.CENTER);
+    thisFrame.add(new JLabel("   "), BorderLayout.SOUTH);
 
     doneButton.addActionListener(new DoneListener());
     applyButton.addActionListener(new ApplyListener());
@@ -170,7 +164,8 @@ public class GraphicalSubcorpusSelector extends JFrame {
       networkError = false;
       if (remoteServer) {
         RemoteSubcorpusOptionRequest ror = 
-          new RemoteSubcorpusOptionRequest(parent.getRemoteServer(), parent.getRemotePort());
+          new RemoteSubcorpusOptionRequest(parent.getRemoteServer(),
+                                           parent.getRemotePort());
         try{
           attChsrSpecs = ror.getAttributeChooserSpecs();
         }

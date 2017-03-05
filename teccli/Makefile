@@ -38,6 +38,7 @@ JAVACFLAGS=-classpath $(SOURCEDIR):$(LIBSPATH) -encoding UTF8 #ISO-8859-1
 JARTARGET=$(TOPDIR)lib/teccli.jar
 BINDISTDIR=$(DISTDIR)-bin
 BINDISTXTRAS=$(LIBLICENSES) $(TOPDIR)*COPYING*
+PROPS=tecli.properties.tec
 
 #VPATH=$(SOURCEDIR)
 
@@ -57,7 +58,7 @@ clean:
 	find -L . -iregex '.*\(\.aux\|\.log\|\.dvi\|\.class\|~\|#.*#\b\)'  -type f  -print0 |xargs -0 -e rm -f
 
 jar: $(TARGETS)
-	cd $(SOURCEDIR) && $(JAR) $(JARFLAGS) ../$(JARTARGET) $(JARREDS)
+	cd $(SOURCEDIR) && cp $(PROPS) tecli.properties && $(JAR) $(JARFLAGS) ../$(JARTARGET) $(JARREDS)
 
 docs: $(TARGETS)
 	javadoc -d $(DOCS) -sourcepath $(SOURCEDIR) -classpath $(SOURCEDIR):$(LIBSPATH) -subpackages modnlp.tec.client 
@@ -78,6 +79,8 @@ bindist: jar
 	tar cfvz /tmp/$(BINDISTDIR).tar.gz  --exclude-from=exclude.txt $(BINDISTDIR)
 	rm -rf $(BINDISTDIR)
 
+bindistec: MANIFEST=teccli-manifest.txt
+bindistec: PROPS=tecli.properties.tec
 bindistec: jar
 	mkdir $(BINDISTDIR)-tec
 	cp README.bin $(BINDISTDIR)-tec/README
@@ -88,6 +91,7 @@ bindistec: jar
 	rm -rf $(BINDISTDIR)-tec
 
 bindistgok: MANIFEST=teccli-manifest-gok.txt
+bindistgok: PROPS=tecli.properties.gok
 bindistgok: jar
 	mkdir $(BINDISTDIR)-gok
 	cp README.bin $(BINDISTDIR)-gok/README
@@ -97,6 +101,8 @@ bindistgok: jar
 	tar cfvz /tmp/$(BINDISTDIR)-gok.tar.gz  --exclude-from=exclude.txt $(BINDISTDIR)-gok
 	rm -rf $(BINDISTDIR)-gok
 
+bindistecpc: MANIFEST=teccli-manifest.txt
+bindistecpc: PROPS=tecli.properties.ecpc
 bindistecpc: jar
 	mkdir $(BINDISTDIR)-ecpc
 	cp README.bin $(BINDISTDIR)-ecpc/README

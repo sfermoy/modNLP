@@ -68,4 +68,4 @@ bindist: libs
 	rm -rf $(BINDISTDIR)
 
 nosvn: clean
-        tar cfvz /tmp/modnlp.tgz --exclude-from=exclude.txt .
+	tar cfvz /tmp/modnlp.tgz --exclude-from=exclude.txt .

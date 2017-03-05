@@ -73,7 +73,7 @@ public class Browser
 {
 
   // constants
-  public static final String RELEASE = "0.7.5";
+  public static final String RELEASE = "0.7.5a";
   public static final String REVISION = "$Revision: 1.9 $";
   String BRANDNAME = "MODNLP/T";
   private static final String PLGLIST = "teclipluginlist.txt";
@@ -727,7 +727,7 @@ public class Browser
         preferenceFrame.setHeaderBaseURL(headerBaseURL);
       }
     if (guiSubcorpusSelector.hasNetworkError())
-      showErrorMessage("Error: couldn't select new Internet corpus.");
+      showErrorMessage("Error: couldn't select new remote corpus.");
     else
       browserFrame.setTitle(getBrowserName()+": index at "+remoteServer+":"+remotePort);
 
@@ -780,7 +780,6 @@ public class Browser
         break;
       }
     }
-
     switch (option)
       {
       case 0:

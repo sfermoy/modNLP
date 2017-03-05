@@ -25,7 +25,7 @@ import java.net.*;
 import java.util.Properties;
 /**
  *  Encapsulate client-related defaults 
- *
+ * 
  * @author  Saturnino Luz &#60;luzs@acm.org&#62;
  * @version <font size=-1>$Id: ClientProperties.java,v 1.2 2001/07/31 16:18:53 luzs Exp $</font>
  * @see  
@@ -40,15 +40,18 @@ public class ClientProperties extends Properties{
   public ClientProperties () 
   {
     super();
+    System.err.println("Starting to load tecli.properties... ");
     try {
       FileInputStream fis = new FileInputStream(FNAME);
+      System.err.println("Loading tecli.properties from " + fis);
       this.load(fis);
     }
     catch (IOException ex){
       ClassLoader cl = this.getClass().getClassLoader();
       InputStreamReader fis = (new InputStreamReader(cl.getResourceAsStream("tecli.properties")));
-            try {
-      this.load(fis);
+      System.err.println("Loading tecli.properties from jar" + fis);
+      try {
+        this.load(fis);
       }
       catch (Exception e) {
         System.err.println("Warning" + e);
@@ -63,7 +66,8 @@ public class ClientProperties extends Properties{
         //System.exit(1);
       }
     }
-      }
+    
+  }
   public void save () {
     try {
       store(new FileOutputStream(FNAME), 

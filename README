@@ -1,10 +1,6 @@
 The modnlp suite is distributed under the GNU General Public
 License. See COPYING for details.
 
-modnlp aims to be fully compatible with the GNU Classpath
-(http://www.gnu.org/software/classpath/). The indexer (modnlp-idx) and
-text categorisation (modnlp-tc) have been tested on IceTea6 as well as
-Oracle's JDK6.
 
 This directory contains:
 
