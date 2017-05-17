@@ -499,7 +499,7 @@ public class BrowserFrame extends BrowserGUI
     }
   }
 
-  public void addRemoteCorpusMenuItem (final String server, int port, String mentry) {
+  public void addRemoteCorpusMenuItem (final String server, final int port, String mentry) {
     JMenuItem mi = new JMenuItem(mentry);
     fileMenu.add(mi, 3);
     try {

@@ -26,8 +26,9 @@ DISTFILES=AUTHORS COPYING Makefile README README.bin VERSION BUGS INSTALL TODO e
 	$(TOPDIR)lib/COPYING-libs $(SOURCEDIR)modnlp/Constants.java $(SOURCEDIR)modnlp/gui \
 	$(SOURCEDIR)modnlp/tec/client $(SOURCEDIR)$(MANIFEST) (SOURCEDIR)modnlp/tec/prj.el
 #JAVA=jamvm
-JAVA=java
-JAVAC=javac #-target 1.7
+#JAVA_BIN=/usr/lib/jvm/java-6-oracle/bin/
+JAVA=$(JAVA_BIN)java
+JAVAC=$(JAVA_BIN)javac # -target 1.6
 #JAVAC=jikes-jsdk
 #JAVAC=jikes-classpath
 #JAVAC=jikes -bootclasspath /usr/lib/jvm/java-1.5.0-sun/jre/lib/rt.jar -source 1.5
