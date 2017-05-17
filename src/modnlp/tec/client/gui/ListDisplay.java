@@ -17,22 +17,28 @@
  */
 package modnlp.tec.client.gui;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ComponentListener;
 import java.awt.event.ComponentEvent;
+import java.awt.image.BufferedImage;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
 
 import modnlp.tec.client.ConcordanceBrowser;
 import modnlp.tec.client.ConcordanceObject;
@@ -81,30 +87,41 @@ public class ListDisplay extends JPanel
   private boolean resizePending = false;
   private JProgressBar scrollProgress;
   private ListSelectionModel listSelectionModel;
-  
+  private JTable table;
 
   public ListDisplay(BrowserGUI parent, ListModel lm) 
   {
     super();
+    
+    String[] columnNames = {"Filename", "Left Context", "Keyword","Right Context"};
+    String[][] data = new String[lm.getSize()][4];
+    
+    
+    
+    table = new JTable(data, columnNames);
+    
     parent = parent;
     font = new Font("Monospaced", Font.PLAIN, 12);//parent.getPreferredFontSize());
     //setPreferredSize(new Dimension(LWIDTH+50, LHEIGHT+30));
+   
     listModel = lm; //parent.getConcordanceVector(); //new DefaultListModel();
     list = new JList(listModel);
     list.setCellRenderer(renderer);    
     renderer.setFont(font);
-    setCellPrototype(ConcordanceObject.RENDERER_PROTOTYPE);
-    jscroll = new JScrollPane();
-    jscroll.getViewport().setView(list);
+    //setCellPrototype(ConcordanceObject.RENDERER_PROTOTYPE);
+    
+    //table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+    jscroll = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     jscroll.setPreferredSize(new Dimension(LWIDTH, LHEIGHT));
-    jscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+  
+    // jscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+    
     jscroll.setWheelScrollingEnabled(true);
     add(jscroll);
+    
     listSelectionModel = list.getSelectionModel();
     listSelectionModel.addListSelectionListener(parent);
     
-    
-   
     addComponentListener(this);
   }
 ///******************************************
@@ -229,18 +246,82 @@ public class ListDisplay extends JPanel
     int h = ec.getHeight();
     Dimension dlist = new Dimension(w-8, h-10);
     //setPreferredSize(new Dimension(w, h-120));
-    remove(jscroll);
-    jscroll.setPreferredSize(dlist);
-    jscroll.getViewport().setView(list);
-    add(jscroll);
-    revalidate();
-    repaint();
+    redisplayConc();
+    
   }
 
   public void redisplayConc(){
+      
+   remove(jscroll);
+    String[] columnNames = {"Filename", "Left Context", "Keyword","Right Context"};
+    String[][] data = new String[listModel.getSize()][4];
+    Graphics g =null;
+    ConcordanceObject cobjct;
+    int[] maxLengths ={15,15,15,15};
+    
+    //Setup to measure Fonts
+    BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g2d = img.createGraphics();
+    FontMetrics fm = g2d.getFontMetrics(font);
+    
+    //converting listmodel to data array
+    for (int i = 0; i < listModel.getSize(); i++) {
+          cobjct = (ConcordanceObject) listModel.getElementAt(i);
+          data[i][0] = " "+ cobjct.sfilename.trim()+" ";
+          data[i][1] = cobjct.getLeftContext().trim();
+          data[i][2] = " " +cobjct.getKeyword().trim() +" ";
+          data[i][3] = cobjct.getKeywordAndRightContext().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim();
+          for (int j = 0; j < 4; j++) {
+              if(fm.stringWidth(data[i][j]) > maxLengths[j])
+                  maxLengths[j] = fm.stringWidth(data[i][j]);
+          } 
+      }
+    
+    table = new JTable(data, columnNames);
+    table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+    
+    //setting column widths
+    TableColumn column = null;
+    for (int i = 0; i < 4; i++) {
+        column = table.getColumnModel().getColumn(i);
+        column.setPreferredWidth(maxLengths[i]); 
+     } 
+    
+    //set column allignments
+    DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+    rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+    rightRenderer.setFont(font);
+    table.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
+    
+    DefaultTableCellRenderer centreRenderer = new DefaultTableCellRenderer();
+    centreRenderer.setHorizontalAlignment(JLabel.CENTER);
+    centreRenderer.setFont(font);
+    table.getColumnModel().getColumn(2).setCellRenderer(centreRenderer);
+    
+    DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
+    leftRenderer.setHorizontalAlignment(JLabel.LEFT);
+    leftRenderer.setFont(font);
+    table.getColumnModel().getColumn(3).setCellRenderer(leftRenderer);
+    
+    DefaultTableCellRenderer filenameRenderer = new DefaultTableCellRenderer();
+    filenameRenderer.setHorizontalAlignment(JLabel.LEFT);
+    filenameRenderer.setFont(font);
+    table.getColumnModel().getColumn(0).setCellRenderer(filenameRenderer);
+    
+
+    //set column color
+    centreRenderer.setForeground(Color.blue);
+    filenameRenderer.setForeground(Color.RED);
+
+    //turn off grid
+    table.setShowGrid(false);
+    
+    jscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+    jscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    jscroll.getViewport().setView(table);
+    add(jscroll);
     revalidate();
     repaint();
-    jscroll.revalidate();
   }
 
   public void componentHidden(ComponentEvent e) {
@@ -249,5 +330,4 @@ public class ListDisplay extends JPanel
   }
   public void componentShown(ComponentEvent e) {		
   }
-
 }
