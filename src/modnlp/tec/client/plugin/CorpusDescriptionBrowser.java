@@ -554,6 +554,7 @@ public class CorpusDescriptionBrowser extends JFrame
           //else
           //  dictionary.printConcordances(wquery, ctx, ignx, out,
           //                               hdbm.getSubcorpusConstraints(xquerywhere));
+          
           d.printCorpusStats(fqlout,!cse);
           d.printNoItems(fqlout, fks.length);
           for (int i = 0; i < fks.length; i++) {
