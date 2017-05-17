@@ -61,7 +61,7 @@ public class ListDisplay extends JPanel
   public JList list;
   public JScrollPane jscroll;
   //public ConcArray conc;
-  public BrowserGUI parent;
+  public ConcordanceBrowser parent;
   Font font; 
   public static int MAXCOL = 180;
   public static int OFFSET = 40;
@@ -99,9 +99,8 @@ public class ListDisplay extends JPanel
     
     
     table = new JTable(data, columnNames);
-    table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     
-    this.parent = parent;
+    parent = parent;
     font = new Font("Monospaced", Font.PLAIN, 12);//parent.getPreferredFontSize());
     //setPreferredSize(new Dimension(LWIDTH+50, LHEIGHT+30));
    
@@ -121,10 +120,8 @@ public class ListDisplay extends JPanel
     add(jscroll);
     
     listSelectionModel = list.getSelectionModel();
-    //listSelectionModel.addListSelectionListener(parent);
-    table.getSelectionModel().addListSelectionListener(parent);
-    table.getColumnModel().getSelectionModel().addListSelectionListener(parent);
-
+    listSelectionModel.addListSelectionListener(parent);
+    
     addComponentListener(this);
   }
 ///******************************************
@@ -175,19 +172,16 @@ public class ListDisplay extends JPanel
   }
   
   public void addListSelectionListener(ListSelectionListener lsl){
-    //listSelectionModel.addListSelectionListener(lsl);
-    table.getSelectionModel().addListSelectionListener(lsl);
-     table.getColumnModel().getSelectionModel().addListSelectionListener(lsl);
+    listSelectionModel.addListSelectionListener(lsl);
   }
 
 
   public ConcordanceObject getSelectedValue () {
-    list.setSelectedIndex(table.getSelectedRow());
     return (ConcordanceObject) list.getSelectedValue();
   }
 
   public int getSelectedIndex (){	
-    int index = table.getSelectedRow();
+    int index = list.getSelectedIndex();
     return index;	
   }
 
@@ -257,8 +251,8 @@ public class ListDisplay extends JPanel
   }
 
   public void redisplayConc(){
-    //removes and readds all the components to the window  
-    remove(jscroll);
+      
+   remove(jscroll);
     String[] columnNames = {"Filename", "Left Context", "Keyword","Right Context"};
     String[][] data = new String[listModel.getSize()][4];
     Graphics g =null;
@@ -275,7 +269,7 @@ public class ListDisplay extends JPanel
           cobjct = (ConcordanceObject) listModel.getElementAt(i);
           data[i][0] = " "+ cobjct.sfilename.trim()+" ";
           data[i][1] = cobjct.getLeftContext().trim();
-          data[i][2] = "  " +cobjct.getKeyword().trim() +"  ";
+          data[i][2] = " " +cobjct.getKeyword().trim() +" ";
           data[i][3] = cobjct.getKeywordAndRightContext().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim();
           for (int j = 0; j < 4; j++) {
               if(fm.stringWidth(data[i][j]) > maxLengths[j])
@@ -322,13 +316,6 @@ public class ListDisplay extends JPanel
     //turn off grid
     table.setShowGrid(false);
     
-    // set selection mode
-    table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    
-    //readd listeners
-    table.getSelectionModel().addListSelectionListener(parent);
-    table.getColumnModel().getSelectionModel().addListSelectionListener(parent);
-    
     jscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
     jscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     jscroll.getViewport().setView(table);
@@ -344,4 +331,3 @@ public class ListDisplay extends JPanel
   public void componentShown(ComponentEvent e) {		
   }
 }
-
