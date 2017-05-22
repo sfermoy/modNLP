@@ -24,6 +24,8 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ComponentListener;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
@@ -34,6 +36,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JViewport;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
@@ -151,26 +154,23 @@ public class ListDisplay extends JPanel
   
   public void setViewToIndex(int index)
   {
-      int guess = index-2+(LHEIGHT/list.getFixedCellHeight());
-      int len = list.getModel().getSize()-1;
-      //scroll to top first to avoid having target index above vieport
-      list.ensureIndexIsVisible(0);
-      revalidate();
-      repaint();
-      jscroll.revalidate();
-      
-      // fallback to going to the end if our next sttement fails
-      if(guess>len){
-      list.ensureIndexIsVisible(len);
-      }
-      else{
-      // guess the number of indices forward we have to go to get seleted
-      //to top of viewport
-      list.ensureIndexIsVisible(guess);
-      }
-      revalidate();
-      repaint();
-      jscroll.revalidate();
+        JViewport viewport = (JViewport)table.getParent();
+
+        // This rectangle is relative to the table where the
+        // northwest corner of cell (0,0) is always (0,0).
+        Rectangle rect = table.getCellRect(index, 1, true);
+
+        // The location of the viewport relative to the table
+        Point pt = viewport.getViewPosition();
+
+        // Translate the cell location so that it is relative
+        // to the view, assuming the northwest corner of the
+        // view is (0,0)
+       // if (rect.y-pt.y +200>0)
+             rect.setLocation(rect.x-pt.x, rect.y-pt.y+400);
+
+        table.scrollRectToVisible(rect);
+    
     
   }
   
@@ -273,14 +273,47 @@ public class ListDisplay extends JPanel
     //converting listmodel to data array
     for (int i = 0; i < listModel.getSize(); i++) {
           cobjct = (ConcordanceObject) listModel.getElementAt(i);
-          data[i][0] = " "+ cobjct.sfilename.trim()+" ";
-          data[i][1] = cobjct.getLeftContext().trim();
-          data[i][2] = "  " +cobjct.getKeyword().trim() +"  ";
-          data[i][3] = cobjct.getKeywordAndRightContext().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim();
+          data[i][0] = " <html> "+cobjct.sfilename.trim()+" </html> ";
+          data[i][1] = "<html>"+cobjct.getLeftContext().trim()+"</html>";
+          data[i][2] = "<html>  " +cobjct.getKeyword().trim() +"</html>  ";
+          data[i][3] ="<html>" + cobjct.getKeywordAndRightContext().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
+          if(cobjct.getSortContextHorizon() > 0 )
+          {
+              String[] contextArray = cobjct.getKeywordAndRightContext().split(" ");
+              contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[cobjct.getSortContextHorizon()]+"</font>";
+              StringBuilder builder = new StringBuilder();
+              
+              for(String s : contextArray) {
+                builder.append(s+" ");
+              }
+              
+              data[i][3] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
+          }
+          
+          if(cobjct.getSortContextHorizon() < 0 )
+          {
+              String[] contextArray = cobjct.getLeftContext().split(" ");
+              
+             
+              
+              contextArray[contextArray.length+cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[contextArray.length+cobjct.getSortContextHorizon()]+"</font>";
+              StringBuilder builder = new StringBuilder();
+              for(String s : contextArray) {
+                builder.append(s+" ");
+            }
+              data[i][1] ="<html>" + builder.toString().trim()+"</html>";
+          }
+          
           for (int j = 0; j < 4; j++) {
               if(fm.stringWidth(data[i][j]) > maxLengths[j])
-                  maxLengths[j] = fm.stringWidth(data[i][j]);
+                  maxLengths[j] = fm.stringWidth(data[i][j]) - fm.stringWidth("<html></html>");
           } 
+          if(cobjct.getSortContextHorizon() < 0){
+              maxLengths[1]= maxLengths[1] -fm.stringWidth("<font color=\"red\"></font>");
+          }
+          if(cobjct.getSortContextHorizon() > 0){
+              maxLengths[3]= maxLengths[3] -fm.stringWidth("<font color=\"red\"></font>");
+          }
       }
     
     table = new JTable(data, columnNames);
@@ -318,6 +351,10 @@ public class ListDisplay extends JPanel
     //set column color
     centreRenderer.setForeground(Color.blue);
     filenameRenderer.setForeground(Color.RED);
+    
+    if ( ((ConcordanceObject) listModel.getElementAt(0)).getSortContextHorizon() != 0 ) {
+    
+    }
 
     //turn off grid
     table.setShowGrid(false);
