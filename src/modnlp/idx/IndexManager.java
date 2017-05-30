@@ -327,6 +327,9 @@ public class IndexManager {
           case modnlp.Constants.LANG_EN:
             tkr = new TokeniserRegex(new File(fname), fenc);
             break;
+          case modnlp.Constants.LANG_AR: 
+            tkr = new TokeniserRegex(new File(fname), fenc);
+            break;
           case modnlp.Constants.LANG_JP:
             tkr = new TokeniserJPLucene(new File(fname), fenc);
             //tkr = new TokeniserJP(new File(fname), fenc);

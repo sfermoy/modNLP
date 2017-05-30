@@ -723,4 +723,9 @@ public class BrowserFrame extends BrowserGUI
     return (ConcordanceListModel)concListDisplay.getListModel();
   }
 
+    @Override
+    public int getLanguage() {
+        return parent.getLanguage();
+    }
+
 }

@@ -46,6 +46,8 @@ public abstract class BrowserGUI extends JFrame
   public abstract void updateStatusLabel(String s);
 
   public abstract int getPreferredFontSize();
+  
+  public abstract int getLanguage();
 
   public abstract void valueChanged(ListSelectionEvent e);
 

@@ -352,7 +352,7 @@ public class Browser
        boolean isleft = true;
        if(col>4)
            isleft=false;
-       browserFrame.clicked =str;
+       browserFrame.clicked = str;
        browserFrame.column = Math.abs(5-(col+1));
        startSorting(browserFrame.column,isleft);
       

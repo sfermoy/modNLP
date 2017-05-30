@@ -47,6 +47,9 @@ public class CorpusFile {
     case modnlp.Constants.LANG_EN:
       setLangEN();
       break;
+    case modnlp.Constants.LANG_AR:
+      setLangEN();
+      break;
     case modnlp.Constants.LANG_JP:
       setLangJP();
       break;

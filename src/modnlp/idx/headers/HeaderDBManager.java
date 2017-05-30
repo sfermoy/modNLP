@@ -214,7 +214,7 @@ public class HeaderDBManager {
       if (ri.hasMoreResources()) {
         Resource r = ri.nextResource();
         String desc = (String)r.getContent();
-        //System.err.println(desc);
+        System.err.println(desc);
         desc = desc.substring(3,desc.lastIndexOf("</d>"));
         desc = desc.replace("&lt;","<");
         desc = desc.replace("&gt;",">");

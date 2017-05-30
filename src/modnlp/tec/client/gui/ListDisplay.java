@@ -271,14 +271,21 @@ public class ListDisplay extends JPanel
     BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
     Graphics2D g2d = img.createGraphics();
     FontMetrics fm = g2d.getFontMetrics(font);
-    
+    //reverse contexts for arabic
+    int leftctx = 1;
+    int rightctxt = 3; 
+    if(parent.getLanguage() == modnlp.Constants.LANG_AR){
+        leftctx = 3;
+        rightctxt = 1; 
+    }
+   
     //converting listmodel to data array
     for (int i = 0; i < listModel.getSize(); i++) {
           cobjct = (ConcordanceObject) listModel.getElementAt(i);
           data[i][0] ="<html>"+ cobjct.sfilename.trim()+"</html>";
-          data[i][1] = "<html>"+cobjct.getLeftContext().trim()+"</html>";
+          data[i][leftctx] = "<html>"+cobjct.getLeftContext().trim()+"</html>";
           data[i][2] = "<html>  " +cobjct.getKeyword().trim() +"</html>  ";
-          data[i][3] ="<html>" + cobjct.getKeywordAndRightContext().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
+          data[i][rightctxt] ="<html>" + cobjct.getKeywordAndRightContext().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
           if(cobjct.getSortContextHorizon() > 0 )
           {
               String trimmed =cobjct.getKeywordAndRightContext().trim();

@@ -130,6 +130,8 @@ public class DictProperties extends java.util.Properties{
       return modnlp.Constants.LANG_EN;  // English is default
     if (p.equals("jp"))
       return modnlp.Constants.LANG_JP;
+    if (p.equals("ar"))
+      return modnlp.Constants.LANG_AR;
 
     return modnlp.Constants.LANG_EN;  // English is default
   }
