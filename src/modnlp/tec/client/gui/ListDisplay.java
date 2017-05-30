@@ -17,6 +17,7 @@
  */
 package modnlp.tec.client.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -94,7 +95,7 @@ public class ListDisplay extends JPanel
 
   public ListDisplay(BrowserGUI parent, ListModel lm) 
   {
-    super();
+    super(new BorderLayout());
     
     String[] columnNames = {"Filename", "Left Context", "Keyword","Right Context"};
     String[][] data = new String[lm.getSize()][4];
@@ -119,9 +120,10 @@ public class ListDisplay extends JPanel
     jscroll.setPreferredSize(new Dimension(LWIDTH, LHEIGHT));
   
     // jscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
     
     jscroll.setWheelScrollingEnabled(true);
-    add(jscroll);
+    add(jscroll, BorderLayout.NORTH);
     
     listSelectionModel = list.getSelectionModel();
     //listSelectionModel.addListSelectionListener(parent);
@@ -273,40 +275,43 @@ public class ListDisplay extends JPanel
     //converting listmodel to data array
     for (int i = 0; i < listModel.getSize(); i++) {
           cobjct = (ConcordanceObject) listModel.getElementAt(i);
-          data[i][0] = " <html> "+cobjct.sfilename.trim()+" </html> ";
+          data[i][0] ="<html>"+ cobjct.sfilename.trim()+"</html>";
           data[i][1] = "<html>"+cobjct.getLeftContext().trim()+"</html>";
           data[i][2] = "<html>  " +cobjct.getKeyword().trim() +"</html>  ";
           data[i][3] ="<html>" + cobjct.getKeywordAndRightContext().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
           if(cobjct.getSortContextHorizon() > 0 )
           {
-              String[] contextArray = cobjct.getKeywordAndRightContext().split(" ");
-              contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[cobjct.getSortContextHorizon()]+"</font>";
-              StringBuilder builder = new StringBuilder();
-              
-              for(String s : contextArray) {
-                builder.append(s+" ");
-              }
-              
-              data[i][3] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
+              String trimmed =cobjct.getKeywordAndRightContext().trim();
+              String[] contextArray = trimmed.split("\\s+");
+               if(contextArray.length != 0){
+                    contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[cobjct.getSortContextHorizon()]+"</font>";
+                    StringBuilder builder = new StringBuilder();
+
+                    for(String s : contextArray) {
+                      builder.append(s+" ");
+                    }
+
+                    data[i][3] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
+
+               }
           }
           
           if(cobjct.getSortContextHorizon() < 0 )
           {
               String[] contextArray = cobjct.getLeftContext().split(" ");
-              
-             
-              
-              contextArray[contextArray.length+cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[contextArray.length+cobjct.getSortContextHorizon()]+"</font>";
-              StringBuilder builder = new StringBuilder();
-              for(String s : contextArray) {
-                builder.append(s+" ");
-            }
-              data[i][1] ="<html>" + builder.toString().trim()+"</html>";
+              if(contextArray.length != 0){
+                    contextArray[contextArray.length+cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[contextArray.length+cobjct.getSortContextHorizon()]+"</font>";
+                    StringBuilder builder = new StringBuilder();
+                    for(String s : contextArray) {
+                      builder.append(s+" ");
+                    }
+                    data[i][1] ="<html>" + builder.toString().trim()+"</html>";
+              }
           }
           
           for (int j = 0; j < 4; j++) {
               if(fm.stringWidth(data[i][j]) > maxLengths[j])
-                  maxLengths[j] = fm.stringWidth(data[i][j]) - fm.stringWidth("<html></html>");
+                  maxLengths[j] = fm.stringWidth(data[i][j]) - fm.stringWidth("<ht</html>");
           } 
           if(cobjct.getSortContextHorizon() < 0){
               maxLengths[1]= maxLengths[1] -fm.stringWidth("<font color=\"red\"></font>");
@@ -381,4 +386,5 @@ public class ListDisplay extends JPanel
   public void componentShown(ComponentEvent e) {		
   }
 }
+
 
