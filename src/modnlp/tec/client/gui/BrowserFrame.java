@@ -365,12 +365,30 @@ public class BrowserFrame extends BrowserGUI
       );
     stlButton.addActionListener(new ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-          parent.startSorting(getSortLeftCtxHorizon(),true);
+            boolean left = true;
+            //sort other context for arabic
+            if(parent.getLanguage() == modnlp.Constants.LANG_AR){
+       
+                parent.startSorting(getSortLeftCtxHorizon(),left);
+            }
+            else{
+                  parent.startSorting(getSortLeftCtxHorizon(),left);
+            }
+             
+        
         }}
       );
     strButton.addActionListener(new ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-          parent.startSorting(getSortRightCtxHorizon(),false);
+         boolean left = false;
+            //sort other context for arabic
+            if(parent.getLanguage() == modnlp.Constants.LANG_AR){
+                   parent.startSorting(getSortRightCtxHorizon(),left);
+            }
+            else{
+                   parent.startSorting(getSortRightCtxHorizon(),left);
+            }
+         
         }}
       );
     extractButton.addActionListener(new ActionListener() {

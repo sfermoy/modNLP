@@ -73,7 +73,7 @@ public class Browser
 {
 
   // constants
-  public static final String RELEASE = "0.8.0beta";
+  public static final String RELEASE = "0.7.5a";
   public static final String REVISION = "$Revision: 1.9 $";
   String BRANDNAME = "MODNLP/T";
   private static final String PLGLIST = "teclipluginlist.txt";
@@ -375,7 +375,7 @@ public class Browser
     if (sortleft){ 
         //*****
         if (browserFrame.clicked.equalsIgnoreCase("")) {
-            concVector.setSortContextHorizon(0-sortContextHorizon);
+            concVector.setSortContextHorizon(0-horizon);
         }
         else{
             concVector.setSortContextHorizon(0-browserFrame.column);
@@ -385,10 +385,10 @@ public class Browser
     else {
         if (browserFrame.clicked.equalsIgnoreCase("")) {
             sortContextHorizon = browserFrame.getSortRightCtxHorizon();
-            concVector.setSortContextHorizon(sortContextHorizon);
+            concVector.setSortContextHorizon(0+horizon);
         }
         else{
-            concVector.setSortContextHorizon(browserFrame.column);
+            concVector.setSortContextHorizon(0+browserFrame.column);
         }
     }
 
@@ -399,6 +399,8 @@ public class Browser
       new RightComparer(sortContextHorizon, 
                         preferenceFrame.maxContext/2, 
                         browserFrame.getPunctuation());
+    
+    
     sortThread = new SortThread(concVector, cprer);
     
     sortThread.addConcordanceDisplayListener(browserFrame);

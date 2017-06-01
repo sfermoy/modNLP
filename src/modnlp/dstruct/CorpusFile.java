@@ -48,7 +48,7 @@ public class CorpusFile {
       setLangEN();
       break;
     case modnlp.Constants.LANG_AR:
-      setLangEN();
+      setLangAR();
       break;
     case modnlp.Constants.LANG_JP:
       setLangJP();
@@ -67,6 +67,11 @@ public class CorpusFile {
   public void setLangEN (){
     spaceChar = ENSPACE;
     language = modnlp.Constants.LANG_EN; 
+  }
+  
+  public void setLangAR (){
+    spaceChar = ENSPACE;
+    language = modnlp.Constants.LANG_AR; 
   }
 
   /**

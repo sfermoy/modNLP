@@ -26,12 +26,10 @@ import modnlp.util.Tokeniser;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.regex.*;
-import java.util.StringTokenizer;
 import javax.swing.JLabel;
+import modnlp.idx.inverted.TokeniserARLucene;
+import modnlp.tec.client.gui.ContextClient;
 /**
  *  Manage the array of concordances returned by the server.
  *  Consisting mostly of legacy code, this class is in 
@@ -136,6 +134,9 @@ public class ConcordanceObject {
       break;
     case modnlp.Constants.LANG_JP:
       tkr = new TokeniserJPLucene("");
+      break;
+    case modnlp.Constants.LANG_AR:
+      tkr = new TokeniserARLucene("");
       break;
     default:
       tkr = new TokeniserRegex("");
