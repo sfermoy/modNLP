@@ -45,7 +45,6 @@ import java.util.Enumeration;
 
 import javax.swing.JOptionPane;
 import java.io.IOException;
-import modnlp.idx.inverted.TokeniserARLucene;
 
 
 /**
@@ -329,7 +328,7 @@ public class IndexManager {
             tkr = new TokeniserRegex(new File(fname), fenc);
             break;
           case modnlp.Constants.LANG_AR: 
-            tkr = new TokeniserARLucene(new File(fname), fenc);
+            tkr = new TokeniserRegex(new File(fname), fenc);
             break;
           case modnlp.Constants.LANG_JP:
             tkr = new TokeniserJPLucene(new File(fname), fenc);
@@ -467,4 +466,3 @@ public class IndexManager {
 
 
 }
-
