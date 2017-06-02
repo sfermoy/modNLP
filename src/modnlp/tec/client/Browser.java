@@ -372,6 +372,9 @@ public class Browser
       sortThread.stop();
     }
     int sortContextHorizon = browserFrame.getSortLeftCtxHorizon();
+    if(language == modnlp.Constants.LANG_AR){
+        sortContextHorizon = browserFrame.getSortRightCtxHorizon();
+    }
     if (sortleft){ 
         //*****
         if (browserFrame.clicked.equalsIgnoreCase("")) {
@@ -385,6 +388,9 @@ public class Browser
     else {
         if (browserFrame.clicked.equalsIgnoreCase("")) {
             sortContextHorizon = browserFrame.getSortRightCtxHorizon();
+            if(language == modnlp.Constants.LANG_AR){
+                sortContextHorizon = browserFrame.getSortLeftCtxHorizon();
+            }
             concVector.setSortContextHorizon(0+horizon);
         }
         else{

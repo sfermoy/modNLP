@@ -284,47 +284,73 @@ public class ListDisplay extends JPanel
           cobjct = (ConcordanceObject) listModel.getElementAt(i);
           data[i][0] ="<html>"+ cobjct.sfilename.trim()+"</html>";
           data[i][leftctx] = "<html>"+cobjct.getLeftContext().trim()+"</html>";
-          data[i][2] = "<html>  " +cobjct.getKeyword().trim() +"</html>  ";
+          data[i][2] = "<html>" +cobjct.getKeyword().trim() +"</html>";
           data[i][rightctxt] ="<html>" + cobjct.getKeywordAndRightContext().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
           if(cobjct.getSortContextHorizon() > 0 )
           {
-              String trimmed =cobjct.getKeywordAndRightContext().trim();
-              String[] contextArray = trimmed.split("\\s+");
-               if(contextArray.length != 0){
-                    contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[cobjct.getSortContextHorizon()]+"</font>";
-                    StringBuilder builder = new StringBuilder();
+              if(parent.getLanguage() == modnlp.Constants.LANG_AR){ // if arabic rendering we need to highlight different part
+                  String[] contextArray = cobjct.getKeywordAndRightContext().trim().split(" ");
+                  if(contextArray.length != 0){
+                        contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[cobjct.getSortContextHorizon()]+"</font>";
+                        StringBuilder builder = new StringBuilder();
+                        for(String s : contextArray) {
+                          builder.append(s+" ");
+                        }
+                    data[i][1] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
+              }
+              }else{
+                String trimmed =cobjct.getKeywordAndRightContext().trim();
+                String[] contextArray = trimmed.split("\\s+");
+                 if(contextArray.length != 0){
 
-                    for(String s : contextArray) {
-                      builder.append(s+" ");
-                    }
+                      contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[cobjct.getSortContextHorizon()]+"</font>";
+                      StringBuilder builder = new StringBuilder();
 
-                    data[i][3] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
+                      for(String s : contextArray) {
+                        builder.append(s+" ");
+                      }
 
-               }
+                      data[i][3] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
+
+                 }
+              }
           }
           
           if(cobjct.getSortContextHorizon() < 0 )
           {
-              String[] contextArray = cobjct.getLeftContext().split(" ");
-              if(contextArray.length != 0){
-                    contextArray[contextArray.length+cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[contextArray.length+cobjct.getSortContextHorizon()]+"</font>";
-                    StringBuilder builder = new StringBuilder();
-                    for(String s : contextArray) {
-                      builder.append(s+" ");
-                    }
-                    data[i][1] ="<html>" + builder.toString().trim()+"</html>";
+              if(parent.getLanguage() == modnlp.Constants.LANG_AR){// if arabic rendering we need to highlight different part
+                  String[] contextArray = cobjct.getLeftContext().split(" ");
+                  if(contextArray.length != 0){
+                        contextArray[contextArray.length + cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[contextArray.length + cobjct.getSortContextHorizon()]+"</font>";
+                        StringBuilder builder = new StringBuilder();
+                        for(String s : contextArray) {
+                          builder.append(s+" ");
+                        }
+                    data[i][3] ="<html>" + builder.toString().trim()+"</html>";
+                  }
+              }
+              else{
+                String[] contextArray = cobjct.getLeftContext().split(" ");
+                if(contextArray.length != 0){
+                      contextArray[contextArray.length+cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[contextArray.length+cobjct.getSortContextHorizon()]+"</font>";
+                      StringBuilder builder = new StringBuilder();
+                      for(String s : contextArray) {
+                        builder.append(s+" ");
+                      }
+                      data[i][1] ="<html>" + builder.toString().trim()+"</html>";
+                }
               }
           }
           
           for (int j = 0; j < 4; j++) {
               if(fm.stringWidth(data[i][j]) > maxLengths[j])
-                  maxLengths[j] = fm.stringWidth(data[i][j]) - fm.stringWidth("<ht</html>");
+                  maxLengths[j] = fm.stringWidth(data[i][j]) - fm.stringWidth("<htm</html>");
           } 
           if(cobjct.getSortContextHorizon() < 0){
-              maxLengths[1]= maxLengths[1] -fm.stringWidth("<font color=\"red\"></font>");
+              maxLengths[leftctx]= maxLengths[leftctx] -fm.stringWidth("<font color=\"red\"></font>");
           }
           if(cobjct.getSortContextHorizon() > 0){
-              maxLengths[3]= maxLengths[3] -fm.stringWidth("<font color=\"red\"></font>");
+              maxLengths[rightctxt]= maxLengths[rightctxt] -fm.stringWidth("<font color=\"red\"></font>");
           }
       }
     

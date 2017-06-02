@@ -365,14 +365,13 @@ public class BrowserFrame extends BrowserGUI
       );
     stlButton.addActionListener(new ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            boolean left = true;
             //sort other context for arabic
             if(parent.getLanguage() == modnlp.Constants.LANG_AR){
        
-                parent.startSorting(getSortLeftCtxHorizon(),left);
+                parent.startSorting(getSortRightCtxHorizon(),false);
             }
             else{
-                  parent.startSorting(getSortLeftCtxHorizon(),left);
+                  parent.startSorting(getSortLeftCtxHorizon(),true);
             }
              
         
@@ -380,13 +379,13 @@ public class BrowserFrame extends BrowserGUI
       );
     strButton.addActionListener(new ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-         boolean left = false;
+        
             //sort other context for arabic
             if(parent.getLanguage() == modnlp.Constants.LANG_AR){
-                   parent.startSorting(getSortRightCtxHorizon(),left);
+                      parent.startSorting(getSortLeftCtxHorizon(),true);
             }
             else{
-                   parent.startSorting(getSortRightCtxHorizon(),left);
+                  parent.startSorting(getSortRightCtxHorizon(),false);
             }
          
         }}
