@@ -107,7 +107,7 @@ public class DSNormalisedBayes
   }
 
 
-  /** CSV_i(d_j) = \sum_0^T tkj log p(t|c) * (1 - p(t|¬c) / p(t|¬c) * (1 - p(t|c) 
+  /** CSV_i(d_j) = \sum_0^T tkj log p(t|c) * (1 - p(t|-c) / p(t|-c) * (1 - p(t|c) 
    *
    * (where tkj \in {0, 1} is the binary weight at position k in
    * vector d_j; multiplying by it causes terms that do not occur in
@@ -133,8 +133,8 @@ public class DSNormalisedBayes
                             / (p.getPTgiven_C() * (1 - p.getPTgivenC())));
     }
     if ( barcat )
-      // CSV based on p(d|¬c):
-      // if  pcsv =def  p(t|c) * (1 - p(t|¬c)) /  p(t|¬c) * (1 - p(t|c))  
+      // CSV based on p(d|-c):
+      // if  pcsv =def  p(t|c) * (1 - p(t|-c)) /  p(t|-c) * (1 - p(t|c))  
       // then that's simply log( 1 / pcsv ) = -log(pcsv)
       return -1 * csv/(double) sov.size();
     return csv/(double) sov.size();
