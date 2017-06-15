@@ -97,7 +97,11 @@ public class ListDisplay extends JPanel
   private JProgressBar scrollProgress;
   private ListSelectionModel listSelectionModel;
   private MyTable table;
+<<<<<<< HEAD
   private int[] maxLengths ={15,15,15,15};
+=======
+  private  int[] maxLengths ={15,15,15,15};
+>>>>>>> e29793cbc3c773a7d20a942f114b4b8e940ed259
 
   public ListDisplay(BrowserGUI parent, ListModel lm) 
   {
@@ -137,7 +141,10 @@ public class ListDisplay extends JPanel
     table.getColumnModel().getSelectionModel().addListSelectionListener(parent);
     table.getColumnModel().addColumnModelListener(new TableColumnWidthListener());
     table.addMouseListener(new TableHeaderMouseListener());
+<<<<<<< HEAD
 
+=======
+>>>>>>> e29793cbc3c773a7d20a942f114b4b8e940ed259
     addComponentListener(this);
   }
 ///******************************************
@@ -273,7 +280,11 @@ public class ListDisplay extends JPanel
     String[][] data = new String[listModel.getSize()][4];
     Graphics g =null;
     ConcordanceObject cobjct;
+<<<<<<< HEAD
     
+=======
+   
+>>>>>>> e29793cbc3c773a7d20a942f114b4b8e940ed259
     
     //Setup to measure Fonts
     BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
@@ -292,69 +303,44 @@ public class ListDisplay extends JPanel
           cobjct = (ConcordanceObject) listModel.getElementAt(i);
           data[i][0] ="<html>"+ cobjct.sfilename.trim()+"</html>";
           data[i][leftctx] = "<html>"+cobjct.getLeftContext().trim()+"</html>";
-          data[i][2] = "<html>" +cobjct.getKeyword().trim() +"</html>";
+          data[i][2] = "<html>  " +cobjct.getKeyword().trim() +"</html>  ";
           data[i][rightctxt] ="<html>" + cobjct.getKeywordAndRightContext().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
           if(cobjct.getSortContextHorizon() > 0 )
           {
-              if(parent.getLanguage() == modnlp.Constants.LANG_AR){ // if arabic rendering we need to highlight different part
-                  String[] contextArray = cobjct.getKeywordAndRightContext().trim().split(" ");
-                  if(contextArray.length != 0){
-                        contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[cobjct.getSortContextHorizon()]+"</font>";
-                        StringBuilder builder = new StringBuilder();
-                        for(String s : contextArray) {
-                          builder.append(s+" ");
-                        }
-                    data[i][1] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
-              }
-              }else{
-                String trimmed =cobjct.getKeywordAndRightContext().trim();
-                String[] contextArray = trimmed.split("\\s+");
-                 if(contextArray.length != 0){
+              String trimmed =cobjct.getKeywordAndRightContext().trim();
+              String[] contextArray = trimmed.split("\\s+");
+               if(contextArray.length != 0){
+                    contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[cobjct.getSortContextHorizon()]+"</font>";
+                    StringBuilder builder = new StringBuilder();
 
-                      contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[cobjct.getSortContextHorizon()]+"</font>";
-                      StringBuilder builder = new StringBuilder();
+                    for(String s : contextArray) {
+                      builder.append(s+" ");
+                    }
 
-                      for(String s : contextArray) {
-                        builder.append(s+" ");
-                      }
+                    data[i][3] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
 
-                      data[i][3] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
-
-                 }
-              }
+               }
           }
           
           if(cobjct.getSortContextHorizon() < 0 )
           {
-              if(parent.getLanguage() == modnlp.Constants.LANG_AR){// if arabic rendering we need to highlight different part
-                  String[] contextArray = cobjct.getLeftContext().split(" ");
-                  if(contextArray.length != 0){
-                        contextArray[contextArray.length + cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[contextArray.length + cobjct.getSortContextHorizon()]+"</font>";
-                        StringBuilder builder = new StringBuilder();
-                        for(String s : contextArray) {
-                          builder.append(s+" ");
-                        }
-                    data[i][3] ="<html>" + builder.toString().trim()+"</html>";
-                  }
-              }
-              else{
-                String[] contextArray = cobjct.getLeftContext().split(" ");
-                if(contextArray.length != 0){
-                      contextArray[contextArray.length+cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[contextArray.length+cobjct.getSortContextHorizon()]+"</font>";
-                      StringBuilder builder = new StringBuilder();
-                      for(String s : contextArray) {
-                        builder.append(s+" ");
-                      }
-                      data[i][1] ="<html>" + builder.toString().trim()+"</html>";
-                }
+              String[] contextArray = cobjct.getLeftContext().split(" ");
+              if(contextArray.length != 0){
+                    contextArray[contextArray.length+cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[contextArray.length+cobjct.getSortContextHorizon()]+"</font>";
+                    StringBuilder builder = new StringBuilder();
+                    for(String s : contextArray) {
+                      builder.append(s+" ");
+                    }
+                    data[i][1] ="<html>" + builder.toString().trim()+"</html>";
               }
           }
           
           for (int j = 0; j < 4; j++) {
               if(fm.stringWidth(data[i][j]) > maxLengths[j])
-                  maxLengths[j] = fm.stringWidth(data[i][j]) - fm.stringWidth("<htm</html>");
+                  maxLengths[j] = fm.stringWidth(data[i][j]) - fm.stringWidth("<ht</html>");
           } 
           if(cobjct.getSortContextHorizon() < 0){
+<<<<<<< HEAD
                int temp =  maxLengths[leftctx] -fm.stringWidth("<font color=\"red\"></font>");
                if( temp >  maxLengths[leftctx])
                  maxLengths[leftctx] =temp;
@@ -363,6 +349,16 @@ public class ListDisplay extends JPanel
               int temp = maxLengths[rightctxt] -fm.stringWidth("<font color=\"red\"></font>");
               if (temp>maxLengths[rightctxt])
                   maxLengths[rightctxt] = temp;
+=======
+             int temp =  maxLengths[leftctx] -fm.stringWidth("<font color=\"red\"></font>");
+             if( temp >  maxLengths[leftctx])
+                  maxLengths[leftctx] =temp;
+          }
+          if(cobjct.getSortContextHorizon() > 0){
+             int temp = maxLengths[rightctxt] -fm.stringWidth("<font color=\"red\"></font>");
+             if (temp>maxLengths[rightctxt])
+                 maxLengths[rightctxt] = temp;
+>>>>>>> e29793cbc3c773a7d20a942f114b4b8e940ed259
           }
       }
     
@@ -484,6 +480,10 @@ public class ListDisplay extends JPanel
             table.setColumnWidthChanged(false);
         }
     }
+<<<<<<< HEAD
+=======
+}
+>>>>>>> e29793cbc3c773a7d20a942f114b4b8e940ed259
 }
 }
 
@@ -503,3 +503,17 @@ class MyTable extends JTable {
 }
 
 
+class MyTable extends JTable {
+    public MyTable(Object[][] data, Object[] columnNames){
+        super(data,columnNames);
+    }
+    private boolean isColumnWidthChanged;
+    public boolean getColumnWidthChanged() {
+        return isColumnWidthChanged;
+    }
+
+    public void setColumnWidthChanged(boolean widthChanged) {
+        isColumnWidthChanged = widthChanged;
+    }
+
+}
