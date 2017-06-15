@@ -367,12 +367,9 @@ public class BrowserFrame extends BrowserGUI
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             //sort other context for arabic
             if(parent.getLanguage() == modnlp.Constants.LANG_AR){
-       
-<<<<<<< HEAD
+
                 parent.startSorting(getSortLeftCtxHorizon(),false);
-=======
-                parent.startSorting(getSortLefttCtxHorizon(),false);
->>>>>>> e29793cbc3c773a7d20a942f114b4b8e940ed259
+
             }
             else{
                   parent.startSorting(getSortLeftCtxHorizon(),true);
@@ -750,3 +747,4 @@ public class BrowserFrame extends BrowserGUI
     }
 
 }
+
