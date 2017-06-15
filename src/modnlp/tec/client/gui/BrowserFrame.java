@@ -368,7 +368,7 @@ public class BrowserFrame extends BrowserGUI
             //sort other context for arabic
             if(parent.getLanguage() == modnlp.Constants.LANG_AR){
        
-                parent.startSorting(getSortRightCtxHorizon(),false);
+                parent.startSorting(getSortLeftCtxHorizon(),false);
             }
             else{
                   parent.startSorting(getSortLeftCtxHorizon(),true);
@@ -382,7 +382,7 @@ public class BrowserFrame extends BrowserGUI
         
             //sort other context for arabic
             if(parent.getLanguage() == modnlp.Constants.LANG_AR){
-                      parent.startSorting(getSortLeftCtxHorizon(),true);
+                      parent.startSorting(getSortRightCtxHorizon(),true);
             }
             else{
                   parent.startSorting(getSortRightCtxHorizon(),false);

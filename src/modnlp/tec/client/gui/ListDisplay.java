@@ -29,6 +29,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ComponentListener;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -40,11 +42,14 @@ import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableColumnModelEvent;
+import javax.swing.event.TableColumnModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import modnlp.tec.client.ConcordanceBrowser;
 import modnlp.tec.client.ConcordanceObject;
 import modnlp.tec.client.gui.event.DefaultChangeEvent;
 import modnlp.tec.client.gui.event.FontSizeChangeEvent;
@@ -91,7 +96,8 @@ public class ListDisplay extends JPanel
   private boolean resizePending = false;
   private JProgressBar scrollProgress;
   private ListSelectionModel listSelectionModel;
-  private JTable table;
+  private MyTable table;
+  private int[] maxLengths ={15,15,15,15};
 
   public ListDisplay(BrowserGUI parent, ListModel lm) 
   {
@@ -102,7 +108,7 @@ public class ListDisplay extends JPanel
     
     
     
-    table = new JTable(data, columnNames);
+    table = new MyTable(data, columnNames);
     table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     
     this.parent = parent;
@@ -129,6 +135,8 @@ public class ListDisplay extends JPanel
     //listSelectionModel.addListSelectionListener(parent);
     table.getSelectionModel().addListSelectionListener(parent);
     table.getColumnModel().getSelectionModel().addListSelectionListener(parent);
+    table.getColumnModel().addColumnModelListener(new TableColumnWidthListener());
+    table.addMouseListener(new TableHeaderMouseListener());
 
     addComponentListener(this);
   }
@@ -265,7 +273,7 @@ public class ListDisplay extends JPanel
     String[][] data = new String[listModel.getSize()][4];
     Graphics g =null;
     ConcordanceObject cobjct;
-    int[] maxLengths ={15,15,15,15};
+    
     
     //Setup to measure Fonts
     BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
@@ -347,14 +355,18 @@ public class ListDisplay extends JPanel
                   maxLengths[j] = fm.stringWidth(data[i][j]) - fm.stringWidth("<htm</html>");
           } 
           if(cobjct.getSortContextHorizon() < 0){
-              maxLengths[leftctx]= maxLengths[leftctx] -fm.stringWidth("<font color=\"red\"></font>");
+               int temp =  maxLengths[leftctx] -fm.stringWidth("<font color=\"red\"></font>");
+               if( temp >  maxLengths[leftctx])
+                 maxLengths[leftctx] =temp;
           }
           if(cobjct.getSortContextHorizon() > 0){
-              maxLengths[rightctxt]= maxLengths[rightctxt] -fm.stringWidth("<font color=\"red\"></font>");
+              int temp = maxLengths[rightctxt] -fm.stringWidth("<font color=\"red\"></font>");
+              if (temp>maxLengths[rightctxt])
+                  maxLengths[rightctxt] = temp;
           }
       }
     
-    table = new JTable(data, columnNames);
+    table = new MyTable(data, columnNames);
     table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     
     //setting column widths
@@ -403,6 +415,8 @@ public class ListDisplay extends JPanel
     //readd listeners
     table.getSelectionModel().addListSelectionListener(parent);
     table.getColumnModel().getSelectionModel().addListSelectionListener(parent);
+    table.getColumnModel().addColumnModelListener(new TableColumnWidthListener());
+    table.addMouseListener(new TableHeaderMouseListener());
     
     jscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
     jscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -416,7 +430,76 @@ public class ListDisplay extends JPanel
   }
   public void componentMoved(ComponentEvent e) {
   }
-  public void componentShown(ComponentEvent e) {		
+  public void componentShown(ComponentEvent e) {
   }
+  
+  private class TableColumnWidthListener implements TableColumnModelListener
+{
+    @Override
+    public void columnMarginChanged(ChangeEvent e)
+    {
+        /* columnMarginChanged is called continuously as the column width is changed
+           by dragging. Therefore, execute code below ONLY if we are not already
+           aware of the column width having changed */
+        if(!table.getColumnWidthChanged())
+        {
+            /* the condition  below will NOT be true if
+               the column width is being changed by code. */
+            if(table.getTableHeader().getResizingColumn() != null)
+            {
+                TableColumn column = null;
+                for (int i = 0; i < 4; i++) {
+                    column = table.getColumnModel().getColumn(i);
+                    maxLengths[i]= column.getWidth();
+                 } 
+                // User must have dragged column and changed width
+                table.setColumnWidthChanged(true);
+            }
+        }
+    }
+
+    @Override
+    public void columnMoved(TableColumnModelEvent e) { }
+
+    @Override
+    public void columnAdded(TableColumnModelEvent e) { }
+
+    @Override
+    public void columnRemoved(TableColumnModelEvent e) { }
+
+    @Override
+    public void columnSelectionChanged(ListSelectionEvent e) { }
 }
+  
+  private class TableHeaderMouseListener extends MouseAdapter
+{
+    @Override
+    public void mouseReleased(MouseEvent e)
+    {
+        /* On mouse release, check if column width has changed */
+        if(table.getColumnWidthChanged())
+        {
+            
+            // Reset the flag on the table.
+            table.setColumnWidthChanged(false);
+        }
+    }
+}
+}
+
+class MyTable extends JTable {
+    public MyTable(Object[][] data, Object[] columnNames){
+        super(data,columnNames);
+    }
+    private boolean isColumnWidthChanged;
+    public boolean getColumnWidthChanged() {
+        return isColumnWidthChanged;
+    }
+
+    public void setColumnWidthChanged(boolean widthChanged) {
+        isColumnWidthChanged = widthChanged;
+    }
+
+}
+
 
