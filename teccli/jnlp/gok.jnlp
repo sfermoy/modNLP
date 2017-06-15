@@ -39,6 +39,9 @@
     <jar href="sunxacml.jar" download="lazy"/>
     <jar href="prefuse.jar" download="lazy"/>
     <jar href="xmlrpc-1.2-patched.jar" download="lazy"/>
+    <jar href="lucene-core-3.6.0.jar" download="lazy"/>
+    <jar href="lucene-analyzers-3.6.0.jar" download="lazy"/>
+    <jar href="lucene-kuromoji-3.6.0.jar" download="lazy"/>
     <!-- plug-ins -->
     <extension name="Plugins" href="plugins-gok.jnlp"/>
 <!--

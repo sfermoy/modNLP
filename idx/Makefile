@@ -57,6 +57,7 @@ SOURCES=$(SOURCEDIR)modnlp/Constants.java \
 	$(SOURCEDIR)modnlp/idx/inverted/TokeniserRegex.java \
 	$(SOURCEDIR)modnlp/idx/inverted/TokeniserJP.java \
 	$(SOURCEDIR)modnlp/idx/inverted/TokeniserJPLucene.java \
+	$(SOURCEDIR)modnlp/idx/inverted/TokeniserARLucene.java \
 	$(SOURCEDIR)modnlp/idx/inverted/jpsegmenter/BasicCodePointReader.java \
 	$(SOURCEDIR)modnlp/idx/inverted/jpsegmenter/CodePointReader.java \
 	$(SOURCEDIR)modnlp/idx/inverted/jpsegmenter/PushbackCodePointReader.java \
@@ -99,7 +100,7 @@ BINDISTXTRAS=$(LIBLICENSES) TUTORIAL.txt
 DISTFILES=AUTHORS COPYING Makefile README TUTORIAL.txt VERSION BUGS INSTALL TODO exclude.txt bin/runidx.sh \
 	$(LIBS) $(DOCS) $(DATA) $(SOURCES) $(SOURCEDIR)modnlp/idx/prj.el $(SOURCEDIR)idx-manifest.txt
 #JAVA=jamvm
-JAVAC=/usr/lib/jvm/java-6-oracle/bin/javac -encoding UTF-8 # -target 1.7 
+JAVAC=javac #/usr/lib/jvm/java-6-oracle/bin/javac -encoding UTF-8 # -target 1.7 
 #JAVAC=ecj -1.5
 #JAVAC=/usr/lib/jvm/java-1.5.0-sun-1.5.0.16/bin/javac
 #JAVAC=jikes -bootclasspath /usr/lib/jvm/java-1.5.0-sun/jre/lib/rt.jar -source 1.5

@@ -106,7 +106,7 @@ public class ListDisplay extends JPanel
     table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     
     this.parent = parent;
-    font = new Font("Monospaced", Font.PLAIN, 12);//parent.getPreferredFontSize());
+    font = new Font("Serif", Font.PLAIN, 12);//parent.getPreferredFontSize());
     //setPreferredSize(new Dimension(LWIDTH+50, LHEIGHT+30));
    
     listModel = lm; //parent.getConcordanceVector(); //new DefaultListModel();
@@ -120,7 +120,6 @@ public class ListDisplay extends JPanel
     jscroll.setPreferredSize(new Dimension(LWIDTH, LHEIGHT));
   
     // jscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
     
     jscroll.setWheelScrollingEnabled(true);
     add(jscroll, BorderLayout.NORTH);
@@ -344,7 +343,7 @@ public class ListDisplay extends JPanel
           
           for (int j = 0; j < 4; j++) {
               if(fm.stringWidth(data[i][j]) > maxLengths[j])
-                  maxLengths[j] = fm.stringWidth(data[i][j]) - fm.stringWidth("<htm</html>");
+                  maxLengths[j] = fm.stringWidth(data[i][j]) - fm.stringWidth("<html></html>");
           } 
           if(cobjct.getSortContextHorizon() < 0){
               maxLengths[leftctx]= maxLengths[leftctx] -fm.stringWidth("<font color=\"red\"></font>");
@@ -399,6 +398,7 @@ public class ListDisplay extends JPanel
     
     // set selection mode
     table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    table.setFont(font);
     
     //readd listeners
     table.getSelectionModel().addListSelectionListener(parent);
