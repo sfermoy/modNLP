@@ -29,6 +29,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ComponentListener;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -40,11 +42,14 @@ import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableColumnModelEvent;
+import javax.swing.event.TableColumnModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import modnlp.tec.client.ConcordanceBrowser;
 import modnlp.tec.client.ConcordanceObject;
 import modnlp.tec.client.gui.event.DefaultChangeEvent;
 import modnlp.tec.client.gui.event.FontSizeChangeEvent;
@@ -91,7 +96,10 @@ public class ListDisplay extends JPanel
   private boolean resizePending = false;
   private JProgressBar scrollProgress;
   private ListSelectionModel listSelectionModel;
-  private JTable table;
+  private MyTable table;
+
+  private int[] maxLengths ={15,15,15,15};
+
 
   public ListDisplay(BrowserGUI parent, ListModel lm) 
   {
@@ -102,7 +110,7 @@ public class ListDisplay extends JPanel
     
     
     
-    table = new JTable(data, columnNames);
+    table = new MyTable(data, columnNames);
     table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     
     this.parent = parent;
@@ -128,6 +136,9 @@ public class ListDisplay extends JPanel
     //listSelectionModel.addListSelectionListener(parent);
     table.getSelectionModel().addListSelectionListener(parent);
     table.getColumnModel().getSelectionModel().addListSelectionListener(parent);
+    
+    table.getColumnModel().addColumnModelListener(new TableColumnWidthListener());
+    table.getTableHeader().addMouseListener(new TableHeaderMouseListener());
 
     addComponentListener(this);
   }
@@ -264,7 +275,6 @@ public class ListDisplay extends JPanel
     String[][] data = new String[listModel.getSize()][4];
     Graphics g =null;
     ConcordanceObject cobjct;
-    int[] maxLengths ={15,15,15,15};
     
     //Setup to measure Fonts
     BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
@@ -283,61 +293,35 @@ public class ListDisplay extends JPanel
           cobjct = (ConcordanceObject) listModel.getElementAt(i);
           data[i][0] ="<html>"+ cobjct.sfilename.trim()+"</html>";
           data[i][leftctx] = "<html>"+cobjct.getLeftContext().trim()+"</html>";
-          data[i][2] = "<html>" +cobjct.getKeyword().trim() +"</html>";
+          data[i][2] = "<html>  " +cobjct.getKeyword().trim() +"</html>  ";
           data[i][rightctxt] ="<html>" + cobjct.getKeywordAndRightContext().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
           if(cobjct.getSortContextHorizon() > 0 )
           {
-              if(parent.getLanguage() == modnlp.Constants.LANG_AR){ // if arabic rendering we need to highlight different part
-                  String[] contextArray = cobjct.getKeywordAndRightContext().trim().split(" ");
-                  if(contextArray.length != 0){
-                        contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[cobjct.getSortContextHorizon()]+"</font>";
-                        StringBuilder builder = new StringBuilder();
-                        for(String s : contextArray) {
-                          builder.append(s+" ");
-                        }
-                    data[i][1] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
-              }
-              }else{
-                String trimmed =cobjct.getKeywordAndRightContext().trim();
-                String[] contextArray = trimmed.split("\\s+");
-                 if(contextArray.length != 0){
+              String trimmed =cobjct.getKeywordAndRightContext().trim();
+              String[] contextArray = trimmed.split("\\s+");
+               if(contextArray.length != 0){
+                    contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[cobjct.getSortContextHorizon()]+"</font>";
+                    StringBuilder builder = new StringBuilder();
 
-                      contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[cobjct.getSortContextHorizon()]+"</font>";
-                      StringBuilder builder = new StringBuilder();
+                    for(String s : contextArray) {
+                      builder.append(s+" ");
+                    }
 
-                      for(String s : contextArray) {
-                        builder.append(s+" ");
-                      }
+                    data[i][3] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
 
-                      data[i][3] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
-
-                 }
-              }
+               }
           }
           
           if(cobjct.getSortContextHorizon() < 0 )
           {
-              if(parent.getLanguage() == modnlp.Constants.LANG_AR){// if arabic rendering we need to highlight different part
-                  String[] contextArray = cobjct.getLeftContext().split(" ");
-                  if(contextArray.length != 0){
-                        contextArray[contextArray.length + cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[contextArray.length + cobjct.getSortContextHorizon()]+"</font>";
-                        StringBuilder builder = new StringBuilder();
-                        for(String s : contextArray) {
-                          builder.append(s+" ");
-                        }
-                    data[i][3] ="<html>" + builder.toString().trim()+"</html>";
-                  }
-              }
-              else{
-                String[] contextArray = cobjct.getLeftContext().split(" ");
-                if(contextArray.length != 0){
-                      contextArray[contextArray.length+cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[contextArray.length+cobjct.getSortContextHorizon()]+"</font>";
-                      StringBuilder builder = new StringBuilder();
-                      for(String s : contextArray) {
-                        builder.append(s+" ");
-                      }
-                      data[i][1] ="<html>" + builder.toString().trim()+"</html>";
-                }
+              String[] contextArray = cobjct.getLeftContext().split(" ");
+              if(contextArray.length != 0){
+                    contextArray[contextArray.length+cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[contextArray.length+cobjct.getSortContextHorizon()]+"</font>";
+                    StringBuilder builder = new StringBuilder();
+                    for(String s : contextArray) {
+                      builder.append(s+" ");
+                    }
+                    data[i][1] ="<html>" + builder.toString().trim()+"</html>";
               }
           }
           
@@ -346,14 +330,20 @@ public class ListDisplay extends JPanel
                   maxLengths[j] = fm.stringWidth(data[i][j]) - fm.stringWidth("<html></html>");
           } 
           if(cobjct.getSortContextHorizon() < 0){
-              maxLengths[leftctx]= maxLengths[leftctx] -fm.stringWidth("<font color=\"red\"></font>");
+
+             int temp =  maxLengths[leftctx] -fm.stringWidth("<font color=\"red\"></font>");
+             if( temp >  maxLengths[leftctx])
+                  maxLengths[leftctx] =temp;
           }
           if(cobjct.getSortContextHorizon() > 0){
-              maxLengths[rightctxt]= maxLengths[rightctxt] -fm.stringWidth("<font color=\"red\"></font>");
+             int temp = maxLengths[rightctxt] -fm.stringWidth("<font color=\"red\"></font>");
+             if (temp>maxLengths[rightctxt])
+                 maxLengths[rightctxt] = temp;
+
           }
       }
     
-    table = new JTable(data, columnNames);
+    table = new MyTable(data, columnNames);
     table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     
     //setting column widths
@@ -400,9 +390,11 @@ public class ListDisplay extends JPanel
     table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     table.setFont(font);
     
-    //readd listeners
+    //re-add listeners
     table.getSelectionModel().addListSelectionListener(parent);
     table.getColumnModel().getSelectionModel().addListSelectionListener(parent);
+    table.getColumnModel().addColumnModelListener(new TableColumnWidthListener());
+    table.getTableHeader().addMouseListener(new TableHeaderMouseListener());
     
     jscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
     jscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -416,7 +408,77 @@ public class ListDisplay extends JPanel
   }
   public void componentMoved(ComponentEvent e) {
   }
-  public void componentShown(ComponentEvent e) {		
+  public void componentShown(ComponentEvent e) {
   }
+  
+  private class TableColumnWidthListener implements TableColumnModelListener
+{
+    @Override
+    public void columnMarginChanged(ChangeEvent e)
+    {
+ /* columnMarginChanged is called continuously as the column width is changed
+           by dragging. Therefore, execute code below ONLY if we are not already
+           aware of the column width having changed */
+        if(!table.hasColumnWidthChanged())
+        {
+            /* the condition  below will NOT be true if
+               the column width is being changed by code. */
+            if(table.getTableHeader().getResizingColumn() != null)
+            {
+                // User must have dragged column and changed width
+                table.setColumnWidthChanged(true);
+            }
+        }
+    }
+
+    @Override
+    public void columnMoved(TableColumnModelEvent e) { }
+
+    @Override
+    public void columnAdded(TableColumnModelEvent e) { }
+
+    @Override
+    public void columnRemoved(TableColumnModelEvent e) { }
+
+    @Override
+    public void columnSelectionChanged(ListSelectionEvent e) { }
 }
+  
+  private class TableHeaderMouseListener extends MouseAdapter
+{
+    @Override
+    public void mouseReleased(MouseEvent e)
+    {
+        /* On mouse release, check if column width has changed */
+        if(table.hasColumnWidthChanged())
+        {
+            
+                TableColumn column = null;
+                for (int i = 0; i < 4; i++) {
+                    column = table.getColumnModel().getColumn(i);
+                    maxLengths[i] = column.getWidth();
+                 } 
+                
+            // Reset the flag on the table.
+            table.setColumnWidthChanged(false);
+        }
+    }
+
+}
+}
+class MyTable extends JTable {
+    public MyTable(Object[][] data, Object[] columnNames){
+        super(data,columnNames);
+    }
+    private boolean isColumnWidthChanged;
+    public boolean hasColumnWidthChanged() {
+        return isColumnWidthChanged;
+    }
+
+    public void setColumnWidthChanged(boolean widthChanged) {
+        isColumnWidthChanged = widthChanged;
+    }
+
+}
+
 
