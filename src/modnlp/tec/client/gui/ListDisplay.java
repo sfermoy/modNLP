@@ -20,6 +20,7 @@ package modnlp.tec.client.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -99,7 +100,7 @@ public class ListDisplay extends JPanel
   private MyTable table;
 
   private int[] maxLengths ={15,15,15,15};
-
+  private boolean useUserWidths = false;
 
   public ListDisplay(BrowserGUI parent, ListModel lm) 
   {
@@ -291,57 +292,83 @@ public class ListDisplay extends JPanel
     //converting listmodel to data array
     for (int i = 0; i < listModel.getSize(); i++) {
           cobjct = (ConcordanceObject) listModel.getElementAt(i);
-          data[i][0] ="<html>"+ cobjct.sfilename.trim()+"</html>";
+          data[i][0] ="<html>"+ cobjct.sfilename.trim()+"     </html>";
           data[i][leftctx] = "<html>"+cobjct.getLeftContext().trim()+"</html>";
           data[i][2] = "<html>  " +cobjct.getKeyword().trim() +"</html>  ";
           data[i][rightctxt] ="<html>" + cobjct.getKeywordAndRightContext().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
           if(cobjct.getSortContextHorizon() > 0 )
           {
-              String trimmed =cobjct.getKeywordAndRightContext().trim();
-              String[] contextArray = trimmed.split("\\s+");
-               if(contextArray.length != 0){
-                    contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[cobjct.getSortContextHorizon()]+"</font>";
-                    StringBuilder builder = new StringBuilder();
+              if(parent.getLanguage() == modnlp.Constants.LANG_AR){ // if arabic rendering we need to highlight different part
+                  String[] contextArray = cobjct.getKeywordAndRightContext().trim().split(" ");
+                  if(contextArray.length != 0){
+                        contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[cobjct.getSortContextHorizon()]+"</font>";
+                        StringBuilder builder = new StringBuilder();
+                        for(String s : contextArray) {
+                          builder.append(s+" ");
+                        }
+                    data[i][1] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
+              }
+              }else{
+                String trimmed =cobjct.getKeywordAndRightContext().trim();
+                String[] contextArray = trimmed.split("\\s+");
+                 if(contextArray.length != 0){
 
-                    for(String s : contextArray) {
-                      builder.append(s+" ");
-                    }
+                      contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[cobjct.getSortContextHorizon()]+"</font>";
+                      StringBuilder builder = new StringBuilder();
 
-                    data[i][3] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
+                      for(String s : contextArray) {
+                        builder.append(s+" ");
+                      }
 
-               }
+                      data[i][3] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
+
+                 }
+              }
           }
           
           if(cobjct.getSortContextHorizon() < 0 )
           {
-              String[] contextArray = cobjct.getLeftContext().split(" ");
-              if(contextArray.length != 0){
-                    contextArray[contextArray.length+cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[contextArray.length+cobjct.getSortContextHorizon()]+"</font>";
-                    StringBuilder builder = new StringBuilder();
-                    for(String s : contextArray) {
-                      builder.append(s+" ");
-                    }
-                    data[i][1] ="<html>" + builder.toString().trim()+"</html>";
+              if(parent.getLanguage() == modnlp.Constants.LANG_AR){// if arabic rendering we need to highlight different part
+                  String[] contextArray = cobjct.getLeftContext().split(" ");
+                  if(contextArray.length != 0){
+                        contextArray[contextArray.length + cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[contextArray.length + cobjct.getSortContextHorizon()]+"</font>";
+                        StringBuilder builder = new StringBuilder();
+                        for(String s : contextArray) {
+                          builder.append(s+" ");
+                        }
+                    data[i][3] ="<html>" + builder.toString().trim()+"</html>";
+                  }
+              }
+              else{
+                String[] contextArray = cobjct.getLeftContext().split(" ");
+                if(contextArray.length != 0){
+                      contextArray[contextArray.length+cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[contextArray.length+cobjct.getSortContextHorizon()]+"</font>";
+                      StringBuilder builder = new StringBuilder();
+                      for(String s : contextArray) {
+                        builder.append(s+" ");
+                      }
+                      data[i][1] ="<html>" + builder.toString().trim()+"</html>";
+                }
               }
           }
-          
+    if(!useUserWidths){  
           for (int j = 0; j < 4; j++) {
               if(fm.stringWidth(data[i][j]) > maxLengths[j])
                   maxLengths[j] = fm.stringWidth(data[i][j]) - fm.stringWidth("<html></html>");
           } 
           if(cobjct.getSortContextHorizon() < 0){
 
-             int temp =  maxLengths[leftctx] -fm.stringWidth("<font color=\"red\"></font>");
-             if( temp >  maxLengths[leftctx])
-                  maxLengths[leftctx] =temp;
+             int temp =  maxLengths[leftctx] -fm.stringWidth("<htm</html<font color=\"red\"></font>");
+                  maxLengths[leftctx] = temp;
           }
           if(cobjct.getSortContextHorizon() > 0){
-             int temp = maxLengths[rightctxt] -fm.stringWidth("<font color=\"red\"></font>");
-             if (temp>maxLengths[rightctxt])
+             int temp = maxLengths[rightctxt] -fm.stringWidth("<htm</htm<font color=\"red\"></font>");
                  maxLengths[rightctxt] = temp;
 
           }
+          useUserWidths = true;
       }
+    }
     
     table = new MyTable(data, columnNames);
     table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -350,12 +377,16 @@ public class ListDisplay extends JPanel
     TableColumn column = null;
     for (int i = 0; i < 4; i++) {
         column = table.getColumnModel().getColumn(i);
+        
         column.setPreferredWidth(maxLengths[i]); 
      } 
     
     //set column allignments
     DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
     rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+    //rightRenderer.setIgnoreRepaint(true);
+    //rightRenderer.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+    //rightRenderer.applyComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
     rightRenderer.setFont(font);
     table.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
     
@@ -480,5 +511,7 @@ class MyTable extends JTable {
     }
 
 }
+
+
 
 
