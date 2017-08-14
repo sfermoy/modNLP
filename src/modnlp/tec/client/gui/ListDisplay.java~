@@ -129,6 +129,7 @@ public class ListDisplay extends JPanel
     jscroll.setPreferredSize(new Dimension(LWIDTH, LHEIGHT));
   
     // jscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
     
     jscroll.setWheelScrollingEnabled(true);
     add(jscroll, BorderLayout.NORTH);
@@ -373,9 +374,7 @@ public class ListDisplay extends JPanel
     
     table = new MyTable(data, columnNames);
     table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    table.setFont(font);
-    table.setRowHeight(table.getRowHeight()+table.getRowHeight()/5);
-
+    
     //setting column widths
     TableColumn column = null;
     for (int i = 0; i < 4; i++) {
@@ -422,7 +421,6 @@ public class ListDisplay extends JPanel
     
     // set selection mode
     table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    table.setFont(font);
     
     //re-add listeners
     table.getSelectionModel().addListSelectionListener(parent);
