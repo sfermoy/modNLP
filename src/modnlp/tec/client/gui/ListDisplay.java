@@ -383,23 +383,23 @@ public class ListDisplay extends JPanel
      } 
     
     //set column allignments
-    DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-    rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+    LeftContextRenderer rightAlignRenderer = new LeftContextRenderer();
+    rightAlignRenderer.setHorizontalAlignment(JLabel.RIGHT);
     //rightRenderer.setIgnoreRepaint(true);
     //rightRenderer.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
     //rightRenderer.applyComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-    rightRenderer.setFont(font);
-    table.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
+    rightAlignRenderer.setFont(font);
+    table.getColumnModel().getColumn(1).setCellRenderer(rightAlignRenderer);
     
     DefaultTableCellRenderer centreRenderer = new DefaultTableCellRenderer();
     centreRenderer.setHorizontalAlignment(JLabel.CENTER);
     centreRenderer.setFont(font);
     table.getColumnModel().getColumn(2).setCellRenderer(centreRenderer);
     
-    DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
-    leftRenderer.setHorizontalAlignment(JLabel.LEFT);
-    leftRenderer.setFont(font);
-    table.getColumnModel().getColumn(3).setCellRenderer(leftRenderer);
+    RightContextRenderer leftAlignRenderer = new RightContextRenderer();
+    leftAlignRenderer.setHorizontalAlignment(JLabel.LEFT);
+    leftAlignRenderer.setFont(font);
+    table.getColumnModel().getColumn(3).setCellRenderer(leftAlignRenderer);
     
     DefaultTableCellRenderer filenameRenderer = new DefaultTableCellRenderer();
     filenameRenderer.setHorizontalAlignment(JLabel.LEFT);
@@ -511,6 +511,37 @@ class MyTable extends JTable {
     }
 
 }
+
+class LeftContextRenderer extends DefaultTableCellRenderer {
+    
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        final JViewport viewport = new JViewport();
+        final Component c;
+        c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        viewport.setView( c);      
+        int width = viewport.getWidth();
+        Dimension size = c.getPreferredSize();
+        viewport.setViewPosition(new Point(size.width - width, 0));
+        return viewport;
+    }
+}
+
+class RightContextRenderer extends DefaultTableCellRenderer {
+    
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        final JViewport viewport = new JViewport();
+        final Component c;
+        c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        viewport.setView( c);      
+        //int width = viewport.getWidth();
+        //Dimension size = c.getPreferredSize();
+        //viewport.setViewPosition(new Point(size.width - width, 0));
+        return viewport;
+    }
+}
+
 
 
 
