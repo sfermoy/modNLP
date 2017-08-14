@@ -374,9 +374,7 @@ public class ListDisplay extends JPanel
     
     table = new MyTable(data, columnNames);
     table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    table.setFont(font);
-    table.setRowHeight(table.getRowHeight()+table.getRowHeight()/5);
-
+    
     //setting column widths
     TableColumn column = null;
     for (int i = 0; i < 4; i++) {
