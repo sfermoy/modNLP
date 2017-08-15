@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Created-By: 1.3.0 (Sun Microsystems Inc.)
+Class-Path: . je.jar idx.jar antlr-2.7.6.jar commons-pool-1.2.jar exist-modules.jar exist.jar jgroups-all.jar log4j-1.2.14.jar resolver.jar sunxacml.jar xmldb.jar xmlrpc-1.2-patched.jar prefuse.jar wordleconc.jar mosaic.jar conctree.jar lucene-core-3.6.0.jar lucene-analyzers-3.6.0.jar lucene-kuromoji-3.6.0.jar
+Main-Class: modnlp.tec.client.Browser
+Permissions: all-permissions
+Application-Name: modnlp/TECCLI
+Codebase: *.genealogiesofknowledge.net
