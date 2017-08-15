@@ -422,7 +422,6 @@ public class ListDisplay extends JPanel
     
     // set selection mode
     table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    table.setFont(font);
     
     //re-add listeners
     table.getSelectionModel().addListSelectionListener(parent);

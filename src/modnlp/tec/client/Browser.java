@@ -73,7 +73,7 @@ public class Browser
 {
 
   // constants
-  public static final String RELEASE = "0.8.0rc1";
+  public static final String RELEASE = "0.8.0rc2";
   public static final String REVISION = "$Revision: 1.9 $";
   String BRANDNAME = "MODNLP/T";
   private static final String PLGLIST = "teclipluginlist.txt";
@@ -356,7 +356,7 @@ public class Browser
        browserFrame.column = Math.abs(5-(col+1));
        startSorting(browserFrame.column,isleft);
       
-      // browserFrame.setShowDetailString(col,str);
+      browserFrame.setShowDetailString(col,str);
        
   }
 
