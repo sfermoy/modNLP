@@ -52,7 +52,7 @@ import java.net.ServerSocket;
 public class Server extends Thread {
 
   private static final boolean DEBUG = false;
-  private static final int MAXCTX = 130;
+  private static final int MAXCTX = 400;
   private static final int MAXEXT = 600;
   // These are feaaults to be chaged in main() 
   private static ServerProperties sprop = new ServerProperties();

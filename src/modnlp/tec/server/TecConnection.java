@@ -58,7 +58,7 @@ import static modnlp.tec.server.Request.COLUMNBATCH;
  */
 public class TecConnection extends Thread {
 
-  private static final int MAXCTX = 130;
+  private static final int MAXCTX = 400;
   private static final int MAXEXT = 600;
   Socket  cSokt = null;
   HeaderDBManager hdbm = null;
