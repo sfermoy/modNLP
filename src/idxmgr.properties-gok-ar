@@ -2,7 +2,7 @@
 #Wed May 16 15:29:14 IST 2007
 tokeniser.ignore.elements=(omit|url)
 ## should punctuation count as tokens?
-index.punctuation=false
+index.punctuation=true
 ## index metadata for subcorpus selection (header files)?
 index.headers=true
 ## which element should be indexed (i.e. text within elements
@@ -33,7 +33,14 @@ xquery.file.description.return={data($s/document/@filename)}<sep/>{data($s/docum
 ## the encoding for characters in files to be indexed. Make sure your text files match this
 file.encoding=UTF8
 ## the language to be indexed (determines the choice of
-## tokeniser). Currently supported languages are LATIN (EN) AR (Arabic) and JP (Japanese); EN
+## tokeniser). Currently supported languages are LATIN (EN) and JP; EN
 ## should make reasonably educated guesses for all European Languages
-## (including some non-Latin scripted ones, such as Greek).
-language=EN
+## (including some non-Latin scripted ones, such as Greek, and Arabic).
+language=AR
+
+
+
+
+
+
+

@@ -8,6 +8,7 @@ frequency.table.name=fqtable.db
 corpus.data.directory=
 subcorpusindexer.element=(speech|writing)
 index.headers=true
+index.punctuation=false
 headers.url=http\://localhost/
 tokeniser.ignore.elements=(omit|ignore|header|chair|heading|post|name)
 xquery.attribute.chooser.specs=File name;../../header/@filename;Spoken language;speech/@language;Written language;writing/@language;Affiliation;(speaker|writer)/affiliation/@EPparty

@@ -100,12 +100,12 @@ public class TokeniserARLucene extends Tokeniser{
       int startOffset = offsetAttribute.startOffset();
       int endOffset = offsetAttribute.endOffset();
       String token = charTermAttribute.toString();
-      System.out.println(token);
+      //System.out.println(token);
       List<CoreLabel> processed = segmenter.segmentStringToTokenList(token);
       Stemmer stem = new Stemmer();
       String stemmed = stem.formatWord(""+token+"");
-      System.out.println(stemmed);
-      System.out.println("-----------\n");
+      //System.out.println(stemmed);
+      //System.out.println("-----------\n");
       if(processed.size() > 1){
           for (int j = 0; j < processed.size(); j++) {
               CoreLabel get = processed.get(j);

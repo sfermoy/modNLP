@@ -1,6 +1,6 @@
 TOPDIR=
 SOURCEDIR=$(TOPDIR)src/
-LIBSPATH=$(TOPDIR)lib/gnu-regexp.jar:$(TOPDIR)lib/je.jar:$(TOPDIR)lib/antlr-2.7.6.jar:$(TOPDIR)lib/commons-pool-1.2.jar:$(TOPDIR)lib/exist-modules.jar:$(TOPDIR)lib/exist.jar:$(TOPDIR)lib/jgroups-all.jar:$(TOPDIR)lib/log4j-1.2.14.jar:$(TOPDIR)lib/resolver.jar:$(TOPDIR)lib/sunxacml.jar:$(TOPDIR)lib/xmldb.jar:$(TOPDIR)lib/xmlrpc-1.2-patched.jar:$(TOPDIR)lib/lucene-core-3.6.0.jar:$(TOPDIR)lib/lucene-analyzers-3.6.0.jar:$(TOPDIR)lib/lucene-kuromoji-3.6.0.jar
+LIBSPATH=$(TOPDIR)lib/gnu-regexp.jar:$(TOPDIR)lib/je.jar:$(TOPDIR)lib/antlr-2.7.6.jar:$(TOPDIR)lib/commons-pool-1.2.jar:$(TOPDIR)lib/exist-modules.jar:$(TOPDIR)lib/exist.jar:$(TOPDIR)lib/jgroups-all.jar:$(TOPDIR)lib/log4j-1.2.14.jar:$(TOPDIR)lib/resolver.jar:$(TOPDIR)lib/sunxacml.jar:$(TOPDIR)lib/xmldb.jar:$(TOPDIR)lib/xmlrpc-1.2-patched.jar:$(TOPDIR)lib/lucene-core-3.6.0.jar:$(TOPDIR)lib/lucene-analyzers-3.6.0.jar:$(TOPDIR)lib/lucene-kuromoji-3.6.0.jar:$(TOPDIR)lib/stanford-segmenter-3.8.0.jar
 LIBS=$(subst :, ,$(LIBSPATH))
 LIBLICENSES=$(TOPDIR)lib/COPYING-libs
 DOCS=$(TOPDIR)doc
@@ -82,7 +82,8 @@ SOURCES=$(SOURCEDIR)modnlp/Constants.java \
 	$(SOURCEDIR)modnlp/idx/query/PrepContextQuery.java \
 	$(SOURCEDIR)modnlp/idx/query/SubcorpusConstraints.java	\
 	$(SOURCEDIR)modnlp/idx/query/WordQuery.java \
-	$(SOURCEDIR)modnlp/idx/query/WordQueryException.java
+	$(SOURCEDIR)modnlp/idx/query/WordQueryException.java \
+	$(SOURCEDIR)modnlp/modnlp/idx/stemmer/Stemmer.java
 TARGETS=$(subst .java,.class,$(SOURCES))
 MAINJARS=$(subst $(SOURCEDIR),,$(TARGETS)) # doesn't work by itself: need to jar inner classess as well
 JARREDS=$(MAINJARS) \
@@ -96,9 +97,31 @@ JARREDS=$(MAINJARS) \
 	'modnlp/idx/IndexManager$$IndexingThread.class'
 DISTDIR:=modnlp-idx-`cat VERSION`
 BINDISTDIR=$(DISTDIR)-bin
-BINDISTXTRAS=$(LIBLICENSES) TUTORIAL.txt
-DISTFILES=AUTHORS COPYING Makefile README TUTORIAL.txt VERSION BUGS INSTALL TODO exclude.txt bin/runidx.sh \
-	$(LIBS) $(DOCS) $(DATA) $(SOURCES) $(SOURCEDIR)modnlp/idx/prj.el $(SOURCEDIR)idx-manifest.txt
+BINDISTXTRAS=$(LIBLICENSES) TUTORIAL.txt \
+	$(SOURCEDIR)arabic-segmenter-atb+bn+arztrain.ser.gz \
+	$(SOURCEDIR)definite_article.txt \
+	$(SOURCEDIR)diacritics.txt \
+	$(SOURCEDIR)duplicate.txt \
+	$(SOURCEDIR)first_waw.txt \
+	$(SOURCEDIR)first_yah.txt \
+	$(SOURCEDIR)last_alif.txt \
+	$(SOURCEDIR)last_hamza.txt \
+	$(SOURCEDIR)last_maksoura.txt \
+	$(SOURCEDIR)last_yah.txt \
+	$(SOURCEDIR)mid_waw.txt \
+	$(SOURCEDIR)mid_yah.txt \
+	$(SOURCEDIR)prefixes.txt \
+	$(SOURCEDIR)punctuation.txt \
+	$(SOURCEDIR)quad_roots.txt \
+	$(SOURCEDIR)stopwords.txt \
+	$(SOURCEDIR)strange.txt \
+	$(SOURCEDIR)suffixes.txt \
+	$(SOURCEDIR)tri_patt.txt \
+	$(SOURCEDIR)tri_roots.txt
+DISTFILES=AUTHORS COPYING Makefile README TUTORIAL.txt VERSION BUGS INSTALL TODO \
+	exclude.txt bin/runidx.sh \
+	$(LIBS) $(DOCS) $(DATA) $(SOURCES) $(SOURCEDIR)modnlp/idx/prj.el \
+	$(SOURCEDIR)idx-manifest.txt 
 #JAVA=jamvm
 JAVAC=javac -encoding UTF-8 #/usr/lib/jvm/java-6-oracle/bin/javac -encoding UTF-8 # -target 1.7 
 #JAVAC=ecj -1.5
@@ -158,6 +181,7 @@ dist: clean
 	rm -rf $(DISTDIR)
 	mkdir $(DISTDIR)
 	cp -aL --parents $(DISTFILES) $(DISTDIR)
+	cp -aL --parents $(BINDISTXTRAS) $(DISTDIR)
 	cp $(TOPDIR)src/idxmgr.properties.ecpc $(DISTDIR)/idxmgr.properties
 	cp $(TOPDIR)src/dictionary.properties.ISO8859_1 $(DISTDIR)/dictionary.properties
 	tar cfvz /tmp/$(DISTDIR).tar.gz  --exclude-from=exclude.txt $(DISTDIR)
@@ -181,6 +205,15 @@ bindistgok: jar
 	cp README.bin $(BINDISTDIR)-gok/README
 	cp bin/runidx.sh $(BINDISTDIR)-gok
 	cp $(TOPDIR)src/idxmgr.properties.gok $(BINDISTDIR)-gok/idxmgr.properties
+	cp $(LIBS) $(JARTARGET) $(BINDISTXTRAS) $(BINDISTDIR)-gok
+	tar cfvz /tmp/$(BINDISTDIR)-gok.tar.gz  --exclude-from=exclude.txt $(BINDISTDIR)-gok
+	rm -rf $(BINDISTDIR)-gok
+
+bindistgok-ar: jar
+	mkdir $(BINDISTDIR)-gok
+	cp README.bin $(BINDISTDIR)-gok/README
+	cp bin/runidx.sh $(BINDISTDIR)-gok
+	cp $(TOPDIR)src/idxmgr.properties.gok-ar $(BINDISTDIR)-gok/idxmgr.properties
 	cp $(LIBS) $(JARTARGET) $(BINDISTXTRAS) $(BINDISTDIR)-gok
 	tar cfvz /tmp/$(BINDISTDIR)-gok.tar.gz  --exclude-from=exclude.txt $(BINDISTDIR)-gok
 	rm -rf $(BINDISTDIR)-gok
