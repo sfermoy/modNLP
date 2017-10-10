@@ -1,0 +1,17 @@
+#modnlp.idx.IndexManager's properties
+#Thu Aug 04 11:59:26 IST 2016
+xquery.file.description.return={data($s/title/@filename)}<sep/>{data($s/title/@subcorpusid)}<sep/>{data($s/title/collection)} {if ($s/title/editor\!\="") then ", editor\: " else ""} { data($s/title/editor)}
+index.headers=true
+xquery.return.attribute.path=/@id
+tokeniser.ignore.elements=(omit)
+file.encoding=UTF8
+subcorpusindexer.attribute=id
+language=EN
+xquery.root.element.path=/techeader/section
+xquery.root.filedescription.path=/techeader
+subcorpusindexer.element=(section)
+index.punctuation=false
+header.extension=hed
+xquery.max.cache.size=23
+last.index.dir=/home/shane/Desktop/Manchester/ExpIndex
+xquery.attribute.chooser.specs=File name;../title/@filename;Pub. date;sourceText/date/@year

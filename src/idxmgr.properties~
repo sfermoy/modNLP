@@ -1,0 +1,17 @@
+#modnlp.idx.IndexManager's properties
+#Wed Sep 24 18:50:19 IST 2014
+xquery.file.description.return={data($s/title/@filename)}<sep/>{data($s/title/@subcorpusid)}<sep/>{data($s/title/collection)} {if ($s/title/editor\!\="") then ", editor\: " else ""} { data($s/title/editor)}
+index.headers=true
+xquery.return.attribute.path=/@id
+tokeniser.ignore.elements=(omit)
+file.encoding=UTF8
+subcorpusindexer.attribute=id
+language=EN
+xquery.root.element.path=/techeader/section
+xquery.root.filedescription.path=/techeader
+subcorpusindexer.element=(section)
+index.punctuation=true
+header.extension=hed
+xquery.max.cache.size=23
+last.index.dir=/tmp/ep2
+xquery.attribute.chooser.specs=File name;../title/@filename;Subcorpus;../title/@subcorpusid;Source;sourceText/language;Pub. date;sourceText/date/@year;Author;author/name;Author's gender;author/@gender;Author's nationality;author/nationality/@description;Translator;translator/name;Translator's gender;translator/@gender;Translator's nationality;translator/nationality/@description

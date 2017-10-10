@@ -6,6 +6,8 @@
 
 package modnlp.idx.inverted;
 
+import edu.stanford.nlp.international.arabic.process.ArabicSegmenter;
+import edu.stanford.nlp.ling.CoreLabel;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
@@ -17,16 +19,14 @@ import java.util.regex.Pattern;
 import modnlp.dstruct.TokenIndex;
 import modnlp.util.PrintUtil;
 import modnlp.util.Tokeniser;
+import modnlp.modnlp.idx.stemmer.Stemmer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.cjk.CJKWidthFilter;
-
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
-
-
 import org.apache.lucene.analysis.ar.ArabicAnalyzer;
 import org.apache.lucene.analysis.ar.ArabicNormalizationFilter;
+import java.util.Properties;
 
 
 /**
@@ -54,6 +54,11 @@ public class TokeniserARLucene extends Tokeniser{
   }
   
    public void tokenise () throws IOException {
+     Properties props = new Properties();
+     ArabicSegmenter segmenter = new ArabicSegmenter(props);
+     segmenter.loadSegmenter("arabic-segmenter-atb+bn+arztrain.ser.gz");
+     //Stemmer stem = new Stemmer();
+     
     String ignregexp = "--+|\\.\\.+|\\.+\\p{Space}";  // delete full stops and dashes (typically not used).
     if (ignoredElements != null && ignoredElements.length() > 0)
       ignregexp = ignregexp+
@@ -87,9 +92,7 @@ public class TokeniserARLucene extends Tokeniser{
     //System.out.println("-->"+text+"<--");
     Analyzer ARtokeniser = new ArabicAnalyzer(org.apache.lucene.util.Version.LUCENE_36);
     TokenStream stream = ARtokeniser.reusableTokenStream("text", new StringReader(text));
-    //stream = new JapanesePartOfSpeechStopFilter(true, stream, stoptags);
-    stream = new ArabicNormalizationFilter(stream);
-  
+
     OffsetAttribute offsetAttribute = stream.addAttribute(OffsetAttribute.class);
     CharTermAttribute charTermAttribute = stream.addAttribute(CharTermAttribute.class);
     
@@ -97,8 +100,22 @@ public class TokeniserARLucene extends Tokeniser{
       int startOffset = offsetAttribute.startOffset();
       int endOffset = offsetAttribute.endOffset();
       String token = charTermAttribute.toString();
+      System.out.println(token);
+      List<CoreLabel> processed = segmenter.segmentStringToTokenList(token);
+      Stemmer stem = new Stemmer();
+      String stemmed = stem.formatWord(""+token+"");
+      System.out.println(stemmed);
+      System.out.println("-----------\n");
+      if(processed.size() > 1){
+          for (int j = 0; j < processed.size(); j++) {
+              CoreLabel get = processed.get(j);
+              tokenMap.putPos(get.value(),startOffset);
+          }
+      }
+      if (token!=stemmed)
+          tokenMap.putPos(stemmed,startOffset);
       tokenMap.putPos(token,startOffset);
-      //System.out.println(token.str+" \t\tS="+token.start+" E="+token.end);
+      
     }
     if (verbose)
       PrintUtil.donePrinting(); ct = 1;
