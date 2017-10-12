@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 import modnlp.dstruct.TokenIndex;
 import modnlp.util.PrintUtil;
 import modnlp.util.Tokeniser;
-import modnlp.modnlp.idx.stemmer.Stemmer;
+import modnlp.idx.stemmer.Stemmer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
@@ -35,16 +35,17 @@ import java.util.Properties;
  */
 public class TokeniserARLucene extends Tokeniser{
     
-    private String ignoredElements = "(omit|ignore)";
-
-    public TokeniserARLucene(String t){
+  private String ignoredElements = "(omit|ignore)";
+  private ArabicSegmenter segmenter = new ArabicSegmenter(new Properties());
+  
+  public TokeniserARLucene(String t){
     super(t);
   }
-
+  
   public TokeniserARLucene(File t, String e) throws IOException {
     super(t,e);
   }
-
+  
   public TokeniserARLucene(URL t, String e) throws IOException {
     super(t,e);
   }
@@ -53,12 +54,13 @@ public class TokeniserARLucene extends Tokeniser{
     return ignoredElements;
   }
   
-   public void tokenise () throws IOException {
-     Properties props = new Properties();
-     ArabicSegmenter segmenter = new ArabicSegmenter(props);
-     segmenter.loadSegmenter("arabic-segmenter-atb+bn+arztrain.ser.gz");
-     //Stemmer stem = new Stemmer();
-     
+  public void setSegmenterModel(String fileorurl){
+    segmenter.loadSegmenter(fileorurl);
+  }
+  
+  public void tokenise () throws IOException {
+    //Stemmer stem = new Stemmer();
+    
     String ignregexp = "--+|\\.\\.+|\\.+\\p{Space}";  // delete full stops and dashes (typically not used).
     if (ignoredElements != null && ignoredElements.length() > 0)
       ignregexp = ignregexp+

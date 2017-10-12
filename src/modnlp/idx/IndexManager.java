@@ -330,6 +330,7 @@ public class IndexManager {
             break;
           case modnlp.Constants.LANG_AR: 
             tkr = new TokeniserARLucene(new File(fname), fenc);
+            ((TokeniserARLucene)tkr).setSegmenterModel(dictProps.getProperty("arabic.segmenter.model"));
             break;
           case modnlp.Constants.LANG_JP:
             tkr = new TokeniserJPLucene(new File(fname), fenc);

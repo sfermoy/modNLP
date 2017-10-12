@@ -83,11 +83,12 @@ SOURCES=$(SOURCEDIR)modnlp/Constants.java \
 	$(SOURCEDIR)modnlp/idx/query/SubcorpusConstraints.java	\
 	$(SOURCEDIR)modnlp/idx/query/WordQuery.java \
 	$(SOURCEDIR)modnlp/idx/query/WordQueryException.java \
-	$(SOURCEDIR)modnlp/modnlp/idx/stemmer/Stemmer.java
+	$(SOURCEDIR)modnlp/idx/stemmer/Stemmer.java
 TARGETS=$(subst .java,.class,$(SOURCES))
 MAINJARS=$(subst $(SOURCEDIR),,$(TARGETS)) # doesn't work by itself: need to jar inner classess as well
 JARREDS=$(MAINJARS) \
 	eXistConf.xml \
+	$(STEMMERDATA) \
 	'modnlp/dstruct/FrequencyHash$$ValueSorter.class' \
 	'modnlp/dstruct/TokenIndex$$TokenCoordinates.class' \
 	'modnlp/idx/inverted/jpsegmenter/TinySegmenter$$1.class' \
@@ -97,30 +98,30 @@ JARREDS=$(MAINJARS) \
 	'modnlp/idx/IndexManager$$IndexingThread.class'
 DISTDIR:=modnlp-idx-`cat VERSION`
 BINDISTDIR=$(DISTDIR)-bin
-BINDISTXTRAS=$(LIBLICENSES) TUTORIAL.txt \
-	$(SOURCEDIR)arabic-segmenter-atb+bn+arztrain.ser.gz \
-	$(SOURCEDIR)definite_article.txt \
-	$(SOURCEDIR)diacritics.txt \
-	$(SOURCEDIR)duplicate.txt \
-	$(SOURCEDIR)first_waw.txt \
-	$(SOURCEDIR)first_yah.txt \
-	$(SOURCEDIR)last_alif.txt \
-	$(SOURCEDIR)last_hamza.txt \
-	$(SOURCEDIR)last_maksoura.txt \
-	$(SOURCEDIR)last_yah.txt \
-	$(SOURCEDIR)mid_waw.txt \
-	$(SOURCEDIR)mid_yah.txt \
-	$(SOURCEDIR)prefixes.txt \
-	$(SOURCEDIR)punctuation.txt \
-	$(SOURCEDIR)quad_roots.txt \
-	$(SOURCEDIR)stopwords.txt \
-	$(SOURCEDIR)strange.txt \
-	$(SOURCEDIR)suffixes.txt \
-	$(SOURCEDIR)tri_patt.txt \
-	$(SOURCEDIR)tri_roots.txt
+BINDISTXTRAS=$(LIBLICENSES) TUTORIAL.txt
+SEGMENTERDATA= # $(SOURCEDIR)arabic-segmenter-atb+bn+arztrain.ser.gz 
+STEMMERDATA=definite_article.txt \
+	diacritics.txt \
+	duplicate.txt \
+	first_waw.txt \
+	first_yah.txt \
+	last_alif.txt \
+	last_hamza.txt \
+	last_maksoura.txt \
+	last_yah.txt \
+	mid_waw.txt \
+	mid_yah.txt \
+	prefixes.txt \
+	punctuation.txt \
+	quad_roots.txt \
+	stopwords.txt \
+	strange.txt \
+	suffixes.txt \
+	tri_patt.txt \
+	tri_roots.txt
 DISTFILES=AUTHORS COPYING Makefile README TUTORIAL.txt VERSION BUGS INSTALL TODO \
 	exclude.txt bin/runidx.sh \
-	$(LIBS) $(DOCS) $(DATA) $(SOURCES) $(SOURCEDIR)modnlp/idx/prj.el \
+	$(LIBS) $(DOCS) $(DATA) $(SOURCES) $(STEMMERDATA) $(SEGMENTERDATA) $(SOURCEDIR)modnlp/idx/prj.el \
 	$(SOURCEDIR)idx-manifest.txt 
 #JAVA=jamvm
 JAVAC=javac -encoding UTF-8 #/usr/lib/jvm/java-6-oracle/bin/javac -encoding UTF-8 # -target 1.7 
@@ -181,7 +182,7 @@ dist: clean
 	rm -rf $(DISTDIR)
 	mkdir $(DISTDIR)
 	cp -aL --parents $(DISTFILES) $(DISTDIR)
-	cp -aL --parents $(BINDISTXTRAS) $(DISTDIR)
+	cp -aL --parents $(BINDISTXTRAS) $(SEGMENTERDATA) $(STEMMERDATA) $(DISTDIR)
 	cp $(TOPDIR)src/idxmgr.properties.ecpc $(DISTDIR)/idxmgr.properties
 	cp $(TOPDIR)src/dictionary.properties.ISO8859_1 $(DISTDIR)/dictionary.properties
 	tar cfvz /tmp/$(DISTDIR).tar.gz  --exclude-from=exclude.txt $(DISTDIR)
@@ -196,7 +197,7 @@ bindist: jar
 	cp README.bin $(BINDISTDIR)/README
 	cp bin/runidx.sh $(BINDISTDIR)
 	cp $(TOPDIR)src/idxmgr.properties.PLEASEEDIT $(BINDISTDIR)/idxmgr.properties.PLEASEEDIT
-	cp $(LIBS) $(JARTARGET) $(BINDISTXTRAS) $(BINDISTDIR)
+	cp $(LIBS) $(JARTARGET) $(BINDISTXTRAS) $(SEGMENTERDATA) $(BINDISTDIR)
 	tar cfvz /tmp/$(BINDISTDIR).tar.gz  --exclude-from=exclude.txt $(BINDISTDIR)
 	rm -rf $(BINDISTDIR)
 
@@ -214,7 +215,7 @@ bindistgok-ar: jar
 	cp README.bin $(BINDISTDIR)-gok/README
 	cp bin/runidx.sh $(BINDISTDIR)-gok
 	cp $(TOPDIR)src/idxmgr.properties.gok-ar $(BINDISTDIR)-gok/idxmgr.properties
-	cp $(LIBS) $(JARTARGET) $(BINDISTXTRAS) $(BINDISTDIR)-gok
+	cp $(LIBS) $(JARTARGET) $(BINDISTXTRAS) $(SEGMENTERDATA) $(BINDISTDIR)-gok
 	tar cfvz /tmp/$(BINDISTDIR)-gok.tar.gz  --exclude-from=exclude.txt $(BINDISTDIR)-gok
 	rm -rf $(BINDISTDIR)-gok
 

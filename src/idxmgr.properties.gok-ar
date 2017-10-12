@@ -1,8 +1,8 @@
 #modnlp.idx.IndexManager's properties (tailored to GOK indexing)
 #Wed May 16 15:29:14 IST 2007
-tokeniser.ignore.elements=(omit)
+tokeniser.ignore.elements=(omit|url)
 ## should punctuation count as tokens?
-index.punctuation=false
+index.punctuation=true
 ## index metadata for subcorpus selection (header files)?
 index.headers=true
 ## which element should be indexed (i.e. text within elements
@@ -35,5 +35,13 @@ file.encoding=UTF8
 ## the language to be indexed (determines the choice of
 ## tokeniser). Currently supported languages are LATIN (EN) and JP; EN
 ## should make reasonably educated guesses for all European Languages
-## (including some non-Latin scripted ones, such as Greek).
+## (including some non-Latin scripted ones, such as Greek, and Arabic).
 language=AR
+## location (file or URL) of CRF language model for Stanford Arabic segmenter
+arabic.segmenter.model=http://genealogiesofknowledge.net/gok/jnlp-beta/arabic-segmenter-atb+bn+arztrain.ser.gz
+
+
+
+
+
+

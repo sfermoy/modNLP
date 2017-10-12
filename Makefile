@@ -1,6 +1,6 @@
 TOPDIR=
 SOURCEDIR=$(TOPDIR)src/
-LIBSPATH=$(TOPDIR)lib/gnu-regexp.jar:$(TOPDIR)lib/je.jar:$(TOPDIR)lib/jung.jar:$(TOPDIR)lib/antlr-2.7.6.jar:$(TOPDIR)lib/commons-pool-1.2.jar:$(TOPDIR)lib/exist-modules.jar:$(TOPDIR)lib/exist.jar:$(TOPDIR)lib/jgroups-all.jar:$(TOPDIR)lib/log4j-1.2.14.jar:$(TOPDIR)lib/resolver.jar:$(TOPDIR)lib/sunxacml.jar:$(TOPDIR)lib/xmldb.jar:$(TOPDIR)lib/xmlrpc-1.2-patched.jar:$(TOPDIR)lib/prefuse.jar:$(TOPDIR)lib/lucene-core-3.6.0.jar:$(TOPDIR)lib/lucene-analyzers-3.6.0.jar:$(TOPDIR)lib/lucene-kuromoji-3.6.0.jar
+LIBSPATH=$(TOPDIR)lib/gnu-regexp.jar:$(TOPDIR)lib/je.jar:$(TOPDIR)lib/jung.jar:$(TOPDIR)lib/antlr-2.7.6.jar:$(TOPDIR)lib/commons-pool-1.2.jar:$(TOPDIR)lib/exist-modules.jar:$(TOPDIR)lib/exist.jar:$(TOPDIR)lib/jgroups-all.jar:$(TOPDIR)lib/log4j-1.2.14.jar:$(TOPDIR)lib/resolver.jar:$(TOPDIR)lib/sunxacml.jar:$(TOPDIR)lib/xmldb.jar:$(TOPDIR)lib/xmlrpc-1.2-patched.jar:$(TOPDIR)lib/prefuse.jar:$(TOPDIR)lib/lucene-core-3.6.0.jar:$(TOPDIR)lib/lucene-analyzers-3.6.0.jar:$(TOPDIR)lib/lucene-kuromoji-3.6.0.jar:$(TOPDIR)lib/stanford-segmenter-3.8.0.jar
 LIBS=$(subst :, ,$(LIBSPATH))
 DOCS=$(TOPDIR)doc
 DATA=$(TOPDIR)data
@@ -9,11 +9,31 @@ TARGETS=$(subst .java,.class,$(SOURCES))
 JARREDS=$(subst $(SOURCEDIR),,$(TARGETS))
 PRJFILES:=`find $(SOURCEDIR) -name prj.el`
 DISTDIR:=modnlp-`cat VERSION`
+SEGMENTERDATA=	$(SOURCEDIR)arabic-segmenter-atb+bn+arztrain.ser.gz \
+	$(SOURCEDIR)definite_article.txt \
+	$(SOURCEDIR)diacritics.txt \
+	$(SOURCEDIR)duplicate.txt \
+	$(SOURCEDIR)first_waw.txt \
+	$(SOURCEDIR)first_yah.txt \
+	$(SOURCEDIR)last_alif.txt \
+	$(SOURCEDIR)last_hamza.txt \
+	$(SOURCEDIR)last_maksoura.txt \
+	$(SOURCEDIR)last_yah.txt \
+	$(SOURCEDIR)mid_waw.txt \
+	$(SOURCEDIR)mid_yah.txt \
+	$(SOURCEDIR)prefixes.txt \
+	$(SOURCEDIR)punctuation.txt \
+	$(SOURCEDIR)quad_roots.txt \
+	$(SOURCEDIR)stopwords.txt \
+	$(SOURCEDIR)strange.txt \
+	$(SOURCEDIR)suffixes.txt \
+	$(SOURCEDIR)tri_patt.txt \
+	$(SOURCEDIR)tri_roots.txt
 BINDISTDIR=$(DISTDIR)-bin
 DISTFILES=AUTHORS COPYING Makefile README VERSION BUGS INSTALL TODO exclude.txt \
-	$(LIBS) $(DOCS) $(DATA) $(SOURCES) 
+	$(LIBS) $(DOCS) $(DATA) $(SOURCES) $(SEGMENTERDATA) 
 BINDISTFILES=$(LIBS) lib/teccli.jar lib/tecser.jar lib/idx.jar lib/tc.jar tecser/lib/server.properties \
-	src/teclipluginlist.txt
+	src/teclipluginlist.txt $(SEGMENTERDATA)
 #JAVA=jamvm
 #JAVAC=jikes-classpath
 #JAVAC=jikes-jsdk -bootclasspath /usr/lib/jvm/java-1.5.0-sun/jre/lib/rt.jar -source 1.5
