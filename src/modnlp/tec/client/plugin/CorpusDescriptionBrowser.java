@@ -290,7 +290,10 @@ public class CorpusDescriptionBrowser extends JFrame
             if ( row[0].equals("0")) { // control info 
               if (row[1].equals(modnlp.idx.database.Dictionary.TTRATIO_LABEL)){
                 ttratio = (new Double(row[2])).doubleValue();
-                cstats.append(row[1]+": "+nf.format(ttratio)+";  ");
+                if (parent.isSubCorpusSelectionON())
+                    cstats.append("Average "+row[1]+": "+nf.format(ttratio)+";  ");
+                else
+                    cstats.append(row[1]+": "+nf.format(ttratio)+";  ");
               }
               else if (row[1].equals(modnlp.idx.database.Dictionary.TTOKENS_LABEL)){
                 notokens = (new Integer(row[2].toString())).intValue();
@@ -350,10 +353,10 @@ public class CorpusDescriptionBrowser extends JFrame
         rq.setServerURL("http://"+parent.getRemoteServer());
         rq.setServerPORT(parent.getRemotePort());
         rq.put("request","corpusdesc");
-        /** TODO
+        
             if (parent.isSubCorpusSelectionON())
             rq.put("xquerywhere",parent.getXQueryWhere());
-        */
+    
         rq.put("casesensitive",parent.isCaseSensitive()?"TRUE":"FALSE");
         //}
         rq.setServerProgramPath("/corpusdesc");
@@ -559,7 +562,7 @@ public class CorpusDescriptionBrowser extends JFrame
           for (int i = 0; i < fks.length; i++) {
             FrequencyHash fh = d.getFileFrequencyTable(fks[i], !cse);
             String fdesc = hdbm.getFileDescription(fks[i]);  
-            String line = fks[i]+Constants.LINE_ITEM_SEP+fdesc+Constants.LINE_ITEM_SEP+
+            String line = "pppllll"+fks[i]+Constants.LINE_ITEM_SEP+fdesc+Constants.LINE_ITEM_SEP+
               fh.getTokenCount()+Constants.LINE_ITEM_SEP+
               fh.getTypeTokenRatio();
             //System.err.println("--");

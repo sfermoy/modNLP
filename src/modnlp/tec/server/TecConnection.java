@@ -43,6 +43,8 @@ import java.net.InetAddress;
 import java.io.OutputStreamWriter;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import modnlp.idx.database.SubcorpusTable;
+import modnlp.idx.query.SubcorpusConstraints;
 import static modnlp.tec.server.Request.COLUMNBATCH;
 
 /** Deal with client's requests for concordance and extracts through
@@ -432,31 +434,53 @@ public class TecConnection extends Thread {
     try {
       cs = ((String)req.get("casesensitive")).equalsIgnoreCase("TRUE");
       int [] fks = dtab.getIndexedFileKeys();
-      //String xquerywhere = 
-      //  (String)request.get("xquerywhere");
-      // TODO: implement information per sub-corpus as well
-      //if (xquerywhere == null)
-      //  dictionary.printConcordances(wquery, ctx, ignx, out);
-      //else
-      //  dictionary.printConcordances(wquery, ctx, ignx, out,
-      //                               hdbm.getSubcorpusConstraints(xquerywhere));
-      dtab.printCorpusStats(os,!cs);
-      dtab.printNoItems(os, fks.length);
-      for (int i = 0; i < fks.length; i++) {
-        FrequencyHash fh = dtab.getFileFrequencyTable(fks[i], !cs);
-        String fdesc = hdbm.getFileDescription(fks[i]);  
-        String line = fks[i]+Constants.LINE_ITEM_SEP+fdesc+Constants.LINE_ITEM_SEP+
-          fh.getTokenCount()+Constants.LINE_ITEM_SEP+
-          fh.getTypeTokenRatio();
-        // System.err.println("--");
-        os.println(line);
+      String xquerywhere =  (String)req.get("xquerywhere");
+      
+      double sumTTratios = 0;
+      int tokenCount = 0;
+      int countSubcorpusFiles =0;
+        for (int i = 0; i < fks.length; i++) {
+            if (xquerywhere == null){
+                FrequencyHash fh = dtab.getFileFrequencyTable(fks[i], !cs);
+                String fdesc = hdbm.getFileDescription(fks[i]);  
+                String line = fks[i]+Constants.LINE_ITEM_SEP+fdesc+Constants.LINE_ITEM_SEP+
+                  fh.getTokenCount()+Constants.LINE_ITEM_SEP+
+                  fh.getTypeTokenRatio();
+                // System.err.println("--");
+                os.println(line);
+            }
+            else{
+                SubcorpusConstraints  sbc=  hdbm.getSubcorpusConstraints(xquerywhere);
+                if (sbc != null && sbc.acceptFile(  Integer.toString(fks[i]))){
+                    FrequencyHash fh = dtab.getFileFrequencyTable(fks[i], !cs);
+                    String fdesc = hdbm.getFileDescription(fks[i]);  
+                    String line = fks[i]+Constants.LINE_ITEM_SEP+fdesc+Constants.LINE_ITEM_SEP+
+                      fh.getTokenCount()+Constants.LINE_ITEM_SEP+
+                      fh.getTypeTokenRatio();
+                    // System.err.println("--");
+                    sumTTratios += fh.getTypeTokenRatio();
+                    tokenCount += fh.getTokenCount();
+                    countSubcorpusFiles++;
+                    os.println(line);
+                }
+            }
+          
       }
+        if (xquerywhere != null){
+            dtab.printSubCorpusStats(os, (double) sumTTratios/countSubcorpusFiles, tokenCount);
+            dtab.printNoItems(os, 5);
+        }else
+        {
+            dtab.printCorpusStats(os,!cs);
+            dtab.printNoItems(os, fks.length);
+        }
     }
     catch (Exception e) {
       System.err.println("CDescPrinter: " + e);
       e.printStackTrace();
     }
   }
+  
 
 
   // utilities for internal use 

@@ -406,8 +406,8 @@ public class Dictionary {
     } // close word iterator, counting done
     return tokencount;
   }
-
-
+  
+  
 
   public CaseTable getCaseTable (){
     return caseTable;
@@ -553,6 +553,11 @@ public class Dictionary {
   public static final void printSubCorpusStats (PrintWriter os, int notypes , int notokens) {
     os.println(0+Constants.LINE_ITEM_SEP+TTOKENS_LABEL+Constants.LINE_ITEM_SEP+notokens);
     os.println(0+Constants.LINE_ITEM_SEP+TTRATIO_LABEL+Constants.LINE_ITEM_SEP+getTypeTokenRatio(notypes,notokens));
+  }
+  
+  public static final void printSubCorpusStats (PrintWriter os, double avgTTratio, int notokens) {
+    os.println(0+Constants.LINE_ITEM_SEP+TTOKENS_LABEL+Constants.LINE_ITEM_SEP+notokens);
+    os.println(0+Constants.LINE_ITEM_SEP+TTRATIO_LABEL+Constants.LINE_ITEM_SEP+avgTTratio );
   }
 
   public void printNoItems (PrintWriter os, int noitems) {
