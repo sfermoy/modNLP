@@ -39,7 +39,8 @@ file.encoding=UTF8
 language=AR
 ## location (file or URL) of CRF language model for Stanford Arabic segmenter
 arabic.segmenter.model=http://genealogiesofknowledge.net/gok/jnlp-beta/arabic-segmenter-atb+bn+arztrain.ser.gz
-
+## This would try to load the model from local filesystem or the classpath
+## arabic.segmenter.model=arabic-segmenter-atb+bn+arztrain.ser.gz
 
 
 

@@ -562,7 +562,8 @@ public class CorpusDescriptionBrowser extends JFrame
           for (int i = 0; i < fks.length; i++) {
             FrequencyHash fh = d.getFileFrequencyTable(fks[i], !cse);
             String fdesc = hdbm.getFileDescription(fks[i]);  
-            String line = "pppllll"+fks[i]+Constants.LINE_ITEM_SEP+fdesc+Constants.LINE_ITEM_SEP+
+            String line = //"pppllll"+
+              fks[i]+Constants.LINE_ITEM_SEP+fdesc+Constants.LINE_ITEM_SEP+
               fh.getTokenCount()+Constants.LINE_ITEM_SEP+
               fh.getTypeTokenRatio();
             //System.err.println("--");
