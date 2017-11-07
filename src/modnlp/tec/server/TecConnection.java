@@ -468,7 +468,7 @@ public class TecConnection extends Thread {
       }
         if (xquerywhere != null){
             dtab.printSubCorpusStats(os, (double) sumTTratios/countSubcorpusFiles, tokenCount);
-            dtab.printNoItems(os, 5);
+            dtab.printNoItems(os, tokenCount);
         }else
         {
             dtab.printCorpusStats(os,!cs);
