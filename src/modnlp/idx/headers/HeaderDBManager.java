@@ -162,7 +162,7 @@ public class HeaderDBManager {
       if (where == null)
         return null;
       if ( (sc = cache.get(where)) != null ){
-        System.err.println("Found cached query: "+where);
+        //System.err.println("Found cached query: "+where);
         return sc;
       }
       String resources[] = collection.listResources();

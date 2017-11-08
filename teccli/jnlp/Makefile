@@ -38,3 +38,4 @@ sign3rdparty:
 	jarsigner  -tsa $(TIMESAUTH) -storetype pkcs12 -keystore ../gok-cert.pkcs.p12 -storepass `cat ../gok.cert.pass` ../lib/lucene-core-3.6.0.jar gok
 	jarsigner  -tsa $(TIMESAUTH) -storetype pkcs12 -keystore ../gok-cert.pkcs.p12 -storepass `cat ../gok.cert.pass` ../lib/lucene-analyzers-3.6.0.jar gok
 	jarsigner  -tsa $(TIMESAUTH) -storetype pkcs12 -keystore ../gok-cert.pkcs.p12 -storepass `cat ../gok.cert.pass` ../lib/lucene-kuromoji-3.6.0.jar gok
+	jarsigner  -tsa $(TIMESAUTH) -storetype pkcs12 -keystore ../gok-cert.pkcs.p12 -storepass `cat ../gok.cert.pass` ../lib/stanford-segmenter-3.8.0.jar gok
