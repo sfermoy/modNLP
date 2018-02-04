@@ -1,3 +1,8 @@
+2018-02-04  Saturnino Luz  <luzs@acm.org>
+
+	* release 0.8.2: Added method to retrieve freq list up to first
+	hapax legomenon. 
+
 2010-07-05  Saturnino Luz  <luzs@cs.tcd.ie>
 
 	* release 0.1.6: Upgraded je.jar to version 4. The new index
