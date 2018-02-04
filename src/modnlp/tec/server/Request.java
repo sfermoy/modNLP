@@ -75,7 +75,7 @@ public class Request extends Hashtable {
       rq = rq.substring(0,rq.indexOf(" "));
     try {
       rq = URLDecoder.decode(rq, "UTF-8");
-      System.err.println(rq);
+      //System.err.println(rq);
       StringTokenizer st = new StringTokenizer(rq,"&",false);
       while (st.hasMoreTokens()){
         String kv = st.nextToken();
