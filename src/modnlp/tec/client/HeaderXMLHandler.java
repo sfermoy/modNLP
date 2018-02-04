@@ -52,6 +52,10 @@ public class HeaderXMLHandler extends DefaultHandler
   private int depthContext = -2;
   private static String[] ignorableArray =  {"","teiHeader"};
   private SAXParser parser;
+  private String defSpacer = "<div style=\"margin-left: 2px;\">";
+  private String spacer = "";
+  private int tab = 20;
+  
 
   public HeaderXMLHandler() throws ParserConfigurationException,
                                    SAXException
@@ -75,24 +79,40 @@ public class HeaderXMLHandler extends DefaultHandler
   {
     if ( !ignorableElement(name) )
       {
-        for (int i = 0; i < depthContext; i++)
-          content.append("   ");
+          if(depthContext < 0)
+             spacer = "<div style=\"margin-left: "+tab*(depthContext+2)+"px;\">";
+          else{
+              if(depthContext == 0)
+                {
+                    spacer="<div style=\"margin-left: "+tab*(depthContext+2)+"px;\">";
+                }
+              else{
+                  spacer="<div style=\"margin-left: "+tab*(depthContext+2)+"px;\">";
+              }
+          }
+           content.append(spacer);
+//        for (int i = 0; i < depthContext; i++)
+//          content.append(spacer);
         String at = "";
         if (elementAttribs != null) {
-          at = " "+"("+elementAttribs+") ";
+          //at = " "+spacer+elementAttribs;
+          at = ""+elementAttribs.replace(",", "<br>");
         }
-        content.append(fixElementName(elementName)+at + ": " + 
-                       elementContent + "\n");
+        if(at.equals(""))
+            content.append("<b>"+fixElementName(elementName)+": " +"</b>"+ 
+                       elementContent +"</div>");
+        else
+            content.append("<b>"+fixElementName(elementName)+": " +"</b>"+"<div style=\"margin-left: "+tab+"px;\">"+at+"</div>" + 
+                           elementContent +"</div>");
         //System.out.println("Content: |" + elementContent + "|");
       } 
     depthContext++;
     elementName = name;
-    if (atts !=null && atts.getLength() > 0)
+    if (atts !=null && atts.getLength()> 0)
       elementAttribs = formatAttributes(atts);
     else {
       elementAttribs = null;
     }
-
     elementContent = new StringBuffer("");
   }
   
@@ -102,14 +122,33 @@ public class HeaderXMLHandler extends DefaultHandler
   {
     if ( !ignorableElement(name)  )
       {
-        for (int i = 0; i < depthContext; i++)
-          content.append("   ");
+         
+          if(depthContext < 0)
+             spacer = "<div style=\"margin-left: "+tab*(depthContext+2)+"px;\">";
+          else{
+              if(depthContext == 0)
+                {
+                    spacer="<div style=\"margin-left: "+tab*(depthContext+2)+"px;\">";
+                }
+              else{
+                  spacer="<div style=\"margin-left: "+tab*(depthContext+2)+"px;\">";
+              }
+          }
+          content.append(spacer);
+//        for (int i = 0; i < depthContext; i++)
+//          content.append(spacer);
         String at = "";
+       
         if (elementAttribs != null) {
-          at = " "+"("+elementAttribs+") ";
+           // at = " "+spacer+elementAttribs;
+           at = ""+elementAttribs.replace(",", "<br>");
         }
-        content.append(fixElementName(elementName)+at+": " 
-                       + elementContent + "\n");
+        if(at.equals(""))
+            content.append("<b>"+fixElementName(elementName)+": " +"</b>"+ 
+                       elementContent +"</div>");
+        else
+            content.append("<b>"+fixElementName(elementName)+": " +"</b>"+"<div style=\"margin-left: "+tab+"px;\">"+at+"</div>" + 
+                           elementContent +"</div>");
         //System.out.println("Content: |" + elementContent + "|");
       } 
     depthContext--;
@@ -245,4 +284,5 @@ public class HeaderXMLHandler extends DefaultHandler
   }
 
 }
+
 

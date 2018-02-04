@@ -539,8 +539,8 @@ public class Browser
       else {
         HeaderXMLHandler parser =  new HeaderXMLHandler();
         parser.parse(is);
-
-        content = new StringBuffer("<html><img src='"+img+"' height=183 width=128 alt='Book Cover'><pre>"+parser.getContent()+"</pre></html>");
+        content = new StringBuffer("<html>"+parser.getContent()+"</html>");
+        //content = new StringBuffer("<html><img src='"+img+"' height=183 width=128 alt='Book Cover'><pre>"+parser.getContent()+"</pre></html>");
         //System.err.println(content+"");
       }
     }
@@ -933,4 +933,5 @@ public class Browser
 
     
 }
+
 
