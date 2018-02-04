@@ -247,7 +247,17 @@ public class FreqTable extends Table {
     printSortedFreqList(os, 0, max ,true);
   }
 
-
+  /**
+   * <code>printSortedFreqList</code>: print a sorted list of words
+   * according with their frequencies in the corpus.
+   *
+   * @param os a <code>PrintWriter</code> stream into which to print the list
+   * @param from an <code>int</code> indicating print from the from^th most frequent item
+   * @param max an <code>int</code> indicating print until the max^th
+   * most frequent item. If max == 0, print all items; if max < 0, stop
+   * printing when the first hapax legomenon (word with frequency 1)
+   * is reached.
+   */
   public void printSortedFreqList (PrintWriter os, int from, int max, boolean nocase) {
     try {
       SecondaryCursor c = freqKeyDatabase.openSecondaryCursor(null, null);
@@ -256,12 +266,16 @@ public class FreqTable extends Table {
       DatabaseEntry data = new DatabaseEntry();
       int i = 0;
       boolean totheend = (max == 0);
+      if (max < 0)
+        totheend = true;
       FrequencyHash ft = new FrequencyHash();
       max += from; // 1 2 3 4 5 6 7
       while (c.getNext(skey, key, data, LockMode.READ_UNCOMMITTED) == 
              OperationStatus.SUCCESS && (totheend  || i <= max) ) {
         String sik = StringBinding.entryToString(key);
         int freq  = IntegerBinding.entryToInt(data);
+        if (max < 0 && freq == 1) // stop when first hapax reached 
+          break;
         if (i++ < from)
           continue;
         if (sik.length() > 0 && freq > 0)

@@ -565,7 +565,7 @@ public class FqListBrowser extends JFrame
         else{
           input = new
             BufferedReader(new
-                           InputStreamReader(exturlConnection.getInputStream() ));
+                           InputStreamReader(exturlConnection.getInputStream(), "UTF-8"));
         }
       } catch (Exception e) {
         System.err.println("FqlPrinter: " + e);

@@ -37,10 +37,12 @@ public class TecClientRequest extends Hashtable<String,String> {
   private String serverURL = null;
   private int serverPORT = 0;
   private String serverProgramPath = null;
+  private String encoding = "UTF-8";
 
-	public TecClientRequest() {
-		super(5);
-	}
+  
+  public TecClientRequest() {
+    super(5);
+  }
 
   /** Parse client request and initialize a key-value table
    *  to store it
@@ -107,57 +109,63 @@ public class TecClientRequest extends Hashtable<String,String> {
     return NOTREQ;
   }
 
-	public int getContextSize ()
-	{
-		return (new Integer ((String) get("context"))).intValue();
-	}
-
-	public boolean containsComplexKeyword()
-	{
-		String kw = (String) get("keyword");
-		if ( kw.indexOf("+") > -1  )
-			return true;
-		else
-			return false;
-	}
-
-	public void put (String key, int value)
-	{
-		this.put(key, ""+value);
-	}
-
-	public void put (String key, long value)
-	{
-		this.put(key, ""+value);
-	}
-
-	public String toString ()
-	{
-		StringBuffer sb = new StringBuffer("");
+  public int getContextSize ()
+  {
+    return (new Integer ((String) get("context"))).intValue();
+  }
+  
+  public boolean containsComplexKeyword()
+  {
+    String kw = (String) get("keyword");
+    if ( kw.indexOf("+") > -1  )
+      return true;
+    else
+      return false;
+  }
+  
+  public void put (String key, int value)
+  {
+    this.put(key, ""+value);
+  }
+  
+  public void put (String key, long value)
+  {
+    this.put(key, ""+value);
+  }
+  
+  public String toString ()
+  {
+    StringBuffer sb = new StringBuffer("");
     sb.append(getURLQueryBase());
     for (Enumeration e = keys() ; e.hasMoreElements() ;)
       {
-				String key = (String) e.nextElement();
-				String val = (String) get(key);
-				sb.append(URLEncoder.encode(key)+"="+URLEncoder.encode(val)+"&");
-      }
-		// chop off trailing '&'
-		sb.deleteCharAt(sb.length()-1);
-		return sb.toString();
-	}
+        String key = (String) e.nextElement();
+        String val = (String) get(key);
+        try {
+          sb.append(URLEncoder.encode(key,encoding)+"="+URLEncoder.encode(val, encoding)+"&");
+        } catch (java.io.UnsupportedEncodingException ex) {
+          System.err.println("Unsupported encoding "+encoding);
+          ex.printStackTrace();
+        }
 
+      }
+    // chop off trailing '&'
+    sb.deleteCharAt(sb.length()-1);
+    return sb.toString();
+  }
+  
   /** Method for test purposes only.
    */
   public void testKeyVal() {
-
+    
     for (Enumeration e = keys() ; e.hasMoreElements() ;)
       {
-				String key = (String) e.nextElement();
-				String val = (String) get(key);
-				System.out.println("!"+key+"!"+val+"!");
+        String key = (String) e.nextElement();
+        String val = (String) get(key);
+        System.out.println("!"+key+"!"+val+"!");
       }
-
+    
   }
-
+  
 }
 

@@ -713,10 +713,13 @@ public class Browser
       lg = input.readLine();
       if (lg != null && lg.length() > 0) 
         headerExt = lg;
+      if (encoding == null || encoding.equals("UTF8")){
+        encoding = "UTF-8";
+        System.err.println("set encoding to "+encoding);
+      }
       System.err.println("language=>>>>"+language);
       System.err.println("encoding=>>>>"+encoding);
       System.err.println("ext=>>>>"+headerExt);
-      encoding = encoding == null? "---UTF8---" : encoding;
       clProperties.setProperty("tec.client.server",remoteServer);
       clProperties.setProperty("tec.client.port",remotePort+"");
       clProperties.setProperty("stand.alone","no");

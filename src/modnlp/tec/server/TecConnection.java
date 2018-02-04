@@ -223,12 +223,13 @@ public class TecConnection extends Thread {
     WordQuery wquery = null;
     try {
       boolean cse = ((String)req.get("case")).equalsIgnoreCase("sensitive");
-      wquery = new WordQuery ((String) req.get("keyword"), dtab, cse);    
+      wquery = new WordQuery ((String) req.get("keyword"), dtab, cse);
+      //System.out.println(wquery.getKeyword());
       int ctx = getSafeInteger((String)req.get("context"),MAXCTX).intValue();
       boolean ignx = 
         ((String)req.get("sgml")).equalsIgnoreCase("no")? true : false;
       String xquerywhere = (String)req.get("xquerywhere");
-      System.err.println("xquerywhere->"+xquerywhere);
+      //System.err.println("xquerywhere->"+xquerywhere);
       if (xquerywhere == null)
         dtab.printConcordances(wquery, ctx, ignx, os);
       else
@@ -300,7 +301,7 @@ public class TecConnection extends Thread {
   }
 
   public void getHeaderBaseURL(PrintWriter os){
-    System.err.println(dtab.getDictProps().getProperty("headers.url"));
+    //System.err.println(dtab.getDictProps().getProperty("headers.url"));
     os.println(dtab.getDictProps().getProperty("headers.url"));
     os.println(dtab.getDictProps().getProperty("file.encoding"));
     os.println(dtab.getDictProps().getLanguage());
