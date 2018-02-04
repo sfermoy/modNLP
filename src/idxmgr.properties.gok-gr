@@ -20,7 +20,7 @@ xquery.root.element.path=/gokheader/section
 xquery.return.attribute.path=/@id
 ## specs and paths all relative to xquery.root.element.path
 ## form: description_1;path_1;description_2;path_2,...
-xquery.attribute.chooser.specs=File name;../document/@filename;Subcorpus;../document/@subcorpusid;Source;translation/source/@language;Tanslation status;translation/@status;Format;../document/@format;Pub. date;/@publication_date;Date accuracy;/@date_accuracy;Author;author/name
+xquery.attribute.chooser.specs=File name;../document/@filename;Subcorpus;../document/@subcorpusid;Source;translation/source/@language;Tanslation status;translation/@status;Format;../document/@format;Pub. date;/@publication_date;Date accuracy;/@date_accuracy;Author;author/name;Commentator;commentator/name
 ## Extension Of the header files (e.g. .hed, .xml etc)
 header.extension=hed
 ## the maximum number of subcorpus constraint query results to be stored (by HeaderDBManager)
