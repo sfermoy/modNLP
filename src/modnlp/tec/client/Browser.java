@@ -73,7 +73,7 @@ public class Browser
 {
 
   // constants
-  public static final String RELEASE = "0.8.1";
+  public static final String RELEASE = "0.8.2";
   public static final String REVISION = "$Revision: 1.9 $";
   String BRANDNAME = "MODNLP/T";
   private static final String PLGLIST = "teclipluginlist.txt";
