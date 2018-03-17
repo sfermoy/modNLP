@@ -413,9 +413,6 @@ public class ListDisplay extends JPanel
     centreRenderer.setForeground(Color.blue);
     filenameRenderer.setForeground(Color.RED);
     
-    if ( ((ConcordanceObject) listModel.getElementAt(0)).getSortContextHorizon() != 0 ) {
-    
-    }
 
     //turn off grid
     table.setShowGrid(false);

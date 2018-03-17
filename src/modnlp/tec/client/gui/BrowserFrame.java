@@ -101,6 +101,7 @@ public class BrowserFrame extends BrowserGUI
   private static final String PREBUT = "Preferences";
   private static final String DOBUTT = "Search";
   private static final String ASCBUTT = "Subcorpus";
+  private static final String RMLINEBUT = "Delete Line";
   private static final String QUITBUT = "QUIT";
 
   private final static int FRAME_WIDTH = 1000;
@@ -151,6 +152,7 @@ public class BrowserFrame extends BrowserGUI
   private JButton strButton = new JButton(STRBUT);
   private JButton extractButton = new JButton(EXTBUT);
   private JButton headerButton = new JButton(HEDBUT);
+  private JButton removeLineButton = new JButton(RMLINEBUT);
 
   private JPanel optArea = new JPanel();
   private JPanel outArea = new JPanel();
@@ -251,6 +253,7 @@ public class BrowserFrame extends BrowserGUI
     stlButton.setEnabled(false);
     strButton.setEnabled(false);
     extractButton.setEnabled(false);
+    removeLineButton.setEnabled(false);
     headerButton.setEnabled(false);
     dldButton.setEnabled(false);
     
@@ -260,6 +263,7 @@ public class BrowserFrame extends BrowserGUI
     stlButton.setToolTipText("Sort with left context horizon indicated on the box");
     strButton.setToolTipText("Sort with right context horizon indicated on the box");
     extractButton.setToolTipText("Display text extract of the selected line");
+    removeLineButton.setToolTipText("Remove selected line from concordance list");
     headerButton.setToolTipText("Display header file of the selected line");
     
     progressBar = new JProgressBar(0, 500);
@@ -401,6 +405,18 @@ public class BrowserFrame extends BrowserGUI
             parent.showExtract(sel);
         }}
       );
+    removeLineButton.addActionListener(new ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+          ConcordanceObject sel = concListDisplay.getSelectedValue();
+          if (sel == null) {
+            alertWindow("Please select a concordance!");
+          }
+          else
+            parent.getConcordanceVector().remove(sel);
+            concListDisplay.redisplayConc();
+          
+        }}
+      );
     headerButton.addActionListener(new ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
           ConcordanceObject sel = concListDisplay.getSelectedValue();
@@ -471,6 +487,8 @@ public class BrowserFrame extends BrowserGUI
     concLabel.add(extractButton);
     concLabel.add(Box.createGlue());
     concLabel.add(headerButton);
+    concLabel.add(Box.createGlue());
+    concLabel.add(removeLineButton);
     concLabel.add(Box.createGlue());
     
     
@@ -555,9 +573,11 @@ public class BrowserFrame extends BrowserGUI
         //No selection: disable header and extract
         extractButton.setEnabled(false);
         headerButton.setEnabled(false);
+        removeLineButton.setEnabled(false);
       } else {
         extractButton.setEnabled(true);
         headerButton.setEnabled(true);
+        removeLineButton.setEnabled(true);
       }
     }
   }
@@ -617,8 +637,11 @@ public class BrowserFrame extends BrowserGUI
     //System.out.println("Displaying "+e.getFirstIndex() );		
     try {
       updateStatusLabel(e.getMessage());
-      if ( concListDisplay != null && concListDisplay.list != null)
-        concListDisplay.list.clearSelection();
+      if ( concListDisplay != null && concListDisplay.list != null){
+         concListDisplay.list.clearSelection();
+         concListDisplay.redisplayConc();
+      }
+       
       timer.start();
       progressBar.setString(null);
       progressBar.setMaximum(parent.getExpectedNoOfConcordances());
