@@ -928,6 +928,7 @@ public class Browser
             concThread.stop();
             if(!e.getMessage().equalsIgnoreCase(" No concordances found"))
                 for (StateChanged sl : listeners) sl.concordanceStateChanged();
+            browserFrame.clearConcordanceList();
         }
     }
     @Override

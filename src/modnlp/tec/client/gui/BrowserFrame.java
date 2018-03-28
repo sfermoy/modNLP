@@ -411,12 +411,18 @@ public class BrowserFrame extends BrowserGUI
           if (sel == null) {
             alertWindow("Please select a concordance!");
           }
-          else
+          else{
+              int selindx = concListDisplay.getSelectedIndex();
             parent.getConcordanceVector().remove(sel);
             concListDisplay.redisplayConc();
+            concListDisplay.setViewToIndex(selindx);
+          }
+            
           
-        }}
-      );
+        }
+    }
+   );
+    
     headerButton.addActionListener(new ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
           ConcordanceObject sel = concListDisplay.getSelectedValue();
@@ -511,7 +517,8 @@ public class BrowserFrame extends BrowserGUI
       concListDisplay.renderer.showDetailString = null;
   }
   public void setShowDetailString (int col, String str) {
-      concListDisplay.renderer.showDetailString = str;
+      //concListDisplay.renderer.showDetailString = str;
+      concListDisplay.setMosaicSelected(str);
       concListDisplay.refresh();
       concListDisplay.setViewToIndex(concListDisplay.getIndexOfDetail( col, str));
   }
@@ -639,7 +646,7 @@ public class BrowserFrame extends BrowserGUI
       updateStatusLabel(e.getMessage());
       if ( concListDisplay != null && concListDisplay.list != null){
          concListDisplay.list.clearSelection();
-         concListDisplay.redisplayConc();
+         //concListDisplay.redisplayConc();
       }
        
       timer.start();
@@ -762,6 +769,11 @@ public class BrowserFrame extends BrowserGUI
 
   public ConcordanceListModel getListModel(){
     return (ConcordanceListModel)concListDisplay.getListModel();
+  }
+  
+  public void clearConcordanceList(){
+      concListDisplay.list.clearSelection();
+      concListDisplay.redisplayConc();
   }
 
     @Override

@@ -101,7 +101,7 @@ public class ListDisplay extends JPanel
 
   private int[] maxLengths ={15,15,15,15};
   private boolean useUserWidths = false;
-
+  private String mosaicSelected ="";
   public ListDisplay(BrowserGUI parent, ListModel lm) 
   {
     super(new BorderLayout());
@@ -140,7 +140,6 @@ public class ListDisplay extends JPanel
     
     table.getColumnModel().addColumnModelListener(new TableColumnWidthListener());
     table.getTableHeader().addMouseListener(new TableHeaderMouseListener());
-
     addComponentListener(this);
   }
 ///******************************************
@@ -167,34 +166,27 @@ public class ListDisplay extends JPanel
   
   public void setViewToIndex(int index)
   {
-        JViewport viewport = (JViewport)table.getParent();
-
-        // This rectangle is relative to the table where the
-        // northwest corner of cell (0,0) is always (0,0).
-        Rectangle rect = table.getCellRect(index, 1, true);
-
-        // The location of the viewport relative to the table
-        Point pt = viewport.getViewPosition();
-
-        // Translate the cell location so that it is relative
-        // to the view, assuming the northwest corner of the
-        // view is (0,0)
-       // if (rect.y-pt.y +200>0)
-             rect.setLocation(rect.x-pt.x, rect.y-pt.y+400);
-
-        table.scrollRectToVisible(rect);
-    
-    
+      Rectangle rect;
+      if(index+10 >= table.getRowCount()){
+        rect = table.getCellRect(index, 1, true);
+        table.changeSelection(index, 0, true, false);
+      }else{
+        rect = table.getCellRect(index+10, 1, true);
+        table.changeSelection(index-1, 0, true, false);
+      } 
+      table.scrollRectToVisible(rect);
   }
   
   public void addListSelectionListener(ListSelectionListener lsl){
     //listSelectionModel.addListSelectionListener(lsl);
     table.getSelectionModel().addListSelectionListener(lsl);
-     table.getColumnModel().getSelectionModel().addListSelectionListener(lsl);
+    table.getColumnModel().getSelectionModel().addListSelectionListener(lsl);
   }
 
 
   public ConcordanceObject getSelectedValue () {
+      System.out.println("tbl : "+table.getSelectedRow());
+       System.out.println("tbl");
     list.setSelectedIndex(table.getSelectedRow());
     return (ConcordanceObject) list.getSelectedValue();
   }
@@ -211,6 +203,10 @@ public class ListDisplay extends JPanel
   public void setFontSize(int fs){
     resetFontIfChanged((float)fs);
     setCellPrototype(ConcordanceObject.RENDERER_PROTOTYPE);
+  }
+  
+   public void setMosaicSelected(String sel){
+    mosaicSelected = sel;
   }
 
   public int getFontSize(){
@@ -297,21 +293,30 @@ public class ListDisplay extends JPanel
           data[i][leftctx] = "<html>"+cobjct.getLeftContext().trim()+"</html>";
           data[i][2] = "<html>  " +cobjct.getKeyword().trim() +"</html>  ";
           data[i][rightctxt] ="<html>" + cobjct.getKeywordAndRightContext().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
+          String sortctxStr ="";
           if(cobjct.getSortContextHorizon() > 0 )
           {
               if(parent.getLanguage() == modnlp.Constants.LANG_AR){ // if arabic rendering we need to highlight different part
                   String[] contextArray = cobjct.getKeywordAndRightContext().trim().split(" ");
+                  sortctxStr = contextArray[cobjct.getSortContextHorizon()];
                   if(contextArray.length != 0){
                         contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[cobjct.getSortContextHorizon()]+"</font>";
                         StringBuilder builder = new StringBuilder();
                         for(String s : contextArray) {
                           builder.append(s+" ");
                         }
-                    data[i][1] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
+                    if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim()) ){
+                        data[i][1] ="<html> <font color=\"Fuchsia\">" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</font> </html>";
+                        data[i][rightctxt] ="<html> <font color=\"Fuchsia\">" + cobjct.getKeywordAndRightContext().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</font> </html>";
+                    } 
+                    else{
+                        data[i][1] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
+                    }
               }
               }else{
                 String trimmed =cobjct.getKeywordAndRightContext().trim();
                 String[] contextArray = trimmed.split("\\s+");
+                sortctxStr = contextArray[cobjct.getSortContextHorizon()];
                  if(contextArray.length != 0){
 
                       contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[cobjct.getSortContextHorizon()]+"</font>";
@@ -320,8 +325,12 @@ public class ListDisplay extends JPanel
                       for(String s : contextArray) {
                         builder.append(s+" ");
                       }
-
-                      data[i][3] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
+                      if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim()) ){
+                          data[i][rightctxt] ="<html> <font color=\"Fuchsia\">" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</font> </html>";
+                          data[i][leftctx] = "<html> <font color=\"Fuchsia\">"+cobjct.getLeftContext().trim()+"</font> </html>";
+                      }
+                      else
+                          data[i][rightctxt] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
 
                  }
               }
@@ -331,24 +340,36 @@ public class ListDisplay extends JPanel
           {
               if(parent.getLanguage() == modnlp.Constants.LANG_AR){// if arabic rendering we need to highlight different part
                   String[] contextArray = cobjct.getLeftContext().split(" ");
+                  sortctxStr = contextArray[contextArray.length + cobjct.getSortContextHorizon()];
                   if(contextArray.length != 0){
                         contextArray[contextArray.length + cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[contextArray.length + cobjct.getSortContextHorizon()]+"</font>";
                         StringBuilder builder = new StringBuilder();
                         for(String s : contextArray) {
                           builder.append(s+" ");
                         }
-                    data[i][3] ="<html>" + builder.toString().trim()+"</html>";
+                    if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim()) ){
+                        data[i][3] ="<html> <font color=\"Fuchsia\">" + builder.toString().trim()+"</font> </html>";
+                        data[i][leftctx] = "<html> <font color=\"Fuchsia\">"+cobjct.getLeftContext().trim()+"</font> </html>";
+                    }
+                    else
+                        data[i][3] ="<html>" + builder.toString().trim()+"</html>";
                   }
               }
               else{
                 String[] contextArray = cobjct.getLeftContext().split(" ");
+                sortctxStr = contextArray[contextArray.length+ cobjct.getSortContextHorizon()];
                 if(contextArray.length != 0){
-                      contextArray[contextArray.length+cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[contextArray.length+cobjct.getSortContextHorizon()]+"</font>";
+                      contextArray[contextArray.length+ cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[contextArray.length+cobjct.getSortContextHorizon()]+"</font>";
                       StringBuilder builder = new StringBuilder();
                       for(String s : contextArray) {
                         builder.append(s+" ");
                       }
-                      data[i][1] ="<html>" + builder.toString().trim()+"</html>";
+                      if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim()) ){
+                          data[i][1] = "<html> <font color=\"Fuchsia\">" + builder.toString().trim()+"</font> </html>";
+                          data[i][rightctxt] = "<html> <font color=\"Fuchsia\">" + cobjct.getKeywordAndRightContext().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</font> </html>";
+                      }
+                      else
+                          data[i][1] ="<html>" + builder.toString().trim()+"</html>";
                 }
               }
           }
@@ -412,6 +433,9 @@ public class ListDisplay extends JPanel
     //set column color
     centreRenderer.setForeground(Color.blue);
     filenameRenderer.setForeground(Color.RED);
+    
+    //update list
+     list = new JList(listModel);
     
 
     //turn off grid
