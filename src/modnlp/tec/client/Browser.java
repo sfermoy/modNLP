@@ -361,8 +361,9 @@ public class Browser
   }
 
   public void startSorting(int horizon, boolean sortleft){
-      ///******* reset show detail
-      browserFrame.resetShowDetailString();
+    Comparator cprer ;
+    ///******* reset show detail
+    browserFrame.resetShowDetailString();
     if ( concThread.atWork()  ) {
       if ( ! browserFrame.interruptDownloading() )
         return;
@@ -375,38 +376,42 @@ public class Browser
     if(language == modnlp.Constants.LANG_AR){
         sortContextHorizon = browserFrame.getSortRightCtxHorizon();
     }
-    if (sortleft){ 
-        //*****
-        if (browserFrame.clicked.equalsIgnoreCase("")) {
-            concVector.setSortContextHorizon(0-horizon);
-        }
-        else{
-            concVector.setSortContextHorizon(0-browserFrame.column);
-        }
-      
+    if(horizon == -111){
+         cprer = new FilenameComparer();
     }
-    else {
-        if (browserFrame.clicked.equalsIgnoreCase("")) {
-            sortContextHorizon = browserFrame.getSortRightCtxHorizon();
-            if(language == modnlp.Constants.LANG_AR){
-                sortContextHorizon = browserFrame.getSortLeftCtxHorizon();
+    else{
+        if (sortleft){ 
+            //*****
+            if (browserFrame.clicked.equalsIgnoreCase("")) {
+                concVector.setSortContextHorizon(0-horizon);
             }
-            concVector.setSortContextHorizon(0+horizon);
-        }
-        else{
-            concVector.setSortContextHorizon(0+browserFrame.column);
-        }
-    }
+            else{
+                concVector.setSortContextHorizon(0-browserFrame.column);
+            }
 
-    Comparator cprer = sortleft ?
-      new LeftComparer(sortContextHorizon, 
-                       preferenceFrame.maxContext/2, 
-                       browserFrame.getPunctuation()) :
-      new RightComparer(sortContextHorizon, 
-                        preferenceFrame.maxContext/2, 
-                        browserFrame.getPunctuation());
-    
-    
+        }
+        else {
+            if (browserFrame.clicked.equalsIgnoreCase("")) {
+                sortContextHorizon = browserFrame.getSortRightCtxHorizon();
+                if(language == modnlp.Constants.LANG_AR){
+                    sortContextHorizon = browserFrame.getSortLeftCtxHorizon();
+                }
+                concVector.setSortContextHorizon(0+horizon);
+            }
+            else{
+                concVector.setSortContextHorizon(0+browserFrame.column);
+            }
+        }
+    //which context are we comparing
+         cprer = sortleft ?
+          new LeftComparer(sortContextHorizon, 
+                           preferenceFrame.maxContext/2, 
+                           browserFrame.getPunctuation()) :
+          new RightComparer(sortContextHorizon, 
+                            preferenceFrame.maxContext/2, 
+                            browserFrame.getPunctuation());
+
+    }
     sortThread = new SortThread(concVector, cprer);
     
     sortThread.addConcordanceDisplayListener(browserFrame);

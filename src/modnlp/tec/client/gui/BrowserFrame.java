@@ -150,6 +150,7 @@ public class BrowserFrame extends BrowserGUI
 
   private JButton stlButton = new JButton(STLBUT);
   private JButton strButton = new JButton(STRBUT);
+  private JButton sortFileButton = new JButton("Sort by filename");
   private JButton extractButton = new JButton(EXTBUT);
   private JButton headerButton = new JButton(HEDBUT);
   private JButton removeLineButton = new JButton(RMLINEBUT);
@@ -236,8 +237,10 @@ public class BrowserFrame extends BrowserGUI
     // sort panels
     JPanel lsp = new JPanel();
     JPanel rsp = new JPanel();
+    JPanel nsp = new JPanel();
     lsp.setBorder(BorderFactory.createEtchedBorder());
     rsp.setBorder(BorderFactory.createEtchedBorder());
+    nsp.setBorder(BorderFactory.createEtchedBorder());
     for (int i = 1 ; i <= PreferPanel.SCTXMAX ; i++){
       leftSortCtx.addItem(""+i);
       rightSortCtx.addItem(""+i);
@@ -247,11 +250,14 @@ public class BrowserFrame extends BrowserGUI
     
     rsp.add(rightSortCtx);
     rsp.add(strButton);
-
+    nsp.add(sortFileButton);
+    
+    
     leftSortCtx.setEnabled(false);
     rightSortCtx.setEnabled(false);
     stlButton.setEnabled(false);
     strButton.setEnabled(false);
+    sortFileButton.setEnabled(false);
     extractButton.setEnabled(false);
     removeLineButton.setEnabled(false);
     headerButton.setEnabled(false);
@@ -261,6 +267,7 @@ public class BrowserFrame extends BrowserGUI
     nrcButton.setToolTipText("Select a new corpus index server");
     dldButton.setToolTipText("Save the displayed concordances to disk");
     stlButton.setToolTipText("Sort with left context horizon indicated on the box");
+    sortFileButton.setToolTipText("Sort by file name column");
     strButton.setToolTipText("Sort with right context horizon indicated on the box");
     extractButton.setToolTipText("Display text extract of the selected line");
     removeLineButton.setToolTipText("Remove selected line from concordance list");
@@ -395,6 +402,14 @@ public class BrowserFrame extends BrowserGUI
          
         }}
       );
+    
+    sortFileButton.addActionListener(new ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            //dummy variable -111 must set up constant 
+             parent.startSorting(-111,true);         
+        }}
+      );
+    
     extractButton.addActionListener(new ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
           ConcordanceObject sel = concListDisplay.getSelectedValue();
@@ -489,6 +504,7 @@ public class BrowserFrame extends BrowserGUI
     concLabel.add(Box.createGlue());
     concLabel.add(lsp);
     concLabel.add(rsp);
+    concLabel.add(nsp);
     concLabel.add(Box.createGlue());
     concLabel.add(extractButton);
     concLabel.add(Box.createGlue());
@@ -654,6 +670,7 @@ public class BrowserFrame extends BrowserGUI
       progressBar.setMaximum(parent.getExpectedNoOfConcordances());
       strButton.setEnabled(true);
       stlButton.setEnabled(true);
+      sortFileButton.setEnabled(true);
       leftSortCtx.setEnabled(true);
       rightSortCtx.setEnabled(true);
       extractButton.setEnabled(false);
