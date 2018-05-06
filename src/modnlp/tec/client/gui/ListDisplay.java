@@ -298,16 +298,36 @@ public class ListDisplay extends JPanel
           {
               if(parent.getLanguage() == modnlp.Constants.LANG_AR){ // if arabic rendering we need to highlight different part
                   String[] contextArray = cobjct.getKeywordAndRightContext().trim().split(" ");
+                  String[] otherContextArray = cobjct.getLeftContext().trim().split(" ");
                   sortctxStr = contextArray[cobjct.getSortContextHorizon()];
                   if(contextArray.length != 0){
-                        contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[cobjct.getSortContextHorizon()]+"</font>";
-                        StringBuilder builder = new StringBuilder();
-                        for(String s : contextArray) {
-                          builder.append(s+" ");
-                        }
+                    String sortedWord = contextArray[cobjct.getSortContextHorizon()];
+                    if(sortedWord.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
+                        contextArray[cobjct.getSortContextHorizon()] = "<font color=\"#FF00FF\">"+sortedWord+"</font>";
+                    }else{
+                        contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+sortedWord+"</font>";
+                    }
+       
+                    StringBuilder builder = new StringBuilder();
+                    StringBuilder otherbuilder = new StringBuilder();
+                    //blue for mosaic selected in other pos
+                    for(String s : contextArray) {
+                        if(s.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
+                            builder.append("<b><font color=\"#FF00FF\">"+s+"</font> </b>");  
+                        }else{
+                            builder.append(s+" ");
+                        }  
+                    }
+                    for(String s : otherContextArray) {
+                        if(s.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
+                            otherbuilder.append("<font color=\"#FF00FF\">"+s+"</font> ");
+                        }else{
+                            otherbuilder.append(s+" ");
+                        }  
+                    }
                     if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim()) ){
-                        data[i][1] ="<html> <font color=\"Fuchsia\">" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</font> </html>";
-                        data[i][rightctxt] ="<html> <font color=\"Fuchsia\">" + cobjct.getKeywordAndRightContext().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</font> </html>";
+                        data[i][1] ="<html> <font color=\"#00BFFF\">" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</font> </html>";
+                        data[i][rightctxt] ="<html> <font color=\"#00BFFF\">" + otherbuilder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</font> </html>";
                     } 
                     else{
                         data[i][1] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
@@ -316,22 +336,37 @@ public class ListDisplay extends JPanel
               }else{
                 String trimmed =cobjct.getKeywordAndRightContext().trim();
                 String[] contextArray = trimmed.split("\\s+");
+                String[] otherContextArray = cobjct.getLeftContext().trim().split(" ");
                 sortctxStr = contextArray[cobjct.getSortContextHorizon()];
-                 if(contextArray.length != 0){
-
-                      contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[cobjct.getSortContextHorizon()]+"</font>";
-                      StringBuilder builder = new StringBuilder();
-
-                      for(String s : contextArray) {
-                        builder.append(s+" ");
-                      }
-                      if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim()) ){
-                          data[i][rightctxt] ="<html> <font color=\"Fuchsia\">" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</font> </html>";
-                          data[i][leftctx] = "<html> <font color=\"Fuchsia\">"+cobjct.getLeftContext().trim()+"</font> </html>";
-                      }
-                      else
-                          data[i][rightctxt] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
-
+                if(contextArray.length != 0){
+                    String sortedWord = contextArray[cobjct.getSortContextHorizon()];
+                    if(sortedWord.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
+                        contextArray[cobjct.getSortContextHorizon()] = "<font color=\"#FF00FF\">"+sortedWord+"</font>";
+                    }else{
+                        contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+sortedWord+"</font>";
+                    }
+                    StringBuilder builder = new StringBuilder();
+                    StringBuilder otherbuilder = new StringBuilder();
+                    for(String s : contextArray) {
+                      if(s.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
+                          builder.append("<b><font color=\"#FF00FF\">"+s+"</font> </b>");  
+                      }else{
+                          builder.append(s+" ");
+                      }  
+                    }
+                    for(String s : otherContextArray) {
+                        if(s.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
+                            otherbuilder.append("<font color=\"#FF00FF\">"+s+"</font> ");
+                        }else{
+                            otherbuilder.append(s+" ");
+                        }  
+                    }
+                    if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim()) ){
+                        data[i][rightctxt] ="<html> <font color=\"#00BFFF\">" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</font> </html>";
+                        data[i][leftctx] = "<html> <font color=\"#00BFFF\">"+otherbuilder.toString().trim()+"</font> </html>";
+                    }
+                    else
+                        data[i][rightctxt] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
                  }
               }
           }
@@ -340,16 +375,34 @@ public class ListDisplay extends JPanel
           {
               if(parent.getLanguage() == modnlp.Constants.LANG_AR){// if arabic rendering we need to highlight different part
                   String[] contextArray = cobjct.getLeftContext().split(" ");
+                  String[] otherContextArray = cobjct.getKeywordAndRightContext().trim().split(" ");
                   sortctxStr = contextArray[contextArray.length + cobjct.getSortContextHorizon()];
-                  if(contextArray.length != 0){
-                        contextArray[contextArray.length + cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[contextArray.length + cobjct.getSortContextHorizon()]+"</font>";
-                        StringBuilder builder = new StringBuilder();
-                        for(String s : contextArray) {
-                          builder.append(s+" ");
-                        }
+                 if(contextArray.length != 0){
+                    String sortedWord = contextArray[contextArray.length + cobjct.getSortContextHorizon()];
+                    if(sortedWord.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
+                        contextArray[contextArray.length + cobjct.getSortContextHorizon()] = "<font color=\"#FF00FF\">"+sortedWord+"</font>";
+                    }else{
+                        contextArray[contextArray.length + cobjct.getSortContextHorizon()] = "<font color=\"red\">"+sortedWord+"</font>";
+                    }
+                    StringBuilder builder = new StringBuilder();
+                    StringBuilder otherbuilder = new StringBuilder();
+                    for(String s : contextArray) {
+                        if(s.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
+                            builder.append("<b><font color=\"#FF00FF\">"+s+"</font> </b>");  
+                        }else{
+                            builder.append(s+" ");
+                        }  
+                    }
+                    for(String s : otherContextArray) {
+                        if(s.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
+                            otherbuilder.append("<font color=\"#FF00FF\">"+s+"</font> ");
+                        }else{
+                            otherbuilder.append(s+" ");
+                        }  
+                    }
                     if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim()) ){
-                        data[i][3] ="<html> <font color=\"Fuchsia\">" + builder.toString().trim()+"</font> </html>";
-                        data[i][leftctx] = "<html> <font color=\"Fuchsia\">"+cobjct.getLeftContext().trim()+"</font> </html>";
+                        data[i][3] ="<html> <font color=\"#00BFFF\">" + builder.toString().trim()+"</font> </html>";
+                        data[i][leftctx] = "<html> <font color=\"#00BFFF\">"+otherbuilder.toString().trim()+"</font> </html>";
                     }
                     else
                         data[i][3] ="<html>" + builder.toString().trim()+"</html>";
@@ -358,18 +411,36 @@ public class ListDisplay extends JPanel
               else{
                 String[] contextArray = cobjct.getLeftContext().split(" ");
                 sortctxStr = contextArray[contextArray.length+ cobjct.getSortContextHorizon()];
+                String[] otherContextArray = cobjct.getKeywordAndRightContext().trim().split(" ");
                 if(contextArray.length != 0){
-                      contextArray[contextArray.length+ cobjct.getSortContextHorizon()] = "<font color=\"red\">"+contextArray[contextArray.length+cobjct.getSortContextHorizon()]+"</font>";
-                      StringBuilder builder = new StringBuilder();
-                      for(String s : contextArray) {
-                        builder.append(s+" ");
-                      }
-                      if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim()) ){
-                          data[i][1] = "<html> <font color=\"Fuchsia\">" + builder.toString().trim()+"</font> </html>";
-                          data[i][rightctxt] = "<html> <font color=\"Fuchsia\">" + cobjct.getKeywordAndRightContext().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</font> </html>";
-                      }
-                      else
-                          data[i][1] ="<html>" + builder.toString().trim()+"</html>";
+                    String sortedWord = contextArray[contextArray.length + cobjct.getSortContextHorizon()];
+                    if(sortedWord.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
+                        contextArray[contextArray.length + cobjct.getSortContextHorizon()] = "<font color=\"#FF00FF\">"+sortedWord+"</font>";
+                    }else{
+                        contextArray[contextArray.length + cobjct.getSortContextHorizon()] = "<font color=\"red\">"+sortedWord+"</font>";
+                    }
+                    StringBuilder builder = new StringBuilder();
+                    StringBuilder otherbuilder = new StringBuilder();
+                    for(String s : contextArray) {
+                      if(s.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
+                          builder.append("<b><font color=\"#FF00FF\">"+s+"</font> </b>");                
+                      }else{
+                          builder.append(s+" ");
+                      }  
+                    }
+                    for(String s : otherContextArray) {
+                        if(s.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
+                            otherbuilder.append("<font color=\"#FF00FF\">"+s+"</font> ");
+                        }else{
+                            otherbuilder.append(s+" ");
+                        }  
+                    }
+                    if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim()) ){
+                        data[i][1] = "<html> <font color=\"#00BFFF\">" + builder.toString().trim()+"</font> </html>";
+                        data[i][rightctxt] = "<html> <font color=\"#00BFFF\">" + otherbuilder.substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</font> </html>";
+                    }
+                    else
+                        data[i][1] ="<html>" + builder.toString().trim()+"</html>";
                 }
               }
           }
