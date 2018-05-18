@@ -422,13 +422,15 @@ public class BrowserFrame extends BrowserGUI
       );
     removeLineButton.addActionListener(new ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-          ConcordanceObject sel = concListDisplay.getSelectedValue();
-          if (sel == null) {
+          ConcordanceObject[] interval = concListDisplay.getSelectedObjects();
+          if (interval.length == 0) {
             alertWindow("Please select a concordance!");
           }
           else{
-              int selindx = concListDisplay.getSelectedIndex();
-            parent.getConcordanceVector().remove(sel);
+            for (int i = 0; i < interval.length; i++) {
+               parent.getConcordanceVector().remove(interval[i]);  
+            }
+            int selindx = concListDisplay.getSelectedIndex();
             concListDisplay.redisplayConc();
             concListDisplay.setViewToIndex(selindx);
           }

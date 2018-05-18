@@ -112,7 +112,7 @@ public class ListDisplay extends JPanel
     
     
     table = new MyTable(data, columnNames);
-    table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     
     this.parent = parent;
      font = new Font("Helvetica",Font.PLAIN, 12);
@@ -185,10 +185,20 @@ public class ListDisplay extends JPanel
 
 
   public ConcordanceObject getSelectedValue () {
-      System.out.println("tbl : "+table.getSelectedRow());
-       System.out.println("tbl");
     list.setSelectedIndex(table.getSelectedRow());
     return (ConcordanceObject) list.getSelectedValue();
+  }
+  
+  public ConcordanceObject[] getSelectedObjects () {
+    int[] interval =table.getSelectedRows();
+    ConcordanceObject[] rows = new ConcordanceObject[interval.length];
+    //System.out.println("tbl :  "+table.getSelectedRows().length+ " "+ interval[0]+ " end "  + interval[interval.length-1]);
+    for (int i = 0; i < rows.length; i++) {
+          list.setSelectedIndex(interval[i]);  
+          rows[i]= (ConcordanceObject) list.getSelectedValue();
+    }
+    list.setSelectedIndex(interval[0]);
+    return  rows;
   }
 
   public int getSelectedIndex (){	
@@ -467,7 +477,7 @@ public class ListDisplay extends JPanel
     table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     table.setFont(font);
     table.setRowHeight(table.getRowHeight()+table.getRowHeight()/5);
-
+    
     //setting column widths
     TableColumn column = null;
     for (int i = 0; i < 4; i++) {
@@ -513,7 +523,7 @@ public class ListDisplay extends JPanel
     table.setShowGrid(false);
     
     // set selection mode
-    table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    table.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
     
     //re-add listeners
     table.getSelectionModel().addListSelectionListener(parent);
