@@ -69,6 +69,7 @@ public class ConcordanceObject {
   public String concordance;
   public String filename;
   public String sfilename;
+  public String sectionID;
   /*
   public String padding = ""; // whitesapeces to make up for half-width
                          // Japanese characters (e.g.'…') for
@@ -114,6 +115,16 @@ public class ConcordanceObject {
           {
             Integer iW = new Integer(new String(data, start, (i-start)));
             filepos = iW.intValue();
+            start = i + 1;
+            break;
+          }
+      }
+    
+        for(int i = start; i < data.length ; i++)
+      {
+        if(data[i] == '|')
+          {
+            sectionID = new String(data, start, (i-start));
             start = i + 1;
             break;
           }

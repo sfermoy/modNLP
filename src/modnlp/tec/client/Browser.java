@@ -492,6 +492,7 @@ public class Browser
   public void showHeader(ConcordanceObject sel)
   {
     String filename = sel.filename;
+    System.err.println("section="+sel.sectionID);
     System.err.println("fn="+filename);
     String headerName =  //   (new File(filename)).getName();
       filename.substring(filename.lastIndexOf('/')+1,filename.lastIndexOf('.'))
@@ -499,10 +500,10 @@ public class Browser
     System.err.println("fn="+filename+"header="+headerName);
     //int p = headerName.lastIndexOf(java.io.File.separator);
     //headerName = p < 0? headerName : headerName.substring(p);
-    showHeader(headerName);
+    showHeader(headerName, sel.sectionID);
   }
 
- public void showHeader(String headerName)
+ public void showHeader(String headerName,String secString)
   {
     System.err.println("-"+headerBaseURL+"-"+headerName);
     int windowHeight = 600;
@@ -542,7 +543,7 @@ public class Browser
           content.append(tmp+"\n");
       }
       else {
-        HeaderXMLHandler parser =  new HeaderXMLHandler();
+        HeaderXMLHandler parser =  new HeaderXMLHandler(secString);
         parser.parse(is);
         content = new StringBuffer("<html>"+parser.getContent()+"</html>");
         //content = new StringBuffer("<html><img src='"+img+"' height=183 width=128 alt='Book Cover'><pre>"+parser.getContent()+"</pre></html>");

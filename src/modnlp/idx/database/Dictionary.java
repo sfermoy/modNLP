@@ -875,7 +875,14 @@ public class Dictionary {
                 //              if (  query.matchConcordance(ot,ctx) )
                 //{
                 //System.err.println(fn+"|"+bp+"|"+ot);
-                os.println(fn+"|"+bp+"|"+ot);
+                
+                //Get the section id to which the keword belongs
+                try {
+                  sbct = new SubcorpusTable(environment, fno.toString(), false);
+                } catch(DatabaseNotFoundException e ) { sbct = null;}     
+                String sn = sbct.getSectionID(bpi);
+                
+                os.println(fn+"|"+bp+"|"+sn+"|"+ot);
                 os.flush();
               }
             if (os.checkError()) {
