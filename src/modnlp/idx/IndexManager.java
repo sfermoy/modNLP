@@ -46,6 +46,7 @@ import java.util.Enumeration;
 import javax.swing.JOptionPane;
 import java.io.IOException;
 import modnlp.idx.inverted.TokeniserARLucene;
+import modnlp.idx.inverted.TokeniserARLuceneWhitespace;
 
 
 /**
@@ -329,8 +330,7 @@ public class IndexManager {
             tkr = new TokeniserRegex(new File(fname), fenc);
             break;
           case modnlp.Constants.LANG_AR: 
-            tkr = new TokeniserARLucene(new File(fname), fenc);
-            ((TokeniserARLucene)tkr).setSegmenterModel(dictProps.getProperty("arabic.segmenter.model"));
+            tkr = new TokeniserARLuceneWhitespace(new File(fname), fenc);
             break;
           case modnlp.Constants.LANG_JP:
             tkr = new TokeniserJPLucene(new File(fname), fenc);
@@ -353,12 +353,27 @@ public class IndexManager {
             imui.print("-- (punctuation *will* count as tokens)\n");
             tkr.setIndexPuntuation(true);
           }
-          tkr.tokenise();
-          TokenMap tm = tkr.getTokenMap();
-          //System.err.print(tm.toString());
-          imui.print("-- Indexing ...\n");
-          dict.setVerbose(debug);
-          int fid = dict.addToDictionary(tm, fname);
+          TokenMap tm;
+          int fid;
+          if(la == modnlp.Constants.LANG_AR)
+          {
+ 
+            ((TokeniserARLuceneWhitespace)tkr).setSegmenterModel(dictProps.getProperty("arabic.segmenter.model")); 
+            tkr.tokenise();
+            tm = tkr.getTokenMap();
+            imui.print("-- Indexing ...\n");
+            dict.setVerbose(debug);
+            TokenMap tmAR = ((TokeniserARLuceneWhitespace)tkr).getWhiteSpaceTokenMap();
+            fid = dict.addToDictionary(tm,tmAR,fname);
+          }else
+          {
+               tkr.tokenise();
+               tm = tkr.getTokenMap();
+                //System.err.print(tm.toString());
+               imui.print("-- Indexing ...\n");
+               dict.setVerbose(debug);
+               fid = dict.addToDictionary(tm, fname);
+          }
           dict.sync();
           System.err.println("subcElement "+subcElement);
           if (subcElement != null){

@@ -136,7 +136,7 @@ public class ConcordanceObject {
       tkr = new TokeniserJPLucene("");
       break;
     case modnlp.Constants.LANG_AR:
-      tkr = new TokeniserARLucene("");
+      tkr = new TokeniserRegex("");
       break;
     default:
       tkr = new TokeniserRegex("");
