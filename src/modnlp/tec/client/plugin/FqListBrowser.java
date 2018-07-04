@@ -528,13 +528,19 @@ public class FqListBrowser extends JFrame
               PrintWriter dlf =
                 new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")));
               Object[] va =  (model.getDataVector()).toArray();
-              dlf.println("Rank order\tType\tFrequency");
+              dlf.println("Rank order,Type,Frequency,Total Types,Total Tokens");
               for (int i = 0; i < va.length ; i++) {
-                dlf.println(((Vector)va[i]).get(0)+"\t"
-                           +((Vector)va[i]).get(1)+"\t"
-                           +((Vector)va[i]).get(2));
+                if(i==0)
+                    dlf.println(((Vector)va[i]).get(0)+","
+                           +((Vector)va[i]).get(1)+","
+                           +((Vector)va[i]).get(2)+","
+                           +va.length+","+notokens);
+                else
+                    dlf.println(((Vector)va[i]).get(0)+","
+                               +((Vector)va[i]).get(1)+","
+                               +((Vector)va[i]).get(2));
               }
-              dlf.println("\nTOTAL:\t"+va.length+"\t"+notokens);
+              //dlf.println("\nTOTAL:\t"+va.length+"\t"+notokens);
               dlf.close();
             }
         }
