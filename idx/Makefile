@@ -124,14 +124,14 @@ DISTFILES=AUTHORS COPYING Makefile README TUTORIAL.txt VERSION BUGS INSTALL TODO
 	$(LIBS) $(DOCS) $(DATA) $(SOURCES) $(STEMMERDATA) $(SEGMENTERDATA) $(SOURCEDIR)modnlp/idx/prj.el \
 	$(SOURCEDIR)idx-manifest.txt 
 #JAVA=jamvm
-JAVAC=javac -encoding UTF-8 #/usr/lib/jvm/java-6-oracle/bin/javac -encoding UTF-8 # -target 1.7 
+JAVAC=javac #/usr/lib/jvm/java-6-oracle/bin/javac -encoding UTF-8 # -target 1.7 
 #JAVAC=ecj -1.5
 #JAVAC=/usr/lib/jvm/java-1.5.0-sun-1.5.0.16/bin/javac
 #JAVAC=jikes -bootclasspath /usr/lib/jvm/java-1.5.0-sun/jre/lib/rt.jar -source 1.5
 JAVA=java
 JAR=jar
 JAVAFLAGS=-classpath $(SOURCEDIR):$(LIBSPATH)
-JAVACFLAGS=-classpath $(SOURCEDIR):$(LIBSPATH)
+JAVACFLAGS=-classpath $(SOURCEDIR):$(LIBSPATH) -encoding UTF-8 -target 7 -source 7
 MANIFEST=idx-manifest.txt
 JARFLAGS= cvmf $(MANIFEST)
 JARTARGET=$(TOPDIR)lib/idx.jar
@@ -142,7 +142,7 @@ JARTARGET=$(TOPDIR)lib/idx.jar
 all: build jar test
 
 %.class: %.java
-		$(JAVAC) $(JAVAFLAGS) $?
+		$(JAVAC) $(JAVACFLAGS) $?
 
 build: $(TARGETS)
 

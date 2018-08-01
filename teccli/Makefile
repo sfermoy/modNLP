@@ -1,6 +1,6 @@
 TOPDIR=
 SOURCEDIR=$(TOPDIR)src/
-LIBSPATH=$(TOPDIR)lib/je.jar:$(TOPDIR)lib/idx.jar:$(TOPDIR)lib/jung.jar:$(TOPDIR)lib/antlr-2.7.6.jar:$(TOPDIR)lib/commons-pool-1.2.jar:$(TOPDIR)lib/exist-modules.jar:$(TOPDIR)lib/exist.jar:$(TOPDIR)lib/jgroups-all.jar:$(TOPDIR)lib/log4j-1.2.14.jar:$(TOPDIR)lib/resolver.jar:$(TOPDIR)lib/sunxacml.jar:$(TOPDIR)lib/xmldb.jar:$(TOPDIR)lib/xmlrpc-1.2-patched.jar:$(TOPDIR)lib/prefuse.jar:$(TOPDIR)lib/wordleconc.jar:$(TOPDIR)lib/mosaic.jar:$(TOPDIR)lib/conctree.jar:$(TOPDIR)lib/lucene-core-3.6.0.jar:$(TOPDIR)lib/lucene-analyzers-3.6.0.jar:$(TOPDIR)lib/lucene-kuromoji-3.6.0.jar
+LIBSPATH=$(TOPDIR)lib/je.jar:$(TOPDIR)lib/idx.jar:$(TOPDIR)lib/jung.jar:$(TOPDIR)lib/antlr-2.7.6.jar:$(TOPDIR)lib/commons-pool-1.2.jar:$(TOPDIR)lib/exist-modules.jar:$(TOPDIR)lib/exist.jar:$(TOPDIR)lib/jgroups-all.jar:$(TOPDIR)lib/log4j-1.2.14.jar:$(TOPDIR)lib/resolver.jar:$(TOPDIR)lib/sunxacml.jar:$(TOPDIR)lib/xmldb.jar:$(TOPDIR)lib/xmlrpc-1.2-patched.jar:$(TOPDIR)lib/prefuse.jar:$(TOPDIR)lib/wordleconc.jar:$(TOPDIR)lib/mosaic.jar:$(TOPDIR)lib/conctree.jar:$(TOPDIR)lib/comfre.jar:$(TOPDIR)lib/lucene-core-3.6.0.jar:$(TOPDIR)lib/lucene-analyzers-3.6.0.jar:$(TOPDIR)lib/lucene-kuromoji-3.6.0.jar
 LIBS=$(subst :, ,$(LIBSPATH))
 LIBLICENSES=$(TOPDIR)lib/COPYING-libs
 DOCS=$(TOPDIR)doc
@@ -35,7 +35,7 @@ JAVAC=$(JAVA_BIN)javac # -target 1.6
 JAR=jar
 JARFLAGS= cvmf $(MANIFEST)
 JAVAFLAGS=-classpath $(SOURCEDIR):$(LIBSPATH)
-JAVACFLAGS=-classpath $(SOURCEDIR):$(LIBSPATH) -encoding UTF8 #ISO-8859-1
+JAVACFLAGS=-classpath $(SOURCEDIR):$(LIBSPATH) -encoding UTF8 -target 7 -source 7 #ISO-8859-1
 JARTARGET=$(TOPDIR)lib/teccli.jar
 BINDISTDIR=$(DISTDIR)-bin
 BINDISTXTRAS=$(LIBLICENSES) $(TOPDIR)*COPYING*
@@ -59,6 +59,7 @@ clean:
 	find -L . -iregex '.*\(\.aux\|\.log\|\.dvi\|\.class\|~\|#.*#\b\)'  -type f  -print0 |xargs -0 -e rm -f
 
 jar: $(TARGETS)
+	echo props is $(PROPS)
 	cd $(SOURCEDIR) && cp $(PROPS) tecli.properties && $(JAR) $(JARFLAGS) ../$(JARTARGET) $(JARREDS)
 
 docs: $(TARGETS)

@@ -20,7 +20,7 @@ xquery.root.element.path=/gokheader/section
 xquery.return.attribute.path=/@id
 ## specs and paths all relative to xquery.root.element.path
 ## form: description_1;path_1;description_2;path_2,...
-xquery.attribute.chooser.specs=File name;../document/@filename;Subcorpus;../document/@subcorpusid;Source;translation/source/@language;Translation status;translation/@status;Format;../document/@format;Pub. date;/@publication_date;Date accuracy;/@date_accuracy;Author;author/name;Commentator;commentator/name;Translator;translation/translator/name;Translation date;translation/source/@date
+xquery.attribute.chooser.specs=File name;../document/@filename;Subcorpus;../document/@subcorpusid;Source;translation/source/@language;Translation status;translation/@status;Format;../document/@format;Pub. date;/@publication_date;Authorship date;/@authorship_date;Author;author/name;Commentator;commentator/name;Translator;translation/translator/name;Translation date;translation/source/@date
 ## Extension Of the header files (e.g. .hed, .xml etc)
 header.extension=hed
 ## the maximum number of subcorpus constraint query results to be stored (by HeaderDBManager)
@@ -38,6 +38,6 @@ file.encoding=UTF8
 ## (including some non-Latin scripted ones, such as Greek, and Arabic).
 language=AR
 ## location (file or URL) of CRF language model for Stanford Arabic segmenter
-arabic.segmenter.model=http://genealogiesofknowledge.net/gok/jnlp-beta/arabic-segmenter-atb+bn+arztrain.ser.gz
+#arabic.segmenter.model=http://genealogiesofknowledge.net/gok/jnlp-beta/arabic-segmenter-atb+bn+arztrain.ser.gz
 ## This would try to load the model from local filesystem or the classpath
-## arabic.segmenter.model=arabic-segmenter-atb+bn+arztrain.ser.gz
+arabic.segmenter.model=arabic-segmenter-atb+bn+arztrain.ser.gz

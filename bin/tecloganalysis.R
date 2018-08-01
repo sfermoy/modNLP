@@ -35,7 +35,8 @@ plotAccessByCountry <- function(log, pdf='', ...){
                format(length(unique(log$country)),big.mark=",", scientific=FALSE)), pos=4)
                
   if (pdf !='')
-    dev.copy2pdf(file=pdf, paper='special', family='Helvetica')
+      dev.copy2pdf(file=pdf, paper='special', family='Helvetica')
+  table
 }
 
 plotAccessByYear <- function(log, pdf='', ...){
@@ -54,4 +55,5 @@ plotAccessByYear <- function(log, pdf='', ...){
                
   if (pdf !='')
     dev.copy2pdf(file=pdf, paper='special', family='Helvetica')
+  table
 }
