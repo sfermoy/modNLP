@@ -55,12 +55,13 @@ public class HeaderXMLHandler extends DefaultHandler
   private String defSpacer = "<div style=\"margin-left: 2px;\">";
   private String spacer = "";
   private int tab = 20;
-  
+  private String Highlight;
 
-  public HeaderXMLHandler() throws ParserConfigurationException,
+  public HeaderXMLHandler(String section) throws ParserConfigurationException,
                                    SAXException
   {
     super();
+    Highlight = section;
     SAXParserFactory spf = SAXParserFactory.newInstance();
     spf.setValidating(false);
     spf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false); 
@@ -97,6 +98,7 @@ public class HeaderXMLHandler extends DefaultHandler
         if (elementAttribs != null) {
           //at = " "+spacer+elementAttribs;
           at = ""+elementAttribs.replace(",", "<br>");
+          at =at.replace("id: "+ Highlight, "<font color=red>"+ "id: "+ Highlight+"</font>");
         }
         if(at.equals(""))
             content.append("<b>"+fixElementName(elementName)+": " +"</b>"+ 
