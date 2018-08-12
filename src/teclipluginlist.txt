@@ -3,3 +3,4 @@ modnlp.tec.client.plugin.CorpusDescriptionBrowser:Corpus description browser:Dis
 org.modnlp.mosaic.ConcordanceMosaic:Concordance Mosaic:Visualize concordances as a mosaic
 org.modnlp.conctree.ConcordanceTreeViewer:Concordance Tree: Display a Concordance Tree
 org.modnlp.wordleconc.WordleConc:Concordance Wordle:Display a Concordance Wordle Diagram
+org.modnlp.comfre.ComFre:ComFre:Compare frequency lists

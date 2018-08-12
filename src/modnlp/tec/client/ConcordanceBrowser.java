@@ -123,5 +123,7 @@ public interface ConcordanceBrowser {
   public void showContext(int col, String str);
   
   public void addChangeListener(StateChanged toAdd);
+  
+  public  String getHeaderBaseUrl();
 
 }
