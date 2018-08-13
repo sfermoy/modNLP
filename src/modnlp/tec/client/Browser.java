@@ -856,7 +856,10 @@ public class Browser
   public final HeaderDBManager getHeaderDBManager(){
     return hdbmanager;
   }
-
+  
+  public final String getHeaderBaseUrl(){
+    return headerBaseURL;
+  }
   public final int getExpectedNoOfConcordances(){
     return concThread.getNoFound();
   }

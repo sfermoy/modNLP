@@ -102,14 +102,14 @@ public class FqListBrowser extends JFrame
   
   private HttpURLConnection exturlConnection;
   int skipFirst = 0;      // print from the startItem^{th} most frequent word
-  int maxListSize = 500;   // print at most maxListSize items (0 means print until the last item)
+  int maxListSize = 0;   // print at most maxListSize items (0 means print until the last item)
   int dldCount = 0;
   double ttratio = 0;
   int notokens = 0;
   int dldi = 0;
   Timer dld_timer;
-  JTextField maxListField = new JTextField(""+maxListSize, 4);
-  JTextField skipFirstField = new JTextField(""+skipFirst, 4);
+  //JTextField maxListField = new JTextField(""+maxListSize, 4);
+  //JTextField skipFirstField = new JTextField(""+skipFirst, 4);
   JButton saveButton = new JButton("Save");
 
   private PrintWriter fqlout = null;
@@ -176,18 +176,18 @@ public class FqListBrowser extends JFrame
     saveButton.addActionListener(new SaveListener());
     JButton go = new JButton("Get list");
     go.addActionListener(new GoListener());
-    maxListField.setToolTipText("Limit list size to this many types. Set to 0 for whole list.");
+//    maxListField.setToolTipText("Limit list size to this many types. Set to 0 for whole list.");
         
     JPanel pa = new JPanel();
     //pa.setLayout(new BorderLayout());
     //JPanel pa0 = new JPanel();
     //JPanel pa1 = new JPanel();
     pa.add(go);
-    pa.add(new JLabel("  Skip "));
-    pa.add(skipFirstField);
-    pa.add(new JLabel(" and print "));
-    pa.add(maxListField);
-    pa.add(new JLabel("commonest words in"));
+    pa.add(new JLabel("          Generate frequency list for"));
+    //pa.add(skipFirstField);
+   // pa.add(new JLabel(" and print "));
+    //pa.add(maxListField);
+   // pa.add(new JLabel("commonest words in"));
 
     scorpusLabel.setForeground(Color.RED);
     scorpusLabel.setToolTipText(FULLCORPUSTIP);
@@ -197,6 +197,7 @@ public class FqListBrowser extends JFrame
     scorpusLabel.setFont(new Font(map));
 
     pa.add(scorpusLabel);
+    pa.add(new JLabel("     "));
     pa.add(saveButton);
     pa.add(new JLabel("     "));
     pa.add(dismissButton);
@@ -260,11 +261,11 @@ public class FqListBrowser extends JFrame
 
   private void checkSubCorpusSelectionStatus (){
     if (parent.isSubCorpusSelectionON()){
-      scorpusLabel.setText("<html><b>subcorpus</b></html>");
+      scorpusLabel.setText("<html><b>subcorpus      </b></html>");
       scorpusLabel.setToolTipText(parent.getXQueryWhere());
     }
     else{
-      scorpusLabel.setText("<html><b>full corpus</b></html>");
+      scorpusLabel.setText("<html><b>full corpus      </b></html>");
       scorpusLabel.setToolTipText(FULLCORPUSTIP);
     }
   }
@@ -501,13 +502,13 @@ public class FqListBrowser extends JFrame
       statsLabel.setText("Retrieving frequency list...");
       try {
         checkSubCorpusSelectionStatus();
-        i = new Integer(maxListField.getText());
-        maxListSize = i.intValue();
-        i = new Integer(skipFirstField.getText());
-        skipFirst = i.intValue();
+      //  i = new Integer(maxListField.getText());
+        //maxListSize = i.intValue();
+        //i = new Integer(skipFirstField.getText());
+        //skipFirst = i.intValue();
       }
       catch (NumberFormatException ex){
-        maxListField.setText(""+maxListSize);
+       // maxListField.setText(""+maxListSize);
       }
       start();
     }
@@ -619,4 +620,5 @@ public class FqListBrowser extends JFrame
 
 
 }
+
 
