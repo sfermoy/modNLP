@@ -69,7 +69,6 @@ public class ConcordanceObject {
   public String concordance;
   public String filename;
   public String sfilename;
-  public String sectionID;
   /*
   public String padding = ""; // whitesapeces to make up for half-width
                          // Japanese characters (e.g.'…') for
@@ -119,7 +118,7 @@ public class ConcordanceObject {
             break;
           }
       }
-           
+
 
     concordance = new String(data, start, (data.length - start));
     bytepos = filepos;
@@ -231,7 +230,7 @@ public class ConcordanceObject {
   }
 
   public String getLeftContext(){
-    System.out.println("=='"+concordance+"'");
+    //System.out.println("=='"+concordance+"'");
     return concordance.substring(0,coVector.getHalfConcordance());
   }
 
