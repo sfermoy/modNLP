@@ -119,16 +119,7 @@ public class ConcordanceObject {
             break;
           }
       }
-    
-        for(int i = start; i < data.length ; i++)
-      {
-        if(data[i] == '|')
-          {
-            sectionID = new String(data, start, (i-start));
-            start = i + 1;
-            break;
-          }
-      }
+           
 
     concordance = new String(data, start, (data.length - start));
     bytepos = filepos;
@@ -240,7 +231,7 @@ public class ConcordanceObject {
   }
 
   public String getLeftContext(){
-    //System.out.println("=='"+concordance+"'");
+    System.out.println("=='"+concordance+"'");
     return concordance.substring(0,coVector.getHalfConcordance());
   }
 

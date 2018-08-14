@@ -315,7 +315,7 @@ public class PreferPanel extends JFrame
 		return (new Integer (context.getText())).intValue();
 	}
 
-	public int getExtractContextSize ()
+	 public int getExtractContextSize ()
 	{
 		return (new Integer (extrctx.getText())).intValue();
 	}
