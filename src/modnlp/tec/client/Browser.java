@@ -711,6 +711,7 @@ public class Browser
       preferenceFrame.setHeaderBaseURL(headerBaseURL);
       encoding = input.readLine();
       String lg = input.readLine();
+       System.err.println("language (read)=>>>>"+lg);
       if (lg == null || lg.length() == 0) 
         language = Constants.LANG_EN;
       else
