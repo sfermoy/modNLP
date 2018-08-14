@@ -492,8 +492,8 @@ public class Browser
   public void showHeader(ConcordanceObject sel)
   {
     String filename = sel.filename;
-    System.err.println("section="+sel.sectionID);
-    System.err.println("fn="+filename);
+    //System.err.println("section="+sel.sectionID);
+    //System.err.println("fn="+filename);
     String headerName =  //   (new File(filename)).getName();
       filename.substring(filename.lastIndexOf('/')+1,filename.lastIndexOf('.'))
       +"."+headerExt;
