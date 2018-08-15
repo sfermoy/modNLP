@@ -73,7 +73,7 @@ public class Browser
 {
 
   // constants
-  public static final String RELEASE = "0.8.2";
+  public static final String RELEASE = "0.8.3";
   public static final String REVISION = "$Revision: 1.9 $";
   String BRANDNAME = "MODNLP/T";
   private static final String PLGLIST = "teclipluginlist.txt";
@@ -492,8 +492,8 @@ public class Browser
   public void showHeader(ConcordanceObject sel)
   {
     String filename = sel.filename;
-    System.err.println("section="+sel.sectionID);
-    System.err.println("fn="+filename);
+    //System.err.println("section="+sel.sectionID);
+    //System.err.println("fn="+filename);
     String headerName =  //   (new File(filename)).getName();
       filename.substring(filename.lastIndexOf('/')+1,filename.lastIndexOf('.'))
       +"."+headerExt;
