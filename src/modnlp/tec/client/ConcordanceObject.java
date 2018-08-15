@@ -2,7 +2,7 @@
  *  (c) 2006 S Luz <luzs@acm.org>
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify ilocat under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2,
  * or (at your option) any later version.
  *
@@ -94,6 +94,7 @@ public class ConcordanceObject {
         concordance = null;
         filename = null;
         filepos = 0;
+        sectionID = null;
       }
     
     for(int i = start ; i < data.length ; i++)
@@ -119,13 +120,13 @@ public class ConcordanceObject {
             break;
           }
       }
-    
-        for(int i = start; i < data.length ; i++)
+       // Section id will be a string usually of max 3 digits. no need to look far into the string
+        for(int i = start; i < data.length; i++)
       {
         if(data[i] == '|')
           {
             sectionID = new String(data, start, (i-start));
-            //start = i + 1;
+            start = i + 1;
             break;
           }
       }
@@ -136,7 +137,7 @@ public class ConcordanceObject {
     coVector = cv;
     if (coVector==null)
       return;
-
+  
     language = coVector.getLanguage();
     Tokeniser tkr;
     switch (language) {
