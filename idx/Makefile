@@ -58,6 +58,7 @@ SOURCES=$(SOURCEDIR)modnlp/Constants.java \
 	$(SOURCEDIR)modnlp/idx/inverted/TokeniserJP.java \
 	$(SOURCEDIR)modnlp/idx/inverted/TokeniserJPLucene.java \
 	$(SOURCEDIR)modnlp/idx/inverted/TokeniserARLucene.java \
+	$(SOURCEDIR)modnlp/idx/inverted/TokeniserARLuceneWhitespace.java \
 	$(SOURCEDIR)modnlp/idx/inverted/jpsegmenter/BasicCodePointReader.java \
 	$(SOURCEDIR)modnlp/idx/inverted/jpsegmenter/CodePointReader.java \
 	$(SOURCEDIR)modnlp/idx/inverted/jpsegmenter/PushbackCodePointReader.java \

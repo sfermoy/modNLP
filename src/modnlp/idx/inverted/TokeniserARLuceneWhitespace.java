@@ -70,7 +70,7 @@ public class TokeniserARLuceneWhitespace extends Tokeniser {
    * @return a <code>String</code> value
    */
   public final String getIgnoredElements() {
-    return ignoredElements;
+      return ignoredElements;
   }
   
   /**
