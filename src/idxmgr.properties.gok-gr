@@ -30,7 +30,7 @@ xquery.root.filedescription.path=/gokheader
 ## xquery expression that returns a (human-readable) file description
 xquery.file.description.return={data($s/document/@filename)}<sep/>{data($s/document/@subcorpusid)}<sep/> {concat("<html><i>",data($s/document/collection_title), "</i>")}  {if ($s/document/editor\!\="") then concat(", editor\: ",data($s/document/editor),"<br>") else ""} { concat(if ($s/document/summary\!\="") then concat("<b>Summary\:</b> ", data($s/document/summary)) else "", "") }  {if ($s/document/editor\!\="" and $s/document/collection_title \!\="" and $s/document/summary\!\="") then "<br>" else ""} {for $section in $s/section return concat("<i>", data($section/title), "</i>, <b>", string-join($section/author/name, ', '), "</b>. ",  data($section/@publication_date), ".", if ($section/translation/translator/name\!\="") then concat(" (Translated by ", string-join($section/translation/translator/name, ', '), ")<br>" ) else "",  if ($section/summary\!\="") then concat("<b>Summary\:</b> ", data($section/summary), "<br>") else "")  } {concat("","</html>")}
 ## the encoding for characters in files to be indexed. Make sure your text files match this
-file.encoding=UTF8
+file.encoding=UTF-8
 ## the language to be indexed (determines the choice of
 ## tokeniser). Currently supported languages are LATIN (EN) and JP; EN
 ## should make reasonably educated guesses for all European Languages

@@ -20,4 +20,4 @@ xquery.root.element.path=//intervention
 wfile.table.name=wfindex.db
 file.table.name=fitable.db
 case.table.name=caindex.db
-file.encoding=UTF8
+file.encoding=UTF-8

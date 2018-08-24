@@ -38,7 +38,7 @@ public class CorpusFile {
 
   char [] fileArray;
   int noChars;
-  String encoding = "UTF8"; // default
+  String encoding = "UTF-8"; // default
   int language = modnlp.Constants.LANG_EN; 
   char spaceChar = ' ';  // default to Latin script white space.
 

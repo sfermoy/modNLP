@@ -13,7 +13,7 @@ header.extension=hed
 last.index.dir=/tmp/a
 xquery.max.cache.size=23
 xquery.attribute.chooser.specs=File name;../../header/@filename;Language;speech/@language;Affiliation;(speaker|writer)/affiliation/@nationalparty;Speaker;(speaker|writer)/name;Speaker gender;(speaker|writer)/gender;Post;(speaker|writer)/post
-file.encoding=UTF8
+file.encoding=UTF-8
 xquery.root.filedescription.path=/header
 ## xquery expression that returns a (human-readable) file description 
 xquery.file.description.return={data($s/@filename)}<sep/>{data($s/@language)}<sep/>{data($s/index/label)}, {data($s/index/place)}, {data($s/index/date)}, {data($s/index/edition)}

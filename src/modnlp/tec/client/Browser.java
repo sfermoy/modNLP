@@ -720,7 +720,7 @@ public class Browser
       lg = input.readLine();
       if (lg != null && lg.length() > 0) 
         headerExt = lg;
-      if (encoding == null || encoding.equals("UTF8")){
+      if (encoding == null || encoding.equals("UTF-8")){
         encoding = "UTF-8";
         System.err.println("set encoding to "+encoding);
       }

@@ -30,7 +30,7 @@ xquery.root.filedescription.path=/techeader
 ## xquery expression that returns a (human-readable) file description 
 xquery.file.description.return={data($s/book/@filename)}<sep/>{data($s/book/@subcorpusid)}<sep/> {data($s/book/collection_title)}  {if ($s/book/editor!="") then ", editor: " else ""} { data($s/book/editor)} {concat(" '", data($s/section/title), ", ", data($s/section/author/name))}
 ## the encoding for characters in files to be indexed. Make sure your text files match this
-file.encoding=UTF8
+file.encoding=UTF-8
 ## the language to be indexed (determines the choice of
 ## tokeniser). Currently supported languages are LATIN (EN) and JP; EN
 ## should make reasonably educated guesses for all European Languages
