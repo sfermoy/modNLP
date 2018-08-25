@@ -101,7 +101,7 @@ public class ListDisplay extends JPanel
 
   private int[] maxLengths ={15,15,15,15};
   private boolean useUserWidths = false;
-  private String mosaicSelected ="";
+  private String mosaicSelected = "";
   public ListDisplay(BrowserGUI parent, ListModel lm) 
   {
     super(new BorderLayout());
@@ -335,7 +335,7 @@ public class ListDisplay extends JPanel
                             otherbuilder.append(s+" ");
                         }  
                     }
-                    if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim()) ){
+                    if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim()) && !mosaicSelected.equalsIgnoreCase("") ){
                         data[i][1] ="<html> <font color=\"#00BFFF\">" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</font> </html>";
                         data[i][rightctxt] ="<html> <font color=\"#00BFFF\">" + otherbuilder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</font> </html>";
                     } 
@@ -344,10 +344,13 @@ public class ListDisplay extends JPanel
                     }
               }
               }else{
-                String trimmed =cobjct.getKeywordAndRightContext().trim();
+                String trimmed = cobjct.getKeywordAndRightContext().trim();
                 String[] contextArray = trimmed.split("\\s+");
                 String[] otherContextArray = cobjct.getLeftContext().trim().split(" ");
-                sortctxStr = contextArray[cobjct.getSortContextHorizon()];
+                if (cobjct.getSortContextHorizon()>= contextArray.length)
+                   continue;
+                else
+                    sortctxStr = contextArray[cobjct.getSortContextHorizon()];
                 if(contextArray.length != 0){
                     String sortedWord = contextArray[cobjct.getSortContextHorizon()];
                     if(sortedWord.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
@@ -371,7 +374,7 @@ public class ListDisplay extends JPanel
                             otherbuilder.append(s+" ");
                         }  
                     }
-                    if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim()) ){
+                    if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim())  && !mosaicSelected.equalsIgnoreCase("") ){
                         data[i][rightctxt] ="<html> <font color=\"#00BFFF\">" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</font> </html>";
                         data[i][leftctx] = "<html> <font color=\"#00BFFF\">"+otherbuilder.toString().trim()+"</font> </html>";
                     }
@@ -410,7 +413,7 @@ public class ListDisplay extends JPanel
                             otherbuilder.append(s+" ");
                         }  
                     }
-                    if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim()) ){
+                    if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim())  && !mosaicSelected.equalsIgnoreCase("") ){
                         data[i][3] ="<html> <font color=\"#00BFFF\">" + builder.toString().trim()+"</font> </html>";
                         data[i][leftctx] = "<html> <font color=\"#00BFFF\">"+otherbuilder.toString().trim()+"</font> </html>";
                     }
@@ -420,6 +423,9 @@ public class ListDisplay extends JPanel
               }
               else{
                 String[] contextArray = cobjct.getLeftContext().split(" ");
+                int SortStringPos = contextArray.length+ cobjct.getSortContextHorizon();
+                if (SortStringPos > contextArray.length || SortStringPos<0 )
+                    continue;
                 sortctxStr = contextArray[contextArray.length+ cobjct.getSortContextHorizon()];
                 String[] otherContextArray = cobjct.getKeywordAndRightContext().trim().split(" ");
                 if(contextArray.length != 0){
@@ -445,7 +451,7 @@ public class ListDisplay extends JPanel
                             otherbuilder.append(s+" ");
                         }  
                     }
-                    if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim()) ){
+                    if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim())  && !mosaicSelected.equalsIgnoreCase("") ){
                         data[i][1] = "<html> <font color=\"#00BFFF\">" + builder.toString().trim()+"</font> </html>";
                         data[i][rightctxt] = "<html> <font color=\"#00BFFF\">" + otherbuilder.substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</font> </html>";
                     }
