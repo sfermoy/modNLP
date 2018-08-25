@@ -189,7 +189,7 @@ public class BrowserFrame extends BrowserGUI
   // ok
   public void initGUI(){
     Container contentPane = getContentPane();
-    setFont(new Font("Helvetica",Font.PLAIN, 12));
+    setFont(new Font("Tahoma",Font.PLAIN, 12));
     parent.incProgress();
     
     // Lay out menu bar. 

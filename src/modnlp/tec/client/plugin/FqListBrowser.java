@@ -195,6 +195,7 @@ public class FqListBrowser extends JFrame
     Map  map = scorpusLabel.getFont().getAttributes();
     map.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
     scorpusLabel.setFont(new Font(map));
+    table.setFont( new Font("Tahoma",Font.PLAIN, 12));
 
     pa.add(scorpusLabel);
     pa.add(new JLabel("     "));

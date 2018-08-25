@@ -73,7 +73,7 @@ public class FullTextWindow extends JFrame
   private JEditorPane outPane = new  JEditorPane("text/html", ""); // new  JTextArea(20,40);
   private JButton dismissButton =  new JButton("Dismiss");
   private boolean useText = false;
-  private final String FONTNAME = "Sans Serif"; 
+  private final String FONTNAME = "Tahoma"; 
   
   /** Initialize Extract and/or Header window
    * with title */
