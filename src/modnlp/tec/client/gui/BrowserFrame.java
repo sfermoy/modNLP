@@ -20,6 +20,7 @@ package modnlp.tec.client.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Event;
 import java.awt.FlowLayout;
@@ -189,7 +190,7 @@ public class BrowserFrame extends BrowserGUI
   // ok
   public void initGUI(){
     Container contentPane = getContentPane();
-    setFont(new Font("Tahoma",Font.PLAIN, 12));
+    setFont(new Font("Helvetica",Font.PLAIN, 12));
     parent.incProgress();
     
     // Lay out menu bar. 
@@ -229,11 +230,11 @@ public class BrowserFrame extends BrowserGUI
     kwd.add( new JLabel("Keyword"));
     keyword = new JTextField(15);
     kwd.add( keyword);
+    setDirectionality();
     keyword.setToolTipText("Syntax: word_1[+[[context]]word2...]. E.g. 'seen+before' will find '...never seen before...' etc; 'seen+[2]before' finds the '...seen her before...'");
     kwd.setBorder(BorderFactory.createEtchedBorder());
     concButton = new JButton(DOBUTT);
     kwd.add( concButton );
-
     // sort panels
     JPanel lsp = new JPanel();
     JPanel rsp = new JPanel();
@@ -799,6 +800,17 @@ public class BrowserFrame extends BrowserGUI
     public int getLanguage() {
         return parent.getLanguage();
     }
+    
+    public void setDirectionality(){
+        if(getLanguage() == modnlp.Constants.LANG_AR ){
+            if(keyword != null)
+                keyword.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);     
+        }else{
+            if(keyword != null)
+                keyword.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);     
+        }
+    }
 
 }
+
 

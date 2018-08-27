@@ -271,7 +271,7 @@ public class Browser
     try {
       while ( (plg = in.readLine() ) != null ){
         try {
-          System.err.println("Loading: "+plg);
+          System.err.println("Loading: " + plg);
           StringTokenizer st = new StringTokenizer(plg, ":");
           // first token: class name (ignore for now)
           final Plugin tp = (Plugin)IOUtil.loadPlugin(st.nextToken(),cl);
@@ -602,6 +602,7 @@ public class Browser
       return;
     String cdir = ncc.getSelectedFile().toString();
     setLocalCorpus(cdir);
+    browserFrame.setDirectionality();
   }
 
   public int getLanguage(){
@@ -638,6 +639,7 @@ public class Browser
     concVector.setLanguage(language);
     guiSubcorpusSelector = new GraphicalSubcorpusSelector(this);
     concordanceProducer = new ConcordanceProducer(dictionary);
+    browserFrame.setDirectionality();
   }
 
   private void setLocalHeadersDirectory(DictProperties dictProps){
@@ -711,7 +713,7 @@ public class Browser
       preferenceFrame.setHeaderBaseURL(headerBaseURL);
       encoding = input.readLine();
       String lg = input.readLine();
-       System.err.println("language (read)=>>>>"+lg);
+       System.err.println("language (read)=>>>>"+encoding);
       if (lg == null || lg.length() == 0) 
         language = Constants.LANG_EN;
       else
@@ -720,7 +722,7 @@ public class Browser
       lg = input.readLine();
       if (lg != null && lg.length() > 0) 
         headerExt = lg;
-      if (encoding == null || encoding.equals("UTF-8")){
+      if (encoding == null || encoding.equals("UTF8")){
         encoding = "UTF-8";
         System.err.println("set encoding to "+encoding);
       }
@@ -732,6 +734,7 @@ public class Browser
       clProperties.setProperty("stand.alone","no");
       clProperties.save();
       concordanceProducer = null;
+      browserFrame.setDirectionality();
     }
     catch(IOException e)
       {
@@ -947,5 +950,6 @@ public class Browser
 
     
 }
+
 
 
