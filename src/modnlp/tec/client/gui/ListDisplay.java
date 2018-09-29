@@ -56,6 +56,8 @@ import modnlp.tec.client.gui.event.DefaultChangeEvent;
 import modnlp.tec.client.gui.event.FontSizeChangeEvent;
 import modnlp.tec.client.gui.event.SortHorizonChangeEvent;
 import modnlp.tec.client.gui.event.TecDefaultChangeListener;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.ar.ArabicAnalyzer;
 
 /**
  *  This class implements the object on which the output
@@ -68,6 +70,7 @@ import modnlp.tec.client.gui.event.TecDefaultChangeListener;
  */
 public class ListDisplay extends JPanel
   implements TecDefaultChangeListener, ComponentListener {
+    Analyzer ARtokeniser = new ArabicAnalyzer(org.apache.lucene.util.Version.LUCENE_36);
   public JList list;
   public JScrollPane jscroll;
   //public ConcArray conc;
@@ -335,9 +338,12 @@ public class ListDisplay extends JPanel
                             otherbuilder.append(s+" ");
                         }  
                     }
-                    if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim()) && !mosaicSelected.equalsIgnoreCase("") ){
-                        data[i][1] ="<html> <font color=\"#00BFFF\">" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</font> </html>";
-                        data[i][rightctxt] ="<html> <font color=\"#00BFFF\">" + otherbuilder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</font> </html>";
+                    if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim()) && !mosaicSelected.equalsIgnoreCase("")){
+                        //we would need to use our arabic tokenisation to identify words and also wrapping the entire string in html 
+                        //makes it display left to right
+//      data[i][1] ="<font color=\"#00BFFF\">" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</font>";
+//      data[i][rightctxt] ="<font color=\"#00BFFF\">" + otherbuilder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</font>";
+                        data[i][1] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
                     } 
                     else{
                         data[i][1] ="<html>" + builder.toString().substring(cobjct.getKeywordAndRightContext().indexOf(" ")+1).trim()+"</html>";
@@ -414,8 +420,11 @@ public class ListDisplay extends JPanel
                         }  
                     }
                     if(sortctxStr.equalsIgnoreCase(mosaicSelected.trim())  && !mosaicSelected.equalsIgnoreCase("") ){
-                        data[i][3] ="<html> <font color=\"#00BFFF\">" + builder.toString().trim()+"</font> </html>";
-                        data[i][leftctx] = "<html> <font color=\"#00BFFF\">"+otherbuilder.toString().trim()+"</font> </html>";
+                        //we would need to use our arabic tokenisation to identify words and also wrapping the entire string in html 
+                        //makes it display left to right
+//                        data[i][3] ="<html><font color=\"#00BFFF\">" + builder.toString().trim()+"</font></html>";
+//                        data[i][leftctx] = "<html><font color=\"#00BFFF\">"+otherbuilder.toString().trim()+"</font> </html>";
+                         data[i][3] ="<html>" + builder.toString().trim()+"</html>";
                     }
                     else
                         data[i][3] ="<html>" + builder.toString().trim()+"</html>";
