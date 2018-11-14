@@ -195,6 +195,7 @@ public class FqListBrowser extends JFrame
     Map  map = scorpusLabel.getFont().getAttributes();
     map.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
     scorpusLabel.setFont(new Font(map));
+    table.setFont( new Font("Tahoma",Font.PLAIN, 12));
 
     pa.add(scorpusLabel);
     pa.add(new JLabel("     "));
@@ -525,7 +526,7 @@ public class FqListBrowser extends JFrame
             {
               File file = filedial.getSelectedFile();
               //System.out.println(file.getName());
-              System.setProperty("file.encoding", "UTF8");
+              System.setProperty("file.encoding", "UTF-8");
               PrintWriter dlf =
                 new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")));
               Object[] va =  (model.getDataVector()).toArray();

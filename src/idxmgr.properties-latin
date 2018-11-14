@@ -28,7 +28,7 @@ xquery.attribute.chooser.specs=Library;header/library;Genre;header/genre;Phase;h
 header.extension=xml
 ## the maximum number of subcorpus constraint query results to be stored (by HeaderDBManager)
 xquery.max.cache.size=23
-file.encoding=UTF8
+file.encoding=UTF-8
 ## element relative to which the xquery descriptions below will be generated
 xquery.root.filedescription.path=/corelat/header
 ## xquery expression that returns a (human-readable) file description (for the corpus description plugin); 

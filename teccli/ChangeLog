@@ -1,3 +1,9 @@
+2018-21-10  Saturnino Luz  <luzs@acm.org>
+
+	* release 0.8.4: Option for case and diacritic insensitive search
+	(default) implemented. See also changes in idx.database.CaseTable.
+	Shane's improvements to concordances list;
+
 2018-02-04  Saturnino Luz  <luzs@acm.org>
 
 	* release 0.8.2: Fixed character encoding issues when using remote

@@ -1,3 +1,8 @@
+2018-21-10  Saturnino Luz  <luzs@acm.org>
+
+	* release 0.8.3: Index key normalisation implemented for case and
+	diacritic insensitive search (default).  See idx.database.CaseTable.
+
 2018-02-04  Saturnino Luz  <luzs@acm.org>
 
 	* release 0.8.2: Added method to retrieve freq list up to first

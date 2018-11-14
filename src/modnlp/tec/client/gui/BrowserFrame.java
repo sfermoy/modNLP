@@ -119,7 +119,7 @@ public class BrowserFrame extends BrowserGUI
 
   private JMenu  prefMenu = new JMenu("Options");
   private JCheckBoxMenuItem caseCheckBox = 
-    new JCheckBoxMenuItem("Case sensitive");
+    new JCheckBoxMenuItem("Case/diacritic sensitive");
   private JCheckBoxMenuItem punctuationCheckBox = 
     new JCheckBoxMenuItem("Punctuation as tokens");
   private JMenuItem advConcButton = 
@@ -817,4 +817,5 @@ public class BrowserFrame extends BrowserGUI
     }
 
 }
+
 

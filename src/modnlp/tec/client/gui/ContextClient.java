@@ -65,6 +65,7 @@ public class ContextClient extends FullTextWindow
   BufferedReader input;
   Dictionary dictionary = null;
   //DataInputStream input;
+  String encoding = "UTF-8";  // the name of the charset
 
 
   /** Create an "extract thread" with its own socket
@@ -79,7 +80,8 @@ public class ContextClient extends FullTextWindow
       socket = new Socket(InetAddress.getByName(SERVER), PORTNUM);
       input = new
         BufferedReader(new
-                       InputStreamReader(socket.getInputStream()));
+                       InputStreamReader(socket.getInputStream(),
+                                         encoding));
       //input = new DataInputStream(socket.getInputStream());
       output = new PrintStream(socket.getOutputStream());
       output.println(request);
@@ -104,7 +106,8 @@ public class ContextClient extends FullTextWindow
       exturlConnection.setRequestMethod("GET");
       input = new
         BufferedReader(new
-                       InputStreamReader(exturlConnection.getInputStream() ));
+                       InputStreamReader(exturlConnection.getInputStream(),
+                                         encoding));
       //start();
     }
     catch(IOException e)
@@ -142,7 +145,8 @@ public class ContextClient extends FullTextWindow
       socket = new Socket(InetAddress.getByName(SERVER), PORTNUM);
       input = new
 				BufferedReader(new
-					InputStreamReader(socket.getInputStream()));
+                                               InputStreamReader(socket.getInputStream(),
+                                                                 encoding));
       //input = new DataInputStream(socket.getInputStream());
       output = new PrintStream(socket.getOutputStream());
       output.println(rq);

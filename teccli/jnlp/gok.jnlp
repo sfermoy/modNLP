@@ -51,6 +51,7 @@
 -->
   </resources>
   <application-desc main-class="modnlp.tec.client.Browser">
-    <argument>genealogiesofknowledge.net:1241</argument> 
+    <argument>genealogiesofknowledge.net:1241</argument>
+    <argument>-Dfile.encoding=UTF-8</argument> 
   </application-desc>  
 </jnlp>
