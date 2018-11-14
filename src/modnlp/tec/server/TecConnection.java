@@ -224,7 +224,7 @@ public class TecConnection extends Thread {
     try {
       boolean cse = ((String)req.get("case")).equalsIgnoreCase("sensitive");
       wquery = new WordQuery ((String) req.get("keyword"), dtab, cse);
-      //System.out.println(wquery.getKeyword());
+      //System.out.println("=%%%=>"+wquery.getKeyword());
       int ctx = getSafeInteger((String)req.get("context"),MAXCTX).intValue();
       boolean ignx = 
         ((String)req.get("sgml")).equalsIgnoreCase("no")? true : false;
