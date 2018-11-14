@@ -20,7 +20,6 @@ package modnlp.tec.client;
 import modnlp.Constants;
 import modnlp.tec.client.gui.GraphicalSubcorpusSelector;
 import modnlp.tec.client.gui.RemoteCorpusChooser;
-import modnlp.tec.client.gui.PreferPanel;
 import modnlp.tec.client.gui.SplashScreen;
 import modnlp.tec.client.gui.BrowserFrame;
 import modnlp.tec.client.gui.BrowserGUI;
@@ -38,7 +37,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import javax.swing.JOptionPane;
@@ -47,12 +45,9 @@ import java.net.URL;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.JLabel;
-import java.util.Vector;
-import java.util.concurrent.CountDownLatch;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import modnlp.tec.client.gui.event.ConcordanceDisplayEvent;
 import modnlp.tec.client.gui.event.ConcordanceDisplayListener;
 import modnlp.tec.client.gui.event.ConcordanceListSizeEvent;
@@ -111,7 +106,10 @@ public class Browser
   // threads
   private SortThread sortThread = null;
   private ConcordanceThread concThread = null;
+  private HeaderDownloadThread headerThread = null;
   private ConcordanceProducer concordanceProducer = null;
+  private HeaderProducer headerProducer = null;
+  public HashMap<String, String> headermap = new HashMap<String, String>();
 
   // text data 
   private ConcordanceVector concVector = new ConcordanceVector();
@@ -175,6 +173,7 @@ public class Browser
     addRemoteCorpusMenu();
     loadPlugins();
     incProgress();
+
       
     //headerBaseURL = "http://"+remoteServer+"/tec/headers";
     //if ( clProperties.getProperty("tec.client.headers") != null )
@@ -196,6 +195,8 @@ public class Browser
       concThread.stop();
     if (sortThread != null)
       sortThread.stop();
+    if(headerThread != null)
+        headerThread.stop();
 
     if (guiSubcorpusSelector != null)
       stopSubCorpusSelectorGUI();
@@ -271,7 +272,7 @@ public class Browser
     try {
       while ( (plg = in.readLine() ) != null ){
         try {
-          System.err.println("Loading: "+plg);
+          System.err.println("Loading: " + plg);
           StringTokenizer st = new StringTokenizer(plg, ":");
           // first token: class name (ignore for now)
           final Plugin tp = (Plugin)IOUtil.loadPlugin(st.nextToken(),cl);
@@ -602,6 +603,7 @@ public class Browser
       return;
     String cdir = ncc.getSelectedFile().toString();
     setLocalCorpus(cdir);
+    browserFrame.setDirectionality();
   }
 
   public int getLanguage(){
@@ -638,6 +640,9 @@ public class Browser
     concVector.setLanguage(language);
     guiSubcorpusSelector = new GraphicalSubcorpusSelector(this);
     concordanceProducer = new ConcordanceProducer(dictionary);
+    headerProducer = new HeaderProducer(dictionary);
+    browserFrame.setDirectionality();
+    dlHeader();
   }
 
   private void setLocalHeadersDirectory(DictProperties dictProps){
@@ -711,7 +716,7 @@ public class Browser
       preferenceFrame.setHeaderBaseURL(headerBaseURL);
       encoding = input.readLine();
       String lg = input.readLine();
-       System.err.println("language (read)=>>>>"+lg);
+       System.err.println("language (read)=>>>>"+encoding);
       if (lg == null || lg.length() == 0) 
         language = Constants.LANG_EN;
       else
@@ -732,6 +737,8 @@ public class Browser
       clProperties.setProperty("stand.alone","no");
       clProperties.save();
       concordanceProducer = null;
+      browserFrame.setDirectionality();
+      dlHeader();
     }
     catch(IOException e)
       {
@@ -848,6 +855,10 @@ public class Browser
   public final Dictionary getDictionary(){
     return dictionary;
   }
+  
+  public final HashMap< String, String> getHeaderMap(){
+    return headermap;
+  }
 
   public final ClientProperties getClientProperties(){
     return clProperties;
@@ -941,11 +952,59 @@ public class Browser
             browserFrame.clearConcordanceList();
         }
     }
+    
     @Override
     public void concordanceChanged(ConcordanceListSizeEvent e) {
     }
 
+    private void dlHeader() {
+    TecClientRequest request = new TecClientRequest();
+    //request.put("request", "nooftokens");
+    //look at freq list download and write request in similar fashon
+    request.put("request", "dldHeaders");
+    if ( subCorpusSelected() )
+      request.put("xquerywhere",xquerywhere);
+    if ( (headerThread != null) ) {
+      headerThread.stop();
+    }
     
+    System.out.println("Not done yet");
+    if (standAlone) {
+        System.out.println("Not done yet");
+        headerThread = new HeaderDownloadThread(headerProducer.getBufferedReader(), request, headermap);
+        headerThread.start();
+        headerProducer.start();
+    }
+    else {
+      request.setServerURL("http://"+remoteServer);
+      request.setServerPORT(remotePort);
+      request.setServerProgramPath("/allheaders");
+      headerThread = new HeaderDownloadThread(request, headermap);
+      headerThread.setEncoding(encoding);
+      //****
+      
+      headerThread.start();
+    }
+  }    
+
+    @Override
+    public void removeConcordanceLine(ConcordanceObject o) {
+        browserFrame.removeConcordanceLine(o);
+    }
+     @Override
+    public void removeConcordanceLineOnly(ConcordanceObject o) {
+        browserFrame.removeConcordanceLineOnly(o);
+    }
+    
+    @Override
+    public void addConcordanceLine(ConcordanceObject o) {
+        browserFrame.addConcordanceLine(o);
+    }
+    
+    @Override
+    public void redisplay() {
+        browserFrame.redisplay();
+    }
 }
 
 

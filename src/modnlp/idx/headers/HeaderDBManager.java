@@ -198,7 +198,7 @@ public class HeaderDBManager {
     }
   }
 
-  public String getFileDescription(int fno){
+ public String getFileDescription(int fno){
     try {
       //      String resources[] = collection.listResources();
       //for (int i = 0; i < resources.length; i++) {
@@ -215,6 +215,60 @@ public class HeaderDBManager {
         Resource r = ri.nextResource();
         String desc = (String)r.getContent();
         //System.err.println(desc);
+        desc = desc.substring(3,desc.lastIndexOf("</d>"));
+        desc = desc.replace("&lt;","<");
+        desc = desc.replace("&gt;",">");
+        return desc.replace('\n',' ');
+      }
+      //}
+    return "";
+    }
+    catch (Exception ex){
+      System.err.println("Error (HeaderDBManager.geSubcorpusConstrints): "+ex);
+      ex.printStackTrace();
+      return "";
+    }
+  }
+  
+  
+  public String getFileHeaderAttributes(int fno){
+    try {
+      
+        String queryFileVisReturn = "{data($s/document/@filename)}<sep/>"
+                + "{data($s/document/@format)}<sep/>"
+                + "{data($s/document/collection_title)}<sep/>"
+                + "{data($s/document/editor)}<sep/>"
+                + "{for $section in $s/section return"
+                    + " concat (\"<section/>\",data($section/@id),\"<sep/>\","
+                    + "data($section/title),\"<sep/>\","
+                    + "data($section/@outlet),\"<sep/>\","
+                    + "data($section/@internet_outlet),\"<sep/>\","
+                    + "data($section/@publication_date),\"<sep/>\","
+                    + "data($section/@authorship_date),\"<sep/>\","
+                        + "string-join($section/author/name, ', '),\"<sep/>\","
+                        + "string-join($section/translation/translator/name, ', '),\"<sep/>\","
+                        + "data($section/translation/source/@date),\"<sep/>\","
+                        + "data($section/translation/source/@filename),\"<sep/>\","
+                        + "data($section/translation/source/@language),\"<sep/>\","
+                        + "data($section/translation/source/original_title),\"<sep/>\""
+                +")}";
+        
+         XQueryService service =
+        (XQueryService) collection.getService("XQueryService", "1.0");
+      //service.setProperty("indent", "yes");
+      
+       //String xq = "let "+XQVAR+" := doc('"+fno+"')"+queryRootFileDescPath+
+      String xq = "let "+XQVAR+" := doc('"+fno+"')"+queryRootFileDescPath+
+        " return <d>"+queryFileVisReturn+"</d>";
+      //xquery.attribute.visualise
+      //System.err.println(xq);
+      CompiledExpression compiled = service.compile(xq);
+      ResourceSet result = service.execute(compiled);
+      ResourceIterator ri = result.getIterator();
+      if (ri.hasMoreResources()) {
+        Resource r = ri.nextResource();
+        String desc = (String)r.getContent();
+        //System.out.println(desc);
         desc = desc.substring(3,desc.lastIndexOf("</d>"));
         desc = desc.replace("&lt;","<");
         desc = desc.replace("&gt;",">");

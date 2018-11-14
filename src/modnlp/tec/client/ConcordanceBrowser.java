@@ -19,6 +19,7 @@
 
 package modnlp.tec.client;
 
+import java.util.HashMap;
 import modnlp.tec.client.gui.BrowserGUI;
 import modnlp.idx.database.Dictionary;
 import modnlp.idx.headers.HeaderDBManager;
@@ -113,6 +114,8 @@ public interface ConcordanceBrowser {
   public String getVersion ();
 
   public String getBrowserName ();
+  
+  public HashMap< String, String> getHeaderMap();
 
   public int getLanguage();
 
@@ -125,5 +128,13 @@ public interface ConcordanceBrowser {
   public void addChangeListener(StateChanged toAdd);
   
   public  String getHeaderBaseUrl();
+  
+  public void removeConcordanceLine(ConcordanceObject o);
+  
+  public void removeConcordanceLineOnly(ConcordanceObject o);
+  
+  public void addConcordanceLine(ConcordanceObject o);
+  
+  public void redisplay();
 
 }

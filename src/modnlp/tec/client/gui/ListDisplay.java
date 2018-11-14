@@ -108,14 +108,12 @@ public class ListDisplay extends JPanel
     
     String[] columnNames = {"Filename", "Left Context", "Keyword","Right Context"};
     String[][] data = new String[lm.getSize()][4];
-    
-    
-    
+     
     table = new MyTable(data, columnNames);
     table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     
     this.parent = parent;
-     font = new Font("Helvetica",Font.PLAIN, 12);
+     font = new Font("Tahoma", Font.PLAIN, 12);
     //setPreferredSize(new Dimension(LWIDTH+50, LHEIGHT+30));
    
     listModel = lm; //parent.getConcordanceVector(); //new DefaultListModel();

@@ -57,6 +57,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.Vector;
+import modnlp.idx.headers.HeaderDBManager;
 
 /**
  *  Mediate access to all databases (called Dictionary for
@@ -906,6 +907,18 @@ public class Dictionary {
     }    
     // os.close();
   }
+  
+public void printHeaders(PrintWriter os, HeaderDBManager hdbm){
+    int [] fks = getIndexedFileKeys();
+    for (int i = 0; i < fks.length; i++) {
+            String fdesc = hdbm.getFileHeaderAttributes(fks[i]);  
+            String line = fdesc ;
+            // System.err.println("--");
+            // System.out.println(line);
+            os.println(line);     
+      }       
+    
+}
 
   public String getExtract(String fn, int ctx, long offset, boolean ignx)
   {

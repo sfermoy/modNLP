@@ -192,6 +192,9 @@ public class TecConnection extends Thread {
       case Request.HEADERBASEURL:
         getHeaderBaseURL(os);
         break;
+      case Request.ALLHEADERS:
+        getAllHeaders(req, os);
+        break;
         //case Request.HEADEREXT:
         //getHeaderEXT(os);
         //break;
@@ -426,6 +429,26 @@ public class TecConnection extends Thread {
   public void  getTotalNoOfTokens(Request req,  PrintWriter os)
   {
     os.println(dtab.getTotalNoOfTokens());
+    
+  }
+  
+  
+    public void  getAllHeaders(Request req,  PrintWriter os)
+  {
+    try {
+      int [] fks = dtab.getIndexedFileKeys();
+        for (int i = 0; i < fks.length; i++) {
+            String fdesc = hdbm.getFileHeaderAttributes(fks[i]);  
+            String line = fdesc ;
+            // System.err.println("--");
+            // System.out.println(line);
+            os.println(line);     
+      }       
+    }
+    catch (Exception e) {
+      System.err.println("CDescPrinter: " + e);
+      e.printStackTrace();
+    }
 
   }
 

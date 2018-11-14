@@ -20,24 +20,14 @@ package modnlp.tec.client.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Container;
-import java.awt.Event;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.Arrays;
 import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.StringTokenizer;
-import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -45,7 +35,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -57,23 +46,21 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
-import java.util.Arrays;
-import javax.swing.JViewport;
 import javax.swing.event.ListSelectionEvent;
+import modnlp.idx.database.Dictionary;
 
 import modnlp.idx.query.WordQuery;
-import modnlp.tec.client.ConcordanceVector;
+import modnlp.tec.client.Browser;
 import modnlp.tec.client.ConcordanceBrowser;
 import modnlp.tec.client.gui.event.ConcordanceDisplayEvent;
-import modnlp.tec.client.gui.event.ConcordanceDisplayListener;
 import modnlp.tec.client.gui.event.ConcordanceListSizeEvent;
 import modnlp.tec.client.ConcordanceObject;
 import modnlp.tec.client.gui.event.DefaultChangeEvent;
-import modnlp.tec.client.gui.event.DefaultChangeListener;
 import modnlp.tec.client.Download;
 import modnlp.tec.client.gui.event.FontSizeChangeEvent;
 import modnlp.tec.client.Plugin;
 import modnlp.tec.client.gui.event.SortHorizonChangeEvent;
+import modnlp.tec.server.Server;
 
 /**
  *  This frame implements a 'concordance browser' that interacts with
@@ -168,13 +155,13 @@ public class BrowserFrame extends BrowserGUI
   private BrowserFrame myself; 
   private SubcorpusCaseStatusPanel sccsPanel;
 
-  ConcordanceBrowser parent = null;
+  private Browser parent = null;
 
   /** Create a TEC Window Object
    * @param width   window width
    * @param height   window height
    */
-  public BrowserFrame(int width, int height, ConcordanceBrowser parent){
+  public BrowserFrame(int width, int height, Browser parent){
     super();
     myself = this;
     concListDisplay = new ListDisplay(this, parent.getConcordanceVector());
@@ -229,11 +216,11 @@ public class BrowserFrame extends BrowserGUI
     kwd.add( new JLabel("Keyword"));
     keyword = new JTextField(15);
     kwd.add( keyword);
+    setDirectionality();
     keyword.setToolTipText("Syntax: word_1[+[[context]]word2...]. E.g. 'seen+before' will find '...never seen before...' etc; 'seen+[2]before' finds the '...seen her before...'");
     kwd.setBorder(BorderFactory.createEtchedBorder());
     concButton = new JButton(DOBUTT);
     kwd.add( concButton );
-
     // sort panels
     JPanel lsp = new JPanel();
     JPanel rsp = new JPanel();
@@ -794,10 +781,39 @@ public class BrowserFrame extends BrowserGUI
       concListDisplay.list.clearSelection();
       concListDisplay.redisplayConc();
   }
+  
+  public void removeConcordanceLine(ConcordanceObject o){
+      parent.getConcordanceVector().remove(o);  
+      concListDisplay.redisplayConc();
+  }
+  
+   public void removeConcordanceLineOnly(ConcordanceObject o){
+      parent.getConcordanceVector().remove(o);  
+ 
+  }
+   public void addConcordanceLine(ConcordanceObject o){
+      parent.getConcordanceVector().add(o);  
+  }
+   
+   public void redisplay(){
+       concListDisplay.redisplayConc();
+       parent.concordanceChanged(new ConcordanceDisplayEvent(this, 0, ConcordanceDisplayEvent.DOWNLOADCOMPLETE_EVT, "redisplay"));
+       
+   }
 
     @Override
     public int getLanguage() {
         return parent.getLanguage();
+    }
+    
+    public void setDirectionality(){
+        if(getLanguage() == modnlp.Constants.LANG_AR ){
+            if(keyword != null)
+                keyword.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);     
+        }else{
+            if(keyword != null)
+                keyword.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);     
+        }
     }
 
 }
