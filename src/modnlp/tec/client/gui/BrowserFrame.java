@@ -22,23 +22,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Container;
-import java.awt.Event;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.Arrays;
 import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.StringTokenizer;
-import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -46,7 +35,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -58,23 +46,21 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
-import java.util.Arrays;
-import javax.swing.JViewport;
 import javax.swing.event.ListSelectionEvent;
+import modnlp.idx.database.Dictionary;
 
 import modnlp.idx.query.WordQuery;
-import modnlp.tec.client.ConcordanceVector;
+import modnlp.tec.client.Browser;
 import modnlp.tec.client.ConcordanceBrowser;
 import modnlp.tec.client.gui.event.ConcordanceDisplayEvent;
-import modnlp.tec.client.gui.event.ConcordanceDisplayListener;
 import modnlp.tec.client.gui.event.ConcordanceListSizeEvent;
 import modnlp.tec.client.ConcordanceObject;
 import modnlp.tec.client.gui.event.DefaultChangeEvent;
-import modnlp.tec.client.gui.event.DefaultChangeListener;
 import modnlp.tec.client.Download;
 import modnlp.tec.client.gui.event.FontSizeChangeEvent;
 import modnlp.tec.client.Plugin;
 import modnlp.tec.client.gui.event.SortHorizonChangeEvent;
+import modnlp.tec.server.Server;
 
 /**
  *  This frame implements a 'concordance browser' that interacts with
@@ -169,13 +155,13 @@ public class BrowserFrame extends BrowserGUI
   private BrowserFrame myself; 
   private SubcorpusCaseStatusPanel sccsPanel;
 
-  ConcordanceBrowser parent = null;
+  private Browser parent = null;
 
   /** Create a TEC Window Object
    * @param width   window width
    * @param height   window height
    */
-  public BrowserFrame(int width, int height, ConcordanceBrowser parent){
+  public BrowserFrame(int width, int height, Browser parent){
     super();
     myself = this;
     concListDisplay = new ListDisplay(this, parent.getConcordanceVector());
@@ -795,6 +781,25 @@ public class BrowserFrame extends BrowserGUI
       concListDisplay.list.clearSelection();
       concListDisplay.redisplayConc();
   }
+  
+  public void removeConcordanceLine(ConcordanceObject o){
+      parent.getConcordanceVector().remove(o);  
+      concListDisplay.redisplayConc();
+  }
+  
+   public void removeConcordanceLineOnly(ConcordanceObject o){
+      parent.getConcordanceVector().remove(o);  
+ 
+  }
+   public void addConcordanceLine(ConcordanceObject o){
+      parent.getConcordanceVector().add(o);  
+  }
+   
+   public void redisplay(){
+       concListDisplay.redisplayConc();
+       parent.concordanceChanged(new ConcordanceDisplayEvent(this, 0, ConcordanceDisplayEvent.DOWNLOADCOMPLETE_EVT, "redisplay"));
+       
+   }
 
     @Override
     public int getLanguage() {
