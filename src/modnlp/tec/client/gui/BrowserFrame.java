@@ -50,7 +50,7 @@ import javax.swing.event.ListSelectionEvent;
 import modnlp.idx.database.Dictionary;
 
 import modnlp.idx.query.WordQuery;
-import modnlp.tec.client.Browser;
+//import modnlp.tec.client.Browser;
 import modnlp.tec.client.ConcordanceBrowser;
 import modnlp.tec.client.gui.event.ConcordanceDisplayEvent;
 import modnlp.tec.client.gui.event.ConcordanceListSizeEvent;
@@ -155,13 +155,13 @@ public class BrowserFrame extends BrowserGUI
   private BrowserFrame myself; 
   private SubcorpusCaseStatusPanel sccsPanel;
 
-  private Browser parent = null;
+  private ConcordanceBrowser parent = null;
 
   /** Create a TEC Window Object
    * @param width   window width
    * @param height   window height
    */
-  public BrowserFrame(int width, int height, Browser parent){
+  public BrowserFrame(int width, int height, ConcordanceBrowser parent){
     super();
     myself = this;
     concListDisplay = new ListDisplay(this, parent.getConcordanceVector());

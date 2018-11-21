@@ -21,8 +21,11 @@ package modnlp.tec.client;
 
 import java.util.HashMap;
 import modnlp.tec.client.gui.BrowserGUI;
+import modnlp.tec.client.gui.event.ConcordanceDisplayEvent;
+import modnlp.tec.client.gui.event.ConcordanceListSizeEvent;
 import modnlp.idx.database.Dictionary;
 import modnlp.idx.headers.HeaderDBManager;
+
 /**
  *  General concordance browser. Classes implementing this interface
  *  will typically control {@link modnlp.tec.client.gui.BrowserFrame}
@@ -59,6 +62,10 @@ public interface ConcordanceBrowser {
 
   public void chooseNewRemoteCorpus();
 
+  public void concordanceChanged(ConcordanceDisplayEvent e);
+
+  public void concordanceChanged(ConcordanceListSizeEvent e);
+  
   public void setRemoteCorpus(String s, int p);
     
   public void quit();
