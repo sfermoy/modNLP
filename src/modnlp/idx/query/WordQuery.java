@@ -515,7 +515,7 @@ public class WordQuery {
    */
   public static boolean isValidQuery(String q){
     q = q.replaceAll("\".+?\"", REGEXPMARKER);
-    System.err.println("-----:"+q+"\n");
+    //System.err.println("-----:"+q+"\n");
     // this is all too sophisticated for this method. the solution above is
     // faster and less complicated
     String separator = QSEPTOKEN;

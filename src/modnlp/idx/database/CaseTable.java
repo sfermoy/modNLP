@@ -281,7 +281,7 @@ public class CaseTable extends Table {
   public static String normaliseString (String sik){
     sik = java.text.Normalizer.normalize(sik, java.text.Normalizer.Form.NFD);
     sik = sik.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
-    System.out.println("----"+sik);
+    //System.out.println("----"+sik);
     
     return sik.toLowerCase();
   }
