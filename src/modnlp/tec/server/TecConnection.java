@@ -437,6 +437,7 @@ public class TecConnection extends Thread {
   {
     try {
       int [] fks = dtab.getIndexedFileKeys();
+      os.println(hdbm.getFileHeaderAttributeHuman());
         for (int i = 0; i < fks.length; i++) {
             String fdesc = hdbm.getFileHeaderAttributes(fks[i]);  
             String line = fdesc ;
