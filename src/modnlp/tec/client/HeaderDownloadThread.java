@@ -43,9 +43,9 @@ public class HeaderDownloadThread implements Runnable {
 //                        + "data($section/translation/source/original_title),\"<sep/>\""
 //                +")}";
     
-    String[] fileAttrNames = {"Filename","Format","Collection_Title", "Editor"};
-    String[] sectionAttrNames = {"ID","Title","Outlet","Internet_Outlet", "Publication_Date", "Authorship_Date", "Author","Translator",
-        "Source_Date", "Source_Filename", "Source_Language", "Original_Title"};
+    
+    String[] fileAttrNames = null;
+    String[] sectionAttrNames = null;
  
   private String commandToServer = null;
   /** default port; normally reset by Browser */
@@ -128,6 +128,7 @@ public class HeaderDownloadThread implements Runnable {
     String[] sections =null;
     String[] fileAttributes = null;
     String[] sectionAttributes = null;
+    Boolean first = true;
     try {
       initConcordanceThread();
       String header = null;
@@ -138,26 +139,32 @@ public class HeaderDownloadThread implements Runnable {
         }
         if (header.length() > 0)
         {
-              //System.out.println(header+"\n"); 
-              sections = header.split("<section/>");
-              for (int i = 0; i < sections.length; i++) {
+            if (first){
+                String[] s = header.split("<section/>");
+                fileAttrNames = s[0].split("<sep/>");
+                sectionAttrNames = s[1].split("<sep/>");
+                first = false;           
+            }else{
+             sections = header.split("<section/>"); 
+             for (int i = 0; i < sections.length; i++) {
                 String jsonString = "{";
-                String section = sections[i];                
+                String section = sections[i];     
                   if(i == 0){
                       fileAttributes = section.split("<sep/>");
                   }else{
                       sectionAttributes = section.split("<sep/>");
                       for (int j = 0; j < fileAttributes.length; j++) {
-                        jsonString += fileAttrNames[j] +":\"" + fileAttributes[j]+"\", ";
+                        jsonString += fileAttrNames[j] +":\"" + fileAttributes[j].replace("\"", "").trim()+"\", ";
                       }
-                      for (int j = 0; j < sectionAttributes.length-1; j++) {
-                          jsonString += sectionAttrNames[j] +":\"" + sectionAttributes[j]+"\", ";
+                      for (int j = 0; j < sectionAttrNames.length-1; j++) {
+                          jsonString += sectionAttrNames[j] +":\"" + sectionAttributes[j].replace("\"", "").trim()+"\", ";
                       }
-                      jsonString += sectionAttrNames[sectionAttributes.length-1] +":\"" + sectionAttributes[sectionAttributes.length-1]+"\" }";
-                      headermap.put(fileAttributes[0]+sectionAttributes[0], jsonString);
-                      //System.out.println(jsonString);
+                      jsonString += sectionAttrNames[sectionAttrNames.length-1] +":\"" + sectionAttributes[sectionAttrNames.length-1]+"\" }";
+                      headermap.put(fileAttributes[0].trim()+sectionAttributes[0].trim(), jsonString);
+
                   }
               }
+            }
         }
         else {
           System.err.println("__headerThread:skipped: "+ctRead);

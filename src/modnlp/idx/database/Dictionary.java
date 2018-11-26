@@ -910,6 +910,7 @@ public class Dictionary {
   
 public void printHeaders(PrintWriter os, HeaderDBManager hdbm){
     int [] fks = getIndexedFileKeys();
+    os.println(hdbm.getFileHeaderAttributeHuman());
     for (int i = 0; i < fks.length; i++) {
             String fdesc = hdbm.getFileHeaderAttributes(fks[i]);  
             String line = fdesc ;

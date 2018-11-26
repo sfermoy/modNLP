@@ -70,6 +70,9 @@ public class HeaderDBManager {
   String queryReturnSIDAttPath = null; // e.g. (speech|writing)/@ref
   String queryRootFileDescPath = null;
   String queryFileDescReturn = null;
+  String queryHeaderInfo = null;
+  String headerInfoHuman = null;
+  
   ConstraintCache cache;
 
   public HeaderDBManager (DictProperties dp)
@@ -95,7 +98,9 @@ public class HeaderDBManager {
     queryReturnSIDAttPath = dp.getProperty("xquery.return.attribute.path");
     queryRootFileDescPath = dp.getProperty("xquery.root.filedescription.path");
     queryFileDescReturn = dp.getProperty("xquery.file.description.return");
-
+    queryHeaderInfo = dp.getProperty("xquery.header.info.return");
+    headerInfoHuman = dp.getProperty("header.info.human");
+    
     String driver = "org.exist.xmldb.DatabaseImpl";
     Class cl = Class.forName(driver);
     database = (Database)cl.newInstance();
@@ -234,24 +239,24 @@ public class HeaderDBManager {
   public String getFileHeaderAttributes(int fno){
     try {
       
-        String queryFileVisReturn = "{data($s/document/@filename)}<sep/>"
-                + "{data($s/document/@format)}<sep/>"
-                + "{data($s/document/collection_title)}<sep/>"
-                + "{data($s/document/editor)}<sep/>"
-                + "{for $section in $s/section return"
-                    + " concat (\"<section/>\",data($section/@id),\"<sep/>\","
-                    + "data($section/title),\"<sep/>\","
-                    + "data($section/@outlet),\"<sep/>\","
-                    + "data($section/@internet_outlet),\"<sep/>\","
-                    + "data($section/@publication_date),\"<sep/>\","
-                    + "data($section/@authorship_date),\"<sep/>\","
-                        + "string-join($section/author/name, ', '),\"<sep/>\","
-                        + "string-join($section/translation/translator/name, ', '),\"<sep/>\","
-                        + "data($section/translation/source/@date),\"<sep/>\","
-                        + "data($section/translation/source/@filename),\"<sep/>\","
-                        + "data($section/translation/source/@language),\"<sep/>\","
-                        + "data($section/translation/source/original_title),\"<sep/>\""
-                +")}";
+//        String queryFileVisReturn = "{data($s/document/@filename)} <sep/>"
+//                + "{data($s/document/@format)} <sep/>"
+//                + "{data($s/document/collection_title)} <sep/>"
+//                + "{data($s/document/editor)} <sep/>"
+//                + "{for $section in $s/section return"
+//                    + " concat (\"<section/>\",data($section/@id),\" <sep/>\","
+//                    + "data($section/title),\" <sep/>\","
+//                    + "data($section/@outlet),\" <sep/>\","
+//                    + "data($section/@internet_outlet),\" <sep/>\","
+//                    + "data($section/@publication_date),\" <sep/>\","
+//                    + "data($section/@authorship_date),\" <sep/>\","
+//                        + "string-join($section/author/name, ', '),\" <sep/>\","
+//                        + "string-join($section/translation/translator/name, ', '),\" <sep/>\","
+//                        + "data($section/translation/source/@date),\" <sep/>\","
+//                        + "data($section/translation/source/@filename),\" <sep/>\","
+//                        + "data($section/translation/source/@language),\" <sep/>\","
+//                        + "data($section/translation/source/original_title),\" <sep/>\""
+//                +")}";
         
          XQueryService service =
         (XQueryService) collection.getService("XQueryService", "1.0");
@@ -259,7 +264,7 @@ public class HeaderDBManager {
       
        //String xq = "let "+XQVAR+" := doc('"+fno+"')"+queryRootFileDescPath+
       String xq = "let "+XQVAR+" := doc('"+fno+"')"+queryRootFileDescPath+
-        " return <d>"+queryFileVisReturn+"</d>";
+        " return <d>"+queryHeaderInfo+"</d>";
       //xquery.attribute.visualise
       //System.err.println(xq);
       CompiledExpression compiled = service.compile(xq);
@@ -378,5 +383,9 @@ public class HeaderDBManager {
       ex.printStackTrace();
     }
   }
+
+    public String getFileHeaderAttributeHuman() {
+        return headerInfoHuman;
+    }
 
 }
