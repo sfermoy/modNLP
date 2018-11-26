@@ -88,9 +88,11 @@ public class ConcordanceProducer implements Runnable {
         (String)request.get("xquerywhere");
       if (xquerywhere == null)
         dictionary.printConcordances(wquery, ctx, ignx, out);
-      else
+      else{
+        //System.err.println("Query: "+xquerywhere+"\nResults: "+hdbm.getSubcorpusConstraints(xquerywhere));
         dictionary.printConcordances(wquery, ctx, ignx, out,
                                      hdbm.getSubcorpusConstraints(xquerywhere));
+      }
     }
     catch (WordQueryException e){
       out.println(1);

@@ -108,7 +108,7 @@ public class ConcordanceThread
   {
     try {
       noFound = -1;
-      if (input == null) {
+      if (input == null) { // not running stand-alone
         //socket = new Socket(InetAddress.getByName(SERVER), PORTNUM);
         URL concurl = new URL( request.toString());
         HttpURLConnection concurlConnection =
