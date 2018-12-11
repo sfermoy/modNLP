@@ -650,8 +650,12 @@ public class Browser
     browserFrame.setDirectionality();
     if (clProperties.getProperty("download.headers") != null && 
         clProperties.getProperty("download.headers").equals("yes") &&
-        dictProps.getProperty("xquery.header.info.return") != null)
+        dictProps.getProperty("xquery.header.info.return") != null){
+      System.err.println("HEADERS: downloading header info (local)");
       dlHeader();
+    }
+    else
+      System.err.println("HEADERS: header facets disabled");
   }
 
   private void setLocalHeadersDirectory(DictProperties dictProps){
@@ -747,9 +751,14 @@ public class Browser
       clProperties.save();
       concordanceProducer = null;
       browserFrame.setDirectionality();
+      // **** SLL disabled checking to allow testing; re-enabled when done *** 
       if (clProperties.getProperty("download.headers") != null && 
-          clProperties.getProperty("download.headers").equals("yes"))
+          clProperties.getProperty("download.headers").equals("yes")){
+        System.err.println("HEADERS: downloading header info");
         dlHeader();
+      }
+      else
+        System.err.println("HEADERS: header facets disabled");
     }
     catch(IOException e)
       {
