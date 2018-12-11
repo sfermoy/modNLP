@@ -648,7 +648,10 @@ public class Browser
     concordanceProducer = new ConcordanceProducer(dictionary);
     headerProducer = new HeaderProducer(dictionary);
     browserFrame.setDirectionality();
-    dlHeader();
+    if (clProperties.getProperty("download.headers") != null && 
+        clProperties.getProperty("download.headers").equals("yes") &&
+        dictProps.getProperty("xquery.header.info.return") != null)
+      dlHeader();
   }
 
   private void setLocalHeadersDirectory(DictProperties dictProps){
@@ -744,7 +747,9 @@ public class Browser
       clProperties.save();
       concordanceProducer = null;
       browserFrame.setDirectionality();
-      dlHeader();
+      if (clProperties.getProperty("download.headers") != null && 
+          clProperties.getProperty("download.headers").equals("yes"))
+        dlHeader();
     }
     catch(IOException e)
       {
@@ -761,7 +766,6 @@ public class Browser
       showErrorMessage("Error: couldn't select new remote corpus.");
     else
       browserFrame.setTitle(getBrowserName()+": index at "+remoteServer+":"+remotePort);
-
   }
   
   public boolean workOffline() {
@@ -964,34 +968,35 @@ public class Browser
     }
 
     private void dlHeader() {
-    TecClientRequest request = new TecClientRequest();
-    //request.put("request", "nooftokens");
-    //look at freq list download and write request in similar fashon
-    request.put("request", "dldHeaders");
-    if ( subCorpusSelected() )
-      request.put("xquerywhere",xquerywhere);
-    if ( (headerThread != null) ) {
-      headerThread.stop();
-    }
-    
-
-    if (standAlone) {
+      TecClientRequest request = new TecClientRequest();
+      //request.put("request", "nooftokens");
+      //look at freq list download and write request in similar fashon
+      request.put("request", "dldHeaders");
+      if ( subCorpusSelected() )
+        request.put("xquerywhere",xquerywhere);
+      if ( (headerThread != null) ) {
+        headerThread.stop();
+      }
+      
+      
+      if (standAlone) {
         System.out.println("Not done yet");
-        headerThread = new HeaderDownloadThread(headerProducer.getBufferedReader(), request, headermap);
+        headerThread = new HeaderDownloadThread(headerProducer.getBufferedReader(),
+                                                request, headermap);
         headerThread.start();
         headerProducer.start();
-    }
-    else {
-      request.setServerURL("http://"+remoteServer);
-      request.setServerPORT(remotePort);
-      request.setServerProgramPath("/allheaders");
-      headerThread = new HeaderDownloadThread(request, headermap);
-      headerThread.setEncoding(encoding);
-      //****
-      
-      headerThread.start();
-    }
-  }    
+      }
+      else {
+        request.setServerURL("http://"+remoteServer);
+        request.setServerPORT(remotePort);
+        request.setServerProgramPath("/allheaders");
+        headerThread = new HeaderDownloadThread(request, headermap);
+        headerThread.setEncoding(encoding);
+        //****
+        
+        headerThread.start();
+      }
+    }    
 
     @Override
     public void removeConcordanceLine(ConcordanceObject o) {
