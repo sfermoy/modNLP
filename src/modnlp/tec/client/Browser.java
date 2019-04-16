@@ -17,6 +17,7 @@
  **/ 
 package modnlp.tec.client;
 
+import org.modnlp.metafacet.HeaderDownloadThread;
 import modnlp.Constants;
 import modnlp.tec.client.gui.GraphicalSubcorpusSelector;
 import modnlp.tec.client.gui.RemoteCorpusChooser;
@@ -648,14 +649,7 @@ public class Browser
     concordanceProducer = new ConcordanceProducer(dictionary);
     headerProducer = new HeaderProducer(dictionary);
     browserFrame.setDirectionality();
-    if (clProperties.getProperty("download.headers") != null && 
-        clProperties.getProperty("download.headers").equals("yes") &&
-        dictProps.getProperty("xquery.header.info.return") != null){
-      System.err.println("HEADERS: downloading header info (local)");
-      dlHeader();
-    }
-    else
-      System.err.println("HEADERS: header facets disabled");
+    //dlHeader();
   }
 
   private void setLocalHeadersDirectory(DictProperties dictProps){
@@ -751,14 +745,7 @@ public class Browser
       clProperties.save();
       concordanceProducer = null;
       browserFrame.setDirectionality();
-      // **** SLL disabled checking to allow testing; re-enabled when done *** 
-      if (clProperties.getProperty("download.headers") != null && 
-          clProperties.getProperty("download.headers").equals("yes")){
-        System.err.println("HEADERS: downloading header info");
-        dlHeader();
-      }
-      else
-        System.err.println("HEADERS: header facets disabled");
+      //dlHeader();
     }
     catch(IOException e)
       {
@@ -775,6 +762,7 @@ public class Browser
       showErrorMessage("Error: couldn't select new remote corpus.");
     else
       browserFrame.setTitle(getBrowserName()+": index at "+remoteServer+":"+remotePort);
+
   }
   
   public boolean workOffline() {
@@ -887,6 +875,10 @@ public class Browser
     return hdbmanager;
   }
   
+  public final HeaderProducer getHeaderProducer(){
+    return headerProducer;
+  }
+  
   public final String getHeaderBaseUrl(){
     return headerBaseURL;
   }
@@ -920,6 +912,10 @@ public class Browser
 
   public final String getBrand(){
     return BRANDNAME;
+  }
+  
+ public final String getEncoding(){
+    return encoding;
   }
 
   // ok
@@ -976,36 +972,6 @@ public class Browser
     public void concordanceChanged(ConcordanceListSizeEvent e) {
     }
 
-    private void dlHeader() {
-      TecClientRequest request = new TecClientRequest();
-      //request.put("request", "nooftokens");
-      //look at freq list download and write request in similar fashon
-      request.put("request", "dldHeaders");
-      if ( subCorpusSelected() )
-        request.put("xquerywhere",xquerywhere);
-      if ( (headerThread != null) ) {
-        headerThread.stop();
-      }
-      
-      
-      if (standAlone) {
-        System.out.println("Not done yet");
-        headerThread = new HeaderDownloadThread(headerProducer.getBufferedReader(),
-                                                request, headermap);
-        headerThread.start();
-        headerProducer.start();
-      }
-      else {
-        request.setServerURL("http://"+remoteServer);
-        request.setServerPORT(remotePort);
-        request.setServerProgramPath("/allheaders");
-        headerThread = new HeaderDownloadThread(request, headermap);
-        headerThread.setEncoding(encoding);
-        //****
-        
-        headerThread.start();
-      }
-    }    
 
     @Override
     public void removeConcordanceLine(ConcordanceObject o) {

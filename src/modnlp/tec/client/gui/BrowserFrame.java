@@ -792,7 +792,7 @@ public class BrowserFrame extends BrowserGUI
  
   }
    public void addConcordanceLine(ConcordanceObject o){
-      parent.getConcordanceVector().add(o);  
+      parent.getConcordanceVector().add(o); 
   }
    
    public void redisplay(){

@@ -31,11 +31,6 @@ import modnlp.idx.headers.HeaderDBManager;
 import modnlp.idx.query.WordQuery;
 import modnlp.idx.query.WordQueryException;
 
-import java.util.StringTokenizer;
-import java.util.Hashtable; 
-import java.util.Vector;
-import java.util.Enumeration;
-import java.util.StringTokenizer;
 import java.net.Socket;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
@@ -43,9 +38,11 @@ import java.net.InetAddress;
 import java.io.OutputStreamWriter;
 import java.io.InputStreamReader;
 import java.io.IOException;
-import modnlp.idx.database.SubcorpusTable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import modnlp.idx.query.SubcorpusConstraints;
-import static modnlp.tec.server.Request.COLUMNBATCH;
 
 /** Deal with client's requests for concordance and extracts through
  * the methods described below.
@@ -67,6 +64,7 @@ public class TecConnection extends Thread {
   Dictionary dtab;
   TecLogFile logf;
   String sqlquery = "";
+  private String dateStarted ;
 
   /** Initialize a new connection thread
    */
@@ -76,6 +74,12 @@ public class TecConnection extends Thread {
     logf = f;
     hdbm = h;
     setPriority(NORM_PRIORITY - 1);
+    //Get datetime when starting the server
+    String pattern = "MM/dd/yyyy HH:mm:ss";
+    DateFormat df = new SimpleDateFormat(pattern);
+    Date today = Calendar.getInstance().getTime();        
+    //Store date as string for caching on client side
+    dateStarted = df.format(today);
     start();
   }
 
@@ -194,6 +198,9 @@ public class TecConnection extends Thread {
         break;
       case Request.ALLHEADERS:
         getAllHeaders(req, os);
+        break;
+      case Request.STARTDATE:
+        getServerStartDate(req, os);
         break;
         //case Request.HEADEREXT:
         //getHeaderEXT(os);
@@ -535,6 +542,10 @@ private String mergeStrings(String[] ss) {
 
 private String[] unmergeStrings(String s) {
     return s.split(STRING_SEPARATOR_REGEX);
+}
+
+private void getServerStartDate(Request req, PrintWriter os) {
+     os.println(dateStarted);
 }
 	
 }

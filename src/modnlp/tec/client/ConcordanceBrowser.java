@@ -123,6 +123,10 @@ public interface ConcordanceBrowser {
   public String getBrowserName ();
   
   public HashMap< String, String> getHeaderMap();
+  
+  public HeaderProducer getHeaderProducer();
+  
+  public  String getEncoding();
 
   public int getLanguage();
 
