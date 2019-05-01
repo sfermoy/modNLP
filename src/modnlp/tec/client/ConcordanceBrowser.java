@@ -20,6 +20,7 @@
 package modnlp.tec.client;
 
 import java.util.HashMap;
+import javax.swing.JMenu;
 import modnlp.tec.client.gui.BrowserGUI;
 import modnlp.tec.client.gui.event.ConcordanceDisplayEvent;
 import modnlp.tec.client.gui.event.ConcordanceListSizeEvent;
@@ -95,6 +96,8 @@ public interface ConcordanceBrowser {
   public void showPreferencesEditor();
 
   public void showSubcorpusSelector();
+  
+  public void showSubcorpusSaveSelector();
 
   public ConcordanceVector getConcordanceVector();
 
@@ -147,5 +150,13 @@ public interface ConcordanceBrowser {
   public void addConcordanceLine(ConcordanceObject o);
   
   public void redisplay();
+  
+  public void loadNamedSubcorpus(String n);
+  
+  public void setSubcorpusName(String subcorpusName);
+   
+  public void lodeRecentMenu();
+  
+  public JMenu getRecentMenu();
 
 }

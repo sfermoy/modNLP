@@ -27,6 +27,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -43,6 +44,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.Timer;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
@@ -112,6 +114,7 @@ public class BrowserFrame extends BrowserGUI
   private JButton concButton;
 
   private JMenu  fileMenu = new JMenu("File");
+  
   private JMenuItem nlcButton = new JMenuItem("New local corpus...");
   private JMenuItem nrcButton = new JMenuItem("New remote corpus...");    
   private JMenuItem dldButton = new JMenuItem("Save concordances...");  
@@ -124,14 +127,17 @@ public class BrowserFrame extends BrowserGUI
     new JCheckBoxMenuItem("Punctuation as tokens");
   private JMenuItem advConcButton = 
     new JMenuItem("Select Sub-corpus...");
+  
+  private JMenuItem saveCorpButton = new JMenuItem("Sub-corpus Tool");  
 
   private JCheckBoxMenuItem advConcFlagItem = 
     new JCheckBoxMenuItem("Activate sub-corpus selection");
   private JMenuItem prefButton = new JMenuItem("Preferences...");
 
-  private JMenu  pluginMenu = new JMenu("Plugins");
+   private JMenu subcorpusMenu = new JMenu("Sub-corpus");
+  private JMenu pluginMenu = new JMenu("Plugins");
 
-  private JMenu  helpMenu = new JMenu("Help");
+  private JMenu helpMenu = new JMenu("Help");
   private JMenuItem helpButton = new JMenuItem("Contents");
   private JMenuItem aboutButton = new JMenuItem("About MODNLP...");    
 
@@ -154,6 +160,7 @@ public class BrowserFrame extends BrowserGUI
   private String encoding = null;
   private BrowserFrame myself; 
   private SubcorpusCaseStatusPanel sccsPanel;
+  private JMenu recent;
 
   private ConcordanceBrowser parent = null;
 
@@ -191,17 +198,27 @@ public class BrowserFrame extends BrowserGUI
     fileMenu.addSeparator();
     fileMenu.add(quitButton);
     
+    subcorpusMenu.add(saveCorpButton);
+
+
+    recent = new JMenu("Quick Load");
+    loadRecentMenu ();
+        
+    subcorpusMenu.add(recent);
+    subcorpusMenu.add(advConcFlagItem);
+    
     prefMenu.add(caseCheckBox);
     prefMenu.add(punctuationCheckBox);
-    prefMenu.add(advConcButton);
-    prefMenu.add(advConcFlagItem);
+
     prefMenu.addSeparator();
     prefMenu.add(prefButton);
+    
 
     helpMenu.add(helpButton);
     helpMenu.add(aboutButton);
 
     menuBar.add(fileMenu);
+    menuBar.add(subcorpusMenu);
     menuBar.add(prefMenu);
     menuBar.add(pluginMenu);
     menuBar.add(Box.createHorizontalGlue());
@@ -331,7 +348,7 @@ public class BrowserFrame extends BrowserGUI
           parent.requestConcordance(keyword.getText());
         }};
     
-    // set up even listening
+    // set up event listening
     concButton.addActionListener(dcl);
     keyword.addActionListener(dcl);
 
@@ -350,6 +367,11 @@ public class BrowserFrame extends BrowserGUI
           parent.showSubcorpusSelector();
         }}                         
       );
+    saveCorpButton.addActionListener(new ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+          parent.showSubcorpusSaveSelector();
+        }}                         
+      );
     
     //caseCheckBox.addActionListener();
     caseCheckBox.setState(false);
@@ -359,6 +381,7 @@ public class BrowserFrame extends BrowserGUI
     advConcFlagItem.addChangeListener(new ChangeListener(){
         public void stateChanged(ChangeEvent e)  {
           parent.setAdvConcFlag(advConcFlagItem.isSelected());
+          
         }}
       );
     stlButton.addActionListener(new ActionListener() {
@@ -517,6 +540,28 @@ public class BrowserFrame extends BrowserGUI
     //addComponentListener(concListDisplay);
   }
   //*****
+  
+   public void loadRecentMenu () {
+    recent.removeAll();
+    String dirName =".namedCorpora"; 
+    File userDir = new File(dirName+"/"+parent.getLanguage());
+    File[] files = userDir.listFiles();
+    if(userDir.exists()){
+        for (File f : files) {
+            if (f.isFile() && !f.isHidden()) {
+                JMenuItem rf =new JMenuItem(f.getName());
+                rf.addActionListener(new ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                      parent.loadNamedSubcorpus(f.getName());
+                    }}                         
+                );
+                recent.add(rf);
+
+            }
+        }
+    }
+  }
+  
   
   public void resetShowDetailString () {
       concListDisplay.renderer.showDetailString = null;
@@ -814,6 +859,10 @@ public class BrowserFrame extends BrowserGUI
             if(keyword != null)
                 keyword.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);     
         }
+    }
+    
+    public JMenu getRecentMenu() {
+        return recent;
     }
 
 }
