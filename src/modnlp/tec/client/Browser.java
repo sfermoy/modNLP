@@ -51,7 +51,6 @@ import java.util.HashMap;
 import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
-import modnlp.gui.GraphicalNamedSubcorpusLoader;
 import modnlp.tec.client.gui.event.ConcordanceDisplayEvent;
 import modnlp.tec.client.gui.event.ConcordanceDisplayListener;
 import modnlp.tec.client.gui.event.ConcordanceListSizeEvent;
