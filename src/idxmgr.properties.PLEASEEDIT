@@ -1,6 +1,7 @@
-#modnlp.idx.IndexManager's properties (tailored to GOK indexing)
-#Wed May 16 15:29:14 IST 2007
-tokeniser.ignore.elements=(omit|url)
+#modnlp.idx.IndexManager's properties
+#Thu Sep 13 09:22:16 IST 2007
+## which elements should be *excluded* from indexing 
+tokeniser.ignore.elements=(omit|ignore|header|chair|heading|post|name)
 ## should punctuation count as tokens?
 index.punctuation=false
 ## index metadata for subcorpus selection (header files)?
@@ -8,32 +9,26 @@ index.headers=true
 ## which element should be indexed (i.e. text within elements
 ## specified here will be indexed and can form subcorpora if xquery
 ## restrictions are applied. Format: a regexp grouping 
-subcorpusindexer.element=(section)
+subcorpusindexer.element=(speech|writing)
 ## which attribute from the element above will we use to uniquely
 ## identify the text segments. Attribute must be of xml type ID
-subcorpusindexer.attribute=id
+subcorpusindexer.attribute=ref
 ## specify 'root' xml element, relative to which the xqueries will be
 ## formulated
-xquery.root.element.path=/gokheader/section
+xquery.root.element.path=//intervention
 ## the element to be returned by xquery to select which indexed texts
 ## should be included in the inverted-index query
-xquery.return.attribute.path=/@id
-## specs and paths all relative to xquery.root.element.path
-## form: description_1;path_1;description_2;path_2,...
-xquery.attribute.chooser.specs=File name;../document/@filename;Subcorpus;../document/@subcorpusid;Source;translation/source/@language;Translation status;translation/@status;Format;../document/@format;Pub. date;/@publication_date;Date accuracy;/@date_accuracy;Author;author/name;Translator;translation/translator/name;Translation date;translation/source/@date
-## Extension Of the header files (e.g. .hed, .xml etc)
+xquery.return.attribute.path=(speech|writing)/@ref
+## Extension Of the header file names (e.g. .hed, .xml etc)
 header.extension=hed
 ## the maximum number of subcorpus constraint query results to be stored (by HeaderDBManager)
 xquery.max.cache.size=23
-## root of the file description path
-xquery.root.filedescription.path=/gokheader
-## xquery expression that returns a (human-readable) file description
-xquery.file.description.return={data($s/document/@filename)}<sep/>{data($s/document/@subcorpusid)}<sep/> {concat("<html><i>",data($s/document/collection_title), "</i>")}  {if ($s/document/editor\!\="") then concat(", editor\: ",data($s/document/editor),"<br>") else ""} { concat(if ($s/document/summary\!\="") then concat("<b>Summary\:</b> ", data($s/document/summary)) else "", "") }  {if ($s/document/editor\!\="" and $s/document/collection_title \!\="" and $s/document/summary\!\="") then "<br>" else ""} {for $section in $s/section return concat("<i>", data($section/title), "</i>, <b>", string-join($section/author/name, ', '), "</b>. ",  data($section/@publication_date), ".", if ($section/translation/translator/name\!\="") then concat(" (Translated by ", string-join($section/translation/translator/name, ', '), ")<br>" ) else "",  if ($section/summary\!\="") then concat("<b>Summary\:</b> ", data($section/summary), "<br>") else "")  } {concat("","</html>")}
-#xquery.file.description.return={data($s/document/@filename)}<sep/>{data($s/document/@subcorpusid)}<sep/> {concat("<html><i>",data($s/document/collection_title), "</i>")}  {if ($s/document/editor\!\="") then ", editor\: " else ""} { data($s/document/editor)} {concat(" <i>", data($s/section/title), "</i>, <b>", string-join($s/section/author/name, ', '), "</b>. ",  data($s/section/@publication_date), ". <br/>")} {if ($s/section/translation/translator/name\!\="") then concat("(Translated by ", string-join($s/section/translation/translator/name, ', '), ")" ) else ""} {if ($s/section/summary\!\="") then " <b>Summary\:</b> " else ""} {concat(data($s/section/summary), "</html>")}
-## the encoding for characters in files to be indexed. Make sure your text files match this
-file.encoding=UTF-8
+## specs and paths all relative to xquery.root.element.path
+## form: description_1;path_1;description_2;path_2,...
+## Used in sub-corpus selection tool
+xquery.attribute.chooser.specs=File name;../../header/@filename;Spoken language;speech/@language;Written language;writing/@language;Affiliation;(speaker|writer)/affiliation/@EPparty
 ## the language to be indexed (determines the choice of
-## tokeniser). Currently supported languages are LATIN (EN) AR (Arabic) and JP (Japanese); EN
+## tokeniser). Currently supported languages are LATIN (EN) and JP; EN
 ## should make reasonably educated guesses for all European Languages
 ## (including some non-Latin scripted ones, such as Greek).
 language=EN
