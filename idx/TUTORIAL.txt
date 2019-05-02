@@ -1,6 +1,9 @@
 Brief tutorial: creating a mini-corpus
 --------------------------------------
 
+(NB: For a more comprehensive tutorial on how to manage corpora using
+the modnlp suite, see http://modnlp.sourceforge.net/doc/tutorials/SallyMarshall-CorpusBuildingwithTECToolsDec2011.pdf)
+
 The modnlp corpus management suite, which consist of modnlp-idx (the
 indexer), modnlp-teccli (the corpus/concordance browser) and
 modnlp-tecser (the corpus server), were originally developed to allow

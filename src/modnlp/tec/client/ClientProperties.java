@@ -17,6 +17,7 @@
 */
 package modnlp.tec.client;
 import java.io.InputStreamReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
@@ -42,14 +43,15 @@ public class ClientProperties extends Properties{
     super();
     System.err.println("Starting to load tecli.properties... ");
     try {
-      FileInputStream fis = new FileInputStream(FNAME);
-      System.err.println("Loading tecli.properties from " + fis);
+      File file = new File(FNAME);
+      FileInputStream fis = new FileInputStream(file);
+      System.err.println("Loading tecli.properties from FILE: " + file.getAbsoluteFile());
       this.load(fis);
     }
     catch (IOException ex){
       ClassLoader cl = this.getClass().getClassLoader();
       InputStreamReader fis = (new InputStreamReader(cl.getResourceAsStream("tecli.properties")));
-      System.err.println("Loading tecli.properties from jar" + fis);
+      System.err.println("Loading tecli.properties from JAR: " + fis);
       try {
         this.load(fis);
       }

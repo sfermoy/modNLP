@@ -17,7 +17,6 @@
  **/ 
 package modnlp.tec.client;
 
-import org.modnlp.metafacet.HeaderDownloadThread;
 import modnlp.Constants;
 import modnlp.tec.client.gui.RemoteCorpusChooser;
 import modnlp.tec.client.gui.SplashScreen;
@@ -113,7 +112,6 @@ public class Browser
   // threads
   private SortThread sortThread = null;
   private ConcordanceThread concThread = null;
-  private HeaderDownloadThread headerThread = null;
   private ConcordanceProducer concordanceProducer = null;
   private HeaderProducer headerProducer = null;
   public HashMap<String, String> headermap = new HashMap<String, String>();
@@ -202,10 +200,8 @@ public class Browser
       concThread.stop();
     if (sortThread != null)
       sortThread.stop();
-    if(headerThread != null)
-        headerThread.stop();
-    
-     if (guiSubcorpusSaver != null)
+
+    if (guiSubcorpusSaver != null)
       stopSubCorpusSaverGUI();
      
     // close all DBs
@@ -655,6 +651,7 @@ public class Browser
       e.printStackTrace(System.err);
     }
     concVector.setLanguage(language);
+    guiSubcorpusSaver = new GraphicalSubcorpusSaver(this);
     concordanceProducer = new ConcordanceProducer(dictionary);
     headerProducer = new HeaderProducer(dictionary);
     browserFrame.setDirectionality();

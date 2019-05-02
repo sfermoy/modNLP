@@ -10,6 +10,7 @@ DATA=$(TOPDIR)data
 MANIFEST=teccli-manifest.txt
 SOURCES:=  $(SOURCEDIR)modnlp/Constants.java $(shell find $(SOURCEDIR)modnlp/tec/client -name *.java) $(SOURCEDIR)modnlp/gui/WrapLayout.java
 TARGETS=$(subst .java,.class,$(SOURCES))
+PROPS=tecli.properties.tec
 JARREDS=modnlp/*.class \
 	modnlp/gui/*.class \
 	modnlp/tec/client/*.class \
@@ -37,11 +38,11 @@ JAVAC=$(JAVA_BIN)javac # -target 1.6
 JAR=jar
 JARFLAGS= cvmf $(MANIFEST)
 JAVAFLAGS=-classpath $(SOURCEDIR):$(LIBSPATH)
-JAVACFLAGS=-classpath $(SOURCEDIR):$(LIBSPATH) -encoding UTF-8 -target 7 -source 7 #ISO-8859-1
+JAVACFLAGS=-classpath $(SOURCEDIR):$(LIBSPATH) -encoding UTF-8 # -target 7 -source 7 #ISO-8859-1
 JARTARGET=$(TOPDIR)lib/teccli.jar
 BINDISTDIR=$(DISTDIR)-bin
 BINDISTXTRAS=$(LIBLICENSES) $(TOPDIR)*COPYING*
-PROPS=tecli.properties.tec
+
 
 #VPATH=$(SOURCEDIR)
 
