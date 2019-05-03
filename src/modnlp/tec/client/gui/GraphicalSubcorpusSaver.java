@@ -54,7 +54,7 @@ public class GraphicalSubcorpusSaver extends JFrame {
   final JButton ApplyButton = new JButton("Select Corpus");
   final JButton clearButton = new JButton("Clear");
   private JTextField namedCorp = new JTextField(20);
-  private String dirName =".namedCorpora";
+  private String dirName ="namedCorpora";
   private JLabel label2 = new JLabel("Corpus name: ");
   private String[] nameStrings = { "               " };
   private JComboBox remList = null;
