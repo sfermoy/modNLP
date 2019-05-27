@@ -543,8 +543,8 @@ public class BrowserFrame extends BrowserGUI
   
    public void loadRecentMenu () {
     recent.removeAll();
-    String dirName =".namedCorpora"; 
-    File userDir = new File(dirName+"/"+parent.getLanguage());
+    String dirName =System.getProperty("user.home") + File.separator+"GOKCache"+File.separator+"namedCorpora"; 
+    File userDir = new File(dirName+ File.separator+parent.getLanguage());
     File[] files = userDir.listFiles();
     if(userDir.exists()){
         for (File f : files) {

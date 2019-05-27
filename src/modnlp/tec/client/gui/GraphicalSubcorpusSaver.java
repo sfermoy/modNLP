@@ -54,7 +54,7 @@ public class GraphicalSubcorpusSaver extends JFrame {
   final JButton ApplyButton = new JButton("Select Corpus");
   final JButton clearButton = new JButton("Clear");
   private JTextField namedCorp = new JTextField(20);
-  private String dirName ="namedCorpora";
+  private String dirName = System.getProperty("user.home") + File.separator+"GOKCache" + File.separator+"namedCorpora";
   private JLabel label2 = new JLabel("Corpus name: ");
   private String[] nameStrings = { "               " };
   private JComboBox remList = null;
@@ -101,7 +101,7 @@ public class GraphicalSubcorpusSaver extends JFrame {
   public void loadNamedCorpora(String name){
     FileInputStream fis = null;
     ObjectInputStream in = null;
-    String filename = dirName+"/"+parent.getLanguage()+"/"+name;
+    String filename = dirName+File.separator+parent.getLanguage()+File.separator+name;
     File test = new File(filename);
     String result = null;
     if(test.exists()){
@@ -199,7 +199,7 @@ public class GraphicalSubcorpusSaver extends JFrame {
     
     removeButton.addActionListener(new ActionListener(){
                               public void actionPerformed(ActionEvent e){
-                                File file = new File(dirName+"/"+parent.getLanguage()+"/"+remList.getSelectedItem());
+                                File file = new File(dirName+File.separator+parent.getLanguage()+File.separator+remList.getSelectedItem());
                                 if (file.exists()){
                                     file.delete();
                                     remList.removeItem(remList.getSelectedItem());
@@ -215,7 +215,7 @@ public class GraphicalSubcorpusSaver extends JFrame {
   }
 
   public void loadRemoveMenu(){
-    File folder = new File(dirName+"/"+parent.getLanguage()+"/");
+    File folder = new File(dirName+File.separator+parent.getLanguage()+File.separator);
     if (folder.exists()){
         File[] listOfFiles = folder.listFiles();
         remList.removeAllItems();
@@ -323,7 +323,7 @@ public class GraphicalSubcorpusSaver extends JFrame {
     public void actionPerformed(ActionEvent e)
     {
        //create dir for named corpora
-      String dirStr = dirName+"/"+parent.getLanguage();
+      String dirStr = dirName+File.separator+parent.getLanguage();
       File directory = new File(dirStr);
       directory.mkdirs();
       //get query and name
@@ -357,7 +357,7 @@ public class GraphicalSubcorpusSaver extends JFrame {
     public void actionPerformed(ActionEvent e)
     {
      //create dir for named corpora
-      String dirStr = dirName+"/"+parent.getLanguage();
+      String dirStr = dirName+File.separator+parent.getLanguage();
       File directory = new File(dirStr);
       directory.mkdirs();
       //get query and name
