@@ -103,7 +103,11 @@ public class MultipleAttributeSelection extends JPanel implements ActionListener
         }});
     textPane.add(useTextQueryCheckBox);
     add(scrollPane,BorderLayout.NORTH);
-    add(textPane,BorderLayout.SOUTH);
+    //add(textPane,BorderLayout.SOUTH);
+  }
+  
+  public JPanel getTextPane(){
+      return textPane;
   }
 
   public void add(final AttributeChooser ac){

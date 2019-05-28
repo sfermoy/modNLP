@@ -6,6 +6,8 @@
 package modnlp.tec.client.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -21,6 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ProgressMonitor;
 import javax.swing.Timer;
@@ -53,7 +56,7 @@ public class GraphicalSubcorpusSaver extends JFrame {
   final JButton removeButton = new JButton("Remove Named Subcorpus");
   final JButton ApplyButton = new JButton("Select Corpus");
   final JButton clearButton = new JButton("Clear");
-  private JTextField namedCorp = new JTextField(20);
+  private JTextField namedCorp = new JTextField(12);
   private String dirName = System.getProperty("user.home") + File.separator+"GOKCache" + File.separator+"namedCorpora";
   private JLabel label2 = new JLabel("Corpus name: ");
   private String[] nameStrings = { "               " };
@@ -154,8 +157,11 @@ public class GraphicalSubcorpusSaver extends JFrame {
     //pa0.add(new JLabel(" "), BorderLayout.EAST);
     //pa0.add(new JLabel(" "), BorderLayout.WEST);
     
+
     //JPanel pa1 = new JPanel();
     //pa1.add(activeChecked);
+    JPanel bottomPane = new JPanel();
+    bottomPane.setLayout(new BorderLayout());
     JPanel pa2 = new JPanel();
     pa2.setBorder(BorderFactory.
               createCompoundBorder(BorderFactory.createTitledBorder("Save or Select"),
@@ -179,12 +185,19 @@ public class GraphicalSubcorpusSaver extends JFrame {
     loadRemoveMenu();
     pa3.add(remList);
     pa3.add(removeButton);
-
+    //pa2.add(pa3);
+    
+    bottomPane.add(mas.getTextPane(),BorderLayout.NORTH);
+    bottomPane.add(pa2,BorderLayout.CENTER);
+    bottomPane.add(pa3,BorderLayout.SOUTH);
+    JScrollPane scrollPane = new JScrollPane(bottomPane);
+    //scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    scrollPane.setPreferredSize( new Dimension(900, 320) );
 
     thisFrame.add(pa0, BorderLayout.NORTH);
-    thisFrame.add(pa2, BorderLayout.CENTER);
-    thisFrame.add(new JLabel("   "), BorderLayout.SOUTH);
-    thisFrame.add(pa3, BorderLayout.SOUTH);
+    thisFrame.add(scrollPane, BorderLayout.CENTER);
+    //thisFrame.add(new JLabel("   "), BorderLayout.SOUTH);
+    //thisFrame.add(pa3, BorderLayout.SOUTH);
 
 
     saveButton.addActionListener(new SaveListener());
