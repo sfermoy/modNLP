@@ -7,7 +7,7 @@ package modnlp.tec.client.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -151,9 +151,9 @@ public class GraphicalSubcorpusSaver extends JFrame {
       thisFrame.setVisible(true);
       return;
     }
-    JPanel pa0 = new JPanel();
-    pa0.setLayout(new BorderLayout());
-    pa0.add(mas, BorderLayout.CENTER);
+    //JPanel pa0 = new JPanel();
+    //pa0.setLayout(new BorderLayout());
+    //pa0.add(mas, BorderLayout.CENTER);
     //pa0.add(new JLabel(" "), BorderLayout.EAST);
     //pa0.add(new JLabel(" "), BorderLayout.WEST);
     
@@ -166,6 +166,7 @@ public class GraphicalSubcorpusSaver extends JFrame {
     pa2.setBorder(BorderFactory.
               createCompoundBorder(BorderFactory.createTitledBorder("Save or Select"),
                                    BorderFactory.createEmptyBorder(5,5,5,5)));
+    
     pa2.add(label2);
     pa2.add(namedCorp);
     pa2.add(saveButton);
@@ -192,10 +193,11 @@ public class GraphicalSubcorpusSaver extends JFrame {
     bottomPane.add(pa3,BorderLayout.SOUTH);
     JScrollPane scrollPane = new JScrollPane(bottomPane);
     //scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    scrollPane.setPreferredSize( new Dimension(900, 320) );
-
-    thisFrame.add(pa0, BorderLayout.NORTH);
-    thisFrame.add(scrollPane, BorderLayout.CENTER);
+    scrollPane.setPreferredSize( new Dimension(940, 450) );
+    
+    thisFrame.setLayout(new GridLayout(2, 1));
+    thisFrame.add(mas);
+    thisFrame.add(scrollPane);
     //thisFrame.add(new JLabel("   "), BorderLayout.SOUTH);
     //thisFrame.add(pa3, BorderLayout.SOUTH);
 
