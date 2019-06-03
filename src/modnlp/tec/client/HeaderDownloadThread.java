@@ -1,28 +1,39 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/**
+ *  (c) 2019 S Sheehan, S Luz. 
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2,
+ * or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+*/
 package modnlp.tec.client;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.net.HttpURLConnection;
 import java.net.Socket;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Vector;
-import modnlp.tec.client.gui.event.ConcordanceDisplayEvent;
-import modnlp.tec.client.gui.event.ConcordanceDisplayListener;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+import javax.swing.JProgressBar;
+import modnlp.tec.client.TecClientRequest;
 
 /**
  *
  * @author shane
  */
 public class HeaderDownloadThread implements Runnable {
-    private Thread dldThread;
-    private HashMap<String,String> headermap = null;
+    
 // String returned by server for reference
 //     String queryFileVisReturn = "{data($s/document/@filename)}<sep/>"
 //                + "{data($s/document/@format)}<sep/>"
@@ -43,23 +54,25 @@ public class HeaderDownloadThread implements Runnable {
 //                        + "data($section/translation/source/original_title),\"<sep/>\""
 //                +")}";
     
-    
-    String[] fileAttrNames = null;
-    String[] sectionAttrNames = null;
- 
-  private String commandToServer = null;
+private Thread dldThread;
+private HashMap<String,String> headermap = null;    
+String[] fileAttrNames = null;
+String[] sectionAttrNames = null;
+Boolean finished = false;
+private String commandToServer = null;
   /** default port; normally reset by Browser */
 
-  boolean stop = false;
-  boolean serverResponded = false;
-   int ctRead = 0;
-  private TecClientRequest request = null;
-  
-  Socket  socket = null;
-  //PrintStream output;
-  BufferedReader input = null;
-  String encoding = "UTF-8";  // the name of the charset
-  
+boolean stop = false;
+boolean serverResponded = false;
+int ctRead = 0;
+private TecClientRequest request = null;
+
+Socket  socket = null;
+//PrintStream output;
+BufferedReader input = null;
+String encoding = "UTF-8";  // the name of the charset
+JProgressBar bar= null;
+
   
   /** Starts a new connection and performs a request to
    *  be displayed in the <code>ListDisplay</code> provided.
@@ -68,21 +81,24 @@ public class HeaderDownloadThread implements Runnable {
    * @param upd     The ListDisplay to update
    * @param ch      The request to be passed on to <code> server</code>
    */
-  public HeaderDownloadThread(TecClientRequest cr, HashMap<String,String> headers)
+  public HeaderDownloadThread(TecClientRequest cr, HashMap<String,String> headers, JProgressBar b)
   {
     headermap = headers;
     request = cr;
     //HASHMAP GPES HERE
     serverResponded = false;
+    bar=b;
   }
   
-    public HeaderDownloadThread(BufferedReader in,TecClientRequest cr, HashMap<String,String> headers)
+    public HeaderDownloadThread(BufferedReader in,TecClientRequest cr, HashMap<String,String> headers, JProgressBar b)
   {
     headermap = headers;
     input = in;
     request = cr;
     //HASHMAP GPES HERE
     serverResponded = false;
+    bar=b;
+
   }
 
   
@@ -129,6 +145,7 @@ public class HeaderDownloadThread implements Runnable {
     String[] fileAttributes = null;
     String[] sectionAttributes = null;
     Boolean first = true;
+    int progress=0;
     try {
       initConcordanceThread();
       String header = null;
@@ -170,14 +187,24 @@ public class HeaderDownloadThread implements Runnable {
           System.err.println("__headerThread:skipped: "+ctRead);
           continue;
         }
+        if(ctRead%200 ==0){
+               progress+=10;
+               if (progress<90)
+                bar.setValue(progress);
+        }
         ctRead++;
+      
       } // end while
-        
+        notifyListeners();
+        bar.setValue(99);
         System.out.println("Header Download Finished");
-      stop();
+        finished = true;
+       
+        stop();
     }
     catch (Exception e){
-        System.err.println("HeaderThread Error" +e);
+        System.err.println("HeaderThread Error " +e.getMessage() +"\n "+e.getLocalizedMessage() +"\n\n end");
+        e.printStackTrace();
       stop();
     }
   }
@@ -186,10 +213,26 @@ public class HeaderDownloadThread implements Runnable {
     if ( dldThread == null ){
       dldThread = new Thread(this);
       dldThread.start();
+      try
+        { 
+            dldThread.join(); 
+        } 
+        catch(Exception ex) 
+        { 
+            System.out.println("Exception has " + 
+                                "been caught" + ex); 
+        } 
     }
+  }
+    
+  public Boolean isFinished(){
+    return finished;
   }
 
   public void stop() {
+    synchronized(this){
+        this.notifyAll();
+    }
     if (dldThread == null)
       return;
     dldThread = null;
@@ -203,4 +246,21 @@ public class HeaderDownloadThread implements Runnable {
       System.err.println("Error Stopping thread "+e);
     }
   }
+  
+  private final Set<ThreadCompleteListener> listeners
+                   = new CopyOnWriteArraySet<ThreadCompleteListener>();
+  public final void addListener(final ThreadCompleteListener listener) {
+    listeners.add(listener);
+  }
+  public final void removeListener(final ThreadCompleteListener listener) {
+    listeners.remove(listener);
+  }
+  private final void notifyListeners() {
+    for (ThreadCompleteListener listener : listeners) {
+
+      listener.notifyOfThreadComplete(this);
+    }
+  }
 }
+
+

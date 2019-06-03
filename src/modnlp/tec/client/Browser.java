@@ -1,5 +1,5 @@
 /**
- *   Copyright (c) 2008-2016 S Luz <luzs@acm.org>. All Rights Reserved.
+ *   Copyright (c) 2008-2019 S Luz <luzs@acm.org>. All Rights Reserved.
  *
  *   This program  is free software; you can redistribute it and/or
  *   modify it under the terms of the GNU General Public License
@@ -17,7 +17,6 @@
  **/ 
 package modnlp.tec.client;
 
-import org.modnlp.metafacet.HeaderDownloadThread;
 import modnlp.Constants;
 import modnlp.tec.client.gui.RemoteCorpusChooser;
 import modnlp.tec.client.gui.SplashScreen;
@@ -113,7 +112,6 @@ public class Browser
   // threads
   private SortThread sortThread = null;
   private ConcordanceThread concThread = null;
-  private HeaderDownloadThread headerThread = null;
   private ConcordanceProducer concordanceProducer = null;
   private HeaderProducer headerProducer = null;
   public HashMap<String, String> headermap = new HashMap<String, String>();
@@ -202,8 +200,6 @@ public class Browser
       concThread.stop();
     if (sortThread != null)
       sortThread.stop();
-    if(headerThread != null)
-        headerThread.stop();
     
      if (guiSubcorpusSaver != null)
       stopSubCorpusSaverGUI();
