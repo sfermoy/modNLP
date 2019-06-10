@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
-package modnlp.tec.client;
+package modnlp.tec.client.cache.header;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import javax.swing.JProgressBar;
+import modnlp.tec.client.TecClientRequest;
 import modnlp.tec.client.TecClientRequest;
 
 /**
@@ -247,16 +248,16 @@ JProgressBar bar= null;
     }
   }
   
-  private final Set<ThreadCompleteListener> listeners
-                   = new CopyOnWriteArraySet<ThreadCompleteListener>();
-  public final void addListener(final ThreadCompleteListener listener) {
+  private final Set<HeaderCompleteListener> listeners
+                   = new CopyOnWriteArraySet<HeaderCompleteListener>();
+  public final void addListener(final HeaderCompleteListener listener) {
     listeners.add(listener);
   }
-  public final void removeListener(final ThreadCompleteListener listener) {
+  public final void removeListener(final HeaderCompleteListener listener) {
     listeners.remove(listener);
   }
   private final void notifyListeners() {
-    for (ThreadCompleteListener listener : listeners) {
+    for (HeaderCompleteListener listener : listeners) {
 
       listener.notifyOfThreadComplete(this);
     }
