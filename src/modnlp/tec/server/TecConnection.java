@@ -68,18 +68,14 @@ public class TecConnection extends Thread {
 
   /** Initialize a new connection thread
    */
-  public TecConnection(Socket s, Dictionary d, TecLogFile f, HeaderDBManager h) {
+  public TecConnection(Socket s, Dictionary d, TecLogFile f, HeaderDBManager h, String dateServerStart) {
     cSokt = s;
     dtab = d;
     logf = f;
     hdbm = h;
     setPriority(NORM_PRIORITY - 1);
     //Get datetime when starting the server
-    String pattern = "MM/dd/yyyy HH:mm:ss";
-    DateFormat df = new SimpleDateFormat(pattern);
-    Date today = Calendar.getInstance().getTime();        
-    //Store date as string for caching on client side
-    dateStarted = df.format(today);
+    dateStarted = dateServerStart;
     start();
   }
 
