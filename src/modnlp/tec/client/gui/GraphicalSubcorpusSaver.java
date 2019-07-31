@@ -24,6 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.ProgressMonitor;
 import javax.swing.Timer;
@@ -195,9 +196,13 @@ public class GraphicalSubcorpusSaver extends JFrame {
     //scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     scrollPane.setPreferredSize( new Dimension(940, 450) );
     
-    thisFrame.setLayout(new GridLayout(2, 1));
-    thisFrame.add(mas);
-    thisFrame.add(scrollPane);
+    
+    JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+                           mas, scrollPane);
+    
+   // thisFrame.setLayout(new GridLayout(2, 1));
+    //thisFrame.add(mas);
+    thisFrame.add(splitPane);
     //thisFrame.add(new JLabel("   "), BorderLayout.SOUTH);
     //thisFrame.add(pa3, BorderLayout.SOUTH);
 
