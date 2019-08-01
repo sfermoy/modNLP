@@ -757,7 +757,7 @@ public class Dictionary {
             //System.err.println("-------------------SKIP:"+word); 
             continue;
           }
-          //System.err.println("-------------------Looking at file: "+getIndexedFileName(Integer.parseInt(fno))); 
+          //System.err.println("---Looking at file: "+getIndexedFileName(Integer.parseInt(fno))); 
           WordPositionTable wpt = new WordPositionTable(environment, 
                                                         fno,
                                                         false);
