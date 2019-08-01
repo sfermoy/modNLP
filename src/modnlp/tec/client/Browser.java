@@ -654,6 +654,7 @@ public class Browser
     concordanceProducer = new ConcordanceProducer(dictionary);
     headerProducer = new HeaderProducer(dictionary);
     browserFrame.setDirectionality();
+    guiSubcorpusSaver = new GraphicalSubcorpusSaver(this);
     if (!initialCorpusSelection)
         browserFrame.loadRecentMenu();
     initialCorpusSelection = false;

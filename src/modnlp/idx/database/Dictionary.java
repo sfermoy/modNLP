@@ -799,6 +799,7 @@ public class Dictionary {
       Integer f = (Integer)ft.get(w);
       os.println(i+++Constants.LINE_ITEM_SEP+w+Constants.LINE_ITEM_SEP+f);
     }
+    os.close();
     os.flush();
   }
   
@@ -905,7 +906,7 @@ public class Dictionary {
         logf.logMsg("Error reading corpus file ", e);
       }
     }    
-    // os.close();
+     os.close();
   }
   
 public void printHeaders(PrintWriter os, HeaderDBManager hdbm){
@@ -917,7 +918,8 @@ public void printHeaders(PrintWriter os, HeaderDBManager hdbm){
             // System.err.println("--");
             // System.out.println(line);
             os.println(line);     
-      }       
+      } 
+    os.close();
     
 }
 
