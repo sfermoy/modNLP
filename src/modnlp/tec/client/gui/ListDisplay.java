@@ -353,11 +353,20 @@ public class ListDisplay extends JPanel
                 String[] otherContextArray = cobjct.getLeftContext().trim().split(" ");
                 if (cobjct.getSortContextHorizon()>= contextArray.length)
                    continue;
-                else
+                else{
                     sortctxStr = contextArray[cobjct.getSortContextHorizon()];
-                if(contextArray.length != 0){
-                    String sortedWord = contextArray[cobjct.getSortContextHorizon()];
-                    if(sortedWord.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
+                    System.out.println(sortctxStr);
+                    sortctxStr = sortctxStr.replaceFirst("^[^\\p{Alpha}]","");
+                    System.out.println(sortctxStr);
+                    sortctxStr = sortctxStr.replaceFirst("[^\\p{Alpha}]+[\\p{Alpha}]*", "");
+                    System.out.println(sortctxStr);
+                    
+                }
+                if(contextArray.length != 0){                                     
+                    String sortedWord = contextArray[cobjct.getSortContextHorizon()];                   
+                    String striped = sortedWord.replaceFirst("^[^\\p{Alpha}]","");
+                    striped = striped.replaceFirst("[^\\p{Alpha}]+[\\p{Alpha}]*", "");
+                    if(striped.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
                         contextArray[cobjct.getSortContextHorizon()] = "<font color=\"#FF00FF\">"+sortedWord+"</font>";
                     }else{
                         contextArray[cobjct.getSortContextHorizon()] = "<font color=\"red\">"+sortedWord+"</font>";
@@ -365,14 +374,18 @@ public class ListDisplay extends JPanel
                     StringBuilder builder = new StringBuilder();
                     StringBuilder otherbuilder = new StringBuilder();
                     for(String s : contextArray) {
-                      if(s.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
+                        String striped1 = s.replaceFirst("^[^\\p{Alpha}]","");
+                        striped1 = striped1.replaceFirst("[^\\p{Alpha}]+[\\p{Alpha}]*", "");
+                      if(striped1.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
                           builder.append("<b><font color=\"#FF00FF\">"+s+"</font> </b>");  
                       }else{
                           builder.append(s+" ");
                       }  
                     }
                     for(String s : otherContextArray) {
-                        if(s.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
+                        String striped1 = s.replaceFirst("^[^\\p{Alpha}]","");
+                        striped1 = striped1.replaceFirst("[^\\p{Alpha}]+[\\p{Alpha}]*", "");
+                        if(striped1.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
                             otherbuilder.append("<font color=\"#FF00FF\">"+s+"</font> ");
                         }else{
                             otherbuilder.append(s+" ");
@@ -434,10 +447,14 @@ public class ListDisplay extends JPanel
                 if (SortStringPos > contextArray.length || SortStringPos<0 )
                     continue;
                 sortctxStr = contextArray[contextArray.length+ cobjct.getSortContextHorizon()];
+                //sortctxStr = sortctxStr.replaceFirst("^[^\\p{Alpha}]","");
+                sortctxStr = sortctxStr.replaceFirst("[^\\p{Alpha}]+[\\p{Alpha}]*", "");
                 String[] otherContextArray = cobjct.getKeywordAndRightContext().trim().split(" ");
                 if(contextArray.length != 0){
                     String sortedWord = contextArray[contextArray.length + cobjct.getSortContextHorizon()];
-                    if(sortedWord.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
+                    String striped = sortedWord.replaceFirst("^[^\\p{Alpha}]","");
+                    striped = striped.replaceFirst("[^\\p{Alpha}]+[\\p{Alpha}]*", "");
+                    if(striped.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
                         contextArray[contextArray.length + cobjct.getSortContextHorizon()] = "<font color=\"#FF00FF\">"+sortedWord+"</font>";
                     }else{
                         contextArray[contextArray.length + cobjct.getSortContextHorizon()] = "<font color=\"red\">"+sortedWord+"</font>";
@@ -445,14 +462,18 @@ public class ListDisplay extends JPanel
                     StringBuilder builder = new StringBuilder();
                     StringBuilder otherbuilder = new StringBuilder();
                     for(String s : contextArray) {
-                      if(s.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
+                        String striped1 = s.replaceFirst("^[^\\p{Alpha}]","");
+                        striped1 = striped1.replaceFirst("[^\\p{Alpha}]+[\\p{Alpha}]*", "");
+                      if(striped1.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
                           builder.append("<b><font color=\"#FF00FF\">"+s+"</font> </b>");                
                       }else{
                           builder.append(s+" ");
                       }  
                     }
                     for(String s : otherContextArray) {
-                        if(s.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
+                        String striped2 = s.replaceFirst("^[^\\p{Alpha}]","");
+                        striped2 = striped2.replaceFirst("[^\\p{Alpha}]+[\\p{Alpha}]*", "");
+                        if(striped2.trim().equalsIgnoreCase(mosaicSelected.trim()) ){
                             otherbuilder.append("<font color=\"#FF00FF\">"+s+"</font> ");
                         }else{
                             otherbuilder.append(s+" ");
