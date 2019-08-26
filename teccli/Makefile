@@ -14,6 +14,8 @@ PROPS=tecli.properties.tec
 JARREDS=modnlp/*.class \
 	modnlp/gui/*.class \
 	modnlp/tec/client/*.class \
+	modnlp/tec/client/cache/frequency/*.class \
+	modnlp/tec/client/cache/header/*.class \
 	modnlp/tec/client/gui/*.class \
 	modnlp/tec/client/gui/event/*.class \
 	modnlp/tec/client/plugin/*.class \

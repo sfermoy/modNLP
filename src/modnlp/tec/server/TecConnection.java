@@ -1,7 +1,7 @@
 /** 
  * Project: MODNLP/TEC/SERVER.
  *
- * Copyright (c) 2009-2016 S Luz, 2016 Shane Shehan
+ * Copyright (c) 2009-2019 S Luz, 2016 Shane Shehan
  *           (c) 2006 S.Luz (luzs@acm.org)
  *           (with contributions by Noel Skehan)
  *           All Rights Reserved.
