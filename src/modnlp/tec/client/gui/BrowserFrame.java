@@ -568,6 +568,9 @@ public class BrowserFrame extends BrowserGUI
   }
   public void setShowDetailString (int col, String str) {
       //concListDisplay.renderer.showDetailString = str;
+      System.out.println(str+"1");
+      System.out.println(str.trim()+"1");
+      str =str.trim().replace("\n", "");
       concListDisplay.setMosaicSelected(str);
       concListDisplay.refresh();
       concListDisplay.setViewToIndex(concListDisplay.getIndexOfDetail( col, str));
