@@ -120,6 +120,14 @@ As mentioned above, any expression that can appear in the WHERE clause
 of an XQuery FLOWR expression can be used to select subcorpora. So,
 consulting an XQuery reference manual might be a good idea. 
 
+Note re. running d3s plugins that use JavaFX on OpenJDK:
+--------------------------------------------------------
+
+On Debian, install the openjx package and run teccli as follows:
+
+java --module-path $PATH_TO_FX --add-opens javafx.graphics/com.sun.javafx.embed=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.cursor=ALL-UNNAMED --add-opens javafx.graphics/com.sun.glass.ui=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-modules javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.media,javafx.swing,javafx.web -jar teccli.jar
+
+
 ABOUT Genealogies of Knowledge, TEC and ECPC
 =============================================
 

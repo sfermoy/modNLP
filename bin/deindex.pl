@@ -9,8 +9,11 @@ use File::Basename;
 $dry_run = 0;
 @TEXT_LIST = @ARGV;
 
+require "./config.pl";
 
-require "config.pl";
+@TEXT_LIST = map {$TEXT_DIR.'/'.$_} @TEXT_LIST
+    unless (substr($TEXT_LIST[1],0,1) eq "/");
+
 die "Usage: deindex.pl [file1 [file2 ...]]\n"
     unless $IDX_BIN;
 

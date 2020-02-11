@@ -31,7 +31,7 @@ DISTFILES=AUTHORS COPYING Makefile README README.bin VERSION BUGS INSTALL TODO e
 	$(TOPDIR)lib/COPYING-libs $(SOURCEDIR)modnlp/Constants.java $(SOURCEDIR)modnlp/gui \
 	$(SOURCEDIR)modnlp/tec/client $(SOURCEDIR)$(MANIFEST) (SOURCEDIR)modnlp/tec/prj.el
 #JAVA=jamvm
-#JAVA_BIN=/usr/lib/jvm/java-6-oracle/bin/
+#JAVA_BIN=/usr/local/share/java-8-sdk/bin
 JAVA=$(JAVA_BIN)java
 JAVAC=$(JAVA_BIN)javac # -target 1.6
 #JAVAC=jikes-jsdk
