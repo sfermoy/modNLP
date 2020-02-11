@@ -929,6 +929,10 @@ public class Browser
  public final String getEncoding(){
     return encoding;
   }
+ 
+ public final boolean getPunctuation(){
+    return browserFrame.getPunctuation();
+  }
 
   // ok
   public final String getRelease (){

@@ -47,6 +47,8 @@ public abstract class BrowserGUI extends JFrame
 
   public abstract int getPreferredFontSize();
   
+    public abstract boolean getPunctuation();
+  
   public abstract int getLanguage();
 
   public abstract void valueChanged(ListSelectionEvent e);
@@ -60,6 +62,6 @@ public abstract class BrowserGUI extends JFrame
   public abstract void defaultChanged(SortHorizonChangeEvent e);
 
   public abstract void defaultChanged(FontSizeChangeEvent e);
-
-
+  
+ 
 }

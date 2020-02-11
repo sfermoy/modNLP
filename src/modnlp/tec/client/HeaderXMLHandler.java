@@ -56,6 +56,7 @@ public class HeaderXMLHandler extends DefaultHandler
   private String spacer = "";
   private int tab = 20;
   private String Highlight;
+  String bgcolor ="";
 
   public HeaderXMLHandler(String section) throws ParserConfigurationException,
                                    SAXException
@@ -78,33 +79,42 @@ public class HeaderXMLHandler extends DefaultHandler
                               final String name,
                               final Attributes atts) 
   {
+     
     if ( !ignorableElement(name) )
       {
           if(depthContext < 0)
-             spacer = "<div style=\"margin-left: "+tab*(depthContext+2)+"px;\">";
+             spacer = "<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">";
           else{
               if(depthContext == 0)
                 {
-                    spacer="<div style=\"margin-left: "+tab*(depthContext+2)+"px;\">";
+                    spacer="<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">";
                 }
               else{
-                  spacer="<div style=\"margin-left: "+tab*(depthContext+2)+"px;\">";
+                  spacer="<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">";
               }
-          }
-           content.append(spacer);
+          }           
 //        for (int i = 0; i < depthContext; i++)
 //          content.append(spacer);
         String at = "";
         if (elementAttribs != null) {
           //at = " "+spacer+elementAttribs;
           at = ""+elementAttribs.replace(",", "<br>");
-          at =at.replace("id: "+ Highlight, "<font color=red>"+ "id: "+ Highlight+"</font>");
+          if(at.contains("id")){
+              spacer=spacer.replace(bgcolor, "");
+              bgcolor="";
+          }
+          at = at.replace("id: "+ Highlight+"<br>", "<font color=red>"+ "#id: "+ Highlight+"</font>"+"<br>");
+          if(at.contains("#id")){
+              bgcolor = "background-color: #FFFF00;";
+              spacer = "<div style=\"background-color: #FFFF00;margin-left: "+tab*(depthContext+2)+"px;\">";
+          }
         }
+        content.append(spacer);
         if(at.equals(""))
             content.append("<b>"+fixElementName(elementName)+": " +"</b>"+ 
                        elementContent +"</div>");
         else
-            content.append("<b>"+fixElementName(elementName)+": " +"</b>"+"<div style=\"margin-left: "+tab+"px;\">"+at+"</div>" + 
+            content.append("<b>"+fixElementName(elementName)+": " +"</b>"+"<div style=\""+bgcolor+"margin-left: "+tab+"px;\">"+at+"</div>" + 
                            elementContent +"</div>");
         //System.out.println("Content: |" + elementContent + "|");
       } 
@@ -126,14 +136,14 @@ public class HeaderXMLHandler extends DefaultHandler
       {
          
           if(depthContext < 0)
-             spacer = "<div style=\"margin-left: "+tab*(depthContext+2)+"px;\">";
+             spacer = "<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">";
           else{
               if(depthContext == 0)
                 {
-                    spacer="<div style=\"margin-left: "+tab*(depthContext+2)+"px;\">";
+                    spacer="<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">";
                 }
               else{
-                  spacer="<div style=\"margin-left: "+tab*(depthContext+2)+"px;\">";
+                  spacer="<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">";
               }
           }
           content.append(spacer);
@@ -149,7 +159,7 @@ public class HeaderXMLHandler extends DefaultHandler
             content.append("<b>"+fixElementName(elementName)+": " +"</b>"+ 
                        elementContent +"</div>");
         else
-            content.append("<b>"+fixElementName(elementName)+": " +"</b>"+"<div style=\"margin-left: "+tab+"px;\">"+at+"</div>" + 
+            content.append("<b>"+fixElementName(elementName)+": " +"</b>"+"<div style=\""+bgcolor+"margin-left: "+tab+"px;\">"+at+"</div>" + 
                            elementContent +"</div>");
         //System.out.println("Content: |" + elementContent + "|");
       } 
