@@ -4,4 +4,4 @@ Class-Path: . je.jar idx.jar antlr-2.7.6.jar commons-pool-1.2.jar exist-modules.
 Main-Class: modnlp.tec.client.Browser
 Permissions: all-permissions
 Application-Name: modnlp/TECCLI
-Codebase: *.genealogiesofknowledge.net
+Codebase: genealogies.mvm.ed.ac.uk

@@ -1,0 +1,42 @@
+#modnlp.idx.IndexManager's properties (tailored to GOK indexing)
+#Wed May 16 15:29:14 IST 2007
+tokeniser.ignore.elements=(omit|url)
+## should punctuation count as tokens?
+index.punctuation=false
+## index metadata for subcorpus selection (header files)?
+index.headers=true
+## which element should be indexed (i.e. text within elements
+## specified here will be indexed and can form subcorpora if xquery
+## restrictions are applied. Format: a regexp grouping 
+subcorpusindexer.element=(text_body)
+## which attribute from the element above will we use to uniquely
+## identify the text segments. Attribute must be of xml type ID
+subcorpusindexer.attribute=id
+## specify 'root' xml element, relative to which the xqueries will be
+## formulated
+xquery.root.element.path=/ayliencov19/text_body
+## the element to be returned by xquery to select which indexed texts
+## should be included in the inverted-index query
+xquery.return.attribute.path=/@id
+## specs and paths all relative to xquery.root.element.path
+## form: description_1;path_1;description_2;path_2,...
+xquery.attribute.chooser.specs=Domain;../source/domain;Source;../source/name;Pub. date;../published_at;Author;../author/name
+## Extension Of the header files (e.g. .hed, .xml etc)
+header.extension=hed
+## the maximum number of subcorpus constraint query results to be stored (by HeaderDBManager)
+xquery.max.cache.size=23
+## root of the file description path
+xquery.root.filedescription.path=/ayliencov19
+## xquery expression that returns a (human-readable) file description
+xquery.file.description.return={data($s/@filename)}<sep/>{data($s/source/domain)}<sep/> {concat("<html><i>",data($s/title), "</i>")} { concat("<b>" data($s/author/name), "</b>. ",  data($s/published_at), ".</html>") }
+## xquery expression that returns a header information
+xquery.header.info.return={data($s/source/domain)} <sep/>{data($s/author/name)} <sep/>{data($s/published_at)} "<sep/>",data($s/title),"<sep/>")}
+## Human readable headings for information in xquery.header.info.return. File data before the </section> tag/
+header.info.human=Domain<sep/>Author<sep/>Date<sep/>Title<sep/>
+## the encoding for characters in files to be indexed. Make sure your text files match this
+file.encoding=UTF-8
+## the language to be indexed (determines the choice of
+## tokeniser). Currently supported languages are LATIN (EN) AR (Arabic) and JP (Japanese); EN
+## should make reasonably educated guesses for all European Languages
+## (including some non-Latin scripted ones, such as Greek).
+language=EN

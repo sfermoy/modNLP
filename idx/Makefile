@@ -100,7 +100,7 @@ JARREDS=$(MAINJARS) \
 DISTDIR:=modnlp-idx-`cat VERSION`
 BINDISTDIR=$(DISTDIR)-bin
 BINDISTXTRAS=$(LIBLICENSES) TUTORIAL.txt
-SEGMENTERDATA= # $(SOURCEDIR)arabic-segmenter-atb+bn+arztrain.ser.gz 
+SEGMENTERDATA= $(SOURCEDIR)arabic-segmenter-atb+bn+arztrain.ser.gz 
 STEMMERDATA=definite_article.txt \
 	diacritics.txt \
 	duplicate.txt \
@@ -212,13 +212,13 @@ bindistgok: jar
 	rm -rf $(BINDISTDIR)-gok
 
 bindistgok-ar: jar
-	mkdir $(BINDISTDIR)-gok
-	cp README.bin $(BINDISTDIR)-gok/README
-	cp bin/runidx.sh $(BINDISTDIR)-gok
-	cp $(TOPDIR)src/idxmgr.properties.gok-ar $(BINDISTDIR)-gok/idxmgr.properties
-	cp $(LIBS) $(JARTARGET) $(BINDISTXTRAS) $(SEGMENTERDATA) $(BINDISTDIR)-gok
-	tar cfvz /tmp/$(BINDISTDIR)-gok.tar.gz  --exclude-from=exclude.txt $(BINDISTDIR)-gok
-	rm -rf $(BINDISTDIR)-gok
+	mkdir $(BINDISTDIR)-gok-ar
+	cp README.bin $(BINDISTDIR)-gok-ar/README
+	cp bin/runidx.sh $(BINDISTDIR)-gok-ar
+	cp $(TOPDIR)src/idxmgr.properties.gok-ar $(BINDISTDIR)-gok-ar/idxmgr.properties
+	cp $(LIBS) $(JARTARGET) $(BINDISTXTRAS) $(SEGMENTERDATA) $(BINDISTDIR)-gok-ar
+	tar cfvz /tmp/$(BINDISTDIR)-gok-ar.tar.gz  --exclude-from=exclude.txt $(BINDISTDIR)-gok-ar
+	rm -rf $(BINDISTDIR)-gok-ar
 
 bindistaqua: jar
 	mkdir $(BINDISTDIR)-aqua

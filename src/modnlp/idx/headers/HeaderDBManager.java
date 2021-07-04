@@ -160,8 +160,51 @@ public class HeaderDBManager {
     System.out.println("ok.");    
   }
 
-
   public SubcorpusConstraints getSubcorpusConstraints(String where){
+    try {
+      SubcorpusConstraints sc;
+      if (where == null)
+        return null;
+      if ( (sc = cache.get(where)) != null ){
+        //System.err.println("Found cached query: "+where);
+        return sc;
+      }
+      //      String resources[] = collection.listResources();
+      sc = new SubcorpusConstraints();
+      //for (int i = 0; i < resources.length; i++) {
+      XQueryService service =
+        (XQueryService) collection.getService("XQueryService", "1.0");
+      //service.setProperty("indent", "yes");
+      String xq = "for "+XQVAR+" in "+"/"+queryRootElementPath+
+        " let $a := 'a' "+  // need to include this nonsensical let clause (possibly a bug in eXist
+        " where "+where+
+        " return data("+XQVAR+"/"+queryReturnSIDAttPath+")";
+      CompiledExpression compiled = service.compile(xq);
+      ResourceSet result = service.execute(compiled);
+      ResourceIterator ri = result.getIterator();
+      HashSet hs = new HashSet();
+      String fn = null;
+      while(ri.hasMoreResources()) {
+        Resource r = ri.nextResource();
+        hs.add(r.getContent());
+        if (fn == null)
+          fn = r.getContent()+"";
+      }
+      if (!hs.isEmpty())
+        sc.put(fn, hs);
+      cache.cache(where,sc);
+      //System.out.println(sc);
+      return sc; //.isEmpty()? null : sc;
+    }
+    catch (Exception ex){
+      System.err.println("Error (HeaderDBManager.geSubcorpusConstrints): "+ex);
+      ex.printStackTrace();
+      return new SubcorpusConstraints();
+    }
+  }
+
+
+  public SubcorpusConstraints getSubcorpusConstraintsOld(String where){
     try {
       SubcorpusConstraints sc;
       if (where == null)
@@ -237,28 +280,8 @@ public class HeaderDBManager {
   
   
   public String getFileHeaderAttributes(int fno){
-    try {
-      
-//        String queryFileVisReturn = "{data($s/document/@filename)} <sep/>"
-//                + "{data($s/document/@format)} <sep/>"
-//                + "{data($s/document/collection_title)} <sep/>"
-//                + "{data($s/document/editor)} <sep/>"
-//                + "{for $section in $s/section return"
-//                    + " concat (\"<section/>\",data($section/@id),\" <sep/>\","
-//                    + "data($section/title),\" <sep/>\","
-//                    + "data($section/@outlet),\" <sep/>\","
-//                    + "data($section/@internet_outlet),\" <sep/>\","
-//                    + "data($section/@publication_date),\" <sep/>\","
-//                    + "data($section/@authorship_date),\" <sep/>\","
-//                        + "string-join($section/author/name, ', '),\" <sep/>\","
-//                        + "string-join($section/translation/translator/name, ', '),\" <sep/>\","
-//                        + "data($section/translation/source/@date),\" <sep/>\","
-//                        + "data($section/translation/source/@filename),\" <sep/>\","
-//                        + "data($section/translation/source/@language),\" <sep/>\","
-//                        + "data($section/translation/source/original_title),\" <sep/>\""
-//                +")}";
-        
-         XQueryService service =
+    try {        
+      XQueryService service =
         (XQueryService) collection.getService("XQueryService", "1.0");
       //service.setProperty("indent", "yes");
       
