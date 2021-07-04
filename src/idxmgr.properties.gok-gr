@@ -1,0 +1,42 @@
+#modnlp.idx.IndexManager's properties (tailored to GOK indexing)
+#Wed May 16 15:29:14 IST 2007
+tokeniser.ignore.elements=(omit|url)
+## should punctuation count as tokens?
+index.punctuation=false
+## index metadata for subcorpus selection (header files)?
+index.headers=true
+## which element should be indexed (i.e. text within elements
+## specified here will be indexed and can form subcorpora if xquery
+## restrictions are applied. Format: a regexp grouping 
+subcorpusindexer.element=(section)
+## which attribute from the element above will we use to uniquely
+## identify the text segments. Attribute must be of xml type ID
+subcorpusindexer.attribute=id
+## specify 'root' xml element, relative to which the xqueries will be
+## formulated
+xquery.root.element.path=/gokheader/section
+## the element to be returned by xquery to select which indexed texts
+## should be included in the inverted-index query
+xquery.return.attribute.path=/@id
+## specs and paths all relative to xquery.root.element.path
+## form: description_1;path_1;description_2;path_2,...
+xquery.attribute.chooser.specs=File name;../document/@filename;Subcorpus;../document/@subcorpusid;Source;translation/source/@language;Tanslation status;translation/@status;Format;../document/@format;Pub. date;/@publication_date;Authorship date;/@authorship_date;Author;author/name;Commentator;commentator/name
+## Extension Of the header files (e.g. .hed, .xml etc)
+header.extension=hed
+## the maximum number of subcorpus constraint query results to be stored (by HeaderDBManager)
+xquery.max.cache.size=23
+## root of the file description path
+xquery.root.filedescription.path=/gokheader
+## xquery expression that returns a (human-readable) file description
+xquery.file.description.return={data($s/document/@filename)}<sep/>{data($s/document/@subcorpusid)}<sep/> {concat("<html><i>",data($s/document/collection_title), "</i>")}  {if ($s/document/editor\!\="") then concat(", editor\: ",data($s/document/editor),"<br>") else ""} { concat(if ($s/document/summary\!\="") then concat("<b>Summary\:</b> ", data($s/document/summary)) else "", "") }  {if ($s/document/editor\!\="" and $s/document/collection_title \!\="" and $s/document/summary\!\="") then "<br>" else ""} {for $section in $s/section return concat("<i>", data($section/title), "</i>, <b>", string-join($section/author/name, ', '), "</b>. ",  data($section/@publication_date), ".", if ($section/translation/translator/name\!\="") then concat(" (Translated by ", string-join($section/translation/translator/name, ', '), ")<br>" ) else "",  if ($section/summary\!\="") then concat("<b>Summary\:</b> ", data($section/summary), "<br>") else "")  } {concat("","</html>")}
+## xquery expression that returns a header information
+xquery.header.info.return={data($s/document/@filename)} <sep/>{data($s/document/@format)} <sep/>{data($s/document/collection_title)} <sep/>{data($s/document/editor)} <sep/>{for $section in $s/section return concat (\"<section/>\",data($section/@id),\" <sep/>\",data($section/title),\" <sep/>\",data($section/@outlet),\" <sep/>\",data($section/@internet_outlet),\" <sep/>\",data($section/@publication_date),\" <sep/>\",data($section/@authorship_date),\" <sep/>\",string-join($section/author/name, ', '),\" <sep/>\",string-join($section/translation/translator/name, ', '),\" <sep/>\",data($section/translation/source/@date),\" <sep/>\",data($section/translation/source/@filename),\" <sep/>\",data($section/translation/source/@language),\" <sep/>\",data($section/translation/source/original_title),\" <sep/>\")}
+## Human readable headings for information in xquery.header.info.return. File data before the </section> tag/
+header.info.human=Filename<sep/>Format<sep/>Collection_Title<sep/>Editor<section/>ID<sep/>Title<sep/>Outlet<sep/>Internet_Outlet<sep/>Publication_Date<sep/>Authorship_Date<sep/>Author<sep/>Translator<sep/>Source_Date<sep/>Source_Filename<sep/>Source_Language<sep/>Original_Title
+## the encoding for characters in files to be indexed. Make sure your text files match this
+file.encoding=UTF-8
+## the language to be indexed (determines the choice of
+## tokeniser). Currently supported languages are LATIN (EN) and JP; EN
+## should make reasonably educated guesses for all European Languages
+## (including some non-Latin scripted ones, such as Greek).
+language=EN

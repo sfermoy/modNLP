@@ -24,7 +24,6 @@ import com.sleepycat.je.Environment;
 import com.sleepycat.bind.tuple.TupleBinding;
 import com.sleepycat.bind.tuple.StringBinding;
 import com.sleepycat.bind.tuple.IntegerBinding;
-import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.DatabaseNotFoundException;
 import com.sleepycat.je.DeadlockException;
@@ -36,6 +35,7 @@ import com.sleepycat.je.SecondaryDatabase;
 import com.sleepycat.je.SecondaryConfig;
 import com.sleepycat.je.SecondaryCursor;
 import com.sleepycat.je.EnvironmentConfig;
+import com.sleepycat.je.StatsConfig;
 
 import java.io.File;
 import java.io.BufferedReader;

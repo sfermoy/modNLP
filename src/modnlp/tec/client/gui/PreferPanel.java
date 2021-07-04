@@ -63,7 +63,7 @@ public class PreferPanel extends JFrame
   private static final String EXTXBT = "File extract context ";
   private static String [] fseltab = {"6","8","10", "12","14","16"};
   private static  int FSELMAX = Array.getLength(fseltab);
-  public int maxContext = 130;
+  public int maxContext = 260;
   public int maxExtrCtx = 600;
 
   private JPanel set1 = new JPanel();
@@ -315,7 +315,7 @@ public class PreferPanel extends JFrame
 		return (new Integer (context.getText())).intValue();
 	}
 
-	public int getExtractContextSize ()
+	 public int getExtractContextSize ()
 	{
 		return (new Integer (extrctx.getText())).intValue();
 	}

@@ -1,0 +1,20 @@
+I've created a new git branch (v0.3.0a) for the new corcordance
+display scheme. Here's basically how you develop on this branch (while
+leaving the 'production' branch intact).
+
+1) Clone the repo, if you haven't done so already:
+
+    git clone ssh://[YOUR-UID]@git.code.sf.net/p/modnlp/code modnlp
+
+At this stage, only the master repo is visible when you do:
+
+     git branch
+
+2) Check out the working branch:
+
+    git checkout v0.3.0a
+
+3) You can now work on this branch, and push your comits to the repo by
+doing:
+
+     git push --set-upstream origin v0.3.0a

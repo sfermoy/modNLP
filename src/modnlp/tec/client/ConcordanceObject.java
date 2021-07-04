@@ -2,7 +2,7 @@
  *  (c) 2006 S Luz <luzs@acm.org>
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify ilocat under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2,
  * or (at your option) any later version.
  *
@@ -26,12 +26,10 @@ import modnlp.util.Tokeniser;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.regex.*;
-import java.util.StringTokenizer;
 import javax.swing.JLabel;
+import modnlp.idx.inverted.TokeniserARLucene;
+import modnlp.tec.client.gui.ContextClient;
 /**
  *  Manage the array of concordances returned by the server.
  *  Consisting mostly of legacy code, this class is in 
@@ -71,6 +69,7 @@ public class ConcordanceObject {
   public String concordance;
   public String filename;
   public String sfilename;
+  public String sectionID;
   /*
   public String padding = ""; // whitesapeces to make up for half-width
                          // Japanese characters (e.g.'…') for
@@ -95,6 +94,7 @@ public class ConcordanceObject {
         concordance = null;
         filename = null;
         filepos = 0;
+        sectionID = null;
       }
     
     for(int i = start ; i < data.length ; i++)
@@ -120,6 +120,16 @@ public class ConcordanceObject {
             break;
           }
       }
+       // Section id will be a string usually of max 3 digits. no need to look far into the string
+        for(int i = start; i < data.length; i++)
+      {
+        if(data[i] == '|')
+          {
+            sectionID = new String(data, start, (i-start));
+            start = i + 1;
+            break;
+          }
+      }
 
     concordance = new String(data, start, (data.length - start));
     bytepos = filepos;
@@ -127,7 +137,7 @@ public class ConcordanceObject {
     coVector = cv;
     if (coVector==null)
       return;
-
+  
     language = coVector.getLanguage();
     Tokeniser tkr;
     switch (language) {
@@ -136,6 +146,9 @@ public class ConcordanceObject {
       break;
     case modnlp.Constants.LANG_JP:
       tkr = new TokeniserJPLucene("");
+      break;
+    case modnlp.Constants.LANG_AR:
+      tkr = new TokeniserRegex("");
       break;
     default:
       tkr = new TokeniserRegex("");

@@ -52,11 +52,17 @@ public class HeaderXMLHandler extends DefaultHandler
   private int depthContext = -2;
   private static String[] ignorableArray =  {"","teiHeader"};
   private SAXParser parser;
+  private String defSpacer = "<div style=\"margin-left: 2px;\">";
+  private String spacer = "";
+  private int tab = 20;
+  private String Highlight;
+  String bgcolor ="";
 
-  public HeaderXMLHandler() throws ParserConfigurationException,
+  public HeaderXMLHandler(String section) throws ParserConfigurationException,
                                    SAXException
   {
     super();
+    Highlight = section;
     SAXParserFactory spf = SAXParserFactory.newInstance();
     spf.setValidating(false);
     spf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false); 
@@ -73,26 +79,52 @@ public class HeaderXMLHandler extends DefaultHandler
                               final String name,
                               final Attributes atts) 
   {
+     
     if ( !ignorableElement(name) )
       {
-        for (int i = 0; i < depthContext; i++)
-          content.append("   ");
+          if(depthContext < 0)
+             spacer = "<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">";
+          else{
+              if(depthContext == 0)
+                {
+                    spacer="<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">";
+                }
+              else{
+                  spacer="<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">";
+              }
+          }           
+//        for (int i = 0; i < depthContext; i++)
+//          content.append(spacer);
         String at = "";
         if (elementAttribs != null) {
-          at = " "+"("+elementAttribs+") ";
+          //at = " "+spacer+elementAttribs;
+          at = ""+elementAttribs.replace(",", "<br>");
+          if(at.contains("id")){
+              spacer=spacer.replace(bgcolor, "");
+              bgcolor="";
+          }
+          at = at.replace("id: "+ Highlight+"<br>", "<font color=red>"+ "#id: "+ Highlight+"</font>"+"<br>");
+          if(at.contains("#id")){
+              bgcolor = "background-color: #FFFF00;";
+              spacer = "<div style=\"background-color: #FFFF00;margin-left: "+tab*(depthContext+2)+"px;\">";
+          }
         }
-        content.append(fixElementName(elementName)+at + ": " + 
-                       elementContent + "\n");
+        content.append(spacer);
+        if(at.equals(""))
+            content.append("<b>"+fixElementName(elementName)+": " +"</b>"+ 
+                       elementContent +"</div>");
+        else
+            content.append("<b>"+fixElementName(elementName)+": " +"</b>"+"<div style=\""+bgcolor+"margin-left: "+tab+"px;\">"+at+"</div>" + 
+                           elementContent +"</div>");
         //System.out.println("Content: |" + elementContent + "|");
       } 
     depthContext++;
     elementName = name;
-    if (atts !=null && atts.getLength() > 0)
+    if (atts !=null && atts.getLength()> 0)
       elementAttribs = formatAttributes(atts);
     else {
       elementAttribs = null;
     }
-
     elementContent = new StringBuffer("");
   }
   
@@ -102,14 +134,33 @@ public class HeaderXMLHandler extends DefaultHandler
   {
     if ( !ignorableElement(name)  )
       {
-        for (int i = 0; i < depthContext; i++)
-          content.append("   ");
+         
+          if(depthContext < 0)
+             spacer = "<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">";
+          else{
+              if(depthContext == 0)
+                {
+                    spacer="<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">";
+                }
+              else{
+                  spacer="<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">";
+              }
+          }
+          content.append(spacer);
+//        for (int i = 0; i < depthContext; i++)
+//          content.append(spacer);
         String at = "";
+       
         if (elementAttribs != null) {
-          at = " "+"("+elementAttribs+") ";
+           // at = " "+spacer+elementAttribs;
+           at = ""+elementAttribs.replace(",", "<br>");
         }
-        content.append(fixElementName(elementName)+at+": " 
-                       + elementContent + "\n");
+        if(at.equals(""))
+            content.append("<b>"+fixElementName(elementName)+": " +"</b>"+ 
+                       elementContent +"</div>");
+        else
+            content.append("<b>"+fixElementName(elementName)+": " +"</b>"+"<div style=\""+bgcolor+"margin-left: "+tab+"px;\">"+at+"</div>" + 
+                           elementContent +"</div>");
         //System.out.println("Content: |" + elementContent + "|");
       } 
     depthContext--;
@@ -245,4 +296,5 @@ public class HeaderXMLHandler extends DefaultHandler
   }
 
 }
+
 

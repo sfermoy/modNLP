@@ -46,7 +46,7 @@ public class Tokeniser {
   protected String originalText;
   protected TokenMap tokenMap;
   
-  protected String encoding = "UTF8";
+  protected String encoding = "UTF-8";
 
   public static final char[] SEPTKARR = {' ',
                                          '|',

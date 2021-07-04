@@ -33,6 +33,10 @@ import java.util.Enumeration;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.net.ServerSocket;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 
 
@@ -52,7 +56,7 @@ import java.net.ServerSocket;
 public class Server extends Thread {
 
   private static final boolean DEBUG = false;
-  private static final int MAXCTX = 130;
+  private static final int MAXCTX = 400;
   private static final int MAXEXT = 600;
   // These are feaaults to be chaged in main() 
   private static ServerProperties sprop = new ServerProperties();
@@ -63,6 +67,7 @@ public class Server extends Thread {
   private static Dictionary dtab;
   private static TecLogFile logf;
   private HeaderDBManager hdbm;
+    private static String dateStarted;
 	
 	
   /** Initialize the server
@@ -76,6 +81,13 @@ public class Server extends Thread {
       DictProperties dictProps = new DictProperties(sprop.getProperty("index.dir"));
       dtab = new Dictionary(dictProps);
       // separate method for initLogFile  to catch different IOException
+      //Save satrtdate
+      String pattern = "MM/dd/yyyy HH:mm:ss";
+      DateFormat df = new SimpleDateFormat(pattern);
+      Date today = Calendar.getInstance().getTime();      
+      dateStarted = df.format(today);
+      
+      
       initLogFile();
       logf.logMsg("TEC Server accepting connections on port # "+PORTNUM);
       setLogDebug();
@@ -96,7 +108,7 @@ public class Server extends Thread {
       hdbm = new HeaderDBManager(dtab.getDictProps());
     while (true)
       {
-        new TecConnection( serverSocket.accept(), dtab, logf, hdbm);
+        new TecConnection( serverSocket.accept(), dtab, logf, hdbm, dateStarted);
       }
     }
     catch (IOException e) {

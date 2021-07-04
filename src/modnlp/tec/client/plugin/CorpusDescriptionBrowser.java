@@ -84,6 +84,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.JEditorPane;
 import javax.swing.JTextPane;
+import modnlp.idx.query.SubcorpusConstraints;
 
 /**
  *  Basic corpus description browser
@@ -290,7 +291,10 @@ public class CorpusDescriptionBrowser extends JFrame
             if ( row[0].equals("0")) { // control info 
               if (row[1].equals(modnlp.idx.database.Dictionary.TTRATIO_LABEL)){
                 ttratio = (new Double(row[2])).doubleValue();
-                cstats.append(row[1]+": "+nf.format(ttratio)+";  ");
+                if (parent.isSubCorpusSelectionON())
+                    cstats.append("Average "+row[1]+": "+nf.format(ttratio)+";  ");
+                else
+                    cstats.append(row[1]+": "+nf.format(ttratio)+";  ");
               }
               else if (row[1].equals(modnlp.idx.database.Dictionary.TTOKENS_LABEL)){
                 notokens = (new Integer(row[2].toString())).intValue();
@@ -350,10 +354,10 @@ public class CorpusDescriptionBrowser extends JFrame
         rq.setServerURL("http://"+parent.getRemoteServer());
         rq.setServerPORT(parent.getRemotePort());
         rq.put("request","corpusdesc");
-        /** TODO
+        
             if (parent.isSubCorpusSelectionON())
             rq.put("xquerywhere",parent.getXQueryWhere());
-        */
+    
         rq.put("casesensitive",parent.isCaseSensitive()?"TRUE":"FALSE");
         //}
         rq.setServerProgramPath("/corpusdesc");
@@ -542,21 +546,31 @@ public class CorpusDescriptionBrowser extends JFrame
     public void run (){
       try {
         if (parent.isStandAlone()){
+            
           Dictionary d = parent.getDictionary();
           HeaderDBManager hdbm = parent.getHeaderDBManager();
           boolean cse = parent.isCaseSensitive();
           int [] fks = d.getIndexedFileKeys();
-          //String xquerywhere = 
-          //  (String)request.get("xquerywhere");
-          // TODO: implement information per sub-corpus as well
-          //if (xquerywhere == null)
-          //  dictionary.printConcordances(wquery, ctx, ignx, out);
-          //else
-          //  dictionary.printConcordances(wquery, ctx, ignx, out,
-          //                               hdbm.getSubcorpusConstraints(xquerywhere));
-          d.printCorpusStats(fqlout,!cse);
-          d.printNoItems(fqlout, fks.length);
+
+          double sumTTratios = 0;
+          int tokenCount = 0;
+          int countSubcorpusFiles =0;
           for (int i = 0; i < fks.length; i++) {
+            if (parent.isSubCorpusSelectionON()){
+               SubcorpusConstraints  sbc=  hdbm.getSubcorpusConstraints(parent.getXQueryWhere());
+                if (sbc != null && sbc.acceptFile(  Integer.toString(fks[i]))){
+                    FrequencyHash fh = d.getFileFrequencyTable(fks[i], !cse);
+                    String fdesc = hdbm.getFileDescription(fks[i]);  
+                    String line = fks[i]+Constants.LINE_ITEM_SEP+fdesc+Constants.LINE_ITEM_SEP+
+                      fh.getTokenCount()+Constants.LINE_ITEM_SEP+
+                      fh.getTypeTokenRatio();
+                    // System.err.println("--");
+                    sumTTratios += fh.getTypeTokenRatio();
+                    tokenCount += fh.getTokenCount();
+                    countSubcorpusFiles++;
+                    fqlout.println(line);
+                }
+            }else{
             FrequencyHash fh = d.getFileFrequencyTable(fks[i], !cse);
             String fdesc = hdbm.getFileDescription(fks[i]);  
             String line = fks[i]+Constants.LINE_ITEM_SEP+fdesc+Constants.LINE_ITEM_SEP+
@@ -564,17 +578,18 @@ public class CorpusDescriptionBrowser extends JFrame
               fh.getTypeTokenRatio();
             //System.err.println("--");
             fqlout.println(line);
+            }
           }
-          /* ---- TODO: implement breadown by scorpus
-             if (parent.subCorpusSelected()){
-             HeaderDBManager hdbm = parent.getHeaderDBManager();
-             d.printSortedFreqList(fqlout, skipFirst, maxListSize,
-             hdbm.getSubcorpusConstraints(parent.getXQueryWhere()),
-             !parent.isCaseSensitive());
-             }
-             else
-             d.printSortedFreqList(fqlout,  skipFirst, maxListSize,!parent.isCaseSensitive());
-          */
+           if (parent.isSubCorpusSelectionON()){
+            d.printSubCorpusStats(fqlout, (double) sumTTratios/countSubcorpusFiles, tokenCount);
+            d.printNoItems(fqlout, tokenCount);
+        }else
+        {
+             d.printCorpusStats(fqlout,!cse);
+             d.printNoItems(fqlout, fks.length);
+        }
+          
+         
         } 
         else{
           input = new

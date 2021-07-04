@@ -1,5 +1,5 @@
 /**
- *   Copyright (c) 2008-2016 S Luz <luzs@acm.org>. All Rights Reserved.
+ *   Copyright (c) 2008-2019 S Luz <luzs@acm.org>. All Rights Reserved.
  *
  *   This program  is free software; you can redistribute it and/or
  *   modify it under the terms of the GNU General Public License
@@ -18,9 +18,7 @@
 package modnlp.tec.client;
 
 import modnlp.Constants;
-import modnlp.tec.client.gui.GraphicalSubcorpusSelector;
 import modnlp.tec.client.gui.RemoteCorpusChooser;
-import modnlp.tec.client.gui.PreferPanel;
 import modnlp.tec.client.gui.SplashScreen;
 import modnlp.tec.client.gui.BrowserFrame;
 import modnlp.tec.client.gui.BrowserGUI;
@@ -38,7 +36,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import javax.swing.JOptionPane;
@@ -46,13 +43,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import java.io.File;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.JLabel;
-import java.util.Vector;
-import java.util.concurrent.CountDownLatch;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JMenu;
 import modnlp.tec.client.gui.event.ConcordanceDisplayEvent;
 import modnlp.tec.client.gui.event.ConcordanceDisplayListener;
 import modnlp.tec.client.gui.event.ConcordanceListSizeEvent;
@@ -73,7 +70,7 @@ public class Browser
 {
 
   // constants
-  public static final String RELEASE = "0.7.5a";
+  public static final String RELEASE = "0.8.5";
   public static final String REVISION = "$Revision: 1.9 $";
   String BRANDNAME = "MODNLP/T";
   private static final String PLGLIST = "teclipluginlist.txt";
@@ -85,6 +82,7 @@ public class Browser
   private boolean commandLineServer  = false;
   private boolean advConcFlag = false;
   private boolean firstRemoteFlag = true;
+  private boolean initialCorpusSelection = true;
   /** Deafult location of TecServer  */
   private String remoteServer;
   /** Default port */
@@ -96,13 +94,16 @@ public class Browser
   private String encoding = null;
   private String xquerywhere = null;
   private int language = Constants.LANG_EN;
+  private String subcorpusName ="";
 
   // GUI
   private SplashScreen splashScreen;
   private BrowserFrame browserFrame;
   private PreferPanel preferenceFrame;
-  private GraphicalSubcorpusSelector guiSubcorpusSelector = null;
+  private GraphicalSubcorpusSaver guiSubcorpusSaver = null;
+
   private ClientProperties clProperties;
+
 
   // DBs
   private Dictionary dictionary = null;
@@ -112,6 +113,8 @@ public class Browser
   private SortThread sortThread = null;
   private ConcordanceThread concThread = null;
   private ConcordanceProducer concordanceProducer = null;
+  private HeaderProducer headerProducer = null;
+  public HashMap<String, String> headermap = new HashMap<String, String>();
 
   // text data 
   private ConcordanceVector concVector = new ConcordanceVector();
@@ -175,6 +178,7 @@ public class Browser
     addRemoteCorpusMenu();
     loadPlugins();
     incProgress();
+
       
     //headerBaseURL = "http://"+remoteServer+"/tec/headers";
     //if ( clProperties.getProperty("tec.client.headers") != null )
@@ -196,10 +200,10 @@ public class Browser
       concThread.stop();
     if (sortThread != null)
       sortThread.stop();
-
-    if (guiSubcorpusSelector != null)
-      stopSubCorpusSelectorGUI();
-
+    
+     if (guiSubcorpusSaver != null)
+      stopSubCorpusSaverGUI();
+     
     // close all DBs
     if (dictionary != null)
       dictionary.close();
@@ -271,7 +275,7 @@ public class Browser
     try {
       while ( (plg = in.readLine() ) != null ){
         try {
-          System.err.println("Loading: "+plg);
+          System.err.println("Loading: " + plg);
           StringTokenizer st = new StringTokenizer(plg, ":");
           // first token: class name (ignore for now)
           final Plugin tp = (Plugin)IOUtil.loadPlugin(st.nextToken(),cl);
@@ -343,26 +347,32 @@ public class Browser
   }
 
 
-  public void showSubcorpusSelector(){
-    guiSubcorpusSelector.activate();
-  }
+
+  
+  @Override
+    public void showSubcorpusSaveSelector() {
+        guiSubcorpusSaver.activate();
+    }
+   
+
   
   //****highlight context
   public void showContext(int col, String str){
        boolean isleft = true;
        if(col>4)
            isleft=false;
-       browserFrame.clicked =str;
+       browserFrame.clicked = str;
        browserFrame.column = Math.abs(5-(col+1));
        startSorting(browserFrame.column,isleft);
       
-      // browserFrame.setShowDetailString(col,str);
+      browserFrame.setShowDetailString(col,str);
        
   }
 
   public void startSorting(int horizon, boolean sortleft){
-      ///******* reset show detail
-      browserFrame.resetShowDetailString();
+    Comparator cprer ;
+    ///******* reset show detail
+    browserFrame.resetShowDetailString();
     if ( concThread.atWork()  ) {
       if ( ! browserFrame.interruptDownloading() )
         return;
@@ -372,33 +382,45 @@ public class Browser
       sortThread.stop();
     }
     int sortContextHorizon = browserFrame.getSortLeftCtxHorizon();
-    if (sortleft){ 
-        //*****
-        if (browserFrame.clicked.equalsIgnoreCase("")) {
-            concVector.setSortContextHorizon(0-sortContextHorizon);
-        }
-        else{
-            concVector.setSortContextHorizon(0-browserFrame.column);
-        }
-      
+    if(language == modnlp.Constants.LANG_AR){
+        sortContextHorizon = browserFrame.getSortRightCtxHorizon();
     }
-    else {
-        if (browserFrame.clicked.equalsIgnoreCase("")) {
-            sortContextHorizon = browserFrame.getSortRightCtxHorizon();
-            concVector.setSortContextHorizon(sortContextHorizon);
-        }
-        else{
-            concVector.setSortContextHorizon(browserFrame.column);
-        }
+    if(horizon == -111){
+         cprer = new FilenameComparer();
     }
+    else{
+        if (sortleft){ 
+            //*****
+            if (browserFrame.clicked.equalsIgnoreCase("")) {
+                concVector.setSortContextHorizon(0-horizon);
+            }
+            else{
+                concVector.setSortContextHorizon(0-browserFrame.column);
+            }
 
-    Comparator cprer = sortleft ?
-      new LeftComparer(sortContextHorizon, 
-                       preferenceFrame.maxContext/2, 
-                       browserFrame.getPunctuation()) :
-      new RightComparer(sortContextHorizon, 
-                        preferenceFrame.maxContext/2, 
-                        browserFrame.getPunctuation());
+        }
+        else {
+            if (browserFrame.clicked.equalsIgnoreCase("")) {
+                sortContextHorizon = browserFrame.getSortRightCtxHorizon();
+                if(language == modnlp.Constants.LANG_AR){
+                    sortContextHorizon = browserFrame.getSortLeftCtxHorizon();
+                }
+                concVector.setSortContextHorizon(0+horizon);
+            }
+            else{
+                concVector.setSortContextHorizon(0+browserFrame.column);
+            }
+        }
+    //which context are we comparing
+         cprer = sortleft ?
+          new LeftComparer(sortContextHorizon, 
+                           preferenceFrame.maxContext/2, 
+                           browserFrame.getPunctuation()) :
+          new RightComparer(sortContextHorizon, 
+                            preferenceFrame.maxContext/2, 
+                            browserFrame.getPunctuation());
+
+    }
     sortThread = new SortThread(concVector, cprer);
     
     sortThread.addConcordanceDisplayListener(browserFrame);
@@ -479,17 +501,18 @@ public class Browser
   public void showHeader(ConcordanceObject sel)
   {
     String filename = sel.filename;
-    System.err.println("fn="+filename);
+    //System.err.println("section="+sel.sectionID);
+    //System.err.println("fn="+filename);
     String headerName =  //   (new File(filename)).getName();
       filename.substring(filename.lastIndexOf('/')+1,filename.lastIndexOf('.'))
       +"."+headerExt;
     System.err.println("fn="+filename+"header="+headerName);
     //int p = headerName.lastIndexOf(java.io.File.separator);
     //headerName = p < 0? headerName : headerName.substring(p);
-    showHeader(headerName);
+    showHeader(headerName, sel.sectionID);
   }
 
- public void showHeader(String headerName)
+ public void showHeader(String headerName,String secString)
   {
     System.err.println("-"+headerBaseURL+"-"+headerName);
     int windowHeight = 600;
@@ -529,10 +552,10 @@ public class Browser
           content.append(tmp+"\n");
       }
       else {
-        HeaderXMLHandler parser =  new HeaderXMLHandler();
+        HeaderXMLHandler parser =  new HeaderXMLHandler(secString);
         parser.parse(is);
-
-        content = new StringBuffer("<html><img src='"+img+"' height=183 width=128 alt='Book Cover'><pre>"+parser.getContent()+"</pre></html>");
+        content = new StringBuffer("<html>"+parser.getContent()+"</html>");
+        //content = new StringBuffer("<html><img src='"+img+"' height=183 width=128 alt='Book Cover'><pre>"+parser.getContent()+"</pre></html>");
         //System.err.println(content+"");
       }
     }
@@ -562,7 +585,12 @@ public class Browser
 
   public void setAdvConcFlag (boolean f){
     browserFrame.clickAdvConcFlag(f);
-    advConcFlag = f;
+    advConcFlag = f; 
+    if (!f)
+        browserFrame.setTitle(browserFrame.getTitle().split(" Sub-corpus:")[0]);
+    else
+        browserFrame.setTitle(browserFrame.getTitle().split(" Sub-corpus:")[0]+" Sub-corpus: " + subcorpusName);
+
   }
 
   public boolean isSubCorpusSelectionON (){
@@ -588,6 +616,7 @@ public class Browser
       return;
     String cdir = ncc.getSelectedFile().toString();
     setLocalCorpus(cdir);
+    browserFrame.setDirectionality();
   }
 
   public int getLanguage(){
@@ -608,9 +637,9 @@ public class Browser
     encoding = dictProps.getProperty("file.encoding");
     language = dictProps.getLanguage();
     headerExt = dictProps.getProperty("header.extension");
-    if (guiSubcorpusSelector != null)
-      stopSubCorpusSelectorGUI();
-    guiSubcorpusSelector = null;
+    if (guiSubcorpusSaver != null)
+      stopSubCorpusSaverGUI();
+    guiSubcorpusSaver = null;
     System.gc();
     try {
       hdbmanager = new HeaderDBManager(dictProps);
@@ -622,8 +651,13 @@ public class Browser
       e.printStackTrace(System.err);
     }
     concVector.setLanguage(language);
-    guiSubcorpusSelector = new GraphicalSubcorpusSelector(this);
     concordanceProducer = new ConcordanceProducer(dictionary);
+    headerProducer = new HeaderProducer(dictionary);
+    browserFrame.setDirectionality();
+    guiSubcorpusSaver = new GraphicalSubcorpusSaver(this);
+    if (!initialCorpusSelection)
+        browserFrame.loadRecentMenu();
+    initialCorpusSelection = false;
   }
 
   private void setLocalHeadersDirectory(DictProperties dictProps){
@@ -680,9 +714,10 @@ public class Browser
     try {
       if (dictionary != null)
         dictionary.close();
-      if (guiSubcorpusSelector != null)
-        stopSubCorpusSelectorGUI();
-      guiSubcorpusSelector = new GraphicalSubcorpusSelector(this);
+      if (guiSubcorpusSaver != null)
+        stopSubCorpusSaverGUI();
+        
+      guiSubcorpusSaver = new GraphicalSubcorpusSaver(this);
       URL exturl = new URL(request.toString());
       HttpURLConnection exturlConnection = (HttpURLConnection) exturl.openConnection();
       //exturlConnection.setUseCaches(false);
@@ -697,6 +732,7 @@ public class Browser
       preferenceFrame.setHeaderBaseURL(headerBaseURL);
       encoding = input.readLine();
       String lg = input.readLine();
+       System.err.println("language (read)=>>>>"+encoding);
       if (lg == null || lg.length() == 0) 
         language = Constants.LANG_EN;
       else
@@ -705,20 +741,28 @@ public class Browser
       lg = input.readLine();
       if (lg != null && lg.length() > 0) 
         headerExt = lg;
+      if (encoding == null || encoding.equals("UTF8")){
+        encoding = "UTF-8";
+        System.err.println("set encoding to "+encoding);
+      }
       System.err.println("language=>>>>"+language);
       System.err.println("encoding=>>>>"+encoding);
       System.err.println("ext=>>>>"+headerExt);
-      encoding = encoding == null? "---UTF8---" : encoding;
       clProperties.setProperty("tec.client.server",remoteServer);
       clProperties.setProperty("tec.client.port",remotePort+"");
       clProperties.setProperty("stand.alone","no");
       clProperties.save();
       concordanceProducer = null;
+      browserFrame.setDirectionality();
+      if (!initialCorpusSelection)
+        browserFrame.loadRecentMenu();
+    initialCorpusSelection = false;
     }
     catch(IOException e)
       {
-        if (guiSubcorpusSelector != null)
-          stopSubCorpusSelectorGUI();
+        
+        if (guiSubcorpusSaver != null)
+          stopSubCorpusSaverGUI();
         showErrorMessage("Error: couldn't create URL input stream: "+e);
         System.err.println("Exception: couldn't create URL input stream: "+e);
         headerBaseURL = "http://"+remoteServer+"/tec/headers";
@@ -726,7 +770,7 @@ public class Browser
         language = Constants.LANG_EN;
         preferenceFrame.setHeaderBaseURL(headerBaseURL);
       }
-    if (guiSubcorpusSelector.hasNetworkError())
+    if (guiSubcorpusSaver.hasNetworkError())
       showErrorMessage("Error: couldn't select new remote corpus.");
     else
       browserFrame.setTitle(getBrowserName()+": index at "+remoteServer+":"+remotePort);
@@ -802,13 +846,13 @@ public class Browser
     System.err.println("Saving Client properties "+clProperties);
     clProperties.save();
   }
-
-  private void stopSubCorpusSelectorGUI(){
+ 
+  private void stopSubCorpusSaverGUI(){
     if (hdbmanager != null){
       hdbmanager.finalize();
       hdbmanager = null;
     }
-    guiSubcorpusSelector.dispose();
+    guiSubcorpusSaver.dispose();
   }
 
   public final void setXQueryWhere(String w){
@@ -830,6 +874,10 @@ public class Browser
   public final Dictionary getDictionary(){
     return dictionary;
   }
+  
+  public final HashMap< String, String> getHeaderMap(){
+    return headermap;
+  }
 
   public final ClientProperties getClientProperties(){
     return clProperties;
@@ -838,7 +886,14 @@ public class Browser
   public final HeaderDBManager getHeaderDBManager(){
     return hdbmanager;
   }
-
+  
+  public final HeaderProducer getHeaderProducer(){
+    return headerProducer;
+  }
+  
+  public final String getHeaderBaseUrl(){
+    return headerBaseURL;
+  }
   public final int getExpectedNoOfConcordances(){
     return concThread.getNoFound();
   }
@@ -869,6 +924,14 @@ public class Browser
 
   public final String getBrand(){
     return BRANDNAME;
+  }
+  
+ public final String getEncoding(){
+    return encoding;
+  }
+ 
+ public final boolean getPunctuation(){
+    return browserFrame.getPunctuation();
   }
 
   // ok
@@ -917,12 +980,57 @@ public class Browser
             concThread.stop();
             if(!e.getMessage().equalsIgnoreCase(" No concordances found"))
                 for (StateChanged sl : listeners) sl.concordanceStateChanged();
+            browserFrame.clearConcordanceList();
         }
     }
+    
     @Override
     public void concordanceChanged(ConcordanceListSizeEvent e) {
     }
 
+    @Override
+    public void removeConcordanceLine(ConcordanceObject o) {
+        browserFrame.removeConcordanceLine(o);
+    }
+     @Override
+    public void removeConcordanceLineOnly(ConcordanceObject o) {
+        browserFrame.removeConcordanceLineOnly(o);
+    }
     
-}
+    @Override
+    public void addConcordanceLine(ConcordanceObject o) {
+        browserFrame.addConcordanceLine(o);
+    }
+    
+    @Override
+    public void redisplay() {
+        browserFrame.redisplay();
+    }
 
+    @Override
+    public void showSubcorpusSelector() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void loadNamedSubcorpus(String n) {
+        
+        browserFrame.setTitle(browserFrame.getTitle()+" Sub-corpus: " + n);
+        subcorpusName = n;
+        guiSubcorpusSaver.loadNamedCorpora(n);     
+    }
+
+    public void setSubcorpusName(String subcorpusName) {
+        this.subcorpusName = subcorpusName;
+    }
+   
+    @Override
+    public void lodeRecentMenu() {
+       browserFrame.loadRecentMenu();
+    }
+    
+    public JMenu getRecentMenu(){
+       return browserFrame.getRecentMenu();
+    }
+
+}

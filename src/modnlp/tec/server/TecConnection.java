@@ -1,7 +1,7 @@
 /** 
  * Project: MODNLP/TEC/SERVER.
  *
- * Copyright (c) 2009-2016 S Luz, 2016 Shane Shehan
+ * Copyright (c) 2009-2019 S Luz, 2016 Shane Shehan
  *           (c) 2006 S.Luz (luzs@acm.org)
  *           (with contributions by Noel Skehan)
  *           All Rights Reserved.
@@ -31,11 +31,6 @@ import modnlp.idx.headers.HeaderDBManager;
 import modnlp.idx.query.WordQuery;
 import modnlp.idx.query.WordQueryException;
 
-import java.util.StringTokenizer;
-import java.util.Hashtable; 
-import java.util.Vector;
-import java.util.Enumeration;
-import java.util.StringTokenizer;
 import java.net.Socket;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
@@ -43,7 +38,11 @@ import java.net.InetAddress;
 import java.io.OutputStreamWriter;
 import java.io.InputStreamReader;
 import java.io.IOException;
-import static modnlp.tec.server.Request.COLUMNBATCH;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import modnlp.idx.query.SubcorpusConstraints;
 
 /** Deal with client's requests for concordance and extracts through
  * the methods described below.
@@ -58,22 +57,25 @@ import static modnlp.tec.server.Request.COLUMNBATCH;
  */
 public class TecConnection extends Thread {
 
-  private static final int MAXCTX = 130;
+  private static final int MAXCTX = 400;
   private static final int MAXEXT = 600;
   Socket  cSokt = null;
   HeaderDBManager hdbm = null;
   Dictionary dtab;
   TecLogFile logf;
   String sqlquery = "";
+  private String dateStarted ;
 
   /** Initialize a new connection thread
    */
-  public TecConnection(Socket s, Dictionary d, TecLogFile f, HeaderDBManager h) {
+  public TecConnection(Socket s, Dictionary d, TecLogFile f, HeaderDBManager h, String dateServerStart) {
     cSokt = s;
     dtab = d;
     logf = f;
     hdbm = h;
     setPriority(NORM_PRIORITY - 1);
+    //Get datetime when starting the server
+    dateStarted = dateServerStart;
     start();
   }
 
@@ -190,6 +192,12 @@ public class TecConnection extends Thread {
       case Request.HEADERBASEURL:
         getHeaderBaseURL(os);
         break;
+      case Request.ALLHEADERS:
+        getAllHeaders(req, os);
+        break;
+      case Request.STARTDATE:
+        getServerStartDate(req, os);
+        break;
         //case Request.HEADEREXT:
         //getHeaderEXT(os);
         //break;
@@ -221,12 +229,13 @@ public class TecConnection extends Thread {
     WordQuery wquery = null;
     try {
       boolean cse = ((String)req.get("case")).equalsIgnoreCase("sensitive");
-      wquery = new WordQuery ((String) req.get("keyword"), dtab, cse);    
+      wquery = new WordQuery ((String) req.get("keyword"), dtab, cse);
+      //System.out.println("=%%%=>"+wquery.getKeyword());
       int ctx = getSafeInteger((String)req.get("context"),MAXCTX).intValue();
       boolean ignx = 
         ((String)req.get("sgml")).equalsIgnoreCase("no")? true : false;
       String xquerywhere = (String)req.get("xquerywhere");
-      System.err.println("xquerywhere->"+xquerywhere);
+      //System.err.println("xquerywhere->"+xquerywhere);
       if (xquerywhere == null)
         dtab.printConcordances(wquery, ctx, ignx, os);
       else
@@ -298,7 +307,7 @@ public class TecConnection extends Thread {
   }
 
   public void getHeaderBaseURL(PrintWriter os){
-    System.err.println(dtab.getDictProps().getProperty("headers.url"));
+    //System.err.println(dtab.getDictProps().getProperty("headers.url"));
     os.println(dtab.getDictProps().getProperty("headers.url"));
     os.println(dtab.getDictProps().getProperty("file.encoding"));
     os.println(dtab.getDictProps().getLanguage());
@@ -423,6 +432,27 @@ public class TecConnection extends Thread {
   public void  getTotalNoOfTokens(Request req,  PrintWriter os)
   {
     os.println(dtab.getTotalNoOfTokens());
+    
+  }
+  
+  
+    public void  getAllHeaders(Request req,  PrintWriter os)
+  {
+    try {
+      int [] fks = dtab.getIndexedFileKeys();
+      os.println(hdbm.getFileHeaderAttributeHuman());
+        for (int i = 0; i < fks.length; i++) {
+            String fdesc = hdbm.getFileHeaderAttributes(fks[i]);  
+            String line = fdesc ;
+            // System.err.println("--");
+            // System.out.println(line);
+            os.println(line);     
+      }       
+    }
+    catch (Exception e) {
+      System.err.println("CDescPrinter: " + e);
+      e.printStackTrace();
+    }
 
   }
 
@@ -432,31 +462,53 @@ public class TecConnection extends Thread {
     try {
       cs = ((String)req.get("casesensitive")).equalsIgnoreCase("TRUE");
       int [] fks = dtab.getIndexedFileKeys();
-      //String xquerywhere = 
-      //  (String)request.get("xquerywhere");
-      // TODO: implement information per sub-corpus as well
-      //if (xquerywhere == null)
-      //  dictionary.printConcordances(wquery, ctx, ignx, out);
-      //else
-      //  dictionary.printConcordances(wquery, ctx, ignx, out,
-      //                               hdbm.getSubcorpusConstraints(xquerywhere));
-      dtab.printCorpusStats(os,!cs);
-      dtab.printNoItems(os, fks.length);
-      for (int i = 0; i < fks.length; i++) {
-        FrequencyHash fh = dtab.getFileFrequencyTable(fks[i], !cs);
-        String fdesc = hdbm.getFileDescription(fks[i]);  
-        String line = fks[i]+Constants.LINE_ITEM_SEP+fdesc+Constants.LINE_ITEM_SEP+
-          fh.getTokenCount()+Constants.LINE_ITEM_SEP+
-          fh.getTypeTokenRatio();
-        // System.err.println("--");
-        os.println(line);
+      String xquerywhere =  (String)req.get("xquerywhere");
+      
+      double sumTTratios = 0;
+      int tokenCount = 0;
+      int countSubcorpusFiles =0;
+        for (int i = 0; i < fks.length; i++) {
+            if (xquerywhere == null){
+                FrequencyHash fh = dtab.getFileFrequencyTable(fks[i], !cs);
+                String fdesc = hdbm.getFileDescription(fks[i]);  
+                String line = fks[i]+Constants.LINE_ITEM_SEP+fdesc+Constants.LINE_ITEM_SEP+
+                  fh.getTokenCount()+Constants.LINE_ITEM_SEP+
+                  fh.getTypeTokenRatio();
+                // System.err.println("--");
+                os.println(line);
+            }
+            else{
+                SubcorpusConstraints  sbc=  hdbm.getSubcorpusConstraints(xquerywhere);
+                if (sbc != null && sbc.acceptFile(  Integer.toString(fks[i]))){
+                    FrequencyHash fh = dtab.getFileFrequencyTable(fks[i], !cs);
+                    String fdesc = hdbm.getFileDescription(fks[i]);  
+                    String line = fks[i]+Constants.LINE_ITEM_SEP+fdesc+Constants.LINE_ITEM_SEP+
+                      fh.getTokenCount()+Constants.LINE_ITEM_SEP+
+                      fh.getTypeTokenRatio();
+                    // System.err.println("--");
+                    sumTTratios += fh.getTypeTokenRatio();
+                    tokenCount += fh.getTokenCount();
+                    countSubcorpusFiles++;
+                    os.println(line);
+                }
+            }
+          
       }
+        if (xquerywhere != null){
+            dtab.printSubCorpusStats(os, (double) sumTTratios/countSubcorpusFiles, tokenCount);
+            dtab.printNoItems(os, tokenCount);
+        }else
+        {
+            dtab.printCorpusStats(os,!cs);
+            dtab.printNoItems(os, fks.length);
+        }
     }
     catch (Exception e) {
       System.err.println("CDescPrinter: " + e);
       e.printStackTrace();
     }
   }
+  
 
 
   // utilities for internal use 
@@ -486,6 +538,10 @@ private String mergeStrings(String[] ss) {
 
 private String[] unmergeStrings(String s) {
     return s.split(STRING_SEPARATOR_REGEX);
+}
+
+private void getServerStartDate(Request req, PrintWriter os) {
+     os.println(dateStarted);
 }
 	
 }

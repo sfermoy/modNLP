@@ -38,7 +38,7 @@ public class CorpusFile {
 
   char [] fileArray;
   int noChars;
-  String encoding = "UTF8"; // default
+  String encoding = "UTF-8"; // default
   int language = modnlp.Constants.LANG_EN; 
   char spaceChar = ' ';  // default to Latin script white space.
 
@@ -46,6 +46,9 @@ public class CorpusFile {
     switch (la) {
     case modnlp.Constants.LANG_EN:
       setLangEN();
+      break;
+    case modnlp.Constants.LANG_AR:
+      setLangAR();
       break;
     case modnlp.Constants.LANG_JP:
       setLangJP();
@@ -64,6 +67,11 @@ public class CorpusFile {
   public void setLangEN (){
     spaceChar = ENSPACE;
     language = modnlp.Constants.LANG_EN; 
+  }
+  
+  public void setLangAR (){
+    spaceChar = ENSPACE;
+    language = modnlp.Constants.LANG_AR; 
   }
 
   /**

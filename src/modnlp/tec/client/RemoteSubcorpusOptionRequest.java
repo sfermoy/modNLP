@@ -36,6 +36,15 @@ public class RemoteSubcorpusOptionRequest {
 
   private String server;
   private int portnum;
+  String encoding = "UTF-8";
+
+  public void setEncoding (String e){
+    encoding = e;
+  }
+
+  public String getEncoding () {
+    return encoding;
+  }
 
   public RemoteSubcorpusOptionRequest(String s, int p){
     server = s;
@@ -55,7 +64,7 @@ public class RemoteSubcorpusOptionRequest {
     exturlConnection.setRequestMethod("GET");
     BufferedReader input = new
       BufferedReader(new
-                     InputStreamReader(exturlConnection.getInputStream() ));
+                     InputStreamReader(exturlConnection.getInputStream(), encoding));
     String al = input.readLine();
     return DictProperties.parseAttributeChooserSpecs(al);
   }
@@ -74,7 +83,7 @@ public class RemoteSubcorpusOptionRequest {
       exturlConnection.setRequestMethod("GET");
       BufferedReader input = 
         new BufferedReader(new
-                           InputStreamReader(exturlConnection.getInputStream() ));
+                           InputStreamReader(exturlConnection.getInputStream(), encoding ));
       String s = input.readLine();
       return s.split(Constants.ATTRIBUTE_OPTION_SEP);
     }

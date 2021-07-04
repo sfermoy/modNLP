@@ -67,7 +67,7 @@ public class CaseTable extends Table {
     DatabaseEntry key = new DatabaseEntry();
     DatabaseEntry data = new DatabaseEntry();
     StringSet set = null;
-    StringBinding.stringToEntry(sik.toLowerCase(), key);
+    StringBinding.stringToEntry(normaliseString(sik), key);
     try {
       if (database.get(null,key, data, LockMode.DEFAULT) == OperationStatus.SUCCESS) 
         set = (StringSet)isb.entryToObject(data);
@@ -84,7 +84,7 @@ public class CaseTable extends Table {
     TupleBinding isb = new StringSetBinding();
     DatabaseEntry key = new DatabaseEntry();
     DatabaseEntry data = new DatabaseEntry();
-    StringBinding.stringToEntry(sik.toLowerCase(), key);
+    StringBinding.stringToEntry(normaliseString(sik), key);
     isb.objectToEntry(set, data);
     put(key,data);
     return set;
@@ -95,7 +95,7 @@ public class CaseTable extends Table {
     DatabaseEntry key = new DatabaseEntry();
     DatabaseEntry data = new DatabaseEntry();
     StringSet set = null;
-    StringBinding.stringToEntry(sik.toLowerCase(), key);
+    StringBinding.stringToEntry(normaliseString(sik), key);
     try {
       if (database.get(null, key, data, LockMode.DEFAULT) ==
           OperationStatus.SUCCESS) {
@@ -114,7 +114,7 @@ public class CaseTable extends Table {
   }
 
   public StringSet put(String wform) {
-    return put(wform.toLowerCase(), wform);
+    return put(normaliseString(wform), wform);
   }
 
   public StringSet remove(String wform) {
@@ -122,7 +122,7 @@ public class CaseTable extends Table {
     DatabaseEntry key = new DatabaseEntry();
     DatabaseEntry data = new DatabaseEntry();
     StringSet set = null;
-    StringBinding.stringToEntry(wform.toLowerCase(), key);
+    StringBinding.stringToEntry(normaliseString(wform), key);
     try {
       if (database.get(null, key, data, LockMode.DEFAULT) ==
           OperationStatus.SUCCESS) {
@@ -154,10 +154,10 @@ public class CaseTable extends Table {
     }
   }
   
-	public WordForms getAllPrefixMatches (String k, boolean csensitive ){
-		WordForms wordform = new WordForms(k);
+  public WordForms getAllPrefixMatches (String k, boolean csensitive ){
+    WordForms wordform = new WordForms(k);
     String prefix = WordQuery.getWildcardsLHS(k);
-		try {
+    try {
       Cursor c = database.openCursor(null, null);
       TupleBinding kb = new StringBinding();
       TupleBinding isb = new StringSetBinding();
@@ -170,7 +170,7 @@ public class CaseTable extends Table {
         for (Iterator f = set.iterator(); f.hasNext() ;) {          
           String word = (String)f.next();
           if ( ! csensitive ) {
-            if ( word.toLowerCase().startsWith(prefix.toLowerCase()) ) 
+            if ( normaliseString(word).startsWith(normaliseString(prefix)) ) 
               wordform.addElement(word);
           }
           else
@@ -185,13 +185,13 @@ public class CaseTable extends Table {
     }
     Collections.sort(wordform);
     //System.out.println(wordform);    
-		return wordform;
-	}
-
-	public WordForms getAllSuffixMatches (String k, boolean csensitive ){
-		WordForms wordform = new WordForms(k);
+    return wordform;
+  }
+  
+  public WordForms getAllSuffixMatches (String k, boolean csensitive ){
+    WordForms wordform = new WordForms(k);
     String suffix = WordQuery.getWildcardsRHS(k);
-		try {
+    try {
       Cursor c = database.openCursor(null, null);
       TupleBinding kb = new StringBinding();
       TupleBinding isb = new StringSetBinding();
@@ -204,7 +204,7 @@ public class CaseTable extends Table {
         for (Iterator f = set.iterator(); f.hasNext() ;) {          
           String word = (String)f.next();
           if ( ! csensitive ) {
-            if ( word.toLowerCase().endsWith(suffix.toLowerCase()) ) 
+            if ( normaliseString(word).endsWith(normaliseString(suffix)) ) 
               wordform.addElement(word);
           }
           else
@@ -219,12 +219,12 @@ public class CaseTable extends Table {
     }
     Collections.sort(wordform);
     //System.out.println(wordform);    
-		return wordform;
-	}
-
-	public WordForms getAllRegexMatches (String k, boolean csensitive ){
-		WordForms wordform = new WordForms(k);
-		try {
+    return wordform;
+  }
+  
+  public WordForms getAllRegexMatches (String k, boolean csensitive ){
+    WordForms wordform = new WordForms(k);
+    try {
       Cursor c = database.openCursor(null, null);
       TupleBinding kb = new StringBinding();
       TupleBinding isb = new StringSetBinding();
@@ -255,22 +255,37 @@ public class CaseTable extends Table {
     }
     Collections.sort(wordform);
     //System.out.println(wordform);    
-		return wordform;
-	}
-
-
-	/** Return a vector containing all word forms (all existing
-	 *  cases) found in the dictionary.
+    return wordform;
+  }
+  
+  
+  /** Return a vector containing all word forms (all existing
+   *  cases) found in the dictionary.
    * @param  key   the keyword to search for 
    * @return all word forms or null if none found.
-	 */
-	public WordForms getAllCases (String sik){
-		WordForms wordform = new WordForms(sik);
-    StringSet ws = fetch(sik.toLowerCase());
-		return ws == null? null : new WordForms(sik, ws);
-	} 
+   */
+  public WordForms getAllCases (String sik){
+    WordForms wordform = new WordForms(sik);
+    StringSet ws = fetch(normaliseString(sik));
+    return ws == null? null : new WordForms(sik, ws);
+  } 
+  
+  
 
+  // --- Utilities
 
+  /** Return 'normalised' form of a sting; lowercase and with diacritics etc removed. 
+   * @param  sik   a string 
+   * @return a normalised form of sik
+   */  
+  public static String normaliseString (String sik){
+    sik = java.text.Normalizer.normalize(sik, java.text.Normalizer.Form.NFD);
+    sik = sik.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+    //System.out.println("----"+sik);
+    
+    return sik.toLowerCase();
+  }
+  
   public void  dump () {
     try {
       Cursor c = database.openCursor(null, null);
@@ -291,6 +306,7 @@ public class CaseTable extends Table {
     }
   }
 
+  
 
 
 }

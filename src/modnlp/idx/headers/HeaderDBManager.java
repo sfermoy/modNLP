@@ -70,6 +70,9 @@ public class HeaderDBManager {
   String queryReturnSIDAttPath = null; // e.g. (speech|writing)/@ref
   String queryRootFileDescPath = null;
   String queryFileDescReturn = null;
+  String queryHeaderInfo = null;
+  String headerInfoHuman = null;
+  
   ConstraintCache cache;
 
   public HeaderDBManager (DictProperties dp)
@@ -95,7 +98,9 @@ public class HeaderDBManager {
     queryReturnSIDAttPath = dp.getProperty("xquery.return.attribute.path");
     queryRootFileDescPath = dp.getProperty("xquery.root.filedescription.path");
     queryFileDescReturn = dp.getProperty("xquery.file.description.return");
-
+    queryHeaderInfo = dp.getProperty("xquery.header.info.return");
+    headerInfoHuman = dp.getProperty("header.info.human");
+    
     String driver = "org.exist.xmldb.DatabaseImpl";
     Class cl = Class.forName(driver);
     database = (Database)cl.newInstance();
@@ -155,14 +160,57 @@ public class HeaderDBManager {
     System.out.println("ok.");    
   }
 
-
   public SubcorpusConstraints getSubcorpusConstraints(String where){
     try {
       SubcorpusConstraints sc;
       if (where == null)
         return null;
       if ( (sc = cache.get(where)) != null ){
-        System.err.println("Found cached query: "+where);
+        //System.err.println("Found cached query: "+where);
+        return sc;
+      }
+      //      String resources[] = collection.listResources();
+      sc = new SubcorpusConstraints();
+      //for (int i = 0; i < resources.length; i++) {
+      XQueryService service =
+        (XQueryService) collection.getService("XQueryService", "1.0");
+      //service.setProperty("indent", "yes");
+      String xq = "for "+XQVAR+" in "+"/"+queryRootElementPath+
+        " let $a := 'a' "+  // need to include this nonsensical let clause (possibly a bug in eXist
+        " where "+where+
+        " return data("+XQVAR+"/"+queryReturnSIDAttPath+")";
+      CompiledExpression compiled = service.compile(xq);
+      ResourceSet result = service.execute(compiled);
+      ResourceIterator ri = result.getIterator();
+      HashSet hs = new HashSet();
+      String fn = null;
+      while(ri.hasMoreResources()) {
+        Resource r = ri.nextResource();
+        hs.add(r.getContent());
+        if (fn == null)
+          fn = r.getContent()+"";
+      }
+      if (!hs.isEmpty())
+        sc.put(fn, hs);
+      cache.cache(where,sc);
+      //System.out.println(sc);
+      return sc; //.isEmpty()? null : sc;
+    }
+    catch (Exception ex){
+      System.err.println("Error (HeaderDBManager.geSubcorpusConstrints): "+ex);
+      ex.printStackTrace();
+      return new SubcorpusConstraints();
+    }
+  }
+
+
+  public SubcorpusConstraints getSubcorpusConstraintsOld(String where){
+    try {
+      SubcorpusConstraints sc;
+      if (where == null)
+        return null;
+      if ( (sc = cache.get(where)) != null ){
+        //System.err.println("Found cached query: "+where);
         return sc;
       }
       String resources[] = collection.listResources();
@@ -198,7 +246,7 @@ public class HeaderDBManager {
     }
   }
 
-  public String getFileDescription(int fno){
+ public String getFileDescription(int fno){
     try {
       //      String resources[] = collection.listResources();
       //for (int i = 0; i < resources.length; i++) {
@@ -214,7 +262,41 @@ public class HeaderDBManager {
       if (ri.hasMoreResources()) {
         Resource r = ri.nextResource();
         String desc = (String)r.getContent();
-        System.err.println(desc);
+        //System.err.println(desc);
+        desc = desc.substring(3,desc.lastIndexOf("</d>"));
+        desc = desc.replace("&lt;","<");
+        desc = desc.replace("&gt;",">");
+        return desc.replace('\n',' ');
+      }
+      //}
+    return "";
+    }
+    catch (Exception ex){
+      System.err.println("Error (HeaderDBManager.geSubcorpusConstrints): "+ex);
+      ex.printStackTrace();
+      return "";
+    }
+  }
+  
+  
+  public String getFileHeaderAttributes(int fno){
+    try {        
+      XQueryService service =
+        (XQueryService) collection.getService("XQueryService", "1.0");
+      //service.setProperty("indent", "yes");
+      
+       //String xq = "let "+XQVAR+" := doc('"+fno+"')"+queryRootFileDescPath+
+      String xq = "let "+XQVAR+" := doc('"+fno+"')"+queryRootFileDescPath+
+        " return <d>"+queryHeaderInfo+"</d>";
+      //xquery.attribute.visualise
+      //System.err.println(xq);
+      CompiledExpression compiled = service.compile(xq);
+      ResourceSet result = service.execute(compiled);
+      ResourceIterator ri = result.getIterator();
+      if (ri.hasMoreResources()) {
+        Resource r = ri.nextResource();
+        String desc = (String)r.getContent();
+        //System.out.println(desc);
         desc = desc.substring(3,desc.lastIndexOf("</d>"));
         desc = desc.replace("&lt;","<");
         desc = desc.replace("&gt;",">");
@@ -324,5 +406,9 @@ public class HeaderDBManager {
       ex.printStackTrace();
     }
   }
+
+    public String getFileHeaderAttributeHuman() {
+        return headerInfoHuman;
+    }
 
 }

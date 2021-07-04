@@ -3,17 +3,30 @@
 # Created Mon Jun 21 2010 by S Luz luzs@cs.tcd.ie
 # $Id$
 # $Log$
- use Cwd;
+use Cwd;
+use Getopt::Std;
 
 ## set these variables to point to your corpus files
-
 require "config.pl";
 
-$dry_run = $ARGV[0];
-die "Usage: indexincoming.pl  [-dry-run]\n  Error reading config.pl. Please set locations correctly."
+sub Usage {
+die "Usage: indexincoming.pl [-h|-d|-s|-q]
+             -h        display this message
+             -d        dry run (test but do not index)
+             -s        do not try to kill server before indexing
+             -q        do not display debug messages
+  Please set locations correctly in config.pl.\n"; 
+}
+getopts('hdsq');
+my $dry_run = $opt_d;
+my $server_kill = !$opt_s;
+my $debug = !$opt_q;
+Usage if $opt_h;
+Usage()
     unless $IDX_BIN || $TEXT_DIR || $HEADERS_DIR || $HEADERS_URL || $INDEX_DIR;
 
-my $debug = 0;
+
+
 my @date = localtime();
 my $DATE = join('',($date[5]+1900),"-",sprintf("%02d",$date[4]+1),"-",sprintf("%02d",$date[3]),"_$date[2].$date[1].$date[0]");
 ## ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst)
@@ -27,9 +40,11 @@ my $TEXT_LIST_FILE = "$INCOMING_DIR/$LOG_DIR/indexed_on_$DATE.lst";
 my @TEXT_LIST=sort(<*.xml>);
 my @HEADERS_LIST=sort(<*.hed>);
 my $error_detected = 0;
+my $warn_detected = 0;
 my $error_local = 0;
 
 @haux = @HEADERS_LIST;
+$htmp = '';
 open(FL, ">$TEXT_LIST_FILE") 
     or die "Couldn't open file list: $!\n";
 if ( scalar @TEXT_LIST == 0 ){
@@ -37,6 +52,27 @@ if ( scalar @TEXT_LIST == 0 ){
 }
 #open(LOG, ">$TEXT_LOG_FILE") 
 #    or die "Couldn't open log file: $!\n";
+my %set = map { $_ => 1 } @haux;
+my @missing;
+foreach(@TEXT_LIST){
+    my $h = $_;
+    $h =~ s/\.xml$/.hed/;
+    push(@missing, $h)
+        unless exists($set{$h});
+}
+%set = map { $_ => 1 } @TEXT_LIST;
+foreach(@HEADERS_LIST){
+    my $t = $_;
+    $t =~ s/\.hed$/.xml/;
+    push(@missing, $t)
+        unless exists($set{$t});
+}
+if (scalar(@missing) > 0){
+    die("ERROR: The following files are missing:\n".join("\n",@missing)."\n");
+}
+
+
+#print "~~~~~~~~~~~~~>".join(':',@missing)."\n";
 foreach (@TEXT_LIST){
     $error_local = 0;
     my $h = $_;
@@ -46,42 +82,43 @@ foreach (@TEXT_LIST){
     if ($DOS2UNIX){
         my $cmd = "$DOS2UNIX $t";
         Run($cmd) or
-            PrepareToDie( "Error converting to unix: '$cmd': $!\n"); 
+            PrepareToDie( "ERROR converting to unix: '$cmd': $!\n"); 
         my $cmd = "$DOS2UNIX $h";
         Run($cmd) or
-            PrepareToDie( "Error converting to unix: '$cmd': $!\n"); 
+            PrepareToDie( "ERROR converting to unix: '$cmd': $!\n"); 
     }
     if ($XMLLINT){
         my $cmd = "$XMLLINT $t";
         Run($cmd) or
-            PrepareToDie( "XML parsing error: '$cmd': $!\n"); 
+            PrepareToDie( "XML parsing ERROR: '$cmd': $!\n"); 
         my $cmd = "$XMLLINT $h";
         Run($cmd) or
-            PrepareToDie( "XML parsing error: '$cmd': $!\n"); 
+            PrepareToDie( "XML parsing ERROR: '$cmd': $!\n"); 
     }
     if ($FILETYPE){
         my $cmd = "$FILETYPE $t";
         AcceptableEncoding($cmd) or
-            PrepareToDie( "Error determining file type: '$cmd': $!\n"); 
+            PrepareToDie( "ERROR determining file type: '$cmd': $!\n"); 
         my $cmd = "$FILETYPE $h";
         AcceptableEncoding($cmd) or
-            PrepareToDie( "Error determining file type: '$cmd': $!\n"); 
+            PrepareToDie( "ERROR determining file type: '$cmd': $!\n"); 
     }
-    unless(shift(@haux) eq $h){
+    #print "++++++++>".join(':',@haux)."\n";
+    unless($htmp = shift(@haux) eq $h){
         unlink($TEXT_LIST_FILE);
-        PrepareToDie("Incoming HEADERS list don't match incoming TEXT files: $t != $h.\n");
+        PrepareToDie("Incoming HEADERS list don't match incoming TEXT files: $t and $h ($htmp).\n");
     }
     if (sectionMismatch($t, $h)){
         unlink($TEXT_LIST_FILE);
-        PrepareToDie("Incoming HEADERS list don't match incoming TEXT files: $t != $h.\n");  
+        PrepareToDie("Section ID mismatch in $t and $h.\n");  
     }
     if (-e "$TEXT_DIR/$t"){
         unlink($TEXT_LIST_FILE);
         PrepareToDie("Incoming files exists at destination '$TEXT_DIR/$t'\n");
-    }    
+    }
     if (!CheckFilenameAttribute($h)){
         unlink($TEXT_LIST_FILE) &&
-         PrepareToDie( "Stopped due to above error in header file $h\n");
+         PrepareToDie( "Stopped due to above ERROR in header file $h\n");
     }
     print  FL "$TEXT_DIR/$t\n";
     if ( $error_local > 0 ) {
@@ -96,11 +133,21 @@ close FL;
  PrepareToDie("Incoming headers don't match incoming text files.\n"))
     if $#haux > 0;
 
-if ( $error_detected > 0 ){
-    die "Errors in incoming files. See list above, fix the errors and try again.\n";
+if ( $warn_detected > 0 ){
+    print STDERR "Warnings found. Search for the word 'WARNING' to see them.\n";
 }
+if ( $error_detected > 0 ){
+    die "Errors in incoming files. See list above (search for 'ERROR'), fix the errors and try again.\n";
+}
+exit 0
+    if $dry_run;
 
 ## Passed all checks; now the action begins...
+if ($server_kill && -e $SERVER_PID){
+    $pid = `cat $SERVER_PID`;
+    Run("kill $pid") or  die "Couldn't stop server: $!\n";
+}
+
 my $cmd = 'cp '. join(' ', @TEXT_LIST)." $TEXT_DIR/";
 Run($cmd)
     or unlink @TEXT_LIST &&
@@ -125,9 +172,17 @@ print "Now at $IDX_BIN \n";
 
 $cmd = "./runidx.sh $INDEX_DIR $TEXT_LIST_FILE $HEADERS_DIR $HEADERS_URL";
 if (! Run($cmd)){
-    unlink @TEXT_LIST;
-    unlink @HEADERS_LIST;
-    unlink($TEXT_LIST_FILE);
+    print "Cleaning up before death:\n";
+    print "Now at $TEXT_DIR\n";
+    chdir($TEXT_DIR);
+    print "Removing @TEXT_LIST\n";
+    unlink @TEXT_LIST
+        unless $dry_run;
+    print "Now at $HEADERS_DIR\n";
+    chdir($HEADERS_DIR);
+    print "Removing @HEADERS_LIST\n";
+    unlink @HEADERS_LIST
+        unless $dry_run;
     die "error running: '$cmd': $!\n";
 }
 
@@ -138,6 +193,11 @@ unlink @HEADERS_LIST
     unless $dry_run;
 
 print 'Files '.join(', ',@TEXT_LIST)." + headers have been indexed and removed from incoming folder.\n";
+
+if ($server_kill && -e $SERVER_PID){
+    $cmd = "daemonize -p $SERVER_PID -o $SYSLOGFILE -e $ERRLOG -c $TEC_BIN $TEC_SERVER $ARGS";
+    Run($cmd) or  die "error re-starting server: '$cmd': $!\n";
+}
 
 sub Run {
     my $c = shift;
@@ -152,10 +212,12 @@ sub Run {
     else{
         `$c 2>&1 /dev/null`;
     }
-
     return 1
         if $dry_run;
-    return $? != -1;
+
+    my $st = $? >> 8;
+    print "Run exit status $st\n";
+    $st == 0;
     #return system("$c") == 0 ;
 }
 
@@ -182,20 +244,33 @@ sub CheckFilenameAttribute{
     open(HF, "<$f") or die "Couldn't open $f: $!\n";
 
     my $l;
+    my $c = '';
+    my $fix = 0;
     while ($l = <HF>){
+        $c .= $l;
         if ($l =~ /filename=['"]([^'"]+?)['"]/){
             if ($1 eq $name){
                 close HF; 
                 return 1;
             }
             else{
-                close HF; 
-                print STDERR "File name mismatch in header file $f;\nFound filename='$1' when it should be filename='$name'\n";
-                return 0;
+                ##                close HF; 
+                print STDERR "WARNING: File name mismatch in header file $f;\nFound filename='$1' when it should be filename='$name'\n";
+                $fix = 1;
+                $warn_detected = 1;
+                #                return 0;
             }
         }
     }
-    close HF; 
+    close HF;
+    if ($fix){
+        print STDERR "fixing it...\n";
+        $c =~ s/(<document .*filename=["'])(.+?)(["'])/$1$name$3/;
+        rename($name,"$name"."-old");
+        open(FI, ">$name.hed") || die("Error opening $name: $!");
+        print FI $c;
+        close(FI);
+    }
     return 1;
 }
 

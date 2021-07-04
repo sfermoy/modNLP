@@ -19,9 +19,14 @@
 
 package modnlp.tec.client;
 
+import java.util.HashMap;
+import javax.swing.JMenu;
 import modnlp.tec.client.gui.BrowserGUI;
+import modnlp.tec.client.gui.event.ConcordanceDisplayEvent;
+import modnlp.tec.client.gui.event.ConcordanceListSizeEvent;
 import modnlp.idx.database.Dictionary;
 import modnlp.idx.headers.HeaderDBManager;
+
 /**
  *  General concordance browser. Classes implementing this interface
  *  will typically control {@link modnlp.tec.client.gui.BrowserFrame}
@@ -58,6 +63,10 @@ public interface ConcordanceBrowser {
 
   public void chooseNewRemoteCorpus();
 
+  public void concordanceChanged(ConcordanceDisplayEvent e);
+
+  public void concordanceChanged(ConcordanceListSizeEvent e);
+  
   public void setRemoteCorpus(String s, int p);
     
   public void quit();
@@ -87,6 +96,8 @@ public interface ConcordanceBrowser {
   public void showPreferencesEditor();
 
   public void showSubcorpusSelector();
+  
+  public void showSubcorpusSaveSelector();
 
   public ConcordanceVector getConcordanceVector();
 
@@ -113,6 +124,12 @@ public interface ConcordanceBrowser {
   public String getVersion ();
 
   public String getBrowserName ();
+  
+  public HashMap< String, String> getHeaderMap();
+  
+  public HeaderProducer getHeaderProducer();
+  
+  public  String getEncoding();
 
   public int getLanguage();
 
@@ -123,5 +140,23 @@ public interface ConcordanceBrowser {
   public void showContext(int col, String str);
   
   public void addChangeListener(StateChanged toAdd);
+  
+  public  String getHeaderBaseUrl();
+  
+  public void removeConcordanceLine(ConcordanceObject o);
+  
+  public void removeConcordanceLineOnly(ConcordanceObject o);
+  
+  public void addConcordanceLine(ConcordanceObject o);
+  
+  public void redisplay();
+  
+  public void loadNamedSubcorpus(String n);
+  
+  public void setSubcorpusName(String subcorpusName);
+   
+  public void lodeRecentMenu();
+  
+  public JMenu getRecentMenu();
 
 }

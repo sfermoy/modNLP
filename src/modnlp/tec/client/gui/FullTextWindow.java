@@ -73,18 +73,20 @@ public class FullTextWindow extends JFrame
   private JEditorPane outPane = new  JEditorPane("text/html", ""); // new  JTextArea(20,40);
   private JButton dismissButton =  new JButton("Dismiss");
   private boolean useText = false;
-
+  private final String FONTNAME = "Tahoma"; 
+  
   /** Initialize Extract and/or Header window
    * with title */
   public FullTextWindow(String title)
   {
     super(title);
     outPane.setEditable(false); 
-    outPane.setFont( new Font("Helvetica", Font.PLAIN, 12) );
+    outPane.setFont( new Font(FONTNAME, Font.PLAIN, 14) );
+    outPane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
     useText = true;
     textInit();
   }
-
+  
   /** Initialize Extract and/or Header window
    * with <code>title</code> and put <code>fulltext</code>
    * in it. */
@@ -94,7 +96,8 @@ public class FullTextWindow extends JFrame
     outPane.setEditable(false); 
     useText = true;
     text = fullText;
-    outPane.setFont( new Font("Helvetica", Font.PLAIN, 12) );
+    outPane.setFont( new Font(FONTNAME, Font.PLAIN, 14) );
+    outPane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
     textInit();
     displayText(text);
   }
@@ -107,7 +110,8 @@ public class FullTextWindow extends JFrame
     super(title);
     outPane.setEditable(false); 
     useText = true;
-    outPane.setFont( new Font("Helvetica", Font.PLAIN, 12) );
+    outPane.setFont( new Font(FONTNAME, Font.PLAIN, 14) );
+    outPane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
     textInit();
     outPane.setText(fullText.toString());
 		outPane.setCaretPosition(0);
@@ -118,7 +122,7 @@ public class FullTextWindow extends JFrame
     super(title);
     outPane.setEditable(false); 
     useText = true;
-    outPane.setFont( new Font("Helvetica", Font.PLAIN, 12) );
+    outPane.setFont( new Font(FONTNAME, Font.PLAIN, 14) );
     textInit();
     outPane.setText(fullText.toString());
 		outPane.setCaretPosition(0);
@@ -135,7 +139,7 @@ public class FullTextWindow extends JFrame
     super(title);
     outPane.setEditable(false); 
     setBackground(Color.white);
-    outPane.setFont( new Font("Helvetica", Font.PLAIN, 12) );
+    outPane.setFont( new Font(FONTNAME, Font.PLAIN, 14) );
     text = fullText;
     height = h;
     width = w;
@@ -233,14 +237,13 @@ public class FullTextWindow extends JFrame
     validate();
   }
 	
-  /** Reset this winows font size if current size 
+  /** Reset this windows font size if current size 
    *  different from <code>nsz</code> 
    *  @return <code>true</code> if font has been reset 
    */
-  public boolean resetFontIfChanged(int nsz){
-		
+  public boolean resetFontIfChanged(int nsz){                 
     if ( outPane.getFont().getSize() != nsz ){
-      outPane.setFont( new Font("Helvetica", Font.PLAIN, nsz) );
+      outPane.setFont( new Font(FONTNAME, Font.PLAIN, nsz) );
       return true;
     }
     else 
@@ -254,7 +257,9 @@ public class FullTextWindow extends JFrame
   }
 
   public void defaultChanged(FontSizeChangeEvent e){
+    outPane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
     if ( resetFontIfChanged(e.getNewSize()) )
       validate();
   }
 }
+

@@ -45,7 +45,7 @@ public class DictProperties extends java.util.Properties{
   String fileTableName = "fitable.db";  // fileno -> fileuri
   String tPosTableName = "tptable.db";  // fileno -> [offset1, offset2, ...]
   String corpusDir = ""; // the default directory for relative fileTableNames 
-  String encoding  = "UTF8";
+  String encoding  = "UTF-8";
   String headerEXT = "hed";
 
   public DictProperties (String cd) {
@@ -130,6 +130,8 @@ public class DictProperties extends java.util.Properties{
       return modnlp.Constants.LANG_EN;  // English is default
     if (p.equals("jp"))
       return modnlp.Constants.LANG_JP;
+    if (p.equals("ar"))
+      return modnlp.Constants.LANG_AR;
 
     return modnlp.Constants.LANG_EN;  // English is default
   }

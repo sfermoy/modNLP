@@ -48,6 +48,7 @@ import java.awt.event.ActionEvent;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
+import modnlp.idx.inverted.TokeniserARLucene;
 
 import prefuse.Constants;
 import prefuse.controls.ControlAdapter;
@@ -325,7 +326,10 @@ public class ConcordanceTreeViewer extends JFrame
           break;
         case modnlp.Constants.LANG_JP:
           ss = new TokeniserJPLucene("");
-            break;
+          break;
+         case modnlp.Constants.LANG_AR:
+          ss = new TokeniserARLucene("");
+          break;
         default:
           ss = new TokeniserRegex("");
           break;

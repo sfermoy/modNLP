@@ -20,24 +20,15 @@ package modnlp.tec.client.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Container;
-import java.awt.Event;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.Arrays;
+import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.StringTokenizer;
-import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -45,7 +36,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -54,26 +44,25 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.Timer;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
-import java.util.Arrays;
-import javax.swing.JViewport;
 import javax.swing.event.ListSelectionEvent;
+import modnlp.idx.database.Dictionary;
 
 import modnlp.idx.query.WordQuery;
-import modnlp.tec.client.ConcordanceVector;
+//import modnlp.tec.client.Browser;
 import modnlp.tec.client.ConcordanceBrowser;
 import modnlp.tec.client.gui.event.ConcordanceDisplayEvent;
-import modnlp.tec.client.gui.event.ConcordanceDisplayListener;
 import modnlp.tec.client.gui.event.ConcordanceListSizeEvent;
 import modnlp.tec.client.ConcordanceObject;
 import modnlp.tec.client.gui.event.DefaultChangeEvent;
-import modnlp.tec.client.gui.event.DefaultChangeListener;
 import modnlp.tec.client.Download;
 import modnlp.tec.client.gui.event.FontSizeChangeEvent;
 import modnlp.tec.client.Plugin;
 import modnlp.tec.client.gui.event.SortHorizonChangeEvent;
+import modnlp.tec.server.Server;
 
 /**
  *  This frame implements a 'concordance browser' that interacts with
@@ -101,6 +90,7 @@ public class BrowserFrame extends BrowserGUI
   private static final String PREBUT = "Preferences";
   private static final String DOBUTT = "Search";
   private static final String ASCBUTT = "Subcorpus";
+  private static final String RMLINEBUT = "Delete Line";
   private static final String QUITBUT = "QUIT";
 
   private final static int FRAME_WIDTH = 1000;
@@ -124,6 +114,7 @@ public class BrowserFrame extends BrowserGUI
   private JButton concButton;
 
   private JMenu  fileMenu = new JMenu("File");
+  
   private JMenuItem nlcButton = new JMenuItem("New local corpus...");
   private JMenuItem nrcButton = new JMenuItem("New remote corpus...");    
   private JMenuItem dldButton = new JMenuItem("Save concordances...");  
@@ -131,26 +122,31 @@ public class BrowserFrame extends BrowserGUI
 
   private JMenu  prefMenu = new JMenu("Options");
   private JCheckBoxMenuItem caseCheckBox = 
-    new JCheckBoxMenuItem("Case sensitive");
+    new JCheckBoxMenuItem("Case/diacritic sensitive");
   private JCheckBoxMenuItem punctuationCheckBox = 
     new JCheckBoxMenuItem("Punctuation as tokens");
   private JMenuItem advConcButton = 
     new JMenuItem("Select Sub-corpus...");
+  
+  private JMenuItem saveCorpButton = new JMenuItem("Sub-corpus Tool");  
 
   private JCheckBoxMenuItem advConcFlagItem = 
     new JCheckBoxMenuItem("Activate sub-corpus selection");
   private JMenuItem prefButton = new JMenuItem("Preferences...");
 
-  private JMenu  pluginMenu = new JMenu("Plugins");
+   private JMenu subcorpusMenu = new JMenu("Sub-corpus");
+  private JMenu pluginMenu = new JMenu("Plugins");
 
-  private JMenu  helpMenu = new JMenu("Help");
+  private JMenu helpMenu = new JMenu("Help");
   private JMenuItem helpButton = new JMenuItem("Contents");
   private JMenuItem aboutButton = new JMenuItem("About MODNLP...");    
 
   private JButton stlButton = new JButton(STLBUT);
   private JButton strButton = new JButton(STRBUT);
+  private JButton sortFileButton = new JButton("Sort by filename");
   private JButton extractButton = new JButton(EXTBUT);
   private JButton headerButton = new JButton(HEDBUT);
+  private JButton removeLineButton = new JButton(RMLINEBUT);
 
   private JPanel optArea = new JPanel();
   private JPanel outArea = new JPanel();
@@ -164,8 +160,9 @@ public class BrowserFrame extends BrowserGUI
   private String encoding = null;
   private BrowserFrame myself; 
   private SubcorpusCaseStatusPanel sccsPanel;
+  private JMenu recent;
 
-  ConcordanceBrowser parent = null;
+  private ConcordanceBrowser parent = null;
 
   /** Create a TEC Window Object
    * @param width   window width
@@ -201,17 +198,27 @@ public class BrowserFrame extends BrowserGUI
     fileMenu.addSeparator();
     fileMenu.add(quitButton);
     
+    subcorpusMenu.add(saveCorpButton);
+
+
+    recent = new JMenu("Quick Load");
+    loadRecentMenu ();
+        
+    subcorpusMenu.add(recent);
+    subcorpusMenu.add(advConcFlagItem);
+    
     prefMenu.add(caseCheckBox);
     prefMenu.add(punctuationCheckBox);
-    prefMenu.add(advConcButton);
-    prefMenu.add(advConcFlagItem);
+
     prefMenu.addSeparator();
     prefMenu.add(prefButton);
+    
 
     helpMenu.add(helpButton);
     helpMenu.add(aboutButton);
 
     menuBar.add(fileMenu);
+    menuBar.add(subcorpusMenu);
     menuBar.add(prefMenu);
     menuBar.add(pluginMenu);
     menuBar.add(Box.createHorizontalGlue());
@@ -226,16 +233,18 @@ public class BrowserFrame extends BrowserGUI
     kwd.add( new JLabel("Keyword"));
     keyword = new JTextField(15);
     kwd.add( keyword);
+    setDirectionality();
     keyword.setToolTipText("Syntax: word_1[+[[context]]word2...]. E.g. 'seen+before' will find '...never seen before...' etc; 'seen+[2]before' finds the '...seen her before...'");
     kwd.setBorder(BorderFactory.createEtchedBorder());
     concButton = new JButton(DOBUTT);
     kwd.add( concButton );
-
     // sort panels
     JPanel lsp = new JPanel();
     JPanel rsp = new JPanel();
+    JPanel nsp = new JPanel();
     lsp.setBorder(BorderFactory.createEtchedBorder());
     rsp.setBorder(BorderFactory.createEtchedBorder());
+    nsp.setBorder(BorderFactory.createEtchedBorder());
     for (int i = 1 ; i <= PreferPanel.SCTXMAX ; i++){
       leftSortCtx.addItem(""+i);
       rightSortCtx.addItem(""+i);
@@ -245,12 +254,16 @@ public class BrowserFrame extends BrowserGUI
     
     rsp.add(rightSortCtx);
     rsp.add(strButton);
-
+    nsp.add(sortFileButton);
+    
+    
     leftSortCtx.setEnabled(false);
     rightSortCtx.setEnabled(false);
     stlButton.setEnabled(false);
     strButton.setEnabled(false);
+    sortFileButton.setEnabled(false);
     extractButton.setEnabled(false);
+    removeLineButton.setEnabled(false);
     headerButton.setEnabled(false);
     dldButton.setEnabled(false);
     
@@ -258,8 +271,10 @@ public class BrowserFrame extends BrowserGUI
     nrcButton.setToolTipText("Select a new corpus index server");
     dldButton.setToolTipText("Save the displayed concordances to disk");
     stlButton.setToolTipText("Sort with left context horizon indicated on the box");
+    sortFileButton.setToolTipText("Sort by file name column");
     strButton.setToolTipText("Sort with right context horizon indicated on the box");
     extractButton.setToolTipText("Display text extract of the selected line");
+    removeLineButton.setToolTipText("Remove selected line from concordance list");
     headerButton.setToolTipText("Display header file of the selected line");
     
     progressBar = new JProgressBar(0, 500);
@@ -333,7 +348,7 @@ public class BrowserFrame extends BrowserGUI
           parent.requestConcordance(keyword.getText());
         }};
     
-    // set up even listening
+    // set up event listening
     concButton.addActionListener(dcl);
     keyword.addActionListener(dcl);
 
@@ -352,6 +367,11 @@ public class BrowserFrame extends BrowserGUI
           parent.showSubcorpusSelector();
         }}                         
       );
+    saveCorpButton.addActionListener(new ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+          parent.showSubcorpusSaveSelector();
+        }}                         
+      );
     
     //caseCheckBox.addActionListener();
     caseCheckBox.setState(false);
@@ -361,18 +381,45 @@ public class BrowserFrame extends BrowserGUI
     advConcFlagItem.addChangeListener(new ChangeListener(){
         public void stateChanged(ChangeEvent e)  {
           parent.setAdvConcFlag(advConcFlagItem.isSelected());
+          
         }}
       );
     stlButton.addActionListener(new ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-          parent.startSorting(getSortLeftCtxHorizon(),true);
+            //sort other context for arabic
+            if(parent.getLanguage() == modnlp.Constants.LANG_AR){
+
+                parent.startSorting(getSortLeftCtxHorizon(),false);
+
+            }
+            else{
+                  parent.startSorting(getSortLeftCtxHorizon(),true);
+            }
+             
+        
         }}
       );
     strButton.addActionListener(new ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-          parent.startSorting(getSortRightCtxHorizon(),false);
+        
+            //sort other context for arabic
+            if(parent.getLanguage() == modnlp.Constants.LANG_AR){
+                      parent.startSorting(getSortRightCtxHorizon(),true);
+            }
+            else{
+                  parent.startSorting(getSortRightCtxHorizon(),false);
+            }
+         
         }}
       );
+    
+    sortFileButton.addActionListener(new ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            //dummy variable -111 must set up constant 
+             parent.startSorting(-111,true);         
+        }}
+      );
+    
     extractButton.addActionListener(new ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
           ConcordanceObject sel = concListDisplay.getSelectedValue();
@@ -383,6 +430,26 @@ public class BrowserFrame extends BrowserGUI
             parent.showExtract(sel);
         }}
       );
+    removeLineButton.addActionListener(new ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+          ConcordanceObject[] interval = concListDisplay.getSelectedObjects();
+          if (interval.length == 0) {
+            alertWindow("Please select a concordance!");
+          }
+          else{
+            for (int i = 0; i < interval.length; i++) {
+               parent.getConcordanceVector().remove(interval[i]);  
+            }
+            int selindx = concListDisplay.getSelectedIndex();
+            concListDisplay.redisplayConc();
+            concListDisplay.setViewToIndex(selindx);
+          }
+            
+          
+        }
+    }
+   );
+    
     headerButton.addActionListener(new ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
           ConcordanceObject sel = concListDisplay.getSelectedValue();
@@ -449,10 +516,13 @@ public class BrowserFrame extends BrowserGUI
     concLabel.add(Box.createGlue());
     concLabel.add(lsp);
     concLabel.add(rsp);
+    concLabel.add(nsp);
     concLabel.add(Box.createGlue());
     concLabel.add(extractButton);
     concLabel.add(Box.createGlue());
     concLabel.add(headerButton);
+    concLabel.add(Box.createGlue());
+    concLabel.add(removeLineButton);
     concLabel.add(Box.createGlue());
     
     
@@ -471,11 +541,37 @@ public class BrowserFrame extends BrowserGUI
   }
   //*****
   
+   public void loadRecentMenu () {
+    recent.removeAll();
+    String dirName =System.getProperty("user.home") + File.separator+"GOKCache"+File.separator+"namedCorpora"; 
+    File userDir = new File(dirName+ File.separator+parent.getLanguage());
+    File[] files = userDir.listFiles();
+    if(userDir.exists()){
+        for (File f : files) {
+            if (f.isFile() && !f.isHidden()) {
+                JMenuItem rf =new JMenuItem(f.getName());
+                rf.addActionListener(new ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                      parent.loadNamedSubcorpus(f.getName());
+                    }}                         
+                );
+                recent.add(rf);
+
+            }
+        }
+    }
+  }
+  
+  
   public void resetShowDetailString () {
       concListDisplay.renderer.showDetailString = null;
   }
   public void setShowDetailString (int col, String str) {
-      concListDisplay.renderer.showDetailString = str;
+      //concListDisplay.renderer.showDetailString = str;
+      System.out.println(str+"1");
+      System.out.println(str.trim()+"1");
+      str =str.trim().replace("\n", "");
+      concListDisplay.setMosaicSelected(str);
       concListDisplay.refresh();
       concListDisplay.setViewToIndex(concListDisplay.getIndexOfDetail( col, str));
   }
@@ -499,7 +595,7 @@ public class BrowserFrame extends BrowserGUI
     }
   }
 
-  public void addRemoteCorpusMenuItem (final String server, int port, String mentry) {
+  public void addRemoteCorpusMenuItem (final String server, final int port, String mentry) {
     JMenuItem mi = new JMenuItem(mentry);
     fileMenu.add(mi, 3);
     try {
@@ -537,9 +633,11 @@ public class BrowserFrame extends BrowserGUI
         //No selection: disable header and extract
         extractButton.setEnabled(false);
         headerButton.setEnabled(false);
+        removeLineButton.setEnabled(false);
       } else {
         extractButton.setEnabled(true);
         headerButton.setEnabled(true);
+        removeLineButton.setEnabled(true);
       }
     }
   }
@@ -599,13 +697,17 @@ public class BrowserFrame extends BrowserGUI
     //System.out.println("Displaying "+e.getFirstIndex() );		
     try {
       updateStatusLabel(e.getMessage());
-      if ( concListDisplay != null && concListDisplay.list != null)
-        concListDisplay.list.clearSelection();
+      if ( concListDisplay != null && concListDisplay.list != null){
+         concListDisplay.list.clearSelection();
+         //concListDisplay.redisplayConc();
+      }
+       
       timer.start();
       progressBar.setString(null);
       progressBar.setMaximum(parent.getExpectedNoOfConcordances());
       strButton.setEnabled(true);
       stlButton.setEnabled(true);
+      sortFileButton.setEnabled(true);
       leftSortCtx.setEnabled(true);
       rightSortCtx.setEnabled(true);
       extractButton.setEnabled(false);
@@ -722,5 +824,50 @@ public class BrowserFrame extends BrowserGUI
   public ConcordanceListModel getListModel(){
     return (ConcordanceListModel)concListDisplay.getListModel();
   }
+  
+  public void clearConcordanceList(){
+      concListDisplay.list.clearSelection();
+      concListDisplay.redisplayConc();
+  }
+  
+  public void removeConcordanceLine(ConcordanceObject o){
+      parent.getConcordanceVector().remove(o);  
+      concListDisplay.redisplayConc();
+  }
+  
+   public void removeConcordanceLineOnly(ConcordanceObject o){
+      parent.getConcordanceVector().remove(o);  
+ 
+  }
+   public void addConcordanceLine(ConcordanceObject o){
+      parent.getConcordanceVector().add(o); 
+  }
+   
+   public void redisplay(){
+       concListDisplay.redisplayConc();
+       parent.concordanceChanged(new ConcordanceDisplayEvent(this, 0, ConcordanceDisplayEvent.DOWNLOADCOMPLETE_EVT, "redisplay"));
+       
+   }
+
+    @Override
+    public int getLanguage() {
+        return parent.getLanguage();
+    }
+    
+    public void setDirectionality(){
+        if(getLanguage() == modnlp.Constants.LANG_AR ){
+            if(keyword != null)
+                keyword.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);     
+        }else{
+            if(keyword != null)
+                keyword.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);     
+        }
+    }
+    
+    public JMenu getRecentMenu() {
+        return recent;
+    }
 
 }
+
+

@@ -51,6 +51,8 @@ public class Request extends Hashtable {
   public static final int FREQWORD = 10;
   public static final int NOOFTOKENS = 11;
   public static final int COLUMNBATCH = 12;
+  public static final int ALLHEADERS = 13;
+  public static final int STARTDATE = 14;
   //public static final int SERVERINFO = 7;
   public static final int NOTREQ = 999;
   public String reqString = null;
@@ -73,13 +75,22 @@ public class Request extends Hashtable {
     // remove ... HTTP/1.1 (or do nothing if socket request) 
     if (rq.indexOf(" ") > 0) 
       rq = rq.substring(0,rq.indexOf(" "));
-    //System.err.println(rq);
-    StringTokenizer st = new StringTokenizer(rq,"&",false);
-    while (st.hasMoreTokens()){
-      String kv = st.nextToken();
-      String k = URLDecoder.decode(kv.substring(0,kv.indexOf("=")));
-      String v = URLDecoder.decode(kv.substring(kv.indexOf("=")+1));
-      put(k,v);
+    try {
+      rq = URLDecoder.decode(rq, "UTF-8");
+      //System.err.println(rq);
+      StringTokenizer st = new StringTokenizer(rq,"&",false);
+      while (st.hasMoreTokens()){
+        String kv = st.nextToken();
+        String k = kv.substring(0,kv.indexOf("="));
+        //URLDecoder.decode(kv.substring(0,kv.indexOf("=")), "UTF-8");
+        String v = kv.substring(kv.indexOf("=")+1);
+        //URLDecoder.decode(kv.substring(kv.indexOf("=")+1), "UTF-8");
+        put(k,v);
+      }
+    }
+    catch (java.io.UnsupportedEncodingException ex) {
+      System.err.println("Unsupported encoding UTF-8");
+      ex.printStackTrace();
     }
   }
   
@@ -116,6 +127,10 @@ public class Request extends Hashtable {
       return NOOFTOKENS;
     if (rq.equalsIgnoreCase("columnbatch"))
       return COLUMNBATCH;
+    if (rq.equalsIgnoreCase("dldHeaders"))
+      return ALLHEADERS;
+    if (rq.equalsIgnoreCase("serverDate"))
+      return STARTDATE;
     // add more ifs here as your range of services grow
     return NOTREQ;
   }

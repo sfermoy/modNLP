@@ -57,6 +57,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.Vector;
+import modnlp.idx.headers.HeaderDBManager;
 
 /**
  *  Mediate access to all databases (called Dictionary for
@@ -245,6 +246,97 @@ public class Dictionary {
     return founo;
   }
   
+  public int addToDictionary(TokenMap tm, TokenMap tmNoFreq, String fou) 
+    throws AlreadyIndexedException, EmptyFileException
+  {
+    if (tm == null || tm.size() == 0){
+      logf.logMsg("Dictionary: file or URI already indexed "+fou);
+      throw new EmptyFileException(fou);
+    }
+    // check if file already exists in corpus; if so, quit and warn user
+    NumberFormat nf = NumberFormat.getInstance();
+    nf.setMaximumFractionDigits(4);
+    int founo = fileTable.getKey(fou);
+    if (founo >= 0) { // file has already been indexed
+      logf.logMsg("Dictionary: file or URI already indexed "+fou);
+      throw new AlreadyIndexedException(fou);
+    }
+    else 
+      founo = -1*founo;
+    fileTable.put(founo,fou);
+    WordPositionTable wPosTable = null;
+    try {
+      wPosTable = new WordPositionTable(environment, 
+                                        ""+founo,
+                                        true);
+    }
+    catch (DatabaseNotFoundException e) {
+      logf.logMsg("Dictionary: Error updating WordPositionTable "+founo);
+      logf.logMsg("Dictionary: Crashing out... ");
+      System.exit(1);
+    }
+    // store sorted set of positions (worst-case for basic operations
+    // O(ln(n)) which should be better than storing in a vector and
+    // standard merge sorting, which is O(n^2 ln(n))) 
+    // [SL: run tests to check that's really the case]
+    TreeSet poss = new TreeSet();
+    int ct = 1;
+    for (Iterator e = tm.entrySet().iterator(); e.hasNext() ;)
+      {
+        if (verbose)
+          PrintUtil.printNoMove("Indexing ...",ct++);
+        Map.Entry kv = (Map.Entry) e.next();
+        String word = (String)kv.getKey();
+        caseTable.put(word);
+        wFilTable.put(word,founo);
+        //StringIntKey sik = new StringIntKey(word, founo);
+        IntegerSet set = (IntegerSet) kv.getValue();
+        wPosTable.put(word, set);
+        freqTable.put(word,set.size());
+        poss.addAll(set);
+      }
+    for (Iterator e = tmNoFreq.entrySet().iterator(); e.hasNext() ;)
+      {
+        if (verbose)
+          PrintUtil.printNoMove("Indexing ...",ct++);
+        Map.Entry kv = (Map.Entry) e.next();
+        String word = (String)kv.getKey();
+        IntegerSet set = (IntegerSet) kv.getValue();
+        
+        caseTable.put(word);
+        wFilTable.put(word,founo);
+        //StringIntKey sik = new StringIntKey(word, founo);
+        IntegerSet posSet = wPosTable.fetch(word);
+        if(posSet !=null){
+         set.addAll(posSet);
+        }
+
+        wPosTable.put(word, set);
+        //remove to hide from frequency list arabic roots
+        freqTable.put(word,set.size());
+        //hiddenFreqTable.put(word,set.size());
+        poss.addAll(set);
+      }
+    if (verbose)
+      PrintUtil.donePrinting();
+    wPosTable.close();
+    //System.err.println(poss);
+    int [] posa = new int[poss.size()];
+    int i = 0;
+    for (Iterator e = poss.iterator(); e.hasNext() ;)
+      posa[i++] = ((Integer) e.next()).intValue();
+    //System.out.println(PrintUtil.toString(posa));
+    tposTable.put(founo,new IntOffsetArray(posa));
+    System.out.println("Cumulative compression ratio = "+
+                       nf.format(tposTable.getCompressionRatio())+
+                       " (read "+nf.format(tposTable.getBytesReceived())+
+                       " and wrote "+
+                       nf.format(tposTable.getBytesWritten())+" bytes)");
+    //tposTable.dump();
+    return founo;
+  }
+  
+  
 
   /**
    * <code>removeFromDictionary</code> de-indexes file or URL
@@ -406,8 +498,8 @@ public class Dictionary {
     } // close word iterator, counting done
     return tokencount;
   }
-
-
+  
+  
 
   public CaseTable getCaseTable (){
     return caseTable;
@@ -554,6 +646,11 @@ public class Dictionary {
     os.println(0+Constants.LINE_ITEM_SEP+TTOKENS_LABEL+Constants.LINE_ITEM_SEP+notokens);
     os.println(0+Constants.LINE_ITEM_SEP+TTRATIO_LABEL+Constants.LINE_ITEM_SEP+getTypeTokenRatio(notypes,notokens));
   }
+  
+  public static final void printSubCorpusStats (PrintWriter os, double avgTTratio, int notokens) {
+    os.println(0+Constants.LINE_ITEM_SEP+TTOKENS_LABEL+Constants.LINE_ITEM_SEP+notokens);
+    os.println(0+Constants.LINE_ITEM_SEP+TTRATIO_LABEL+Constants.LINE_ITEM_SEP+avgTTratio );
+  }
 
   public void printNoItems (PrintWriter os, int noitems) {
     os.println(0+Constants.LINE_ITEM_SEP+NOITEMS_LABEL+Constants.LINE_ITEM_SEP+noitems);
@@ -660,7 +757,7 @@ public class Dictionary {
             //System.err.println("-------------------SKIP:"+word); 
             continue;
           }
-          //System.err.println("-------------------Looking at file: "+getIndexedFileName(Integer.parseInt(fno))); 
+          //System.err.println("---Looking at file: "+getIndexedFileName(Integer.parseInt(fno))); 
           WordPositionTable wpt = new WordPositionTable(environment, 
                                                         fno,
                                                         false);
@@ -702,6 +799,7 @@ public class Dictionary {
       Integer f = (Integer)ft.get(w);
       os.println(i+++Constants.LINE_ITEM_SEP+w+Constants.LINE_ITEM_SEP+f);
     }
+    os.close();
     os.flush();
   }
   
@@ -779,7 +877,14 @@ public class Dictionary {
                 //              if (  query.matchConcordance(ot,ctx) )
                 //{
                 //System.err.println(fn+"|"+bp+"|"+ot);
-                os.println(fn+"|"+bp+"|"+ot);
+                
+                //Get the section id to which the keword belongs
+                try {
+                  sbct = new SubcorpusTable(environment, fno.toString(), false);
+                } catch(DatabaseNotFoundException e ) { sbct = null;}     
+                String sn = sbct.getSectionID(bpi);
+                
+                os.println(fn+"|"+bp+"|"+sn+"|"+ot);
                 os.flush();
               }
             if (os.checkError()) {
@@ -801,8 +906,22 @@ public class Dictionary {
         logf.logMsg("Error reading corpus file ", e);
       }
     }    
-    // os.close();
+     os.close();
   }
+  
+public void printHeaders(PrintWriter os, HeaderDBManager hdbm){
+    int [] fks = getIndexedFileKeys();
+    os.println(hdbm.getFileHeaderAttributeHuman());
+    for (int i = 0; i < fks.length; i++) {
+            String fdesc = hdbm.getFileHeaderAttributes(fks[i]);  
+            String line = fdesc ;
+            // System.err.println("--");
+            // System.out.println(line);
+            os.println(line);     
+      } 
+    os.close();
+    
+}
 
   public String getExtract(String fn, int ctx, long offset, boolean ignx)
   {

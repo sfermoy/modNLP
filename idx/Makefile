@@ -1,6 +1,6 @@
 TOPDIR=
 SOURCEDIR=$(TOPDIR)src/
-LIBSPATH=$(TOPDIR)lib/gnu-regexp.jar:$(TOPDIR)lib/je.jar:$(TOPDIR)lib/antlr-2.7.6.jar:$(TOPDIR)lib/commons-pool-1.2.jar:$(TOPDIR)lib/exist-modules.jar:$(TOPDIR)lib/exist.jar:$(TOPDIR)lib/jgroups-all.jar:$(TOPDIR)lib/log4j-1.2.14.jar:$(TOPDIR)lib/resolver.jar:$(TOPDIR)lib/sunxacml.jar:$(TOPDIR)lib/xmldb.jar:$(TOPDIR)lib/xmlrpc-1.2-patched.jar:$(TOPDIR)lib/lucene-core-3.6.0.jar:$(TOPDIR)lib/lucene-analyzers-3.6.0.jar:$(TOPDIR)lib/lucene-kuromoji-3.6.0.jar
+LIBSPATH=$(TOPDIR)lib/gnu-regexp.jar:$(TOPDIR)lib/je.jar:$(TOPDIR)lib/antlr-2.7.6.jar:$(TOPDIR)lib/commons-pool-1.2.jar:$(TOPDIR)lib/exist-modules.jar:$(TOPDIR)lib/exist.jar:$(TOPDIR)lib/jgroups-all.jar:$(TOPDIR)lib/log4j-1.2.14.jar:$(TOPDIR)lib/resolver.jar:$(TOPDIR)lib/sunxacml.jar:$(TOPDIR)lib/xmldb.jar:$(TOPDIR)lib/xmlrpc-1.2-patched.jar:$(TOPDIR)lib/lucene-core-3.6.0.jar:$(TOPDIR)lib/lucene-analyzers-3.6.0.jar:$(TOPDIR)lib/lucene-kuromoji-3.6.0.jar:$(TOPDIR)lib/stanford-segmenter-3.8.0.jar
 LIBS=$(subst :, ,$(LIBSPATH))
 LIBLICENSES=$(TOPDIR)lib/COPYING-libs
 DOCS=$(TOPDIR)doc
@@ -57,6 +57,8 @@ SOURCES=$(SOURCEDIR)modnlp/Constants.java \
 	$(SOURCEDIR)modnlp/idx/inverted/TokeniserRegex.java \
 	$(SOURCEDIR)modnlp/idx/inverted/TokeniserJP.java \
 	$(SOURCEDIR)modnlp/idx/inverted/TokeniserJPLucene.java \
+	$(SOURCEDIR)modnlp/idx/inverted/TokeniserARLucene.java \
+	$(SOURCEDIR)modnlp/idx/inverted/TokeniserARLuceneWhitespace.java \
 	$(SOURCEDIR)modnlp/idx/inverted/jpsegmenter/BasicCodePointReader.java \
 	$(SOURCEDIR)modnlp/idx/inverted/jpsegmenter/CodePointReader.java \
 	$(SOURCEDIR)modnlp/idx/inverted/jpsegmenter/PushbackCodePointReader.java \
@@ -81,11 +83,13 @@ SOURCES=$(SOURCEDIR)modnlp/Constants.java \
 	$(SOURCEDIR)modnlp/idx/query/PrepContextQuery.java \
 	$(SOURCEDIR)modnlp/idx/query/SubcorpusConstraints.java	\
 	$(SOURCEDIR)modnlp/idx/query/WordQuery.java \
-	$(SOURCEDIR)modnlp/idx/query/WordQueryException.java
+	$(SOURCEDIR)modnlp/idx/query/WordQueryException.java \
+	$(SOURCEDIR)modnlp/idx/stemmer/Stemmer.java
 TARGETS=$(subst .java,.class,$(SOURCES))
 MAINJARS=$(subst $(SOURCEDIR),,$(TARGETS)) # doesn't work by itself: need to jar inner classess as well
 JARREDS=$(MAINJARS) \
 	eXistConf.xml \
+	$(STEMMERDATA) \
 	'modnlp/dstruct/FrequencyHash$$ValueSorter.class' \
 	'modnlp/dstruct/TokenIndex$$TokenCoordinates.class' \
 	'modnlp/idx/inverted/jpsegmenter/TinySegmenter$$1.class' \
@@ -96,17 +100,39 @@ JARREDS=$(MAINJARS) \
 DISTDIR:=modnlp-idx-`cat VERSION`
 BINDISTDIR=$(DISTDIR)-bin
 BINDISTXTRAS=$(LIBLICENSES) TUTORIAL.txt
-DISTFILES=AUTHORS COPYING Makefile README TUTORIAL.txt VERSION BUGS INSTALL TODO exclude.txt bin/runidx.sh \
-	$(LIBS) $(DOCS) $(DATA) $(SOURCES) $(SOURCEDIR)modnlp/idx/prj.el $(SOURCEDIR)idx-manifest.txt
+SEGMENTERDATA= $(SOURCEDIR)arabic-segmenter-atb+bn+arztrain.ser.gz 
+STEMMERDATA=definite_article.txt \
+	diacritics.txt \
+	duplicate.txt \
+	first_waw.txt \
+	first_yah.txt \
+	last_alif.txt \
+	last_hamza.txt \
+	last_maksoura.txt \
+	last_yah.txt \
+	mid_waw.txt \
+	mid_yah.txt \
+	prefixes.txt \
+	punctuation.txt \
+	quad_roots.txt \
+	stopwords.txt \
+	strange.txt \
+	suffixes.txt \
+	tri_patt.txt \
+	tri_roots.txt
+DISTFILES=AUTHORS COPYING Makefile README TUTORIAL.txt VERSION BUGS INSTALL TODO \
+	exclude.txt bin/runidx.sh \
+	$(LIBS) $(DOCS) $(DATA) $(SOURCES) $(STEMMERDATA) $(SEGMENTERDATA) $(SOURCEDIR)modnlp/idx/prj.el \
+	$(SOURCEDIR)idx-manifest.txt 
 #JAVA=jamvm
-JAVAC=javac -encoding UTF-8 #-target 1.5 
+JAVAC=javac #/usr/lib/jvm/java-6-oracle/bin/javac -encoding UTF-8 # -target 1.7 
 #JAVAC=ecj -1.5
 #JAVAC=/usr/lib/jvm/java-1.5.0-sun-1.5.0.16/bin/javac
 #JAVAC=jikes -bootclasspath /usr/lib/jvm/java-1.5.0-sun/jre/lib/rt.jar -source 1.5
 JAVA=java
 JAR=jar
 JAVAFLAGS=-classpath $(SOURCEDIR):$(LIBSPATH)
-JAVACFLAGS=-classpath $(SOURCEDIR):$(LIBSPATH)
+JAVACFLAGS=-classpath $(SOURCEDIR):$(LIBSPATH) -encoding UTF-8 -target 7 -source 7
 MANIFEST=idx-manifest.txt
 JARFLAGS= cvmf $(MANIFEST)
 JARTARGET=$(TOPDIR)lib/idx.jar
@@ -117,7 +143,7 @@ JARTARGET=$(TOPDIR)lib/idx.jar
 all: build jar test
 
 %.class: %.java
-		$(JAVAC) $(JAVAFLAGS) $?
+		$(JAVAC) $(JAVACFLAGS) $?
 
 build: $(TARGETS)
 
@@ -157,6 +183,7 @@ dist: clean
 	rm -rf $(DISTDIR)
 	mkdir $(DISTDIR)
 	cp -aL --parents $(DISTFILES) $(DISTDIR)
+	cp -aL --parents $(BINDISTXTRAS) $(SEGMENTERDATA) $(STEMMERDATA) $(DISTDIR)
 	cp $(TOPDIR)src/idxmgr.properties.ecpc $(DISTDIR)/idxmgr.properties
 	cp $(TOPDIR)src/dictionary.properties.ISO8859_1 $(DISTDIR)/dictionary.properties
 	tar cfvz /tmp/$(DISTDIR).tar.gz  --exclude-from=exclude.txt $(DISTDIR)
@@ -171,7 +198,7 @@ bindist: jar
 	cp README.bin $(BINDISTDIR)/README
 	cp bin/runidx.sh $(BINDISTDIR)
 	cp $(TOPDIR)src/idxmgr.properties.PLEASEEDIT $(BINDISTDIR)/idxmgr.properties.PLEASEEDIT
-	cp $(LIBS) $(JARTARGET) $(BINDISTXTRAS) $(BINDISTDIR)
+	cp $(LIBS) $(JARTARGET) $(BINDISTXTRAS) $(SEGMENTERDATA) $(BINDISTDIR)
 	tar cfvz /tmp/$(BINDISTDIR).tar.gz  --exclude-from=exclude.txt $(BINDISTDIR)
 	rm -rf $(BINDISTDIR)
 
@@ -183,6 +210,15 @@ bindistgok: jar
 	cp $(LIBS) $(JARTARGET) $(BINDISTXTRAS) $(BINDISTDIR)-gok
 	tar cfvz /tmp/$(BINDISTDIR)-gok.tar.gz  --exclude-from=exclude.txt $(BINDISTDIR)-gok
 	rm -rf $(BINDISTDIR)-gok
+
+bindistgok-ar: jar
+	mkdir $(BINDISTDIR)-gok-ar
+	cp README.bin $(BINDISTDIR)-gok-ar/README
+	cp bin/runidx.sh $(BINDISTDIR)-gok-ar
+	cp $(TOPDIR)src/idxmgr.properties.gok-ar $(BINDISTDIR)-gok-ar/idxmgr.properties
+	cp $(LIBS) $(JARTARGET) $(BINDISTXTRAS) $(SEGMENTERDATA) $(BINDISTDIR)-gok-ar
+	tar cfvz /tmp/$(BINDISTDIR)-gok-ar.tar.gz  --exclude-from=exclude.txt $(BINDISTDIR)-gok-ar
+	rm -rf $(BINDISTDIR)-gok-ar
 
 bindistaqua: jar
 	mkdir $(BINDISTDIR)-aqua
