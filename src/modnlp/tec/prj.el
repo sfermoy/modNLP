@@ -10,6 +10,7 @@
 ;"../../../teccli/org-modnlp/ConcTree/lib/conctree.jar"
 "./../../../teccli/org-modnlp/ConcTree/classes"
 "./../../../teccli/org-modnlp/Mosaic/classes"
+"./../../../lib/stanford-segmenter-3.8.0.jar"
 )))
  '(jdee-run-working-directory "../../")
  '(jdee-run-option-application-args nil)

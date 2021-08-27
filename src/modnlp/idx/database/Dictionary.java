@@ -814,7 +814,7 @@ public class Dictionary {
   public void printConcordances(WordQuery query, int ctx, boolean ignx, 
                                 PrintWriter os, SubcorpusConstraints sbc) 
   {
-    //System.err.println("dictio--->"+sbc);
+    //System.err.println("sbc--->"+sbc);
     WordForms wforms = query.getKeyWordForms();
     if (wforms == null) {
       os.println(0);
@@ -861,9 +861,11 @@ public class Dictionary {
           }
 
           CorpusFile fh = null;
+          //System.err.println("sbct: "+sbct.toString());
           for (Iterator p = pos.iterator(); p.hasNext(); ) {
             Integer bp = (Integer)p.next();
             int bpi = bp.intValue();
+            //System.err.println("fno: "+fno.toString()+" accept "+sbc.accept(fno.toString(),bpi,sbct));
             if ( (sbc == null || sbc.accept(fno.toString(),bpi,sbct)) 
                  && (jkw || matchConcordance(pcq,bpi,posa))) 
               {
@@ -876,14 +878,13 @@ public class Dictionary {
                 String ot = fh.getWordInContext(bp, key, ctx);
                 //              if (  query.matchConcordance(ot,ctx) )
                 //{
-                //System.err.println(fn+"|"+bp+"|"+ot);
                 
                 //Get the section id to which the keword belongs
                 try {
                   sbct = new SubcorpusTable(environment, fno.toString(), false);
                 } catch(DatabaseNotFoundException e ) { sbct = null;}     
                 String sn = sbct.getSectionID(bpi);
-                
+                //System.err.println("fn, sn: "+fn+"|"+sn+"|");
                 os.println(fn+"|"+bp+"|"+sn+"|"+ot);
                 os.flush();
               }
