@@ -1,3 +1,14 @@
+2021-08-27  Saturnino Luz  <s.luz@ed.ac.uk>
+
+	* New bug-fixing release 0.8.5.
+
+	* ../src/modnlp/idx/headers/HeaderDBManager.java
+	(getSubcorpusConstraints):  removed experimental  XML DB query
+	which is not quite ready for use yet.
+
+	* ../src/modnlp/dstruct/CorpusFile.java (findNextRightIndex):
+	fixed null pointer bug (was trying to read past eof).
+
 2018-21-10  Saturnino Luz  <luzs@acm.org>
 
 	* release 0.8.3: Index key normalisation implemented for case and
@@ -6,7 +17,7 @@
 2018-02-04  Saturnino Luz  <luzs@acm.org>
 
 	* release 0.8.2: Added method to retrieve freq list up to first
-	hapax legomenon. 
+	hapax legomenon.
 
 2010-07-05  Saturnino Luz  <luzs@cs.tcd.ie>
 
@@ -44,11 +55,11 @@
 2008-07-18  Saturnino Luz  <luzs@cs.tcd.ie>
 
 	* SubcorpusIndexer: section tokenisation bug in
-	SubcorpusIndexer (dot regexp didn't extend across lines); 
+	SubcorpusIndexer (dot regexp didn't extend across lines);
 
 	* Dictionary: added subcorpus-selection sensitivity in
 	Dictionary#printSortedFreqList(PrintWriter,int,SubcorpusConstraints);
-	
+
 	* CorpusFile: fixed concordance line display (CorpusFile couldn't read past
 	non-ascii characters)
 
@@ -57,7 +68,7 @@
 	* HeaderDBManager, etc: improved subcorpus search, implemented a
 	basic form of subcorpus query caching, fixed a few bugs, tested on
 	HC and CD corpora
-	
+
 2007-06-25  Saturnino Luz  <luzs@cs.tcd.ie>
 
 	*  (modnlp-idx): Incorporated XMLDB subcospus selection
@@ -76,5 +87,4 @@
 
 	* (All) Started idx as a sub-module of modnlp, with its separate
 	  Makefile etc. Changed directory structure in preparation for
-	  SVN. 
-
+	  SVN.
