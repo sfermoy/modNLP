@@ -245,10 +245,12 @@ public class BrowserFrame extends BrowserGUI
     lsp.setBorder(BorderFactory.createEtchedBorder());
     rsp.setBorder(BorderFactory.createEtchedBorder());
     nsp.setBorder(BorderFactory.createEtchedBorder());
-    for (int i = 1 ; i <= PreferPanel.SCTXMAX ; i++){
+    for (int i = 0 ; i <= PreferPanel.SCTXMAX ; i++){
       leftSortCtx.addItem(""+i);
       rightSortCtx.addItem(""+i);
     }
+    leftSortCtx.setSelectedItem("1");
+    rightSortCtx.setSelectedItem("1");
     lsp.add(leftSortCtx);
     lsp.add(stlButton);
     

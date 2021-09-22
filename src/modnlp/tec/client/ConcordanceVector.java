@@ -54,13 +54,13 @@ public class ConcordanceVector extends Vector<ConcordanceObject> implements List
 
   public ConcordanceVector (){
     super();
-    sortContextHorizon = 0;
+    sortContextHorizon = -1;
     halfConcordance = 0;
   }
 
   public ConcordanceVector (int size){
     super(size);
-    sortContextHorizon = 0;
+    sortContextHorizon = -1;
     halfConcordance = 0;
   }
 

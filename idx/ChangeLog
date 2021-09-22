@@ -1,6 +1,6 @@
 2021-08-27  Saturnino Luz  <s.luz@ed.ac.uk>
 
-	* New bug-fixing release 0.8.5.
+	* release 0.8.5: bug-fixes.
 
 	* ../src/modnlp/idx/headers/HeaderDBManager.java
 	(getSubcorpusConstraints):  removed experimental  XML DB query

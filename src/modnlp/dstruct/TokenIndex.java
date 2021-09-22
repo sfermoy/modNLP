@@ -50,6 +50,12 @@ public class TokenIndex {
                                 endPosList.remove(i).intValue());
   }
 
+  public TokenCoordinates getCoordinates(int i){
+    return new TokenCoordinates(startPosList.get(i).intValue(),
+                                endPosList.get(i).intValue());
+  }
+
+  
   public void reverse(){
     Collections.reverse(startPosList);
     Collections.reverse(endPosList);

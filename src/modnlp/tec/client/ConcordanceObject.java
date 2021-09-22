@@ -54,7 +54,7 @@ public class ConcordanceObject {
   private ConcordanceVector coVector;
 
   private int indexOfSort = 0; 
-  private int sortCtxHorizon = 0;
+  private int sortCtxHorizon = -1;
   private boolean punctuationOn = false;
   private int language = Constants.LANG_EN;
 
@@ -163,14 +163,13 @@ public class ConcordanceObject {
           pad.append(' ');
       padding = pad.toString();
     }
-    */
-    leftTokenIndex = tkr.getTokenIndex(getLeftContext());
-    leftTokenIndex.reverse();
-      
+    */      
     String kwarc = getKeywordAndRightContext();
     rightTokenIndex = tkr.getTokenIndex(kwarc);
-    TokenIndex.TokenCoordinates tc = rightTokenIndex.remove(0); 
+    TokenIndex.TokenCoordinates tc = rightTokenIndex.getCoordinates(0); 
     keyword = kwarc.substring(tc.start, tc.end);
+    leftTokenIndex = tkr.getTokenIndex(getLeftContextAndKeyword());
+    leftTokenIndex.reverse();
 
   }
 
@@ -245,6 +244,12 @@ public class ConcordanceObject {
     return concordance.substring(0,coVector.getHalfConcordance());
   }
 
+  public String getLeftContextAndKeyword(){
+    //System.out.println("=='"+concordance+"'");
+    return concordance.substring(0,coVector.getHalfConcordance())+" "+keyword;
+  }
+
+  
   public final String getKeywordAndRightContext(){
     return concordance.substring(coVector.getHalfConcordance());
   }
@@ -295,19 +300,22 @@ public class ConcordanceObject {
   public String[] getLeftSortArray (boolean punctuation){
     int sch = coVector.getSortContextHorizon(); 
 
-    if ( sch == 0) // no sort requested
-      return new String[0];
+    //if ( sch == 0) // sort from keyword
+    //  return new String[0];
     
-    if (sortCtxHorizon == sch && punctuation == punctuationOn) // don't search if we have done it before
-      return leftSortContext.getWordArray();    // and user-requested sort context and punctuation haven't
-                               // changed since
+    if (sch > 0 && sortCtxHorizon == sch && punctuation == punctuationOn)
+      // don't search if we have done it before
+      return leftSortContext.getWordArray();
+    // and user-requested sort context and punctuation haven't
+    // changed since
     sortCtxHorizon = sch;
     punctuationOn = punctuation;
 
-    String s =  getLeftContext(); //concordance.substring(0,getIndexOfSort(punctuation));
+    String s = getLeftContextAndKeyword();
+    //concordance.substring(0,getIndexOfSort(punctuation));
     Pattern p = punctuation? WORDPUNCT_PATTERN : WORD_PATTERN;
     
-    leftSortContext = getSortContext(getLeftContext(), leftTokenIndex, (sch*-1) - 1);
+    leftSortContext = getSortContext(s, leftTokenIndex, (sch*-1) );
 
     //System.err.println("--->"+s);
     //System.err.println("===>"+leftSortContext.getWordList());
@@ -318,13 +326,13 @@ public class ConcordanceObject {
   public String[] getRightSortArray (boolean punctuation){
     int sch = coVector.getSortContextHorizon(); 
 
-    if ( sch == 0) // no sort requested
-      return new String[0];
-
     
-    if (sortCtxHorizon == sch && punctuation == punctuationOn) // don't search if we have done it before
-      return rightSortContext.getWordArray();    // and user-requested sort context and punctuation haven't
-                               // changed since
+    if (sch > 0 && sortCtxHorizon == sch
+        && punctuation == punctuationOn) {
+      // don't search if we have done it before and user-requested
+      // sort context and punctuation haven't changed since
+      return rightSortContext.getWordArray();
+    }
     sortCtxHorizon = sch;
     punctuationOn = punctuation;
 
@@ -333,7 +341,7 @@ public class ConcordanceObject {
     //Pattern p = punctuation? WORDPUNCT_PATTERN : WORD_PATTERN;
     
     // String s =  getKeywordAndRightContext();
-    rightSortContext = getSortContext(getKeywordAndRightContext(), rightTokenIndex, sch-1);
+    rightSortContext = getSortContext(getKeywordAndRightContext(), rightTokenIndex, sch);
     
     //System.err.println("--->"+s);
     //System.err.println("===>"+rightSortContext.getWordList());
@@ -404,7 +412,7 @@ public class ConcordanceObject {
 
     if (sch < 0) { // sort on the left hand side 
       sch = sch * -1;
-      String s = getLeftContext();
+      String s = getLeftContextAndKeyword();
       int i = s.length();
       while (i-- > 0) {
         char c = s.charAt(i);
