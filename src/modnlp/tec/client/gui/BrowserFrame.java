@@ -245,10 +245,12 @@ public class BrowserFrame extends BrowserGUI
     lsp.setBorder(BorderFactory.createEtchedBorder());
     rsp.setBorder(BorderFactory.createEtchedBorder());
     nsp.setBorder(BorderFactory.createEtchedBorder());
-    for (int i = 1 ; i <= PreferPanel.SCTXMAX ; i++){
+    for (int i = 0 ; i <= PreferPanel.SCTXMAX ; i++){
       leftSortCtx.addItem(""+i);
       rightSortCtx.addItem(""+i);
     }
+    leftSortCtx.setSelectedItem("1");
+    rightSortCtx.setSelectedItem("1");
     lsp.add(leftSortCtx);
     lsp.add(stlButton);
     
@@ -386,30 +388,28 @@ public class BrowserFrame extends BrowserGUI
       );
     stlButton.addActionListener(new ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            //sort other context for arabic
-            if(parent.getLanguage() == modnlp.Constants.LANG_AR){
-
-                parent.startSorting(getSortLeftCtxHorizon(),false);
-
-            }
-            else{
-                  parent.startSorting(getSortLeftCtxHorizon(),true);
-            }
-             
-        
+          concListDisplay.setMosaicSelected("");
+          //sort other context for arabic
+          if(parent.getLanguage() == modnlp.Constants.LANG_AR){
+            
+            parent.startSorting(getSortLeftCtxHorizon(),false);
+            
+          }
+          else{
+            parent.startSorting(getSortLeftCtxHorizon(),true);
+          }
         }}
       );
     strButton.addActionListener(new ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-        
-            //sort other context for arabic
-            if(parent.getLanguage() == modnlp.Constants.LANG_AR){
-                      parent.startSorting(getSortRightCtxHorizon(),true);
-            }
-            else{
-                  parent.startSorting(getSortRightCtxHorizon(),false);
-            }
-         
+          concListDisplay.setMosaicSelected("");
+          //sort other context for arabic
+          if(parent.getLanguage() == modnlp.Constants.LANG_AR){
+            parent.startSorting(getSortRightCtxHorizon(),true);
+          }
+          else{
+            parent.startSorting(getSortRightCtxHorizon(),false);
+          }
         }}
       );
     

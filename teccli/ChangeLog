@@ -1,3 +1,23 @@
+2021-10-10  Saturnino Luz  <luzs@acm.org>
+
+	* release 0.8.7:
+
+	* ConcordanceObject.java: implemented separation of keyword and
+	hyphenated matches on keyword column by modifying tokenisation in
+	ConcordanceObject.
+
+	* ListDisplay.java: Rewrote the redisplayConc to use tokenisation
+	from ConcordanceObject rather than the ad-hoc tokenisation (avoid
+	duplication; keep tokenisation consistent).
+
+2021-09-22  Saturnino Luz  <luzs@acm.org>
+
+	* Added option to sort concordances from keyword (sort context 0)
+
+2021-08-27  Saturnino Luz  <luzs@acm.org>
+
+	* release 0.8.6: bug fixes in idx files. 
+
 2018-21-10  Saturnino Luz  <luzs@acm.org>
 
 	* release 0.8.4: Option for case and diacritic insensitive search

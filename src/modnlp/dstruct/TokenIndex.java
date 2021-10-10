@@ -41,15 +41,30 @@ public class TokenIndex {
     endPosList.add(e);
   }
 
+  public void add(int index, Integer s, Integer e){
+    startPosList.add(index, s);
+    endPosList.add(index, e);
+  }
+  
   public void add(int s, int e){
     add(new Integer(s), new Integer(e));
   }
 
+  public void add(int index, int s, int e){
+    add(index, new Integer(s), new Integer(e));
+  }
+  
   public TokenCoordinates remove(int i){
     return new TokenCoordinates(startPosList.remove(i).intValue(),
                                 endPosList.remove(i).intValue());
   }
 
+  public TokenCoordinates getCoordinates(int i){
+    return new TokenCoordinates(startPosList.get(i).intValue(),
+                                endPosList.get(i).intValue());
+  }
+
+  
   public void reverse(){
     Collections.reverse(startPosList);
     Collections.reverse(endPosList);
@@ -77,5 +92,10 @@ public class TokenIndex {
     }
   }
 
+  public String toString() {
+    return("Start: "+startPosList+"\nEnd:   "+endPosList);
+    
+  }
+  
 
 }

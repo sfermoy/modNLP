@@ -38,6 +38,7 @@ public class WordQuery {
   
   public static final String QSEPTOKEN = "+[]";
 
+  public static final String REGEXQUERYSYNTAX = "\".+?\""; // regexp to identify queries that are regexps
   public static final String REGEXPMARKER = "___REGEXP___";
 
   public static char[] SEPTKARR 
@@ -165,38 +166,6 @@ public class WordQuery {
       keyword = keywordforms.getKeyword();
     }
 
-    Horizon a = getLeftHorizon();
-    Horizon b = getRightHorizon();
-
-
-    // System.err.println("QA= ["+modnlp.util.PrintUtil.toString(queryArray)+"]");
-    // System.err.println("WT= ["+modnlp.util.PrintUtil.toString(wordFormTypes)+"]");
-     // at this point all words/wildcard will have been expanded and their
-    // expanded forms stored in wformsArray
-
-    //dictionary = dict;
-
-    /*
-    System.err.println(modnlp.util.PrintUtil.toString(intervArray)+" kw="+keyword);
-    Horizon a = getLeftHorizon();
-    Horizon b = getRightHorizon();
-    if (a != null){
-      System.err.println("LIA= ["+modnlp.util.PrintUtil.toString(a.getHorizonArray())+"]");
-      System.err.println("LWA= ["+modnlp.util.PrintUtil.toString(a.getWordArray())+"]");
-      System.err.println("MLH= "+a.getMaxSearchHorizon());
-    }
-    else 
-      System.err.println("null");
-
-    if (b != null){
-      System.err.println("RIA= ["+modnlp.util.PrintUtil.toString(b.getHorizonArray())+"]");
-      System.err.println("RWA= ["+modnlp.util.PrintUtil.toString(b.getWordArray())+"]");
-      System.err.println("MRH= "+b.getMaxSearchHorizon());
-    }
-    else 
-      System.err.println("null");
-    */
-
   }
 
   public WordForms getKeyWordForms(){
@@ -284,6 +253,16 @@ public class WordQuery {
     */
   }
 
+  public static final boolean isKeywordOnly(String key) {
+    if ( key.matches(REGEXQUERYSYNTAX) || key.indexOf('+') >= 0 || isWildcard(key) )
+      {
+        //System.err.println("matched in "+key);
+        return false;
+      }
+    return true;
+  }
+
+  
   public static final boolean isLeftWildcard(String key) {
     return key.lastIndexOf('*') > 0;
   }
@@ -499,12 +478,6 @@ public class WordQuery {
     return true;
   }
   
-  private void parseQuery (String query)
-    throws WordQueryException
-  {
-    parseQuery(query, false);
-  }
-
   /**
    * Perform basic sanity check on a query (for use by clients, for
    * instance, where full parsing of the query is impossible without
@@ -514,7 +487,7 @@ public class WordQuery {
    * @return a <code>boolean</code> value
    */
   public static boolean isValidQuery(String q){
-    q = q.replaceAll("\".+?\"", REGEXPMARKER);
+    q = q.replaceAll(REGEXQUERYSYNTAX, REGEXPMARKER);
     //System.err.println("-----:"+q+"\n");
     // this is all too sophisticated for this method. the solution above is
     // faster and less complicated
@@ -565,7 +538,7 @@ public class WordQuery {
   }
 
   private String replaceRegexpQueryTerms(String query) {
-    Pattern p = Pattern.compile("\".+?\"");  // quotes identify regular expressions
+    Pattern p = Pattern.compile(REGEXQUERYSYNTAX);// regular expression queries
     Matcher m = p.matcher(query);
 
     StringBuffer tx = new StringBuffer(query);
@@ -579,7 +552,7 @@ public class WordQuery {
     return tx.toString();
   }
 
-  private void parseQuery (String query, boolean regexp)
+  private void parseQuery (String query)
     throws WordQueryException
   {
     String separator = QSEPTOKEN;
@@ -652,14 +625,13 @@ public class WordQuery {
         }
     }
     catch (NoSuchElementException e){
-     e.printStackTrace(); 
-     throw new WordQueryException(e.getMessage(), originalQuery);
+      e.printStackTrace(); 
+      throw new WordQueryException(e.getMessage(), originalQuery);
     }
     catch (Exception e){
-     e.printStackTrace();
+      e.printStackTrace();
     }
   }
-
 
 }
 

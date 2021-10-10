@@ -150,7 +150,8 @@ public class CorpusFile {
     boolean ignore = i < 0 || fileArray[i] == '<' ? true : false;
     while (ignore){
       while ( ++i < fileArray.length && fileArray[i] != '>' ) {}
-      i++;
+      //i++;
+      //System.err.println("findNextRightIndex: i="+i+" fileArray.length="+fileArray.length);
       if (fileArray[i] != '<')
         return i;
       else

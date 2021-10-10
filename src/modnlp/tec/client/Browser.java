@@ -70,7 +70,7 @@ public class Browser
 {
 
   // constants
-  public static final String RELEASE = "0.8.5";
+  public static final String RELEASE = "0.8.7";
   public static final String REVISION = "$Revision: 1.9 $";
   String BRANDNAME = "MODNLP/T";
   private static final String PLGLIST = "teclipluginlist.txt";
@@ -314,7 +314,8 @@ public class Browser
     }
     concVector.clear();
     concVector.setHalfConcordance(request.getContextSize());
-      concVector.setSortContextHorizon(0);
+    concVector.setSortContextHorizon(0);
+    concVector.setBrowserQuery(query);
     //concList.removeAll();
     //concList.reset();
     if (standAlone) {
@@ -345,9 +346,6 @@ public class Browser
     concThread.addConcordanceDisplayListener(this);
     browserFrame.progressBarUnknownStart("Searching... ");
   }
-
-
-
   
   @Override
     public void showSubcorpusSaveSelector() {
