@@ -40,7 +40,7 @@ public class ConcordanceVector extends Vector<ConcordanceObject> implements List
   public static final String SEPTOKEN = " |'`\"-_,.?!;:<>{}[]=+/\\%$*&()";
   public static final int UPDATE_INTERVAL = 20;
   
-  private boolean fireChangeContinuously = false; 
+  private boolean fireChangeContinuously = false;
   private int lengthLongestFname = 0;
   private int sortContextHorizon;
   private int halfConcordance;
@@ -51,6 +51,7 @@ public class ConcordanceVector extends Vector<ConcordanceObject> implements List
   private ListDataEvent ldEvent = null;
   private int language = Constants.LANG_EN;
   private boolean punctuation = false;
+  private String browserQuery; // query entered into browser search box and submitted as request
 
   public ConcordanceVector (){
     super();
@@ -64,6 +65,15 @@ public class ConcordanceVector extends Vector<ConcordanceObject> implements List
     halfConcordance = 0;
   }
 
+  public final void setBrowserQuery(String l){
+    browserQuery = l;
+  }
+
+  public final String getBrowserQuery(){
+    return browserQuery;
+  }
+
+  
   public final void setLanguage(int l){
     language = l;
   }

@@ -51,6 +51,7 @@ import javax.swing.event.TableColumnModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import modnlp.dstruct.TokenIndex;
 import modnlp.tec.client.ConcordanceObject;
 import modnlp.tec.client.gui.event.DefaultChangeEvent;
 import modnlp.tec.client.gui.event.FontSizeChangeEvent;
@@ -70,7 +71,7 @@ import org.apache.lucene.analysis.ar.ArabicAnalyzer;
  */
 public class ListDisplay extends JPanel
   implements TecDefaultChangeListener, ComponentListener {
-    Analyzer ARtokeniser = new ArabicAnalyzer(org.apache.lucene.util.Version.LUCENE_36);
+  Analyzer ARtokeniser = new ArabicAnalyzer(org.apache.lucene.util.Version.LUCENE_36);
   public JList list;
   public JScrollPane jscroll;
   //public ConcArray conc;
@@ -116,7 +117,7 @@ public class ListDisplay extends JPanel
     table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     
     this.parent = parent;
-     font = new Font("Tahoma", Font.PLAIN, 12);
+    font = new Font("Tahoma", Font.PLAIN, 12);
     //setPreferredSize(new Dimension(LWIDTH+50, LHEIGHT+30));
    
     listModel = lm; //parent.getConcordanceVector(); //new DefaultListModel();
@@ -143,39 +144,39 @@ public class ListDisplay extends JPanel
     table.getTableHeader().addMouseListener(new TableHeaderMouseListener());
     addComponentListener(this);
   }
-///******************************************
+  ///******************************************
  
   public int getIndexOfDetail(int col, String str){
-      for (int i = 0; i < list.getModel().getSize()-1; i++) {
-          ConcordanceObject cobjct = (ConcordanceObject) list.getModel().getElementAt(i);
-          String concordance = cobjct.concordance;
-          HighlightString hls = cobjct.indexOfSortContext();
-          String test = hls.string;
-          if(test.equalsIgnoreCase(str))
-              return i;
+    for (int i = 0; i < list.getModel().getSize()-1; i++) {
+      ConcordanceObject cobjct = (ConcordanceObject) list.getModel().getElementAt(i);
+      String concordance = cobjct.concordance;
+      HighlightString hls = cobjct.indexOfSortContext();
+      String test = hls.string;
+      if(test.equalsIgnoreCase(str))
+        return i;
       
-      }
+    }
     return 3;
   }
   
   public void refresh()
   {
-      revalidate();
-      repaint();
-      jscroll.revalidate();
+    revalidate();
+    repaint();
+    jscroll.revalidate();
   }
   
   public void setViewToIndex(int index)
   {
-      Rectangle rect;
-      if(index+10 >= table.getRowCount()){
-        rect = table.getCellRect(index, 1, true);
-        table.changeSelection(index, 0, true, false);
-      }else{
-        rect = table.getCellRect(index+10, 1, true);
-        table.changeSelection(index-1, 0, true, false);
-      } 
-      table.scrollRectToVisible(rect);
+    Rectangle rect;
+    if(index+10 >= table.getRowCount()){
+      rect = table.getCellRect(index, 1, true);
+      table.changeSelection(index, 0, true, false);
+    }else{
+      rect = table.getCellRect(index+10, 1, true);
+      table.changeSelection(index-1, 0, true, false);
+    } 
+    table.scrollRectToVisible(rect);
   }
   
   public void addListSelectionListener(ListSelectionListener lsl){
@@ -195,8 +196,8 @@ public class ListDisplay extends JPanel
     ConcordanceObject[] rows = new ConcordanceObject[interval.length];
     //System.out.println("tbl :  "+table.getSelectedRows().length+ " "+ interval[0]+ " end "  + interval[interval.length-1]);
     for (int i = 0; i < rows.length; i++) {
-          list.setSelectedIndex(interval[i]);  
-          rows[i]= (ConcordanceObject) list.getSelectedValue();
+      list.setSelectedIndex(interval[i]);  
+      rows[i]= (ConcordanceObject) list.getSelectedValue();
     }
     list.setSelectedIndex(interval[0]);
     return  rows;
@@ -216,7 +217,7 @@ public class ListDisplay extends JPanel
     setCellPrototype(ConcordanceObject.RENDERER_PROTOTYPE);
   }
   
-   public void setMosaicSelected(String sel){
+  public void setMosaicSelected(String sel){
     mosaicSelected = sel;
   }
 
@@ -277,6 +278,7 @@ public class ListDisplay extends JPanel
     
   }
 
+  /**  OLD IMPLEMENTATION. REMOVE WHEN NEW IMPLEMENTATION (BELOW) IS STABLE ** 
   public void redisplayConc(){
     //removes and readds all the components to the window  
     remove(jscroll);
@@ -307,7 +309,20 @@ public class ListDisplay extends JPanel
           String sortctxStr ="";
           if(cobjct.getSortContextHorizon() > 0 )
           {
-              if(parent.getLanguage() == modnlp.Constants.LANG_AR){ // if arabic rendering we need to highlight different part
+              if(parent.getLanguage() == modnlp.Constants.LANG_AR)
+              { // if ARABIC rendering we need to highlight different
+              // part
+              // 
+              // SL: this needs to be revised in line with the
+              // non-Arabic display below, so that it uses
+              // ConcordanceObject's TokenIndex's rather than re-split
+              // the context strings. Using ConcordanceObject we avoid
+              // redundancy (and save CPU time) and keep the display
+              // consistent with Tokenisation and sorting (both of
+              // which already handled at the level of
+              // ConcordanceObject). See 'else' clause of this if for
+              // an example of how this can be done with a lot less
+              // code.
                   String[] contextArray = cobjct.getKeywordAndRightContext().trim().split(" ");
                   String[] otherContextArray = cobjct.getLeftContext().trim().split(" ");
                   sortctxStr = contextArray[cobjct.getSortContextHorizon()];
@@ -661,6 +676,218 @@ public class ListDisplay extends JPanel
     revalidate();
     repaint();
   }
+  */
+  
+  public void redisplayConc(){
+    System.err.println("mosaicSelected="+mosaicSelected);
+    //removes and readds all the components to the window  
+    remove(jscroll);
+    String[] columnNames = {"Filename", "Left Context", "Keyword","Right Context"};
+    String[][] data = new String[listModel.getSize()][4];
+    Graphics g =null;
+    ConcordanceObject cobjct;
+    
+    //Setup to measure Fonts
+    BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g2d = img.createGraphics();
+    FontMetrics fm = g2d.getFontMetrics(font);
+    
+    //reverse contexts for arabic
+    int leftctx = 1;
+    int rightctxt = 3; 
+    if(parent.getLanguage() == modnlp.Constants.LANG_AR){
+      leftctx = 3;
+      rightctxt = 1; 
+    }
+   
+    //converting listmodel to data array
+    for (int i = 0; i < listModel.getSize(); i++) {
+      cobjct = (ConcordanceObject) listModel.getElementAt(i);
+      String kw = cobjct.getKeyword();
+      String lc = cobjct.getLeftContext();
+      String rc = cobjct.getKeywordAndRightContext();
+      data[i][0] ="<html>"+ cobjct.sfilename.trim()+"     </html>";
+      data[i][leftctx] = "<html>"+lc.trim()+"</html>";
+      data[i][2] = "<html>  " +kw.trim() +"</html>  ";
+      data[i][rightctxt]
+        ="<html>" + rc.substring(kw.length()).trim()+"</html>";
+      String sortctxStr ="";
+      if(cobjct.getSortContextHorizon() > 0 )
+        { // highlight by sorted word on the right 
+          int sch = cobjct.getSortContextHorizon();
+          TokenIndex rti = cobjct.getRightTokenIndex();              
+          
+          if ( sch == 0 || sch+1 > rti.size() )
+            continue;
+          StringBuilder rcs = new StringBuilder("");
+          // context left of sort word
+          String lrc = rc.substring(rti.getEndPos(0), rti.getStartPos(sch));
+          // sort word
+          String sw  = rc.substring(rti.getStartPos(sch), rti.getEndPos(sch)); 
+          // context right of sort word
+          String rrc = rc.substring(rti.getEndPos(sch));
+          
+          if( mosaicSelected.trim().equalsIgnoreCase("") )
+            { // no mosaic highlights
+              rcs.insert(0, "<html>");
+              rcs.append(lrc); 
+              rcs.append("<font color='red'>");
+              rcs.append(sw);
+              rcs.append("</font>");
+              rcs.append(rrc);
+              rcs.append("</html>");
+              data[i][rightctxt] = rcs.toString();
+              // leftctx stays as default
+            }
+          else if ( mosaicSelected.trim().equalsIgnoreCase(sw) )
+            {
+              rcs.append(lrc);
+              rcs.append("<font color='#FF00FF'>");
+              rcs.append(sw);
+              rcs.append("</font>");
+              rcs.append(rrc);
+              rcs.insert(0, "<html><font color='#00BFFF'>");
+              rcs.append("</font></html>");
+              rcs.insert(0, "<html><font color='#00BFFF'>");
+              data[i][rightctxt] = rcs.toString();
+              data[i][leftctx] =
+                "<html> <font color='#00BFFF'>"+lc.trim()+"</font> </html>";
+            }
+        }
+      if(cobjct.getSortContextHorizon() < 0 )
+        { // left context sorting
+          int sch = cobjct.getSortContextHorizon()*-1;
+          TokenIndex lti = cobjct.getLeftTokenIndex();
+          if ( sch == 0 || sch+1 > lti.size() )
+            continue;
+          //System.err.println("sch==>"+sch+" coord ==>\n"+ lti+"\n rc==>"+rc);
+          // builder for left context  
+          StringBuilder lcs = new StringBuilder("");
+          // context left of sort word
+          String lrc = lc.substring(0, lti.getStartPos(sch));
+          // sort word
+          String sw  = lc.substring(lti.getStartPos(sch), lti.getEndPos(sch)); 
+          // context right of sort word
+          String rrc = lc.substring(lti.getEndPos(sch));
+          
+          if( mosaicSelected.trim().equalsIgnoreCase("") )
+            { // no mosaic highlights
+              lcs.insert(0, "<html>");
+              lcs.append(lrc); 
+              lcs.append("<font color='red'>");
+              lcs.append(sw);
+              lcs.append("</font>");
+              lcs.append(rrc);
+              lcs.append("</html>");
+              data[i][leftctx] = lcs.toString();
+              // rightctxt stays as default
+            }
+          else if ( mosaicSelected.trim().equalsIgnoreCase(sw) )
+            {
+              lcs.append(lrc);
+              lcs.append("<font color='#FF00FF'>");
+              lcs.append(sw);
+              lcs.append("</font>");
+              lcs.append(rrc);
+              lcs.insert(0, "<html><font color='#00BFFF'>");
+              lcs.append("</font></html>");
+              lcs.insert(0, "<html><font color='#00BFFF'>");
+              data[i][leftctx] = lcs.toString();
+              data[i][rightctxt] = "<html> <font color='#00BFFF'>"+
+                rc.substring(kw.length()).trim()+"</font> </html>";
+            }
+        }
+      if(!useUserWidths)
+        {  
+          for (int j = 0; j < 4; j++)
+            {
+              if(fm.stringWidth(data[i][j]) > maxLengths[j])
+                maxLengths[j] = fm.stringWidth(data[i][j]) -
+                  fm.stringWidth("<html></html>");
+            } 
+          if(cobjct.getSortContextHorizon() < 0)
+            {
+              int temp =  maxLengths[leftctx] -
+                fm.stringWidth("<htm</html<font color=\"red\"></font>");
+              maxLengths[leftctx] = temp;
+            }
+          if(cobjct.getSortContextHorizon() > 0)
+            {
+              int temp = maxLengths[rightctxt] -
+                fm.stringWidth("<htm</htm<font color=\"red\"></font>");
+              maxLengths[rightctxt] = temp;
+            }
+          useUserWidths = true;
+        }
+    }
+
+    table = new MyTable(data, columnNames);
+    table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+    table.setFont(font);
+    table.setRowHeight(table.getRowHeight()+table.getRowHeight()/5);
+    
+    //setting column widths
+    TableColumn column = null;
+    for (int i = 0; i < 4; i++) {
+      column = table.getColumnModel().getColumn(i);
+        
+      column.setPreferredWidth(maxLengths[i]); 
+    } 
+    
+    //set column allignments
+    LeftContextRenderer rightAlignRenderer = new LeftContextRenderer();
+    rightAlignRenderer.setHorizontalAlignment(JLabel.RIGHT);
+    //rightRenderer.setIgnoreRepaint(true);
+    //rightRenderer.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+    //rightRenderer.applyComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+    rightAlignRenderer.setFont(font);
+    table.getColumnModel().getColumn(1).setCellRenderer(rightAlignRenderer);
+    
+    DefaultTableCellRenderer centreRenderer = new DefaultTableCellRenderer();
+    centreRenderer.setHorizontalAlignment(JLabel.CENTER);
+    centreRenderer.setFont(font);
+    table.getColumnModel().getColumn(2).setCellRenderer(centreRenderer);
+    
+    RightContextRenderer leftAlignRenderer = new RightContextRenderer();
+    leftAlignRenderer.setHorizontalAlignment(JLabel.LEFT);
+    leftAlignRenderer.setFont(font);
+    table.getColumnModel().getColumn(3).setCellRenderer(leftAlignRenderer);
+    
+    DefaultTableCellRenderer filenameRenderer = new DefaultTableCellRenderer();
+    filenameRenderer.setHorizontalAlignment(JLabel.LEFT);
+    filenameRenderer.setFont(font);
+    table.getColumnModel().getColumn(0).setCellRenderer(filenameRenderer);
+    
+
+    //set column color
+    centreRenderer.setForeground(Color.blue);
+    filenameRenderer.setForeground(Color.RED);
+    
+    //update list
+    list = new JList(listModel);
+    
+
+    //turn off grid
+    table.setShowGrid(false);
+    
+    // set selection mode
+    table.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+    
+    //re-add listeners
+    table.getSelectionModel().addListSelectionListener(parent);
+    table.getColumnModel().getSelectionModel().addListSelectionListener(parent);
+    table.getColumnModel().addColumnModelListener(new TableColumnWidthListener());
+    table.getTableHeader().addMouseListener(new TableHeaderMouseListener());
+    
+    jscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+    jscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    jscroll.getViewport().setView(table);
+    add(jscroll);
+    revalidate();
+    repaint();
+  }
+
+
 
   public void componentHidden(ComponentEvent e) {
   }
@@ -670,21 +897,21 @@ public class ListDisplay extends JPanel
   }
   
   private class TableColumnWidthListener implements TableColumnModelListener
-{
+  {
     @Override
     public void columnMarginChanged(ChangeEvent e)
     {
- /* columnMarginChanged is called continuously as the column width is changed
-           by dragging. Therefore, execute code below ONLY if we are not already
-           aware of the column width having changed */
-        if(!table.hasColumnWidthChanged())
+      /* columnMarginChanged is called continuously as the column width is changed
+         by dragging. Therefore, execute code below ONLY if we are not already
+         aware of the column width having changed */
+      if(!table.hasColumnWidthChanged())
         {
-            /* the condition  below will NOT be true if
-               the column width is being changed by code. */
-            if(table.getTableHeader().getResizingColumn() != null)
+          /* the condition  below will NOT be true if
+             the column width is being changed by code. */
+          if(table.getTableHeader().getResizingColumn() != null)
             {
-                // User must have dragged column and changed width
-                table.setColumnWidthChanged(true);
+              // User must have dragged column and changed width
+              table.setColumnWidthChanged(true);
             }
         }
     }
@@ -700,73 +927,73 @@ public class ListDisplay extends JPanel
 
     @Override
     public void columnSelectionChanged(ListSelectionEvent e) { }
-}
+  }
   
   private class TableHeaderMouseListener extends MouseAdapter
-{
+  {
     @Override
     public void mouseReleased(MouseEvent e)
     {
-        /* On mouse release, check if column width has changed */
-        if(table.hasColumnWidthChanged())
+      /* On mouse release, check if column width has changed */
+      if(table.hasColumnWidthChanged())
         {
             
-                TableColumn column = null;
-                for (int i = 0; i < 4; i++) {
-                    column = table.getColumnModel().getColumn(i);
-                    maxLengths[i] = column.getWidth();
-                 } 
+          TableColumn column = null;
+          for (int i = 0; i < 4; i++) {
+            column = table.getColumnModel().getColumn(i);
+            maxLengths[i] = column.getWidth();
+          } 
                 
-            // Reset the flag on the table.
-            table.setColumnWidthChanged(false);
+          // Reset the flag on the table.
+          table.setColumnWidthChanged(false);
         }
     }
 
-}
+  }
 }
 class MyTable extends JTable {
-    public MyTable(Object[][] data, Object[] columnNames){
-        super(data,columnNames);
-    }
-    private boolean isColumnWidthChanged;
-    public boolean hasColumnWidthChanged() {
-        return isColumnWidthChanged;
-    }
+  public MyTable(Object[][] data, Object[] columnNames){
+    super(data,columnNames);
+  }
+  private boolean isColumnWidthChanged;
+  public boolean hasColumnWidthChanged() {
+    return isColumnWidthChanged;
+  }
 
-    public void setColumnWidthChanged(boolean widthChanged) {
-        isColumnWidthChanged = widthChanged;
-    }
+  public void setColumnWidthChanged(boolean widthChanged) {
+    isColumnWidthChanged = widthChanged;
+  }
 
 }
 
 class LeftContextRenderer extends DefaultTableCellRenderer {
     
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        final JViewport viewport = new JViewport();
-        final Component c;
-        c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        viewport.setView( c);      
-        int width = viewport.getWidth();
-        Dimension size = c.getPreferredSize();
-        viewport.setViewPosition(new Point(size.width - width, 0));
-        return viewport;
-    }
+  @Override
+  public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+    final JViewport viewport = new JViewport();
+    final Component c;
+    c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+    viewport.setView( c);      
+    int width = viewport.getWidth();
+    Dimension size = c.getPreferredSize();
+    viewport.setViewPosition(new Point(size.width - width, 0));
+    return viewport;
+  }
 }
 
 class RightContextRenderer extends DefaultTableCellRenderer {
     
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        final JViewport viewport = new JViewport();
-        final Component c;
-        c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        viewport.setView( c);      
-        //int width = viewport.getWidth();
-        //Dimension size = c.getPreferredSize();
-        //viewport.setViewPosition(new Point(size.width - width, 0));
-        return viewport;
-    }
+  @Override
+  public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+    final JViewport viewport = new JViewport();
+    final Component c;
+    c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+    viewport.setView( c);      
+    //int width = viewport.getWidth();
+    //Dimension size = c.getPreferredSize();
+    //viewport.setViewPosition(new Point(size.width - width, 0));
+    return viewport;
+  }
 }
 
 

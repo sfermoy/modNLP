@@ -22,6 +22,7 @@ import modnlp.tec.client.gui.HighlightString;
 import modnlp.dstruct.TokenIndex;
 import modnlp.idx.inverted.TokeniserRegex;
 import modnlp.idx.inverted.TokeniserJPLucene;
+import modnlp.idx.query.WordQuery;
 import modnlp.util.Tokeniser;
 
 import java.io.File;
@@ -157,20 +158,34 @@ public class ConcordanceObject {
 
     /*
     StringBuffer pad = new StringBuffer("");
-    if (language==modnlp.Constants.LANG_JP){// create padding for 1/2-width JP characters 
+    if (language==modnlp.Constants.LANG_JP)
+    {// create padding for 1/2-width JP characters 
       for(int i = start; i < data.length ; i++)
         if(data[i] == '…')
           pad.append(' ');
       padding = pad.toString();
     }
-    */      
-    String kwarc = getKeywordAndRightContext();
-    rightTokenIndex = tkr.getTokenIndex(kwarc);
-    TokenIndex.TokenCoordinates tc = rightTokenIndex.getCoordinates(0); 
-    keyword = kwarc.substring(tc.start, tc.end);
+    */
+
     leftTokenIndex = tkr.getTokenIndex(getLeftContextAndKeyword());
     leftTokenIndex.reverse();
 
+    String kwarc = getKeywordAndRightContext();
+    rightTokenIndex = tkr.getTokenIndex(kwarc);
+
+    TokenIndex.TokenCoordinates tc = rightTokenIndex.getCoordinates(0); 
+    keyword = kwarc.substring(tc.start, tc.end);
+    String q = coVector.getBrowserQuery();
+    if (WordQuery.isKeywordOnly(q) && keyword.length() > q.length())
+      {
+        //System.err.println("q==>"+q+" ==>"+keyword+" coord ==>"+ rightTokenIndex);
+        rightTokenIndex.remove(0);
+        rightTokenIndex.add(0, 0, q.length());
+        rightTokenIndex.add(1, q.length()+1, keyword.length());
+        //System.err.println("q=>"+q+" q.l==>"+q.length()+" ==>"+keyword);
+        keyword = keyword.substring(0, q.length());
+        //System.err.println(" ==>"+keyword+" ==> kwarc"+kwarc+" coord ==>\n"+ rightTokenIndex+"\n LC: "+getLeftContextAndKeyword());
+      }
   }
 
   public static ConcordanceObject getRendererPrototype(){
@@ -180,6 +195,16 @@ public class ConcordanceObject {
     return c;
   }
 
+
+  public TokenIndex getLeftTokenIndex (){
+    return leftTokenIndex;
+  }
+
+  public TokenIndex getRightTokenIndex (){
+    return rightTokenIndex;
+  }
+
+  
   public JLabel labelConcLine (int lfn_size){
     String offset = adjustOffSet(lfn_size,filename.length());
     return new JLabel(filename+offset+concordance);

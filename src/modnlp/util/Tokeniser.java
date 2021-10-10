@@ -261,5 +261,4 @@ public class Tokeniser {
     return isBar(token) ? token.substring(1) : token;
   }
 
-
 }

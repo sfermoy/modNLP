@@ -388,30 +388,28 @@ public class BrowserFrame extends BrowserGUI
       );
     stlButton.addActionListener(new ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            //sort other context for arabic
-            if(parent.getLanguage() == modnlp.Constants.LANG_AR){
-
-                parent.startSorting(getSortLeftCtxHorizon(),false);
-
-            }
-            else{
-                  parent.startSorting(getSortLeftCtxHorizon(),true);
-            }
-             
-        
+          concListDisplay.setMosaicSelected("");
+          //sort other context for arabic
+          if(parent.getLanguage() == modnlp.Constants.LANG_AR){
+            
+            parent.startSorting(getSortLeftCtxHorizon(),false);
+            
+          }
+          else{
+            parent.startSorting(getSortLeftCtxHorizon(),true);
+          }
         }}
       );
     strButton.addActionListener(new ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-        
-            //sort other context for arabic
-            if(parent.getLanguage() == modnlp.Constants.LANG_AR){
-                      parent.startSorting(getSortRightCtxHorizon(),true);
-            }
-            else{
-                  parent.startSorting(getSortRightCtxHorizon(),false);
-            }
-         
+          concListDisplay.setMosaicSelected("");
+          //sort other context for arabic
+          if(parent.getLanguage() == modnlp.Constants.LANG_AR){
+            parent.startSorting(getSortRightCtxHorizon(),true);
+          }
+          else{
+            parent.startSorting(getSortRightCtxHorizon(),false);
+          }
         }}
       );
     
