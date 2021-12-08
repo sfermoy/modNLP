@@ -11,15 +11,13 @@ $debug = $ARGV[1] eq '-v';
 $textfile =~ s/\.hed//i;
 $textfile .= '.xml';
 
-print "Testing that section attributes match in $headfile and $textfile\n"
+print "Copying section tags from $textfile to  $headfile\n"
     if $debug;
 
-if (sectionMismatch($textfile, $headfile))
-{
-    die("Sections in $textfile do not match $headfile\n");
-}
+copySectionTags($textfile, $headfile);
 
-sub sectionMismatch{
+
+sub copySectionTags{
     my $t = shift;
     my $h = shift;
 
@@ -40,35 +38,37 @@ sub sectionMismatch{
         }
     }
  
+    my $err = 0;
     my %section = {};
     open(HF, "$h") or die "Couldn't open $h: $!\n";
+    open(HT, ">$h-tmp") or die "Couldn't open $h-tmp: $!\n";
+    my $tmp = '';
+    ## remove old sections from header
     while ($l = <HF>){
-        if ($l =~ /<$indexelement .*?$indexattribute=['"](.+?)['"]/){
-            $section{$2} = 1;
+        if ($l =~ s/(<$indexelement .*?>)/__SECTIONS_GO_HERE__/gs){
+            print STDERR "Removed $1 from header\n";
         }
+        $tmp .= $l;
     }
     close HF;
 
-    my $err = 0;
-    open(HF, "$t") or die "Couldn't open $t: $!\n";
-    while ($l = <HF>){
-        if ($l =~ /<$indexelement .*?$indexattribute=['"](.+?)['"]/){
-            if ($section{$2}){
-                $section{$2} = 0;
-            }
-            else{
-                print STDERR "ERROR: Mismatched section $2: only in $t, not in $h\n";
-                $err++;
-            }
-        }
+    my $sec = '';
+    my $txt = '';
+    open(TF, "$t") or die "Couldn't open $t: $!\n";
+    while (<TF>){
+        $txt .= $_;
     }
-    close HF;
-    foreach (keys %section){
-        if ($section{$_}){
-            print STDERR "ERROR: Mismatched section $_: only in $h, not in $t\n";
-            $err++;
-        }
+    close TF;
+    
+    while ($txt =~ /<($indexelement) (.*?)>/g){
+        $sec .= "<$1 $3/>\n";
     }
+    
+    $tmp =~ s/__SECTIONS_GO_HERE__/$sec/;
+    $tmp =~ s/__SECTIONS_GO_HERE__//g;
+    print HT $tmp;
+    close HT;
+
     return $err;
 }
 

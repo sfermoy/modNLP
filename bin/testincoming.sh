@@ -6,11 +6,16 @@
 XML=`ls *.xml`
 HED=`ls *.hed`
 ERR=0
-echo 'Converting to unix format'
-echo dos2unix $XML
-dos2unix $XML
-echo dos2unix $HED
-dos2unix $HED
+if [ "$1" == "--nodos2unix" ]
+   then 
+    echo "Skipping dos2unix conversion"
+   else
+    echo 'Converting to unix format'
+    echo dos2unix $XML
+    dos2unix $XML
+    echo dos2unix $HED
+    dos2unix $HED
+fi
 CWD=`dirname $0`
 . $CWD/config.sh
 
