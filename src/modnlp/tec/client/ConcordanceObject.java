@@ -144,6 +144,14 @@ public class ConcordanceObject {
     switch (language) {
     case modnlp.Constants.LANG_EN:
       tkr = new TokeniserRegex("");
+      /* SL: setIndexNumerals() should really be sent from the server
+       * or read off the properties file; a better idea is to send the
+       * keywords parsed from the server. This will need some redesign
+       * of these classes, when time pertmits. For now, we will assume
+       * numerals are always indexed (which may cause some problems in
+       * corpora where they are not).
+       */
+      tkr.setIndexNumerals(true); 
       break;
     case modnlp.Constants.LANG_JP:
       tkr = new TokeniserJPLucene("");
@@ -167,6 +175,7 @@ public class ConcordanceObject {
     }
     */
 
+    
     leftTokenIndex = tkr.getTokenIndex(getLeftContextAndKeyword());
     leftTokenIndex.reverse();
 

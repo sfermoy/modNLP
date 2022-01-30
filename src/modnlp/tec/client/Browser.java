@@ -947,11 +947,9 @@ public class Browser
     return getBrand()+" Concordance Browser (v. "+getRelease()+")";
   }
 
-
   public BrowserGUI getBrowserGUI(){
     return browserFrame;
   }
-
 
   public static void main(String[] args) {
     try {

@@ -3,6 +3,8 @@
 tokeniser.ignore.elements=(omit|url)
 ## should punctuation count as tokens?
 index.punctuation=false
+## should we index numerals?
+index.numerals=false
 ## index metadata for subcorpus selection (header files)?
 index.headers=true
 ## which element should be indexed (i.e. text within elements

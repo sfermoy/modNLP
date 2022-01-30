@@ -1,0 +1,44 @@
+#modnlp.idx.IndexManager's properties (tailored to OMC indexing)
+#Wed May 16 15:29:14 IST 2007
+tokeniser.ignore.elements=(omit|url)
+## should punctuation count as tokens?
+index.punctuation=false
+## should we index numerals?
+index.numerals=true
+## index metadata for subcorpus selection (header files)?
+index.headers=true
+## which element should be indexed (i.e. text within elements
+## specified here will be indexed and can form subcorpora if xquery
+## restrictions are applied. Format: a regexp grouping 
+subcorpusindexer.element=(section)
+## which attribute from the element above will we use to uniquely
+## identify the text segments. Attribute must be of xml type ID
+subcorpusindexer.attribute=id
+## specify 'root' xml element, relative to which the xqueries will be
+## formulated
+xquery.root.element.path=/omcheader/document
+## the element to be returned by xquery to select which indexed texts
+## should be included in the inverted-index query
+xquery.return.attribute.path=/@id
+## specs and paths all relative to xquery.root.element.path
+## form: description_1;path_1;description_2;path_2,...
+xquery.attribute.chooser.specs=File name;/@filename;Pub. date;/@publication_date;Organisation;/organisation/@name;Author;/author/lastname;Text type;section/@type;Format;/@format;Visual class;/section/taxon/@class;Visual order;/section/taxon/@order;Visual family;/section/taxon/@family
+## Extension Of the header files (e.g. .hed, .xml etc)
+header.extension=hed
+## the maximum number of subcorpus constraint query results to be stored (by HeaderDBManager)
+xquery.max.cache.size=23
+## root of the file description path
+xquery.root.filedescription.path=/omcheader
+## xquery expression that returns a (human-readable) file description
+xquery.file.description.return={data($s/document/@filename)}<sep/>{data($s/document/@format)}<sep/>{concat("<html>"," ")} {for $author in $s/document/author return concat("", data($author/lastname), " ", data($author/firstname), ",")} {concat("<i>", data($s/document/title), "</i>. ", data($s/document/@publication_date), data($s/document/organisation/@name), ".</html>")}
+## xquery expression that returns a header information
+xquery.header.info.return={data($s/document/@filename)} <sep/>{data($s/document/@format)} <sep/>{for $section in $s/section return concat (\"<section/>\",data($section/@id),\" <sep/>\",data($s/title),\" <sep/>\",data($s/@publication_date))
+## Human readable headings for information in xquery.header.info.return. File data before the </section> tag/
+header.info.human=Filename<sep/>Format<sep/>Title<sep/>Author<section/>ID<sep/>Publication_Date<sep/>
+## the encoding for characters in files to be indexed. Make sure your text files match this
+file.encoding=UTF-8
+## the language to be indexed (determines the choice of
+## tokeniser). Currently supported languages are LATIN (EN) AR (Arabic) and JP (Japanese); EN
+## should make reasonably educated guesses for all European Languages
+## (including some non-Latin scripted ones, such as Greek).
+language=EN

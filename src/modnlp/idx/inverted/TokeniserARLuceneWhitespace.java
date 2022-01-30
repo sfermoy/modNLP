@@ -35,7 +35,6 @@ import java.util.Properties;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import modnlp.dstruct.TokenMap;
-import static modnlp.idx.inverted.TokeniserRegex.PUNCTUATIONWORDREGEXP;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.ar.ArabicAnalyzer;

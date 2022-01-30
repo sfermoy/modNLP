@@ -349,10 +349,24 @@ public class IndexManager {
             throw new AlreadyIndexedException(fname);
           }
           imui.print("-- Tokenising ...\n");
-          if (dictProps.getProperty("index.punctuation").equalsIgnoreCase("true")){
-            imui.print("-- (punctuation *will* count as tokens)\n");
-            tkr.setIndexPuntuation(true);
+          String ipun = dictProps.getProperty("index.punctuation");
+          if (ipun != null && ipun.equalsIgnoreCase("true")){
+            imui.print("-- (punctuation *will* count as token constituents)\n");
+            tkr.setIndexPuntuation(true);            
           }
+          else {
+            imui.print("-- (punctuation *WILL NOT* count as token constituents)\n");
+          }
+          String inum = dictProps.getProperty("index.numerals");
+          if (inum != null && inum.equalsIgnoreCase("true")){
+            imui.print("-- (numerals *WILL* count as tokens)\n");
+            tkr.setIndexNumerals(true);            
+          }
+          else {
+            imui.print("-- (numerals *WILL NOT* count as tokens)\n");
+          }
+            
+
           TokenMap tm;
           int fid;
           if(la == modnlp.Constants.LANG_AR)

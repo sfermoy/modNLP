@@ -40,12 +40,13 @@ import java.util.regex.Matcher;
 */
 public class TokeniserRegex extends Tokeniser {
 
-  public static final String DEFAULTWORDREGEXP = "\\p{L}[\\p{L}-.]*'?s?"; // include dots for abbrev. (e.g. U.S.A.)
-  public static final String PUNCTUATIONWORDREGEXP = "\\p{L}[\\p{L}-.]*'?s?|[.?!;:,](?:\\s)"; // include dots for abbrev. (e.g. U.S.A.)
+  public static final String DEFAULTWORDREGEXP = "\\p{L}[\\p{L}-.]*|\\p{L}[\\p{L}-.]*'s"; // include dots for abbrev. (e.g. U.S.A.)
+  public static final String PUNCTUATIONWORDREGEXP = "[.?!;:,](?:\\s"; // include dots for abbrev. (e.g. U.S.A.)
+  public static final String NUMERALREGEXP = "[0-9,.]+[0-9]+%?";
 
+  
   private String bigWordRegexp = DEFAULTWORDREGEXP; 
   private Pattern bigWordPattern = Pattern.compile(bigWordRegexp);
-
   private String wordRegexp = "[\\p{L}.]+|'s?";
   private String ignoredElements = "(omit|ignore)";
   
@@ -99,9 +100,27 @@ public class TokeniserRegex extends Tokeniser {
   public final void setIndexPuntuation(final Boolean argIndexPuntuation) {
     indexPuntuation = argIndexPuntuation;
     if (indexPuntuation)
-      setBigWordRegexp(PUNCTUATIONWORDREGEXP);
+      setBigWordRegexp(bigWordRegexp+"|"+PUNCTUATIONWORDREGEXP);
   }
 
+  /**
+   * Sets the value of indexNumerals
+   *
+   * @param argIndexNumerals Value to assign to this.indexNumerals
+   */
+  public final void setIndexNumerals(final Boolean argIndexNumerals) {
+    if (!indexNumerals && argIndexNumerals)
+      setBigWordRegexp(bigWordRegexp+"|"+NUMERALREGEXP);
+    if (!argIndexNumerals){
+      setBigWordRegexp(DEFAULTWORDREGEXP);
+      if (indexPuntuation)
+        setBigWordRegexp(DEFAULTWORDREGEXP+"|"+PUNCTUATIONWORDREGEXP);
+    }
+    indexNumerals = argIndexNumerals;
+  }
+
+
+  
   /**
    * Gets the value of wordRegexp
    *
@@ -167,10 +186,12 @@ public class TokeniserRegex extends Tokeniser {
     while (bwre.find()) {
       int pos = bwre.start();
       String word = bwre.group();
+      //System.out.println("BW->"+word+"<-");
       if (verbose)
         PrintUtil.printNoMove("Tokenising ...",ct++);
       int iofd = word.indexOf('.');  // index of first dot
       int iolc = word.length()-1;    // index of last char
+      boolean numl = word.matches(NUMERALREGEXP); 
       boolean hogc = word.indexOf('-')+word.indexOf('\'') == -2 ? false : true;
       if ( iofd >= 0) {      // word is an acronym, possibly with a missing dot or ...
         //System.out.println("-->"+word+"<-- iofd="+iofd+" iolc="+iolc+" hogc="+hogc);
@@ -178,9 +199,9 @@ public class TokeniserRegex extends Tokeniser {
           tokenMap.putPos(word.substring(0,iolc), pos);
         else if (iofd == 0)    // ... a normal word with a leading dot
           tokenMap.putPos(word.substring(1,iolc+1), pos); 
-        else if (word.charAt(iolc) == '.' || hogc) // right, this is a complete acronym. hyphenated or genitive
+        else if (word.charAt(iolc) == '.' || hogc || numl) // right, this is a complete acronym. hyphenated, genitive or numeral
           tokenMap.putPos(word, pos);      // ... so store as is.
-        else if (!hogc)                     // incomplete acronym...
+        else if (!hogc)          // incomplete acronym...
           tokenMap.putPos(word+".", pos);  // ... add missing dot and store acronym
       }
       else {

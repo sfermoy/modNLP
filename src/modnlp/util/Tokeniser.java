@@ -83,6 +83,7 @@ public class Tokeniser {
   public static final String SEPTOKEN = new String(SEPTKARR);
 
   protected Boolean indexPuntuation = false;
+  protected Boolean indexNumerals = false;
 
 
 
@@ -131,12 +132,32 @@ public class Tokeniser {
   /**
    * Sets the value of indexPuntuation
    *
-   * @param argIndexPuntuation Value to assign to this.indexPuntuation
+   * @param setIndexPuntuation Value to assign to this.indexPuntuation
    */
   public void setIndexPuntuation(final Boolean argIndexPuntuation) {
     this.indexPuntuation = argIndexPuntuation;
   }
 
+
+  /**
+   * Gets the value of indexNumerals
+   *
+   * @return the value of indexNumerals
+   */
+  public final Boolean getIndexNumerals() {
+    return this.indexNumerals;
+  }
+
+  /**
+   * Sets the value of indexNumerals
+   *
+   * @param setIndexNumerals Value to assign to this.indexNumerals
+   */
+  public void setIndexNumerals(final Boolean argIndexNumerals) {
+    this.indexNumerals = argIndexNumerals;
+  }
+
+  
   public void setTokenMap(TokenMap t){
     tokenMap = t;
   }
