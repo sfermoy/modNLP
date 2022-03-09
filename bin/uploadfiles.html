@@ -12,14 +12,23 @@ type="text/css">
 -->
 </HEAD>
 <body class="mine" BGCOLOR="#FFFFFF" LINK="#0A0BFF" vlink="#0A0BFF">
-  <h1>Upload files for indexing</h1>
+  <h3>Upload OMC XML and HED files for indexing</h3>
 
+  <p>
+  Note: files must be uploaded in in pairs (e.g. omc000001.xml and
+  omc000001.hed), otherwise the checking will fail. You can select
+  several files to upload at once by clicking on 'Browse...' and
+  holding down Ctrl or Shift and clicking on the files you wish to
+  select. Files will be also be checked for character encoding, XML
+  validity, matching filename attribute in the header file, and
+  whether they have already been indexed. The results will appear on
+  the next page, once you hit 'Upload'.
+  </p><br/><br/>
 
- <form enctype="multipart/form-data"
-                     action="uploadfiles.cgi" method="post">
-   <p>File: <input type="file" name="filename" multiple></p>
-   <p><input type="submit" value="Upload" /></p>
-   </form>
+<form enctype="multipart/form-data"
+      action="uploadfiles.cgi" method="post">
+  <p>File: <input type="file" name="filename" multiple><input type="submit" value="Upload" /></p>
+</form>
 
 
 

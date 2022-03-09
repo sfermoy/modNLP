@@ -56,6 +56,7 @@ public class HeaderXMLHandler extends DefaultHandler
   private String spacer = "";
   private int tab = 20;
   private String Highlight;
+  private String imgBase;
   String bgcolor ="";
 
   public HeaderXMLHandler(String section) throws ParserConfigurationException,
@@ -79,45 +80,48 @@ public class HeaderXMLHandler extends DefaultHandler
                               final String name,
                               final Attributes atts) 
   {
-     
-    if ( !ignorableElement(name) )
-      {
-          if(depthContext < 0)
-             spacer = "<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">";
-          else{
-              if(depthContext == 0)
-                {
-                    spacer="<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">";
-                }
-              else{
-                  spacer="<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">";
-              }
-          }           
-//        for (int i = 0; i < depthContext; i++)
-//          content.append(spacer);
-        String at = "";
-        if (elementAttribs != null) {
-          //at = " "+spacer+elementAttribs;
-          at = ""+elementAttribs.replace(",", "<br>");
-          if(at.contains("id")){
-              spacer=spacer.replace(bgcolor, "");
-              bgcolor="";
+    if ( !ignorableElement(name) ){
+      if(depthContext < 0)
+        spacer = "<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">\n";
+      else{
+        if(depthContext == 0)
+          {
+            spacer="<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">\n";
           }
-          at = at.replace("id: "+ Highlight+"<br>", "<font color=red>"+ "#id: "+ Highlight+"</font>"+"<br>");
-          if(at.contains("#id")){
-              bgcolor = "background-color: #FFFF00;";
-              spacer = "<div style=\"background-color: #FFFF00;margin-left: "+tab*(depthContext+2)+"px;\">";
-          }
+        else{
+          spacer="<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">\n";
         }
-        content.append(spacer);
-        if(at.equals(""))
-            content.append("<b>"+fixElementName(elementName)+": " +"</b>"+ 
-                       elementContent +"</div>");
-        else
-            content.append("<b>"+fixElementName(elementName)+": " +"</b>"+"<div style=\""+bgcolor+"margin-left: "+tab+"px;\">"+at+"</div>" + 
-                           elementContent +"</div>");
-        //System.out.println("Content: |" + elementContent + "|");
-      } 
+      }           
+      //        for (int i = 0; i < depthContext; i++)
+      //          content.append(spacer);
+      String at = "";
+      if (elementAttribs != null) {
+        //at = " "+spacer+elementAttribs;
+        at = ""+elementAttribs.replace(",", "<br>\n");
+        if(at.contains("id")){
+          spacer=spacer.replace(bgcolor, "");
+          bgcolor="";
+        }
+        at = at.replace("id: "+ Highlight+"<br>\n", "<font color=red>"+ "#id: "+ Highlight+"</font>"+"<br>\n");
+        if(at.contains("#id")){
+          bgcolor = "background-color: #FFFF00;";
+          spacer = "<div style=\"background-color: #FFFF00;margin-left: "+tab*(depthContext+2)+"px;\">";
+        }
+      }
+      content.append(spacer);
+      if(at.equals(""))
+        content.append("<b>"+fixElementName(elementName)+": " +"</b>"+ 
+                       elementContent +"</div>\n");
+      else
+        content.append("<b>"+fixElementName(elementName)+": " +
+                       "</b>"+"<div style=\""+bgcolor+"margin-left: "+tab+"px;\">"+at+"</div>" + 
+                       elementContent +"</div>\n");
+      if ( name.equalsIgnoreCase("img") ){
+        content.append(formatImage(atts));
+        //  //return;
+      }
+      //System.out.println("Content: |" + elementContent + "|");
+    } 
     depthContext++;
     elementName = name;
     if (atts !=null && atts.getLength()> 0)
@@ -127,43 +131,44 @@ public class HeaderXMLHandler extends DefaultHandler
     }
     elementContent = new StringBuffer("");
   }
-  
+
   public void endElement (final String namespaceURI,
                             final String localName,
                             final String name)
   {
-    if ( !ignorableElement(name)  )
-      {
-         
-          if(depthContext < 0)
-             spacer = "<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">";
+    if ( !ignorableElement(name) || elementName.equalsIgnoreCase(name))
+      {  
+        if(depthContext < 0)
+          spacer = "<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">\n";
+        else{
+          if(depthContext == 0)
+            {
+              spacer="<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">\n";
+            }
           else{
-              if(depthContext == 0)
-                {
-                    spacer="<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">";
-                }
-              else{
-                  spacer="<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">";
-              }
+            spacer="<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">\n";
           }
-          content.append(spacer);
-//        for (int i = 0; i < depthContext; i++)
-//          content.append(spacer);
+        }
+        content.append(spacer);
+        //        for (int i = 0; i < depthContext; i++)
+        //          content.append(spacer);
         String at = "";
-       
         if (elementAttribs != null) {
-           // at = " "+spacer+elementAttribs;
-           at = ""+elementAttribs.replace(",", "<br>");
+          // at = " "+spacer+elementAttribs;
+          at = ""+elementAttribs.replace(",", "<br>\n");
         }
         if(at.equals(""))
-            content.append("<b>"+fixElementName(elementName)+": " +"</b>"+ 
-                       elementContent +"</div>");
+          content.append("<b>"+fixElementName(elementName)+": " +"</b>"+ 
+                         elementContent +"</div>");
         else
-            content.append("<b>"+fixElementName(elementName)+": " +"</b>"+"<div style=\""+bgcolor+"margin-left: "+tab+"px;\">"+at+"</div>" + 
-                           elementContent +"</div>");
+          content.append("<b>"+fixElementName(elementName)+": " +
+                         "</b>"+"<div style=\""+bgcolor+"margin-left: "+tab+"px;\">"+at+"</div>" + 
+                         elementContent +"</div>\n");
         //System.out.println("Content: |" + elementContent + "|");
-      } 
+      }
     depthContext--;
+    // if ( name.equalsIgnoreCase("img") )
+    //  return;
     elementName = "";
     elementContent = new StringBuffer("");
   }
@@ -295,6 +300,32 @@ public class HeaderXMLHandler extends DefaultHandler
     return sb.toString();
   }
 
+  private final String formatImage (Attributes atts){
+    int l = atts.getLength();
+    StringBuffer sb = new StringBuffer("");
+    if (l > 0) {
+      if (atts.getLocalName(0).equalsIgnoreCase("src"))
+        sb.append("<img "+atts.getLocalName(0)+"='"+imgBase+atts.getValue(0)+"'");
+      else
+        sb.append("<img "+atts.getLocalName(0)+"='"+atts.getValue(0)+"'");
+    }
+    for (int i = 1; i < l; i++) {
+      sb.append(" "+atts.getLocalName(i)+"='"+atts.getValue(i)+"'");
+    }
+    sb.append(" border='1'>");
+    return sb.toString();
+  }
+
+  public void setImgBase(String base){
+    imgBase = base+'/';
+  }
+
+  public String getImgBase(String base){
+    return imgBase;
+  }
+
+  
+  
 }
 
 

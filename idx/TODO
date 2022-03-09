@@ -1,3 +1,14 @@
+* Replace eXistXML db system by baseX; sample queries:
+
+for $s in //omctext where ($s/source/name = 'BBC' or $s/source/name='Ars Technica') order by $s/author/name return data($s/author/name)
+
+for $s in //omctext where ($s/source/name = 'BBC' or $s/source/name='Ars Technica') order by $s/author/name return data($s/author/name)
+
+for $s in //ayliencov19 where ($s/source/name = 'BBC' or $s/source/name='Ars Technica') return $s/author/name
+
+for $s in //omctext/document/section/visual/class return data($s)
+
+
 * [DONE] replace sequential search in the posa loops in matchConcordance() by
   binary search to make them more efficient: currently linear on the
   number of tokens in the file (posa.length) when it could be

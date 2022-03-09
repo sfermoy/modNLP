@@ -7,7 +7,7 @@ use Cwd;
 use Getopt::Std;
 
 ## set these variables to point to your corpus files
-require "config.pl";
+require "./config.pl";
 
 sub Usage {
 die "Usage: indexincoming.pl [-h|-d|-s|-q]
@@ -25,8 +25,6 @@ Usage if $opt_h;
 Usage()
     unless $IDX_BIN || $TEXT_DIR || $HEADERS_DIR || $HEADERS_URL || $INDEX_DIR;
 
-
-
 my @date = localtime();
 my $DATE = join('',($date[5]+1900),"-",sprintf("%02d",$date[4]+1),"-",sprintf("%02d",$date[3]),"_$date[2].$date[1].$date[0]");
 ## ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst)
@@ -39,6 +37,12 @@ my $TEXT_LIST_FILE = "$INCOMING_DIR/$LOG_DIR/indexed_on_$DATE.lst";
 #$TEXT_LOG_FILE = "$INCOMING_DIR/indexed_on_$DATE.log";
 my @TEXT_LIST=sort(<*.xml>);
 my @HEADERS_LIST=sort(<*.hed>);
+my @IMAGES = ();
+#    map {
+#    my $i = $_;
+#    $i =~ s/\.hed/*.{png,jpg,jpeg,gif,PNG,JPG,JPEG,GIF}/;
+#    $i;
+#} @HEADERS_LIST; 
 my $error_detected = 0;
 my $warn_detected = 0;
 my $error_local = 0;
@@ -112,6 +116,9 @@ foreach (@TEXT_LIST){
         unlink($TEXT_LIST_FILE);
         PrepareToDie("Section ID mismatch in $t and $h.\n");  
     }
+    my $img = getImages($h);
+    push(@IMAGES, @$img);
+    
     if (-e "$TEXT_DIR/$t"){
         unlink($TEXT_LIST_FILE);
         PrepareToDie("Incoming files exists at destination '$TEXT_DIR/$t'\n");
@@ -157,6 +164,16 @@ $cmd = 'cp '. join(' ', @HEADERS_LIST)." $HEADERS_DIR/";
 if (! Run($cmd)){
     unlink @TEXT_LIST;
     unlink @HEADERS_LIST;
+    unlink @IMAGES;
+    unlink($TEXT_LIST_FILE);
+    die "error running: '$cmd': $!\n";
+}
+
+$cmd = 'cp '. join(' ', @IMAGES)." $HEADERS_DIR/";
+if (! Run($cmd)){
+    unlink @TEXT_LIST;
+    unlink @HEADERS_LIST;
+    unlink @IMAGES;
     unlink($TEXT_LIST_FILE);
     die "error running: '$cmd': $!\n";
 }
@@ -165,8 +182,10 @@ if (!chdir($IDX_BIN)){
     unlink @TEXT_LIST;
     unlink @HEADERS_LIST;
     unlink($TEXT_LIST_FILE);
+    unlink @IMAGES;
     die "error running: 'chdir($IDX_BIN)': $!\n";
 }
+
 
 print "Now at $IDX_BIN \n";
 
@@ -190,6 +209,8 @@ chdir($INCOMING_DIR);
 unlink @TEXT_LIST
     unless $dry_run;
 unlink @HEADERS_LIST
+    unless $dry_run;
+unlink @IMAGES
     unless $dry_run;
 
 print 'Files '.join(', ',@TEXT_LIST)." + headers have been indexed and removed from incoming folder.\n";
@@ -272,6 +293,26 @@ sub CheckFilenameAttribute{
         close(FI);
     }
     return 1;
+}
+
+
+sub getImages{
+    my $h = shift;
+
+    my @IMG = ();
+    open(HF, "$h") or die "Couldn't open $h: $!\n";
+    while ($l = <HF>){
+        if ($l =~ /<img .*?src=['"](.+?)['"]/){
+            if (! -e $1){
+                PrepareToDie("Missing image from $h: $1\n");
+            }
+            else {
+                push(@IMG, $1);
+            }
+        }
+    }
+    close HF;
+    return(\@IMG);
 }
 
 sub sectionMismatch{

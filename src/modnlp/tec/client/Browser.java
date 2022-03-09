@@ -517,7 +517,7 @@ public class Browser
     int windowWidth = 500;
     String sep = java.io.File.separator;
     if (headerBaseURL.startsWith("http://") || 
-        headerBaseURL.startsWith("https://") || 
+        headerBaseURL.startsWith("https://") ||
         headerBaseURL.startsWith("file://"))
       sep = "/";
     String tmp;
@@ -532,9 +532,7 @@ public class Browser
       URL headerURL = null;
 
       if (standAlone) {
-        is = new FileInputStream(headerBaseURL+
-                                                 sep+
-                                                 headerName);
+        is = new FileInputStream(headerBaseURL+sep+headerName);
         img = "file://"+img;
       }
       else {
@@ -551,10 +549,13 @@ public class Browser
       }
       else {
         HeaderXMLHandler parser =  new HeaderXMLHandler(secString);
+        String hburl = !headerBaseURL.startsWith("file://") ? "file://"+headerBaseURL : headerBaseURL;
+
+        parser.setImgBase(hburl);
         parser.parse(is);
         content = new StringBuffer("<html>"+parser.getContent()+"</html>");
         //content = new StringBuffer("<html><img src='"+img+"' height=183 width=128 alt='Book Cover'><pre>"+parser.getContent()+"</pre></html>");
-        //System.err.println(content+"");
+        System.err.println(content+"");
       }
     }
     catch (Exception e) {
