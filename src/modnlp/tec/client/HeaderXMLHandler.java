@@ -91,23 +91,27 @@ public class HeaderXMLHandler extends DefaultHandler
         else{
           spacer="<div style=\""+bgcolor+"margin-left: "+tab*(depthContext+2)+"px;\">\n";
         }
-      }           
-      //        for (int i = 0; i < depthContext; i++)
-      //          content.append(spacer);
+      }
+      
       String at = "";
       if (elementAttribs != null) {
         //at = " "+spacer+elementAttribs;
         at = ""+elementAttribs.replace(",", "<br>\n");
+      }
+      // SL: removed this code in favour of highlighting only the
+      // section heading and ID (less visually busy result, and
+      // cleaner code).
+      /*
         if(at.contains("id")){
           spacer=spacer.replace(bgcolor, "");
           bgcolor="";
         }
-        at = at.replace("id: "+ Highlight+"<br>\n", "<font color=red>"+ "#id: "+ Highlight+"</font>"+"<br>\n");
+        at = at.replace("id: "+ Highlight, "<font color=red>"+ "#id: "+ Highlight+"</font>"+"<br>\n");
         if(at.contains("#id")){
           bgcolor = "background-color: #FFFF00;";
           spacer = "<div style=\"background-color: #FFFF00;margin-left: "+tab*(depthContext+2)+"px;\">";
         }
-      }
+        }*/
       content.append(spacer);
       if(at.equals(""))
         content.append("<b>"+fixElementName(elementName)+": " +"</b>"+ 
@@ -288,6 +292,11 @@ public class HeaderXMLHandler extends DefaultHandler
     return content;
   }
 
+  public String getSectionHighlightedContent(){
+    return content.toString().replaceFirst("(Section:.*id: [a-z0-9A-Z]+)", "<div style=\"background-color: #FFFF00;margin-left:>\1</div>");
+  }
+
+  
   private final String formatAttributes (Attributes atts){
     int l = atts.getLength();
     StringBuffer sb = new StringBuffer("");
@@ -323,7 +332,6 @@ public class HeaderXMLHandler extends DefaultHandler
   public String getImgBase(String base){
     return imgBase;
   }
-
   
   
 }

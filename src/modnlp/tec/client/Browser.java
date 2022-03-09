@@ -70,7 +70,7 @@ public class Browser
 {
 
   // constants
-  public static final String RELEASE = "0.8.7";
+  public static final String RELEASE = "0.8.9";
   public static final String REVISION = "$Revision: 1.9 $";
   String BRANDNAME = "MODNLP/T";
   private static final String PLGLIST = "teclipluginlist.txt";
@@ -553,9 +553,9 @@ public class Browser
 
         parser.setImgBase(hburl);
         parser.parse(is);
-        content = new StringBuffer("<html>"+parser.getContent()+"</html>");
+        content = new StringBuffer("<html>"+parser.getSectionHighlightedContent()+"</html>");
         //content = new StringBuffer("<html><img src='"+img+"' height=183 width=128 alt='Book Cover'><pre>"+parser.getContent()+"</pre></html>");
-        System.err.println(content+"");
+        //System.err.println(content+"");
       }
     }
     catch (Exception e) {
