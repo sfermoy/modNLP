@@ -293,7 +293,7 @@ public class HeaderXMLHandler extends DefaultHandler
   }
 
   public String getSectionHighlightedContent(){
-    return content.toString().replaceFirst("(Section:.*id: [a-z0-9A-Z]+)", "<div style=\"background-color: #FFFF00;margin-left:>\1</div>");
+    return content.toString().replaceFirst("(<b>Section:.*id: [a-z0-9A-Z]+)", "<div style='background-color: #FFFF00'>$1</div>");
   }
 
   

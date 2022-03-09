@@ -555,7 +555,7 @@ public class Browser
         parser.parse(is);
         content = new StringBuffer("<html>"+parser.getSectionHighlightedContent()+"</html>");
         //content = new StringBuffer("<html><img src='"+img+"' height=183 width=128 alt='Book Cover'><pre>"+parser.getContent()+"</pre></html>");
-        //System.err.println(content+"");
+        //System.err.println(content+"\n----------\n"+parser.getContent());
       }
     }
     catch (Exception e) {
@@ -567,7 +567,7 @@ public class Browser
     FullTextWindow window =  new FullTextWindow(headerName,
                                                 content);
     preferenceFrame.addDefaultChangeListener(window);
-    //System.err.println(content);
+    
     window.setVisible(true); // a bug in jdk 1.5 won't let it show the
                              // frame unless it is resized *after* it
                              // is made visible
