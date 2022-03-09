@@ -16,6 +16,12 @@ URGENT:
 
 BUG FIXES:
 
+* Find a more principled way to deal with section highlights in
+  HeaderXMLHandler. At hte moment it depends on the section being
+  called 'section' and the ID attribute being called id. This is too
+  ad-hoc, as the idxmgr.properties file allows you to specify any
+  section/attribute name you wish.
+
 * Proper treatment of error conditions for new corpus selection (taken
    some initial steps, e.g. handling of ConnectException in
    GraphicalSubcorpusSelector and Browser.setRemoteCorpus() but lots
