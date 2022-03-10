@@ -286,7 +286,7 @@ public class CorpusDescriptionBrowser extends JFrame
           try {
             if (textLine.equals(""))
               continue;
-            
+            //System.err.println("Line: |" + textLine+"|");
             String [] row = textLine.split(Constants.LINE_ITEM_SEP);
             if ( row[0].equals("0")) { // control info 
               if (row[1].equals(modnlp.idx.database.Dictionary.TTRATIO_LABEL)){
@@ -311,12 +311,17 @@ public class CorpusDescriptionBrowser extends JFrame
               Object [] orow = new Object[6]; 
               for (int j = 0; j < row.length; j++)
                 orow[j] = row[j];
-              orow[0] = new Integer(row[0]);
-              orow[4] = new Integer(row[4]);
-              orow[5] = new Float(row[5]);
-              // clean  spurious XML entities
-              //System.err.println("Line: |" + textLine+"|\nOROW[3]="+orow[3]);
-              orow[3] = row[3].replaceAll("&#[^;]+;"," ").trim();
+              if (row.length > 5){
+                orow[0] = new Integer(row[0]);
+                orow[4] = new Integer(row[4]);
+                orow[5] = new Float(row[5]);
+                // clean  spurious XML entities
+                //System.err.println("Line: |" + textLine+"|\nOROW[3]="+orow[3]);
+                orow[3] = row[3].replaceAll("&#[^;]+;"," ").trim();
+              }
+              else {// error in corpus description
+                orow[3] = "Error retrieving this files description; please check header files.";
+              }
               model.addRow(orow);
               progressBar.setValue(dldCount++);
             }

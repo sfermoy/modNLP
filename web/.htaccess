@@ -1,0 +1,4 @@
+AuthName "OMC Upload Area"
+AuthUserFile /home/gok/.htpasswd
+AuthType Basic
+require valid-user

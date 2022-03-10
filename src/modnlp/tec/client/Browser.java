@@ -549,7 +549,7 @@ public class Browser
       }
       else {
         HeaderXMLHandler parser =  new HeaderXMLHandler(secString);
-        String hburl = !headerBaseURL.startsWith("file://") ? "file://"+headerBaseURL : headerBaseURL;
+        String hburl = headerBaseURL.matches("(file|http|https)://.*") ? headerBaseURL : "file://"+headerBaseURL ;
 
         parser.setImgBase(hburl);
         parser.parse(is);

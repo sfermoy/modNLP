@@ -15,15 +15,18 @@ die "Usage: indexincoming.pl [-h|-d|-s|-q]
              -d        dry run (test but do not index)
              -s        do not try to kill server before indexing
              -q        do not display debug messages
+             -o        print all STDERR messages to STDOUT
   Please set locations correctly in config.pl.\n"; 
 }
-getopts('hdsq');
+getopts('hdsqo');
 my $dry_run = $opt_d;
 my $server_kill = !$opt_s;
 my $debug = !$opt_q;
 Usage if $opt_h;
 Usage()
     unless $IDX_BIN || $TEXT_DIR || $HEADERS_DIR || $HEADERS_URL || $INDEX_DIR;
+
+my $STDERR =  $opt_o? *STDOUT : *STDERR;
 
 my @date = localtime();
 my $DATE = join('',($date[5]+1900),"-",sprintf("%02d",$date[4]+1),"-",sprintf("%02d",$date[3]),"_$date[2].$date[1].$date[0]");
@@ -72,7 +75,7 @@ foreach(@HEADERS_LIST){
         unless exists($set{$t});
 }
 if (scalar(@missing) > 0){
-    die("ERROR: The following files are missing:\n".join("\n",@missing)."\n");
+    PrepareToDie("ERROR: The following files are missing:\n".join("\n",@missing)."\n");
 }
 
 
@@ -129,10 +132,10 @@ foreach (@TEXT_LIST){
     }
     print  FL "$TEXT_DIR/$t\n";
     if ( $error_local > 0 ) {
-        print STDERR "-----ERRORS FOUND in $t or $h (see above).\n";
+        print $STDERR "-----ERRORS FOUND in $t or $h (see above).\n";
     }
     else {
-        print STDERR "-----Files $t and $h are OK for indexing.\n";
+        print $STDERR "-----Files $t and $h are OK for indexing.\n";
     }
 }
 close FL;
@@ -141,9 +144,10 @@ close FL;
     if $#haux > 0;
 
 if ( $warn_detected > 0 ){
-    print STDERR "Warnings found. Search for the word 'WARNING' to see them.\n";
+    print $STDERR "Warnings found. Search for the word 'WARNING' to see them.\n";
 }
 if ( $error_detected > 0 ){
+    print $STDERR "Errors in incoming files. See list above (search for 'ERROR'), fix the errors and try again.\n";
     die "Errors in incoming files. See list above (search for 'ERROR'), fix the errors and try again.\n";
 }
 exit 0
@@ -276,7 +280,7 @@ sub CheckFilenameAttribute{
             }
             else{
                 ##                close HF; 
-                print STDERR "WARNING: File name mismatch in header file $f;\nFound filename='$1' when it should be filename='$name'\n";
+                print $STDERR "WARNING: File name mismatch in header file $f;\nFound filename='$1' when it should be filename='$name'\n";
                 $fix = 1;
                 $warn_detected = 1;
                 #                return 0;
@@ -285,7 +289,7 @@ sub CheckFilenameAttribute{
     }
     close HF;
     if ($fix){
-        print STDERR "fixing it...\n";
+        print $STDERR "fixing it...\n";
         $c =~ s/(<document .*filename=["'])(.+?)(["'])/$1$name$3/;
         rename($name,"$name"."-old");
         open(FI, ">$name.hed") || die("Error opening $name: $!");
@@ -353,7 +357,7 @@ sub sectionMismatch{
                 $section{$2} = 0;
             }
             else{
-                print STDERR "ERROR: Mismatched section $2: only in $t, not in $h\n";
+                print $STDERR "ERROR: Mismatched section $2: only in $t, not in $h\n";
                 $err++;
             }
         }
@@ -361,7 +365,7 @@ sub sectionMismatch{
     close HF;
     foreach (keys %section){
         if ($section{$_}){
-            print STDERR "ERROR: Mismatched section $_: only in $h, not in $t\n";
+            print $STDERR "ERROR: Mismatched section $_: only in $h, not in $t\n";
             $err++;
         }
     }
@@ -374,12 +378,11 @@ sub Remove {
     foreach (@toremove){
         unlink $_;
     }
-
 }
 
 sub PrepareToDie {
     my $msg = shift;
-    print STDERR "ERROR: $msg";
+    print $STDERR "ERROR: $msg";
     $error_local = 1;
     $error_detected = 1;
 
