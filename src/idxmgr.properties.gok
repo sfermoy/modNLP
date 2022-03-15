@@ -20,8 +20,12 @@ xquery.root.element.path=/gokheader/section
 ## the element to be returned by xquery to select which indexed texts
 ## should be included in the inverted-index query
 xquery.return.attribute.path=/@id
-## specs and paths all relative to xquery.root.element.path
-## form: description_1;path_1;description_2;path_2,...
+## This specifies the layout of the subcorpus eselection tool. The
+## format for each selection box is description;path-in-header-xml
+## Descriptions and paths are all relative to xquery.root.element.path
+## (above)
+## The general format is: description_1;path_1;description_2;path_2,...
+## [This is ignored if index.headers=false]
 xquery.attribute.chooser.specs=File name;../document/@filename;Subcorpus;../document/@subcorpusid;Type;/@type;Source;translation/source/@language;Translation status;translation/@status;Format;../document/@format;Pub. date;/@publication_date;Author;author/name;Commentator;commentator/name;Translator;translation/translator/name;Translation date;translation/source/@date;Internet outlet;/@internet_outlet
 ## Extension Of the header files (e.g. .hed, .xml etc)
 header.extension=hed

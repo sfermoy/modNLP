@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE text SYSTEM "mintext.dtd">
+<text filename=""> 
+<section id='s1'>

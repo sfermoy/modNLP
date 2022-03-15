@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE text SYSTEM "mintext.dtd">
+<text filename="REPLACE THIS TEXT BY THE NAME OF YOUR FILE (NO  EXTENSION)">
+<section id='s1'>
+  Your text can go here. (This is a mininal 'template' for a modnlp
+  indexable file).
+
+ <omit reason='frontmatter'> The min-text.dtd allows you to omit bit of text you might not like
+   to index, such as this sentence. </omit>
+
+</section>
+</text>
+

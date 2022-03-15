@@ -140,6 +140,16 @@ public class DictProperties extends java.util.Properties{
     return getProperty("headers.home");
   }
 
+  public String getHeadersHome () {
+    return getProperty("headers.home");
+  }
+
+  public void setHeadersHome (String v) {
+    //v = v.replace("\\", "/");
+    setProperty("headers.home", v);
+  }
+
+  
   public String getTPosTableName () {
     return getProperty("tpos.table.name");
   }
@@ -164,6 +174,11 @@ public class DictProperties extends java.util.Properties{
     return corpusDir;
   }
 
+  public Boolean indexHeaders () {
+    String ih = getProperty("index.headers");
+    return ( ih != null ) && ih.equalsIgnoreCase("true");
+  }
+  
   public String[] getAttributeChooserSpecs(){
     return parseAttributeChooserSpecs(getProperty("xquery.attribute.chooser.specs"));
   }
@@ -178,7 +193,7 @@ public class DictProperties extends java.util.Properties{
     corpusDir = c;
     setProperty("corpus.data.directory", corpusDir);
   }
-
+  
   public String getFullCorpusFileName (String fn){
     if ( (new File(fn)).isAbsolute() )
       return fn;

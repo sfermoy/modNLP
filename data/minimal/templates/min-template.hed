@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE text SYSTEM "minhead.dtd">
+<text filename="YOU HEADER FILE NAME WITHOUT EXTENSION (.hed)">
+  <title>  Title is optional </title>
+  <author> Author is optional </author>
+  <section id='s1'/>
+</text>

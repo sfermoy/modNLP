@@ -501,30 +501,35 @@ public class Browser
     String filename = sel.filename;
     //System.err.println("section="+sel.sectionID);
     //System.err.println("fn="+filename);
+    String sep;
+    if (headerBaseURL.startsWith("http://") || 
+        headerBaseURL.startsWith("https://"))
+      sep = "/";
+    else
+      sep = System.getProperty("file.separator"); //java.io.File.separator;
     String headerName =  //   (new File(filename)).getName();
-      filename.substring(filename.lastIndexOf('/')+1,filename.lastIndexOf('.'))
+      filename.substring(filename.lastIndexOf(sep)+1,filename.lastIndexOf('.'))
       +"."+headerExt;
-    System.err.println("fn="+filename+"header="+headerName);
-    //int p = headerName.lastIndexOf(java.io.File.separator);
-    //headerName = p < 0? headerName : headerName.substring(p);
+    //System.err.println("-------\nfn="+filename+"\nheader="+headerName+"\nheaderBaseURL="+headerBaseURL+"\nsep="+sep);
     showHeader(headerName, sel.sectionID);
   }
 
  public void showHeader(String headerName,String secString)
   {
-    System.err.println("-"+headerBaseURL+"-"+headerName);
+    //System.err.println("-"+headerBaseURL+"-"+headerName);
     int windowHeight = 600;
     int windowWidth = 500;
-    String sep = java.io.File.separator;
+    String sep = System.getProperty("file.separator"); //java.io.File.separator;
     if (headerBaseURL.startsWith("http://") || 
         headerBaseURL.startsWith("https://") ||
         headerBaseURL.startsWith("file://"))
       sep = "/";
-    String tmp;
+    //    else
+    //  headerBaseURL = "file://"+headerBaseURL;
     String img = headerBaseURL+sep+headerName.substring(0,headerName.indexOf('.'))+".jpg";
     
     StringBuffer content = new StringBuffer();
-    System.err.println("URL--:"+headerBaseURL);
+    //System.err.println("URL--:"+headerBaseURL+sep+headerName);
     //HeaderReader header = new HeaderReader(headerBaseURL+headerName);
     //HeaderXMLHandler parser =  new HeaderXMLHandler();
     try {
@@ -532,6 +537,8 @@ public class Browser
       URL headerURL = null;
 
       if (standAlone) {
+        //headerURL = new URL(headerBaseURL+sep+headerName);
+        //is = headerURL.openConnection().getInputStream();
         is = new FileInputStream(headerBaseURL+sep+headerName);
         img = "file://"+img;
       }
@@ -544,6 +551,7 @@ public class Browser
       if (preferenceFrame.isShowingSGMLFlag()){
         BufferedReader in = 
           new BufferedReader(new InputStreamReader(is,"UTF-8"));
+        String tmp;
         while ( (tmp = in.readLine()) != null )
           content.append(tmp+"\n");
       }
@@ -632,7 +640,16 @@ public class Browser
     clProperties.setProperty("stand.alone","yes");
     browserFrame.setTitle(getBrowserName()+": index at "+cdir);
     dictionary.setVerbose(debug);
-    setLocalHeadersDirectory(dictProps);
+    
+    if ( dictProps.indexHeaders() ) {
+      setLocalHeadersDirectory(dictProps);
+      browserFrame.subcorpusMenuSetEnabled(true);
+      browserFrame.headerButtonSetActive(true);
+    }
+    else {
+      browserFrame.subcorpusMenuSetEnabled(false);
+      browserFrame.headerButtonSetActive(false);
+    }
     encoding = dictProps.getProperty("file.encoding");
     language = dictProps.getLanguage();
     headerExt = dictProps.getProperty("header.extension");
@@ -653,7 +670,8 @@ public class Browser
     concordanceProducer = new ConcordanceProducer(dictionary);
     headerProducer = new HeaderProducer(dictionary);
     browserFrame.setDirectionality();
-    guiSubcorpusSaver = new GraphicalSubcorpusSaver(this);
+    if (dictProps.indexHeaders())
+      guiSubcorpusSaver = new GraphicalSubcorpusSaver(this);
     if (!initialCorpusSelection)
         browserFrame.loadRecentMenu();
     initialCorpusSelection = false;
@@ -679,7 +697,8 @@ public class Browser
         dictProps.setProperty("headers.home", hh);
         dictProps.save();
       }
-    headerBaseURL = hh;
+    headerBaseURL = hh.replaceFirst("[\\\\/]:", ":");
+    //System.err.println("\n===hh="+hh+"\nheaderBaseURL="+headerBaseURL);
     clProperties.setProperty("tec.client.headers", headerBaseURL);
     preferenceFrame.setHeaderBaseURL(headerBaseURL);
   }
@@ -715,7 +734,7 @@ public class Browser
         dictionary.close();
       if (guiSubcorpusSaver != null)
         stopSubCorpusSaverGUI();
-        
+
       guiSubcorpusSaver = new GraphicalSubcorpusSaver(this);
       URL exturl = new URL(request.toString());
       HttpURLConnection exturlConnection = (HttpURLConnection) exturl.openConnection();
@@ -744,6 +763,8 @@ public class Browser
         encoding = "UTF-8";
         System.err.println("set encoding to "+encoding);
       }
+      browserFrame.subcorpusMenuSetEnabled(true);
+      browserFrame.headerButtonSetActive(true);
       System.err.println("language=>>>>"+language);
       System.err.println("encoding=>>>>"+encoding);
       System.err.println("ext=>>>>"+headerExt);
@@ -758,8 +779,7 @@ public class Browser
     initialCorpusSelection = false;
     }
     catch(IOException e)
-      {
-        
+      {   
         if (guiSubcorpusSaver != null)
           stopSubCorpusSaverGUI();
         showErrorMessage("Error: couldn't create URL input stream: "+e);

@@ -293,7 +293,7 @@ public class ListDisplay extends JPanel
    */
   public void redisplayConc()
   {
-    System.err.println("mosaicSelected="+mosaicSelected);
+    //System.err.println("mosaicSelected="+mosaicSelected);
     //removes and readds all the components to the window  
     remove(jscroll);
     String[] columnNames = {"Filename", "Left Context", "Keyword","Right Context"};

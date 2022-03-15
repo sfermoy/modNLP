@@ -134,7 +134,7 @@ public class BrowserFrame extends BrowserGUI
     new JCheckBoxMenuItem("Activate sub-corpus selection");
   private JMenuItem prefButton = new JMenuItem("Preferences...");
 
-   private JMenu subcorpusMenu = new JMenu("Sub-corpus");
+  private JMenu subcorpusMenu = new JMenu("Sub-corpus");
   private JMenu pluginMenu = new JMenu("Plugins");
 
   private JMenu helpMenu = new JMenu("Help");
@@ -146,6 +146,8 @@ public class BrowserFrame extends BrowserGUI
   private JButton sortFileButton = new JButton("Sort by filename");
   private JButton extractButton = new JButton(EXTBUT);
   private JButton headerButton = new JButton(HEDBUT);
+  // headerButton is permanently deactivated if corpus does not have headers
+  private Boolean activeHeaderButton = true;
   private JButton removeLineButton = new JButton(RMLINEBUT);
 
   private JPanel optArea = new JPanel();
@@ -164,6 +166,7 @@ public class BrowserFrame extends BrowserGUI
 
   private ConcordanceBrowser parent = null;
 
+  
   /** Create a TEC Window Object
    * @param width   window width
    * @param height   window height
@@ -636,7 +639,8 @@ public class BrowserFrame extends BrowserGUI
         removeLineButton.setEnabled(false);
       } else {
         extractButton.setEnabled(true);
-        headerButton.setEnabled(true);
+        if (activeHeaderButton)
+          headerButton.setEnabled(true);
         removeLineButton.setEnabled(true);
       }
     }
@@ -739,6 +743,14 @@ public class BrowserFrame extends BrowserGUI
     progressBar.setMaximum(SRTBARMAX-1);
     ucrt_timer.start();
     progressBar.setString(msg);
+  }
+
+  public void subcorpusMenuSetEnabled(Boolean v){
+    subcorpusMenu.setEnabled(v);
+  }
+
+  public void headerButtonSetActive(Boolean v){
+    activeHeaderButton = v;
   }
 
 

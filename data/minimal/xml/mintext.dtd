@@ -1,0 +1,9 @@
+<!-- min.dtd minimalist sample dtd for modnlp indexing $ -->
+<!ELEMENT text (#PCDATA|omit|section)*>
+<!ATTLIST text filename CDATA #REQUIRED>
+<!ELEMENT section (#PCDATA|omit)*>
+<!ATTLIST section id ID #REQUIRED>
+<!ELEMENT omit (#PCDATA)>
+<!ATTLIST omit reason (frontmatter|backmatter) #IMPLIED>
+
+

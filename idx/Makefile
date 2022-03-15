@@ -255,3 +255,10 @@ bindistep: jar
 	cp $(LIBS) $(JARTARGET) $(BINDISTXTRAS) $(BINDISTDIR)-ep
 	tar cfvz /tmp/$(BINDISTDIR)-ep.tar.gz  --exclude-from=exclude.txt $(BINDISTDIR)-ep
 	rm -rf $(BINDISTDIR)-ep
+
+tutorial: jar
+	mkdir modnlp-idx-sampledata
+	cp -a data/minimal/* modnlp-idx-sampledata/
+	tar cfvz /tmp/modnlp-idx-sampledata.tar.gz --exclude-from=exclude.txt modnlp-idx-sampledata/ 
+	rm -rf modnlp-idx-sampledata
+

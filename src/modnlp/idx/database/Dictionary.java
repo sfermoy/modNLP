@@ -84,7 +84,8 @@ public class Dictionary {
   FileTable fileTable;           // fileno -> filenameOrUri
   TPosTable tposTable;           // fileno -> (offset) positions of each token in file
   Environment environment;
-
+  Boolean indexHeaders = false; 
+  
   protected boolean verbose = false;  
 
   /**
@@ -131,6 +132,8 @@ public class Dictionary {
    */
   public Dictionary (boolean write, DictProperties dp){
     dictProps = dp;
+    String ih = dp.getProperty("index.headers");
+    indexHeaders = ( ih != null ) && ih.equalsIgnoreCase("true");
     init(write);
   }
 
@@ -474,7 +477,7 @@ public class Dictionary {
             continue;
           SubcorpusTable sbct = null;
           int nooc = 0;
-          if (sbc != null){
+          if (indexHeaders && sbc != null){
             try {
               sbct = new SubcorpusTable(environment, fno, false, false);
               // get number of tokens that satisfy subcorpus constraints
@@ -768,7 +771,7 @@ public class Dictionary {
             continue;
           SubcorpusTable sbct = null;
           int nooc = 0;
-          if (sbc != null){
+          if (indexHeaders && sbc != null){
             try {
               sbct = new SubcorpusTable(environment, fno, false, false);
               //System.err.println("-------------------Counting SBC freq of:"+word+" in "+fno); 
@@ -854,7 +857,7 @@ public class Dictionary {
           String fn = fileTable.getFileName(fno.intValue());
 
           SubcorpusTable sbct = null;
-          if (sbc != null){
+          if (indexHeaders && sbc != null){
             try {
               sbct = new SubcorpusTable(environment, fno.toString(), false);
             } catch(DatabaseNotFoundException e ) { sbct = null;}
@@ -881,9 +884,10 @@ public class Dictionary {
                 
                 //Get the section id to which the keword belongs
                 try {
-                  sbct = new SubcorpusTable(environment, fno.toString(), false);
+                  if (indexHeaders) 
+                    sbct = new SubcorpusTable(environment, fno.toString(), false);
                 } catch(DatabaseNotFoundException e ) { sbct = null;}     
-                String sn = sbct.getSectionID(bpi);
+                String sn = indexHeaders? sbct.getSectionID(bpi) : "na";
                 //System.err.println("fn, sn: "+fn+"|"+sn+"|");
                 os.println(fn+"|"+bp+"|"+sn+"|"+ot);
                 os.flush();

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT text (title,author,section)*>
+<!ATTLIST text filename CDATA #REQUIRED>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT section EMPTY>
+<!ATTLIST section id ID #REQUIRED>

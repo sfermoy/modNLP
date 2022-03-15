@@ -95,13 +95,12 @@ public class IndexManager {
   public IndexManager (String cdir, String hdir, String hurl) {
     dictProps =  new DictProperties(cdir);
     dict = new Dictionary(true,dictProps);
-    sbcd = new SubcorpusDirectory(dict);
     String hh = null;
     String hu = null;
     if ((hh =  dictProps.getProperty("headers.home")) != null)
-      dictProps.setProperty("headers.home", hh);
+      dictProps.setHeadersHome(hh);
     else
-      dictProps.setProperty("headers.home", hdir);
+      dictProps.setHeadersHome(hdir);
 
     if ((hu =  dictProps.getProperty("headers.url")) != null)
       dictProps.setProperty("headers.url", hu);
@@ -109,8 +108,11 @@ public class IndexManager {
       dictProps.setProperty("headers.url", hurl);
     dictProps.save();
 
-    indexHeaders =  dictProps.getProperty("index.headers").equalsIgnoreCase("true");
+    String ih = dictProps.getProperty("index.headers");
+    indexHeaders = ( ih != null ) && ih.equalsIgnoreCase("true");
+
     if (indexHeaders){
+      sbcd = new SubcorpusDirectory(dict);
       System.err.println("\n----- Opening Headers DB:  ------\n");
       try { hdbm = new HeaderDBManager(dict.getDictProps()); }
       catch(Exception e) 
@@ -163,8 +165,8 @@ public class IndexManager {
     if (dict != null)
       dict.close();
     dict = new Dictionary(true,dictProps);
-    sbcd = new SubcorpusDirectory(dict);
     if (indexHeaders){
+      sbcd = new SubcorpusDirectory(dict);
       try { hdbm = new HeaderDBManager(dict.getDictProps()); }
       catch(Exception e) 
         {imui.print("\n----- Error opening Headers DB: "+e+" ------\n");}
@@ -175,7 +177,7 @@ public class IndexManager {
     ((IndexManagerUI)imui).setCorpusListData(dict.getIndexedFileNames());
     // choose headers directory
     String hh = null;
-    if ((hh = dictProps.getProperty("headers.home")) == null)  // see if dictProps already exists
+    if ( indexHeaders && (hh = dictProps.getProperty("headers.home")) == null)  // see if dictProps already exists
       {
         while ( (r = ncc.showChooseDir("Choose the directory (folder) where the headers are stored"))
                 != CorpusChooser.APPROVE_OPTION  )
@@ -183,10 +185,11 @@ public class IndexManager {
             JOptionPane.showMessageDialog(null, "Please choose a headers directory (folder)");      
           }
         hh = ncc.getSelectedFile().toString();
-        dictProps.setProperty("headers.home", hh);
+        dictProps.setHeadersHome(hh);
+        //dictProps.setProperty("headers.home", hh);
         dictProps.save();
       }
-    if ((hh = dictProps.getProperty("headers.url")) == null)  // see if dictProps already exists
+    if (indexHeaders && (hh = dictProps.getProperty("headers.url")) == null)  // see if dictProps already exists
       {
         HeaderURLChooser huc = new HeaderURLChooser((IndexManagerUI)imui, null);
         while ( (r = huc.showChooseURL()) == HeaderURLChooser.CANCEL_OPTION ) 
@@ -274,7 +277,7 @@ public class IndexManager {
       }
     } // end try
     catch (Exception ex){
-      System.err.println(ex+"\n-->"+args[0]+"--"+args[1]);
+      //System.err.println(ex+"\n-->"+args[0]+"--"+args[1]);
       ex.printStackTrace();
       if (im.dict != null)
         im.dict.close();
@@ -390,7 +393,7 @@ public class IndexManager {
           }
           dict.sync();
           System.err.println("subcElement "+subcElement);
-          if (subcElement != null){
+          if (indexHeaders && subcElement != null){
             imui.print("-- Indexing sub-corpus sections.\n");
             SubcorpusIndexer sir = new SubcorpusIndexer(tkr.getOriginalText(),subcElement, subcAttribute);
             sir.section();
@@ -473,7 +476,7 @@ public class IndexManager {
         try {
           // if (debug) {
           imui.print("\n----- De-indexing: "+fname+" ------\n");
-          if (subcElement != null){
+          if (indexHeaders && subcElement != null){
             imui.print("----- Removing subcorpus sections ------\n");
             sbcd.remove(fname);
           }
