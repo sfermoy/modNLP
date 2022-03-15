@@ -4,7 +4,10 @@ Here you will find a 'mini corpus' consisting of 3 Shakespeare plays
 downloaded from the Gutenberg project. This mini corpus is meant to
 illustrate how the indexer (modnlp/idx) works. 
 
-The structure of this directory is this:
+A complete copy of all files needed for this tutorial can be
+downloaded from the modnlp SF repository in compressed format: 
+(modnlp-idx-sampledata.tar.gz)[https://sourceforge.net/projects/modnlp/files/modnlp-idx-sampledata.tar.gz/download]
+The structure of the uncompressed directory is the following:
 
 ```console
 .
