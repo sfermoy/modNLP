@@ -6,7 +6,7 @@ illustrate how the indexer (modnlp/idx) works.
 
 A complete copy of all files needed for this tutorial can be
 downloaded from the modnlp SF repository in compressed format: 
-(modnlp-idx-sampledata.tar.gz)[https://sourceforge.net/projects/modnlp/files/modnlp-idx-sampledata.tar.gz/download]
+[modnlp-idx-sampledata.tar.gz](https://sourceforge.net/projects/modnlp/files/modnlp-idx-sampledata.tar.gz/download)
 The structure of the uncompressed directory is the following:
 
 ```console
