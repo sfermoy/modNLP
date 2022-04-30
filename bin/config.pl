@@ -21,3 +21,4 @@ $XMLLINT='xmllint -noout -valid';
 #$XMLLINT='';
 # comment out the following if you don't have file installed
 $FILETYPE='file -bi';
+$VISUALTOHEAD='visualstoheaders.pl';

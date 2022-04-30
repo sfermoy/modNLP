@@ -6,19 +6,23 @@
 use Cwd;
 use Getopt::Std;
 
+$VISUALTOHEAD='./visualstoheaders.pl -v -b -f';
 ## set these variables to point to your corpus files
 require "./config.pl";
 
 sub Usage {
-die "Usage: indexincoming.pl [-h|-d|-s|-q]
+die "Usage: indexincoming.pl [-h|-d|-s|-q|-o|-x]
              -h        display this message
+             -i        skip image copying (assume they are already at destination 'headers/')
+             -v        extract visual tags from xml, convert them to flat-format and add to hed files 
              -d        dry run (test but do not index)
              -s        do not try to kill server before indexing
              -q        do not display debug messages
              -o        print all STDERR messages to STDOUT
+             -x        skip 'file already indexed' test
   Please set locations correctly in config.pl.\n"; 
 }
-getopts('hdsqo');
+getopts('hidsqovx');
 my $dry_run = $opt_d;
 my $server_kill = !$opt_s;
 my $debug = !$opt_q;
@@ -52,8 +56,10 @@ my $error_local = 0;
 
 @haux = @HEADERS_LIST;
 $htmp = '';
-open(FL, ">$TEXT_LIST_FILE") 
-    or die "Couldn't open file list: $!\n";
+unless($dry_run){
+    open(FL, ">$TEXT_LIST_FILE") 
+        or die "Couldn't open file list: $!\n";
+}
 if ( scalar @TEXT_LIST == 0 ){
     die "No files to index.\n";
 }
@@ -78,7 +84,8 @@ if (scalar(@missing) > 0){
     PrepareToDie("ERROR: The following files are missing:\n".join("\n",@missing)."\n");
 }
 
-
+## flush after printing
+$| = 1;
 #print "~~~~~~~~~~~~~>".join(':',@missing)."\n";
 foreach (@TEXT_LIST){
     $error_local = 0;
@@ -110,6 +117,11 @@ foreach (@TEXT_LIST){
         AcceptableEncoding($cmd) or
             PrepareToDie( "ERROR determining file type: '$cmd': $!\n"); 
     }
+    if ($VISUALTOHEAD && $opt_v){
+        my $cmd = "$VISUALTOHEAD $h";
+        Run($cmd) or
+            PrepareToDie("ERROR extracting visuals from $t into $h ('$cmd'): $!\n");
+    }
     #print "++++++++>".join(':',@haux)."\n";
     unless($htmp = shift(@haux) eq $h){
         unlink($TEXT_LIST_FILE);
@@ -122,23 +134,26 @@ foreach (@TEXT_LIST){
     my $img = getImages($h);
     push(@IMAGES, @$img);
     
-    if (-e "$TEXT_DIR/$t"){
+    if (!$opt_x && -e "$TEXT_DIR/$t"){
         unlink($TEXT_LIST_FILE);
-        PrepareToDie("Incoming files exists at destination '$TEXT_DIR/$t'\n");
+        PrepareToDie("Incoming files exists at destination '$TEXT_DIR/$t'\n", ($dry_run ? 'WARNING' : 0));
     }
     if (!CheckFilenameAttribute($h)){
         unlink($TEXT_LIST_FILE) &&
          PrepareToDie( "Stopped due to above ERROR in header file $h\n");
     }
-    print  FL "$TEXT_DIR/$t\n";
+    print  FL "$TEXT_DIR/$t\n"
+        unless $dry_run;
     if ( $error_local > 0 ) {
-        print $STDERR "-----ERRORS FOUND in $t or $h (see above).\n";
+        my $S = $error_local > 1? "S" : '';
+        print $STDERR "-----$error_local ERROR$S/WARNING$S in $t or $h (see above).\n";
     }
     else {
         print $STDERR "-----Files $t and $h are OK for indexing.\n";
     }
 }
-close FL;
+close FL
+    unless $dry_run;
 (unlink($TEXT_LIST_FILE) &&
  PrepareToDie("Incoming headers don't match incoming text files.\n"))
     if $#haux > 0;
@@ -147,10 +162,15 @@ if ( $warn_detected > 0 ){
     print $STDERR "Warnings found. Search for the word 'WARNING' to see them.\n";
 }
 if ( $error_detected > 0 ){
-    print $STDERR "Errors in incoming files. See list above (search for 'ERROR'), fix the errors and try again.\n";
-    die "Errors in incoming files. See list above (search for 'ERROR'), fix the errors and try again.\n";
+    print $STDERR "=========================================================================================\n";
+    print $STDERR "Error(s)/warning(s) in incoming files. search for 'ERROR' and 'WARNING' above for details.\n";
+    exit $error_detected;
 }
-exit 0
+else {
+    print $STDERR "All files are OK\n";
+}
+
+exit $error_detected
     if $dry_run;
 
 ## Passed all checks; now the action begins...
@@ -173,13 +193,15 @@ if (! Run($cmd)){
     die "error running: '$cmd': $!\n";
 }
 
-$cmd = 'cp '. join(' ', @IMAGES)." $HEADERS_DIR/";
-if (! Run($cmd)){
-    unlink @TEXT_LIST;
-    unlink @HEADERS_LIST;
-    unlink @IMAGES;
-    unlink($TEXT_LIST_FILE);
-    die "error running: '$cmd': $!\n";
+unless (@IMAGES == 0 || $opt_i) { 
+    $cmd = 'cp '. join(' ', @IMAGES)." $HEADERS_DIR/";
+    if (! Run($cmd)){
+        unlink @TEXT_LIST;
+        unlink @HEADERS_LIST;
+        unlink @IMAGES;
+        unlink($TEXT_LIST_FILE);
+        die "error running: '$cmd': $!\n";
+    }
 }
 
 if (!chdir($IDX_BIN)){
@@ -382,8 +404,10 @@ sub Remove {
 
 sub PrepareToDie {
     my $msg = shift;
-    print $STDERR "ERROR: $msg";
-    $error_local = 1;
+    my $warn = shift || 'ERROR';
+    
+    print $STDERR "$warn: $msg";
+    $error_local += 1;
     $error_detected = 1;
 
 }

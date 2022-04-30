@@ -321,7 +321,7 @@ public class HeaderXMLHandler extends DefaultHandler
     for (int i = 1; i < l; i++) {
       sb.append(" "+atts.getLocalName(i)+"='"+atts.getValue(i)+"'");
     }
-    sb.append(" border='1'>");
+    sb.append(" border='1' style='max-width: 90%;'>");
     return sb.toString();
   }
 

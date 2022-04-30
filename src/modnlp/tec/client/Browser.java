@@ -561,7 +561,7 @@ public class Browser
 
         parser.setImgBase(hburl);
         parser.parse(is);
-        content = new StringBuffer("<html>"+parser.getSectionHighlightedContent()+"</html>");
+        content = new StringBuffer("<html><body style='width=100%;'"+parser.getSectionHighlightedContent()+"</body></html>");
         //content = new StringBuffer("<html><img src='"+img+"' height=183 width=128 alt='Book Cover'><pre>"+parser.getContent()+"</pre></html>");
         //System.err.println(content+"\n----------\n"+parser.getContent());
       }
