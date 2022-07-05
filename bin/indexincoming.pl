@@ -6,9 +6,22 @@
 use Cwd;
 use Getopt::Std;
 
-$VISUALTOHEAD='./visualstoheaders.pl -v -b -f';
+BEGIN{ 
+    $0 =~ /(.*)\/[^\/]/;
+    $pgd = $1;
+    unshift (@INC,("./",
+	       "$pgd/",
+	       "$pgd/Lib/"
+		));
+		$me   = $0;
+		$me =~ s/.*\///;
+}
+
+
+$VISUALTOHEAD="$pgd/visualstoheaders.pl -v -b -f";
 ## set these variables to point to your corpus files
-require "./config.pl";
+
+require "config.pl";
 
 sub Usage {
 die "Usage: indexincoming.pl [-h|-d|-s|-q|-o|-x]

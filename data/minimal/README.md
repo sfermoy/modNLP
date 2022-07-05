@@ -70,7 +70,7 @@ refer to as "text files") and metadata stored as separate
 XML files, which we refer to as "header files". 
 
 It is not essential that data and meta-data be stored in separate
-files or even encoded in XML. However, if you would like to be able to
+files or even encoded in XML. However, if you wish to be able to
 select sub-corpora, for instance, in order to make the concordancer
 display only concordances coming from texts that share certain
 features (e.g. all texts written by a given author), you need to
@@ -101,8 +101,9 @@ and
   In `modnlp-idx-0.8.7-bin-gok`, there is a file named
   `idxmgr.properties`. This file control the basic settings of the
   indexer. In it, the lines starting with hash symbols (`#`) are
-  comments, which document the options set in the file. For instance,
-  the following lines, from `idxmgr.properties`:
+  comments, which document the options set in the file. 
+  
+  For instance, the following lines, from `idxmgr.properties`:
 
 ```properties
 #modnlp.idx.IndexManager's properties (tailored to minimal corpus )
@@ -162,7 +163,7 @@ java -jar idx.jar
 
 5. If you do not wish to use headers with an XML-encoded corpus, such
    as the one in the `xml` folder (min001.xml, etc), you can index it
-   using the same `idxmgr.properties` configuration file we you used
+   using the same `idxmgr.properties` configuration file we used
    above (step 4.)
 
 #### Indexing an XML corpus *with* headers.
@@ -188,6 +189,92 @@ java -jar idx.jar
    [config/idxmgr.properties-withheaders](idxmgr.properties-withheaders)
    into it (replacing the existing content). Save the `idxmgr.properties` file.
    
+   The index configuration file, `idxmgr.properties`, allows you to
+   specify sub-corpus selection options based on the metadata you
+   specified in your header file. Take for example `min001.hed`:
+   
+   ```xml
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE text SYSTEM "minhead.dtd">
+<text filename="min001">
+  <title>Romeo and Juliet</title>
+  <author> William Shakespeare</author>
+  <section id='s1'/>
+</text>
+   ```
+   which is the header file for `min001.xml`:
+   
+      ```xml
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE text SYSTEM "mintext.dtd">
+<text filename="min001">
+  <section id='s1'>
+  <omit reason='frontmatter'>
+    The Project Gutenberg EBook of Romeo and Juliet, by William Shakespeare
+  </omit>
+  [...]
+  THE TRAGEDY OF ROMEO AND JULIET
+       by William Shakespeare
+
+    Dramatis Personae
+    Chorus.
+    Escalus, Prince of Verona.
+    Paris, a young Count, kinsman to the Prince.
+    Montague, heads of two houses at variance with each other.
+    Capulet, heads of two houses at variance with each other.
+    An old Man, of the Capulet family.
+    [...]
+    ```
+   
+   The header's DTD (take a look at the dtds in `hed/minhead.dtd` and
+   `xml/mintext.dtd`) allows you to specify a few *elements*
+   (e.g. `<title>`) and *attributes* (e.g. `filename="min001"`) all of
+   which can be used to select subcorpora.
+   
+   To specify which elements and/or attributes the user interface
+   (`modnlp/teccli`) should use, all you need to do is add the
+   following lines to `idxmgr.properties`:
+   
+   ```sh
+subcorpusindexer.element=(section)
+subcorpusindexer.attribute=id
+xquery.root.element.path=/text
+xquery.return.attribute.path=/@id
+xquery.attribute.chooser.specs=File name;/@filename;Author;/author;Title;/title
+   ```
+   The first line defines which element should be indexed. That is, text within elements
+   specified here will be indexed and can form subcorpora. 
+   
+   The second line which attribute from the element above will we use to uniquely
+   identify the text segments. In this case, the attribute `id` from
+   element `<section>` has been chosen. Note that the text between
+   `<section>... </section>` tags will be indexed. 
+   
+   The third line specifies the path on the XML tree to the *root
+   element* (i.e. the element in relation to which the selectors
+   specified by `xquery.attribute.chooser.specs` are defined). This is
+   specified in [XPath
+   syntax](https://www.w3schools.com/xml/xpath_syntax.asp). (NB: make
+   sure this element path does not end with a `/`).
+   
+   The forth line specifies the element to be returned by xquery to
+   select which indexed texts should be included in the inverted-index
+   query. This will typically be the same as
+   `subcorpusindexer.attribute`, but in XPath syntax relative to the
+   *root element" (in this case `/@id`, which translates into `/text/@id`,
+   as `/text` is the root element. 
+   
+   Finally, the fifth line specifies the selectable attributes, in
+   this case `File name;/@filename;Author;/author;Title;/title`. This
+   specifies the layout of the subcorpus selection tool. The general
+   format for each selection box is 
+   `description;path-in-header-xml;description2;path-in-header-xml2;...`
+   (note the semicolon separating the (human readable) description of
+   the selection (e.g. `File name`) and the path in the header
+   document (e.g. `/@filename` which translates to `/text/@filename`
+   and will select all filename values in `<text filename="min...">`)
+   Paths are all relative to xquery.root.element.path (see above).
+
 6.2. Open the modnlp-idx folder and click on `idx.jar` (it might
      simply appear as `idx` on Windows, next to an icon) or run
 
