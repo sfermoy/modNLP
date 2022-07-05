@@ -203,7 +203,7 @@ java -jar idx.jar
 </text>
 ```
 
-    which is the header file for `min001.xml`:
+which is the header file for `min001.xml`:
    
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
