@@ -193,7 +193,7 @@ java -jar idx.jar
    specify sub-corpus selection options based on the metadata you
    specified in your header file. Take for example `min001.hed`:
    
-   ```xml
+```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE text SYSTEM "minhead.dtd">
 <text filename="min001">
@@ -201,10 +201,11 @@ java -jar idx.jar
   <author> William Shakespeare</author>
   <section id='s1'/>
 </text>
-   ```
-   which is the header file for `min001.xml`:
+```
+
+    which is the header file for `min001.xml`:
    
-      ```xml
+```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE text SYSTEM "mintext.dtd">
 <text filename="min001">
@@ -224,7 +225,7 @@ java -jar idx.jar
     Capulet, heads of two houses at variance with each other.
     An old Man, of the Capulet family.
     [...]
-    ```
+```
    
    The header's DTD (take a look at the dtds in `hed/minhead.dtd` and
    `xml/mintext.dtd`) allows you to specify a few *elements*
@@ -235,70 +236,72 @@ java -jar idx.jar
    (`modnlp/teccli`) should use, all you need to do is add the
    following lines to `idxmgr.properties`:
    
-   ```sh
+```sh
 subcorpusindexer.element=(section)
 subcorpusindexer.attribute=id
 xquery.root.element.path=/text
 xquery.return.attribute.path=/@id
 xquery.attribute.chooser.specs=File name;/@filename;Author;/author;Title;/title
-   ```
-   The first line defines which element should be indexed. That is, text within elements
-   specified here will be indexed and can form subcorpora. 
+```
+
+The first line defines which element should be indexed. That is, text within elements
+specified here will be indexed and can form subcorpora. 
    
-   The second line which attribute from the element above will we use to uniquely
-   identify the text segments. In this case, the attribute `id` from
-   element `<section>` has been chosen. Note that the text between
-   `<section>... </section>` tags will be indexed. 
+The second line which attribute from the element above will we use to
+uniquely identify the text segments. In this case, the attribute `id`
+from element `<section>` has been chosen. Note that the text between
+`<section>... </section>` tags will be indexed.
    
-   The third line specifies the path on the XML tree to the *root
-   element* (i.e. the element in relation to which the selectors
-   specified by `xquery.attribute.chooser.specs` are defined). This is
-   specified in [XPath
-   syntax](https://www.w3schools.com/xml/xpath_syntax.asp). (NB: make
-   sure this element path does not end with a `/`).
+The third line specifies the path on the XML tree to the *root
+element* (i.e. the element in relation to which the selectors
+specified by `xquery.attribute.chooser.specs` are defined). This is
+specified in [XPath
+syntax](https://www.w3schools.com/xml/xpath_syntax.asp). (NB: make
+sure this element path does not end with a `/`).
    
-   The forth line specifies the element to be returned by xquery to
-   select which indexed texts should be included in the inverted-index
-   query. This will typically be the same as
-   `subcorpusindexer.attribute`, but in XPath syntax relative to the
-   *root element" (in this case `/@id`, which translates into `/text/@id`,
-   as `/text` is the root element. 
-   
-   Finally, the fifth line specifies the selectable attributes, in
-   this case `File name;/@filename;Author;/author;Title;/title`. This
-   specifies the layout of the subcorpus selection tool. The general
-   format for each selection box is 
-   `description;path-in-header-xml;description2;path-in-header-xml2;...`
-   (note the semicolon separating the (human readable) description of
-   the selection (e.g. `File name`) and the path in the header
-   document (e.g. `/@filename` which translates to `/text/@filename`
-   and will select all filename values in `<text filename="min...">`)
-   Paths are all relative to xquery.root.element.path (see above).
+The forth line specifies the element to be returned by xquery to
+select which indexed texts should be included in the inverted-index
+query. This will typically be the same as
+`subcorpusindexer.attribute`, but in XPath syntax relative to the
+*root element" (in this case `/@id`, which translates into `/text/@id`,
+as `/text` is the root element. 
+
+Finally, the fifth line specifies the selectable attributes, in
+this case `File name;/@filename;Author;/author;Title;/title`. This
+specifies the layout of the subcorpus selection tool. The general
+format for each selection box is 
+`description;path-in-header-xml;description2;path-in-header-xml2;...`
+(note the semicolon separating the (human readable) description of
+the selection (e.g. `File name`) and the path in the header
+document (e.g. `/@filename` which translates to `/text/@filename`
+and will select all filename values in `<text filename="min...">`)
+Paths are all relative to xquery.root.element.path (see above).
 
 6.2. Open the modnlp-idx folder and click on `idx.jar` (it might
-     simply appear as `idx` on Windows, next to an icon) or run
+  simply appear as `idx` on Windows, next to an icon) or run
 
 ```console
 java -jar idx.jar
 ```
-        from a console (command prompt) started in the modnlp-idx folder. 
+
+from a console (command prompt) started in the modnlp-idx folder. 
 
 6.3. A window will appear asking you to specify a location for your
-     index (i.e. where you would like the indexer to store the index
-     used in concordance searches etc). Create a new folder by cliking
-     on the create folder icon on your file selector window.  Call it,
-     for instance `myindex-withheaders`. Choose this folder for the index.
+  index (i.e. where you would like the indexer to store the index
+  used in concordance searches etc). Create a new folder by cliking
+  on the create folder icon on your file selector window.  Call it,
+  for instance `myindex-withheaders`. Choose this folder for the index.
 
 6.4. The program will now ask you to choose the folder where the
-     headers are stored. Choose the `hed` folder. Finally, the program
-     will ask for a URL for public access to the header files. This is
-     in case you want to make corpus searches available to other
-     users. For this tutorial, simply press OK to accept the default
-     URL. The main window should now appear.
-     
+  headers are stored. Choose the `hed` folder. Finally, the program
+  will ask for a URL for public access to the header files. This is
+  in case you want to make corpus searches available to other
+  users. For this tutorial, simply press OK to accept the default
+  URL. The main window should now appear.
+  
 6.5. The main window of modnlp-idx should now appear. Click on 'Index
-     new files' and choose the text files in the `xml` folder
-     (min001.xml, etc).
+  new files' and choose the text files in the `xml` folder
+  (min001.xml, etc).
 
 6.6. Once indexing finishes, quit the indexer. 
 
@@ -306,12 +309,12 @@ java -jar idx.jar
 ### Using the modnlp-teccli browser on your newly indexed corpora.
 
 7. Open your modnlp-teccli folder and click on `teccli.jar`
-   or run
+or run
 
 ```console
 java -jar teccli.jar
 ```
-   from a console (command prompt) started in the modnlp-teccli folder. 
+from a console (command prompt) started in the modnlp-teccli folder. 
 
 8. Select 'Choose new local corpus'. A window will appear. Use it to
    select one of your previously created indices
