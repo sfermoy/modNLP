@@ -100,12 +100,13 @@ if (scalar(@missing) > 0){
 ## flush after printing
 $| = 1;
 #print "~~~~~~~~~~~~~>".join(':',@missing)."\n";
+
 foreach (@TEXT_LIST){
     $error_local = 0;
     my $h = $_;
     $h =~ s/\.xml$/.hed/;
     my $t = $_;
-    print "=====Checking $t and $h for indexing:\n";
+    #print "=====Checking $t and $h for indexing:\n";
     if ($DOS2UNIX){
         my $cmd = "$DOS2UNIX $t";
         Run($cmd) or
@@ -130,7 +131,8 @@ foreach (@TEXT_LIST){
         AcceptableEncoding($cmd) or
             PrepareToDie( "ERROR determining file type: '$cmd': $!\n"); 
     }
-    if ($VISUALTOHEAD && $opt_v){
+    if ($VISUALTOHEAD and $opt_v){
+        print  "=====>V2H: $VISUALTOHEAD $h\n";
         my $cmd = "$VISUALTOHEAD $h";
         Run($cmd) or
             PrepareToDie("ERROR extracting visuals from $t into $h ('$cmd'): $!\n");
@@ -272,12 +274,14 @@ sub Run {
     else{
         `$c 2>&1 /dev/null`;
     }
-    return 1
-        if $dry_run;
+    #return 1
+    #    if $dry_run;
 
     my $st = $? >> 8;
-    print "Run exit status $st\n";
-    $st == 0;
+    #print "Run exit status $st\n"
+    #    if $debug;
+    return($st == 0);
+    
     #return system("$c") == 0 ;
 }
 
@@ -287,8 +291,8 @@ sub AcceptableEncoding {
     print "$c \n"
         if $debug;
     print LOG "$c \n";
-    return 1
-        if $dry_run;
+    #return 1
+    #    if $dry_run;
     
     my $enc = `$c`;
     return $enc =~ /(charset=us-ascii|charset=utf-8)/;

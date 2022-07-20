@@ -914,7 +914,7 @@ public class Dictionary {
      os.close();
   }
   
-public void printHeaders(PrintWriter os, HeaderDBManager hdbm){
+  public void printHeaders(PrintWriter os, HeaderDBManager hdbm){
     int [] fks = getIndexedFileKeys();
     os.println(hdbm.getFileHeaderAttributeHuman());
     for (int i = 0; i < fks.length; i++) {
@@ -926,7 +926,7 @@ public void printHeaders(PrintWriter os, HeaderDBManager hdbm){
       } 
     os.close();
     
-}
+  }
 
   public String getExtract(String fn, int ctx, long offset, boolean ignx)
   {
