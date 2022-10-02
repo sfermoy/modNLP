@@ -25,7 +25,8 @@ JARREDS=modnlp/*.class \
 	modnlp/tec/client/help/*.html \
 	modnlp/tec/client/help/*.jpg tecli.properties
 PRJFILES:=`find $(SOURCEDIR) -name prj.el`
-DISTDIR:=modnlp-teccli-`cat VERSION`
+VERSION:=$(shell cat VERSION)
+DISTDIR:=modnlp-teccli-$(VERSION)
 DISTFILES=AUTHORS COPYING Makefile README README.bin VERSION BUGS INSTALL TODO exclude.txt \
 	$(LIBS) $(DOCS) $(DATA) $(SOURCEDIR)tecli.properties* $(SOURCEDIR)teclipluginlist.txt \
 	$(TOPDIR)lib/COPYING-libs $(SOURCEDIR)modnlp/Constants.java $(SOURCEDIR)modnlp/gui \
@@ -48,12 +49,15 @@ BINDISTXTRAS=$(LIBLICENSES) $(TOPDIR)*COPYING* $(TOPDIR)bin/runteccli.sh
 
 #VPATH=$(SOURCEDIR)
 
-.PHONY: build jar test docs dist
+.PHONY: build jar test docs dist version
 
-all: build jar test 
+all: version build jar test 
 
 %.class: %.java
 		$(JAVAC) $(JAVACFLAGS) $?
+
+version:
+	sed -i 's/RELEASE *= *"[0-9].[0-9].[0-9]";/RELEASE = "$(VERSION)";/' src/modnlp/tec/client/Browser.java
 
 build: $(TARGETS)
 
@@ -78,7 +82,7 @@ dist:
 	tar cfvz /tmp/$(DISTDIR).tar.gz  --exclude-from=exclude.txt $(DISTDIR)
 	rm -rf $(DISTDIR)
 
-bindist: jar
+bindist: version jar
 	mkdir $(BINDISTDIR)
 	cp README.bin $(BINDISTDIR)/README
 	cp src/teclipluginlist.txt $(BINDISTDIR)/
@@ -88,7 +92,7 @@ bindist: jar
 
 bindistec: MANIFEST=teccli-manifest.txt
 bindistec: PROPS=tecli.properties.tec
-bindistec: jar
+bindistec: version jar
 	mkdir $(BINDISTDIR)-tec
 	cp README.bin $(BINDISTDIR)-tec/README
 	cp src/teclipluginlist.txt $(BINDISTDIR)-tec/
@@ -99,7 +103,7 @@ bindistec: jar
 
 bindistgok: MANIFEST=teccli-manifest-gok.txt
 bindistgok: PROPS=tecli.properties.gok
-bindistgok: jar
+bindistgok: version jar
 	mkdir $(BINDISTDIR)-gok
 	cp README.bin $(BINDISTDIR)-gok/README
 	cp src/teclipluginlist.txt $(BINDISTDIR)-gok/
@@ -110,7 +114,7 @@ bindistgok: jar
 
 bindistecpc: MANIFEST=teccli-manifest.txt
 bindistecpc: PROPS=tecli.properties.ecpc
-bindistecpc: jar
+bindistecpc: version jar
 	mkdir $(BINDISTDIR)-ecpc
 	cp README.bin $(BINDISTDIR)-ecpc/README
 	cp src/teclipluginlist.txt $(BINDISTDIR)-ecpc/
