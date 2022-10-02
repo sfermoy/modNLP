@@ -436,7 +436,7 @@ public class TecConnection extends Thread {
   }
   
   
-    public void  getAllHeaders(Request req,  PrintWriter os)
+  public void  getAllHeaders(Request req,  PrintWriter os)
   {
     try {
       int [] fks = dtab.getIndexedFileKeys();

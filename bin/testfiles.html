@@ -1,5 +1,5 @@
 <HEAD>
-<TITLE> TEST OMC Files </TITLE>
+<TITLE> TEST and Standardise Files </TITLE>
 <SCRIPT>
 <!--- Hide script from old browsers
 
@@ -12,15 +12,19 @@ type="text/css">
 -->
 </HEAD>
 <body class="mine" BGCOLOR="#FFFFFF" LINK="#0A0BFF" vlink="#0A0BFF">
-  <h3>Upload OMC XML and HED files for TESTING</h3>
+  <h3>Upload XML and HED files for TESTING and STANDARDISATION</h3>
 
   <p>
-    Note: <b>This script is only for testing the files. The uploaded
+    Note: <b>
+      This application tests XML and HEADER files for indexing by
+      modnlp/idx, and optionally standardises all encodings to UTF-8 and
+      extracts <font face='Courier'>visual</font> tags (for DTDs that
+      specify these tags, such as the OMC DTDs). The uploaded
     files will be deleted from the server once the testing is
     done. Optionally (see checkbox below) you can download the files
     (as a compressed tar archive) in a reformatted, clean format
     suitable for indexing by modnlp/idx, with visuals tags added to
-    the header files.</b>
+    the header files, as described.</b>
   <p>
     Files must be uploaded in in pairs (e.g. omc000001.xml and
     omc000001.hed), otherwise the checking will fail. You can select
@@ -32,9 +36,11 @@ type="text/css">
     the next page, once you hit 'Upload'.
   </p>
   <p>
-    If you would like to use your own DTDs rather than the current
-    version of the OMC DTD, just upload them with your files and check
-    the checkbox below. 
+    By default, files are checked against the OMC DTDs. However, you
+    can check any files for modnlp/idx indexing. If you would like to
+    use your own DTDs rather than the current version of the OMC DTD,
+    just upload them with your files and check the checkbox
+    "Use my uploaded DTDs" below.
 
     <br/><br/>
 
@@ -48,7 +54,7 @@ type="text/css">
     name="allowdownload" value='true'>
   </p>
   <p>
-    Use uploaded DTDs? <input type="checkbox" name="userdtd" value='true'>
+    Use my uploaded DTDs? <input type="checkbox" name="userdtd" value='true'>
   </p>
   <p>
     <input type="submit" value="Start testing/reformatting..." />

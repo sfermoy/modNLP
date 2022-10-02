@@ -155,6 +155,7 @@ JProgressBar bar= null;
         if ((header = input.readLine()) == null ){
           break;
         }
+        //System.out.println("H: "+header); 
         if (header.length() > 0)
         {
             if (first){

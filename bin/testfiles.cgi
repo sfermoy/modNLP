@@ -93,5 +93,5 @@ if (  $allowdownload eq 'true') {
     print "<br><a href='data/$archive'>Download clean, reformatted files (link valid for the next 2 minutes).</a>";
 }
 #print "rm -rf $timestamp\n";
-print `rm -rf $timestamp`;
+print `\n rm -rf '$timestamp'`;
 

@@ -34,7 +34,8 @@ xquery.file.description.return={data($s/document/@filename)}<sep/>{data($s/docum
 ## xquery expression that returns a header information
 xquery.header.info.return={data($s/document/@filename)} <sep/>{data($s/document/@format)} <sep/>{for $section in $s/section return concat (\"<section/>\",data($section/@id),\" <sep/>\",data($s/title),\" <sep/>\",data($s/@publication_date))
 ## Human readable headings for information in xquery.header.info.return. File data before the </section> tag/
-header.info.human=Filename<sep/>Format<sep/>Title<sep/>Author<section/>ID<sep/>Publication_Date<sep/>
+#header.info.human=Filename<sep/>Format<sep/>Title<sep/>Author<section/>ID<sep/>Publication_Date<sep/>
+header.info.human=Filename<sep/>Format<sep/>Title<sep/>Author<sep/>Publication_Date<sep/>xquery.header.info.return={data($s/document/@filename)} <sep/>{data($s/document/@format)}<sep/>{data($s/document/title)} <sep/>{data($s/document/author)}<sep/>{data($s/document/@publication_date)}<sep/>
 ## the encoding for characters in files to be indexed. Make sure your text files match this
 file.encoding=UTF-8
 ## the language to be indexed (determines the choice of
