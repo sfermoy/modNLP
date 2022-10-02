@@ -22,11 +22,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.Socket;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import javax.swing.JProgressBar;
-import modnlp.tec.client.TecClientRequest;
 import modnlp.tec.client.TecClientRequest;
 
 /**
@@ -160,7 +160,8 @@ JProgressBar bar= null;
             if (first){
                 String[] s = header.split("<section/>");
                 fileAttrNames = s[0].split("<sep/>");
-                sectionAttrNames = s[1].split("<sep/>");
+                if(s.length>1)
+                    sectionAttrNames = s[1].split("<sep/>");
                 first = false;           
             }else{
              sections = header.split("<section/>"); 
@@ -169,6 +170,16 @@ JProgressBar bar= null;
                 String section = sections[i];     
                   if(i == 0){
                       fileAttributes = section.split("<sep/>");
+                      if(fileAttributes[fileAttributes.length -1].trim().isEmpty() )
+                          fileAttributes = Arrays.copyOf(fileAttributes, fileAttributes.length-1);
+                      if(sections.length == 1){
+                          for (int j = 0; j < fileAttributes.length - 1; j++) {
+                            jsonString += fileAttrNames[j] +":\"" + fileAttributes[j].replace("\"", "").trim()+"\", ";
+                        }
+                          jsonString += "ID" +":\"" + "ignore"+"\", ";
+                          jsonString += fileAttrNames[fileAttributes.length - 1] +":\"" + fileAttributes[fileAttributes.length - 1].replace("\"", "").trim()+"\" } ";
+                          headermap.put(fileAttributes[0].trim()+"s1", jsonString);
+                      }
                   }else{
                       sectionAttributes = section.split("<sep/>");
                       for (int j = 0; j < fileAttributes.length; j++) {
