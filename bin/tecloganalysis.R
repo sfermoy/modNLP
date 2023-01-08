@@ -42,18 +42,18 @@ plotAccessByCountry <- function(log, pdf='', ...){
 ## Cleveland style dot chart
 dotchartAccessByCountry  <- function(log, pdf='', ...){
   op <- par(no.readonly = TRUE); on.exit(par(op))
-  par(mar=c(op$mar[1],op$mar[2]+3,op$mar[3],op$mar[4]))
+  par(mar=c(op$mar[1],op$mar[2]+5,op$mar[3]+1,op$mar[4]))
 
   table <- sort(table(log$country))
   
-  dotchart(log(table), xaxt='n')
-  axis(1, labels=table, at=log(table), cex.axis=.8)
-  axis(3)
-  mtext("Total number of accesses", 1, line=3)
-  mtext("Log10 number of accesses", 3, line=3)
+  dotchart(log(table), xaxt='n', cex=0.6)
+  axis(1, labels=table, at=log(table), cex.axis=.6)
+  axis(3, cex.axis=0.6)
+  mtext("Total number of data requests", 1, line=3)
+  mtext("Log10 number of data requests", 3, line=3)
   text(max(log(table))*.55,length(log(table))/3,
-       sprintf('Accesses to GoK since %s %s\n\nTotal: %s\nfrom %s different locations (machines)\nin %s different countries',
-               log[1,]$month, log[1,]$year,
+       sprintf('Usage of TEC/GoK/OMC data\n\nTotal number of requests: %s\nfrom %s different locations (machines)\nin %s different countries',
+               #log[1,]$month, log[1,]$year,
                format(length(log$year), big.mark=",", scientific=FALSE),
                format(length(unique(log$ip)),big.mark=",", scientific=FALSE),
                format(length(unique(log$country)),big.mark=",", scientific=FALSE)), pos=4)
