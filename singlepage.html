@@ -1,0 +1,1796 @@
+<!doctype html>
+<html lang="en" class="h-100">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="SS">
+    <meta name="generator" content="SS1.0">
+    <title>ModNLP LIVE</title>
+
+
+    <!-- Bootstrap core CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+
+    <!-- Favicons -->
+<meta name="theme-color" content="#7952b3">
+
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+          .svg-container {
+      display: inline-block;
+      position: relative;
+      width: 100%;
+      padding-bottom: 100%; /* aspect ratio */
+      vertical-align: top;
+      overflow: hidden;
+    }
+    .svg-content-responsive {
+      display: inline-block;
+      position: absolute;
+      top: 10px;
+      left: 0;
+    }
+
+    /*body {*/
+    /*  font-size: 16px;*/
+    /*  font-family: 'Open Sans', sans-serif;*/
+    /*  font-weight: 400;*/
+    /*  text-align: center;*/
+    /*}*/
+
+    #title {
+      font-size: 20px;
+      padding-bottom: 10px;
+      padding-top: 20px;
+      font-weight: 300;
+    }
+
+    #explanation {
+      font-size: 12px;
+      max-width: 620px;
+      margin: 0 auto;
+      padding-top: 10px;
+      color: #ababab;
+      font-weight: 300;
+    }
+
+    .y.axis line {
+      fill: none;
+    }
+
+    .x.axis line {
+      fill: none;
+      stroke: #e0e0e0;
+      shape-rendering: crispEdges;
+    }
+
+    .axis path {
+      display: none;
+    }
+
+    .brush .extent {
+      fill-opacity: .125;
+      shape-rendering: crispEdges;
+    }
+
+    .resize {
+      display: inline !important; /* show when empty */
+      fill: #7A7A7A;
+      fill-opacity: 1;
+      stroke: #7A7A7A;
+      stroke-width: 2px;
+    }
+
+    .toolTip {
+      position: absolute;
+      display: none;
+      min-width: 80px;
+      height: auto;
+      background: none repeat scroll 0 0 #ffffff;
+      border: 1px solid #6F257F;
+      padding: 14px;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .bar {
+      /*shape-rendering: crispEdges;*/
+    }
+
+    /*HTML Horizonal Legend*/
+.country-name {
+    margin: 0 !important;
+}
+.key-dot {
+    display: inline-block;
+    height: 10px;
+    margin-right: .5em;
+    width: 10px;
+}
+
+.removed { background: red;
+          opacity:0.3  }
+.some { background: orange;
+         opacity:0.3}
+
+
+#legend2{
+    overflow:hidden;
+}
+.legend2 {
+    float:left;
+    margin-right: 1em;
+}
+    </style>
+
+
+    <!-- Custom styles for this template -->
+  </head>
+  <body class="d-flex flex-column h-100">
+
+<header>
+  <!-- Fixed navbar -->
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">ModNLP LIVE</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+<!--        <ul class="navbar-nav me-auto mb-2 mb-md-0">-->
+<!--          <li class="nav-item">-->
+<!--            <a class="nav-link active" aria-current="page" href="/search">Search</a>-->
+<!--          </li>-->
+<!--          <li class="nav-item">-->
+<!--            <a class="nav-link" href="/mosaic">Mosaic</a>-->
+<!--          </li>-->
+<!--          &lt;!&ndash; <li class="nav-item">-->
+<!--            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
+<!--          </li> &ndash;&gt;-->
+<!--        </ul>-->
+        <form class="d-flex" id="searchform">
+          <input class="form-control me-2 " id="keyword" type="text" placeholder="Search" aria-label="Text">
+          <button class="btn btn-outline-success" type="button" onclick="submitKeyword('keyword')">Search</button>
+          <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    Options
+  </button>
+        </form>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!--<main class="flex-shrink-0">-->
+<!-- Begin page content -->
+<div class="container">
+<!--    <h1 class="mt-5">ModNLP Live</h1>-->
+    <p class="lead">Search word and display concordance as a Mosaic or concordance list</p>
+  </div>
+
+<div class="collapse" id="collapseExample">
+      <div class="card card-body">
+                <!-- <img src="https://genealogies.mvm.ed.ac.uk/omc/headers/omc000001-figure-1-1.png"> -->
+              <select class="form-select" id = "corpusSelect" onchange="corpChanged()">
+              <option value="1241">Gok English</option>
+              <option selected value="1245">OMC</option>
+            </select>
+
+            <select class="form-select" id = "markdownSelect">
+              <option value="yes">Images</option>
+              <option selected value="no">No Images</option>
+            </select>
+
+          <div class="border rounded">
+              <div class="form-check form-switch" style="margin-left: 10px;">
+              <input class="form-check-input" type="checkbox" id="flexSwitchsubcorpus" onclick="subcorpusSwitch()">
+              <label class="form-check-label" for="flexSwitchsubcorpus">Activate Subcorpus Selection</label>
+            </div>
+              <form>
+                  <fieldset class="row gy-2 gx-3 align-items-center" id="subcorpusForm" disabled>
+
+                  </fieldset>
+              </form>
+
+          </div>
+
+
+
+      </div>
+
+
+</div>
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Mosaic</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Concordance</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Metafacet</button>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+
+    <div class="container">
+    <h1 class="mt-5">Mosaic Controls</h1>
+      <div class="border rounded">
+    <p></p>
+    <p>Set minimum frequency to display</p>
+    <input type="range" class="form-range w-50" min="0" max="20" step=".1" id="customRange3" value="0" onmouseup="redrawMosaic()" oninput="this.nextElementSibling.value = this.value">
+<output>0</output>
+<!--        </div>-->
+<!-- <div class="border rounded">-->
+<p></p>
+    <p>Set maximum frequency to display</p>
+    <input type="range" class="form-range w-50" min="0" max="100" step=".5" id="customRange4" value="100"  onmouseup="redrawMosaic()"   oninput="this.nextElementSibling.value = this.value">
+<output>100</output>
+
+ </div>
+  <div class="border rounded">
+
+<div class="form-check form-switch" style="margin-left: 10px;">
+  <input class="form-check-input" type="checkbox" id="flexSwitchStopword" onclick="checkSwitch()">
+  <label class="form-check-label" for="flexSwitchStopword">Remove Stopwords</label>
+</div>
+ </div>
+
+
+  </div>
+<div id="chart"></div>
+
+
+  </div>
+
+  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+    <div class="container">
+        <h1 class="mt-5">Concordance Controls</h1>
+        <div class="border rounded">
+            <p></p>
+            <p>Choose sort position</p>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+                Sort position
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <li><button class="dropdown-item" type="button" onclick="sort('filename')">Filename</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort('left1')">Left 1</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort('left2')">Left 2</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort('left3')">Left 3</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort('left4')">Left 4</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort('left5')">Left 5</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort('right1')">Right 1</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort('right2')">Right 2</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort('right3')">Right 3</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort('right4')">Right 4</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort('right5')">Right 5</button></li>
+              </ul>
+            </div>
+        </div>
+            <div id="linesreturned"> </div>
+    </div>
+      <div class="d-inline-flex  overflow-auto"  style="height:600px;overflow-x: scroll;flex-shrink: 0; overflow-x: auto;">
+               <div class="flex-nowrap p-2 flex-fill" id="filename"  style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:14px;flex-shrink: 0;">
+              </div>
+              <div class="flex-nowrap p-2 flex-fill" id="leftconc"  style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:14px;flex-shrink: 0;">
+              </div>
+
+              <div class="d-inline-flex p-2 flex-fill " id="keyworddisplay" style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:14px;flex-shrink: 0;">
+              </div>
+
+              <div class="d-inline-flex p-2 flex-fill " id="rightconc" style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:14px;flex-shrink: 0;">
+              </div>
+      </div>
+      </div>
+
+<!--    <p class="lead">Search word and display concordance</p>-->
+
+
+
+
+
+
+      <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+       <div class="container">
+           <div class="border rounded">
+
+            <h1 class="mt-5">Metafacet: Concordance Metadata distributions</h1>
+
+                <p>Click or drag to select attributes and remove from the current concordance. Check the concordance tab to see the lines which will be removed if you cll the <b>"Remove Selected"</b> button. </p>
+                <p>Use the dropdown to view different facets. Items colored yellow have been partially removed by a previous deletion and will be updated by pressing the <b>"Remove Selected"</b> button.  <p>
+          </div>
+           <div id="legend2">
+                   <div class="legend2"> <p class="country-name"><span class="key-dot removed"></span>All Lines Removed</p> </div>
+                   <div class="legend2"> <p class="country-name"><span class="key-dot some"></span>Some Lines Removed</p> </div>
+                </div>
+           <br>
+           <button type="button" class="btn btn-primary" id="metafacetRemove" onclick="hide()">Remove Selected</button>
+
+
+<!--      <div id="explination"> This plugin can be used to see the number of lines in the current concordance which are associated with a-->
+<!--          particular piece of metadata, and to filter the concordance based on the metadata.-->
+<!--          <ul><li>EXAMPLE</li>-->
+<!--              <li>Select metafacet such as "author" form the dropdown.</li>-->
+<!--              <li>Then expand/contract/slide the range view to relevant data (Authors).</li>-->
+<!--          <li>Clicking on a bar will remove/add the concordance lines associated with the attribute</li>-->
+<!--          <li>Ctrl+click removes all lines but the ones associated with the attribute clicked</li>-->
+<!--          <li>Once you are happy with your new concordance list the "Update Bars/Load concordance" refreshes MetaFacet for the filtered list</li>-->
+<!--          <li>Mosiac plugin works with MetaFacet</li>-->
+<!--          <li>Removing lines from one attribute effects the other attribute views. Orange attribute bars are ones which have been partially removed from th concordance by another attribute interaction </li>-->
+<!--          </ul>-->
+<!--          </div>-->
+<!--    </div>-->
+         <div id="chart2"></div>
+       </div>
+      </div>
+</div>
+
+<!--end of HTML-->
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<script src="https://d3js.org/d3.v3.min.js"></script>
+
+<script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
+
+<script type="text/javascript">
+    var currentData;
+    var currentKeyword;
+    var sortpos ="filename";
+    var headersfetched = false;
+    var headermap = {};
+    var concrdance ="";
+    var isSectionedHeader = true;
+    var filterStopwords = false;
+    var removedViaMetafacet = new Set();
+    var indextoremove =[];
+    var sortClick = false;
+    var subcorpatts = [];
+    var subcorpenabled = false;
+    var socket ;
+
+    var  selectHtml ="<div class=\"col-auto\"><select class=\"form-select theclass\" id=\"theclassSelect\"  onchange=\"updateTextBox()\" size=\"10\" multiple aria-label=\"size 10 select theclass\"></select></div>"
+    var  optionHtml ="<option value=\"opVal\">opVal</option>"
+    var  subTextHtml =" <div class=\"border rounded text-wrap\" id=\"supcorptextbox\" style=\"width: 50rem;height: 20rem;margin:13px\"></div>"
+
+    var initselectvalue = document.getElementById("corpusSelect").value
+    fetchSubcorpusAttributesd(initselectvalue )
+
+    document.getElementById('searchform').addEventListener('submit', function(e) {
+            submitKeyword('keyword')
+            e.preventDefault();
+        }, false);
+
+function checkSwitch()
+{
+  var checkbox = document.getElementById('flexSwitchStopword');
+  if (checkbox.checked != true)
+  {
+      filterStopwords = false;
+      redrawMosaic()
+  }else{
+      filterStopwords = true;
+      redrawMosaic()
+  }
+}
+
+
+
+function subcorpusSwitch()
+{
+  var checkbox = document.getElementById('flexSwitchsubcorpus');
+  if (checkbox.checked != true)
+  {
+    $("#subcorpusForm").prop('disabled', true);
+    subcorpenabled = false;
+  }else{
+    $("#subcorpusForm").prop('disabled', false);
+    subcorpenabled = true;
+  }
+}
+
+function corpChanged(){
+    let corp = document.getElementById("corpusSelect").value;
+    fetchSubcorpusAttributesd(corp)
+    headersfetched =false;
+
+}
+
+function updateTextBox(){
+    let tb = document.getElementById("supcorptextbox")
+    tb.innerHTML = ''
+    let first = true;
+    for (const attElement of subcorpatts) {
+        let selbox = document.getElementById(attElement + "Select")
+
+        varselecteditems = $(selbox).val();
+        var txtstring = "";
+        if (varselecteditems.length > 0 & !first) {
+          txtstring +="and "
+        }
+        for (const selitm of varselecteditems) {
+            if (txtstring === "" || txtstring === "and ") {
+                txtstring += "($s/" + attElement + "=%27" + selitm.trim() + "%27";
+            } else {
+                txtstring += " or $s/" + attElement + "=%27" + selitm.trim() + "%27";
+            }
+        }
+        if (varselecteditems.length > 0) {
+            tb.insertAdjacentHTML('beforeend', txtstring + ") ");
+            first = false;
+         }
+
+
+    }
+
+}
+
+   function redrawMosaic(){
+       dataProcessMosaic(currentData,currentKeyword);
+   }
+
+   function sort(pos){
+       sortClick = true;
+       sortpos = pos;
+       dataProcess(currentData,currentKeyword)
+       sortClick = false;
+   }
+
+   function highlightWord(selectedWord){
+    const collection = document.getElementsByClassName(selectedWord);
+        setTimeout(function (d) {
+            collection[0].scrollIntoView();
+                      },100)
+       for (let i = 0; i < collection.length; i++) {
+           collection[i].style.color = "Orange";
+           collection[i].parentElement.style.backgroundColor = "lightyellow";
+       }
+   }
+
+    let data = ""
+      var requestOptions = {
+        method: 'GET',
+    };
+
+async function fetchSubcorpusAttributesd(corpus){
+    let text0 = 'http://genealogies.mvm.ed.ac.uk:'
+    let text1 =text0.concat(corpus).concat('/attchooser?')
+    let text3 ='request=attchooserspecs'
+    let text4 = text1.concat(text3)
+    let attributes ="";
+    let form = document.getElementById("subcorpusForm")
+    form.innerHTML="";
+    try {
+      let response = await fetch(text4,requestOptions)
+       attributes = await response.text();
+    }
+    catch (e) {
+      return e.message;
+    }
+    attributes = attributes.trim().split(";")
+
+    let selectors = attributes.filter((element, index) => {
+      return index % 2 === 1;
+    })
+    subcorpatts=selectors;
+    for (const selectorsKey in selectors) {
+        fetchSubcorpusAttribute(corpus,selectors[selectorsKey])
+    }
+
+    form.insertAdjacentHTML( 'beforeend', subTextHtml);
+
+
+}
+
+// http://genealogies.mvm.ed.ac.uk:1245/attoptions?request=attoptions&xqueryattribs=
+async function fetchSubcorpusAttribute(corpus,selector){
+    let text0 = 'http://genealogies.mvm.ed.ac.uk:'
+    let text1 =text0.concat(corpus).concat('/attoptions?')
+    let text3 ='request=attoptions&xqueryattribs='
+    let text4 = text1.concat(text3).concat(selector)
+    let attoption ="";
+    let form = document.getElementById("subcorpusForm")
+    form.insertAdjacentHTML( 'beforeend',selectHtml.replaceAll("theclass",selector))
+    try {
+      let response = await fetch(text4,requestOptions)
+       attoption = (await response.text()).replaceAll("_"," ");
+        attoption =attoption.split(',')
+
+    }
+    catch (e) {
+      return e.message;
+    }
+    let thisBox = document.getElementById(selector+"Select")
+    for (let attoptionElement of attoption) {
+        thisBox.insertAdjacentHTML( 'beforeend',optionHtml.replaceAll("opVal",attoptionElement));
+    }
+}
+
+
+
+
+  async function fetchConcordance(keyword,corpus,markdowSelect) {
+       removedViaMetafacet = new Set();
+       indextoremove =[];
+       sortpos ="filename";
+      let text0 = 'http://genealogies.mvm.ed.ac.uk:'
+      let text1 =text0.concat(corpus).concat('/concordancer?sgml=').concat(markdowSelect).concat('&keyword=')
+      let text2 =text1.concat(keyword.replaceAll("+","%2b"))
+      let text3 ='&case=insensitive&context=130&request=concord'
+      let text4 = text2.concat(text3)
+      if(subcorpenabled) {
+          text4 = text4.concat("&xquerywhere=" + document.getElementById("supcorptextbox").innerHTML)
+      }
+        try {
+          let response = await fetch(text4,requestOptions)
+          data = await response.text();
+        }
+        catch (e) {
+          return e.message;
+        }
+        currentData = data;
+        currentKeyword = keyword;
+        dataProcess(data,keyword);
+        dataProcessMosaic(data,keyword);
+
+        if(!headersfetched) {
+            console.log("getting headers "+corpus)
+            fetchheader(corpus);
+        }
+        else{
+            buildConcMetadata();
+        }
+
+}
+
+ async function fetchheader(corpus) {
+  let text0 = 'http://genealogies.mvm.ed.ac.uk:'
+  let text1 =text0.concat(corpus).concat('/allheaders?request=dldHeaders')
+  let headers = "";
+  try {
+      let response = await fetch(text1,requestOptions)
+      headers = await response.text();
+    }
+    catch (e) {
+      return e.message;
+    }
+    headersfetched = true;
+   processHeaders(headers)
+
+}
+
+
+function submitKeyword(id){
+  var value = document.getElementById(id).value
+  var selectvalue = document.getElementById("corpusSelect").value
+  var markdowSelect = document.getElementById("markdownSelect").value
+  fetchConcordance(value,selectvalue,markdowSelect)
+}
+
+function processHeaders(hdrs){
+    var hdrList = hdrs.split("\n")
+    var hdrProps = hdrList[0].split("<section/>");
+    var fileAttrNames = hdrProps[0].split("<sep/>");
+    if(fileAttrNames[fileAttrNames.length -1].trim() ===""){
+               fileAttrNames.pop()
+    }
+
+    var fileAttributes;
+    if(hdrProps.length>1)
+        sectionAttrNames = hdrProps[1].split("<sep/>");
+    for (let i = 1; i < hdrList.length; i++) {
+        sections = hdrList[i].split("<section/>");
+        for (let j = 0; j < sections.length; j++) {
+            var jsonString = "{";
+            var section = sections[j];
+            if (j == 0) {
+                fileAttributes = section.split("<sep/>");
+                if(fileAttributes[fileAttributes.length -1].trim() ===""){
+                        fileAttributes.pop()
+                }
+                if (sections.length == 1 && fileAttributes.length>1) {
+                    isSectionedHeader = false;
+                    for (let k = 0; k < fileAttributes.length - 1; k++) {
+                        jsonString += fileAttrNames[k] + ":\"" + fileAttributes[k].replaceAll("\"", "").replaceAll("\:", " ").replaceAll("\;", " ").trim() + "\", ";
+                    }
+                    jsonString += "ID" + ":\"" + "ignore" + "\", ";
+                    jsonString += fileAttrNames[fileAttributes.length - 1] + ":\"" + fileAttributes[fileAttributes.length - 1].replaceAll("\"", "").replaceAll("\:", " ").replaceAll("\;", " ").trim() + "\" } ";
+                    var key = fileAttributes[0].trim() + "s1"
+                    headermap[key] = jsonString;
+                }
+            } else {
+                var sectionAttributes = section.split("<sep/>");
+                for (var k = 0; k < fileAttributes.length; k++) {
+                    jsonString += fileAttrNames[k] + ":\"" + fileAttributes[k].replaceAll("\"", "").replaceAll("\:", " ").replaceAll("\;", " ").trim() + "\", ";
+                }
+                for (var l = 0; l < sectionAttrNames.length - 1; l++) {
+                    jsonString += sectionAttrNames[l] + ":\"" + sectionAttributes[l].replaceAll("\"", "").replaceAll("\:", " ").replaceAll("\;", " ").trim() + "\", ";
+                }
+                if(hdrProps.length>1)
+                    jsonString += sectionAttrNames[sectionAttrNames.length - 1] + ":\"" + sectionAttributes[sectionAttrNames.length - 1].replaceAll("\:", " ").replaceAll("\;", " ").trim() + "\" }";
+                var key = fileAttributes[0].trim() + sectionAttributes[0].trim()
+                headermap[key] = jsonString;
+
+            }
+        }
+    }
+    console.log("Header Download Finished");
+    buildConcMetadata();
+}
+
+function dataProcess(data,keyword) {
+    document.getElementById("filename").innerHTML = '';
+    document.getElementById("leftconc").innerHTML = '';
+    document.getElementById("keyworddisplay").innerHTML = '';
+    document.getElementById("rightconc").innerHTML = '';
+    var countWords = [{}, {}, {}, {}, {}, {}, {}, {}, {}];
+
+    var countWordsTot = {}
+    var wordOrder = [];
+
+    var concJSON;
+    concJSON = JSON.stringify(data.split("\n").map(x => ({text: x})))
+    var concobj = JSON.parse(concJSON);
+    var leftctx = "";
+    var keywordctx = "";
+    var rightctx = "";
+    var fns = "";
+    indextoremove = [];
+
+    //sorting setup
+    if (sortClick) {
+        concobj = concrdance;
+    }else {
+        for (var i = 1; i < concobj.length - 1; i++) {
+            conc = concobj[i]['text'].split("|")
+            var section = conc[2];
+            var fn = conc[0].split("/")
+            fn = fn[fn.length - 1];
+            var lftWordtokens = conc[3].slice(0, 130).replaceAll(/[.,\/#!$%\^&\*;?:{\'}=_`~()]/g, "").replaceAll(/\s{2,}/g, " ").replaceAll(/\s{2,}/g, " ").toLowerCase().trim().split(' ');
+            var rightWordtokens = conc[3].slice((130 + keyword.length), conc[3].length).replaceAll(/[.,\/#!$%\^&\*;?\':{}=_`~()]/g, "").replaceAll(/\s{2,}/g, " ").toLowerCase().trim().split(' ');
+            if (removedViaMetafacet.has(fn) || removedViaMetafacet.has(fn + section)) {
+                indextoremove.push(i);
+            }
+            for (let j = 1; j < 7; j++) {
+                concobj[i]['left' + j] = lftWordtokens[lftWordtokens.length - j];
+                concobj[i]['right' + j] = rightWordtokens[j - 1];
+            }
+            conc = concobj[i]['text'].split("|")
+            concobj[i]['filename'] = fn;
+        }
+
+        for (var l = indextoremove.length - 1; l >= 0; l--)
+            concobj.splice(indextoremove[l], 1);
+
+        //sort
+        concrdance = concobj
+    }
+    concobj.sort((a, b) => (a[sortpos] > b[sortpos]) ? 1 : -1)
+    // save for metafacet
+
+    for (var i = 1; i < concobj.length-1; i++){
+        var color ='white'// i % 2===0 ? "lightgrey": "grey";
+        conc = concobj[i]['text'].split("|")
+        var fn = conc[0].split("/")
+        var section = conc[2];
+        fn=fn[fn.length -1];
+        var lftWordtokens =  conc[3].slice(0, 130).trim().split(' ');
+        var rightWordtokens =  conc[3].slice((130 + keyword.length),conc[3].length).trim().split(' ');
+        var leftincrement =0;
+        var rightincrement =0;
+
+        for (let j = 1; j < 7; j++) {
+            var dontSkipleft = 1;
+            var dontSkipright = 1;
+            if (j - 1 + rightincrement < rightWordtokens.length && !(rightWordtokens[j - 1 + rightincrement] ==='')) {
+                while (rightWordtokens[j - 1 + rightincrement].replaceAll(/[.,\/#!$%\^&\*;?:{}\'=_`~()]/g, "").length === 0) {
+                    rightincrement += 1;
+                    if (j - 1 + rightincrement > rightWordtokens.length ) {
+                        dontSkipright = 0;
+                        break;
+                    }
+                }
+            }
+            if (lftWordtokens.length - j - leftincrement > 0) {
+                while (lftWordtokens[lftWordtokens.length - j - leftincrement].replaceAll(/[.,\/#!$%\^&\*;?\':{}=_`~()]/g, "").length === 0) {
+                    leftincrement += 1;
+                    if (lftWordtokens.length - j - leftincrement < 0) {
+                        dontSkipleft = 0;
+                        break;
+                    }
+                }
+            }
+            if (dontSkipleft) {
+                if (lftWordtokens.length - j - leftincrement >= 0) {
+                    lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase() + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                }
+            }
+            if (dontSkipright) {
+                if (j - 1 + rightincrement < rightWordtokens.length && !(rightWordtokens[j - 1 + rightincrement] === '')) {
+                    rightWordtokens[j - 1 + rightincrement] = " <span class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase() + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
+                }
+            }
+        }
+        var leftSideHtml = lftWordtokens.join(" ")
+        var rightSideHtml = rightWordtokens.join(" ")
+        if(leftSideHtml.length === 0){
+            leftSideHtml = "*"
+        }
+        if(rightSideHtml.length === 0){
+            rightSideHtml = "*"
+        }
+        fns +="<div"+ " class=\""+fn + section +" "+ fn +" \" " + "style=\"background-color:"+color+";color:red; \" >" + fn+' </div> ';
+        leftctx += "<div"+ " class=\""+fn + section +" "+ fn +" \" " + "style=\"background-color:"+color+" \" >"+leftSideHtml.replaceAll('&amp;','&').replaceAll('<visual>','').replaceAll('<caption>', '').replaceAll('image','image id =img'.concat(i)).replaceAll('uri','src')+' </div> ';
+        keywordctx += "<div"+ " class=\""+fn + section +" "+ fn +" \" " +  "style=\"background-color:"+color+" \" >"+conc[3].slice(130,(130 + keyword.replaceAll('&amp;','&').split("+")[keyword.split("+").length - 1].length)) + '</div> ';
+        rightctx += "<div"+ " class=\""+fn + section +" "+ fn +" \" " +  "style=\"background-color:"+color+" \" >"+rightSideHtml.replaceAll('&amp;','&').replaceAll('<visual>','').replaceAll('<caption>', '').replaceAll('image','image id =img'.concat(i)).replaceAll('uri','src')+' </div>  ';
+
+
+        lftWords = conc[3].slice(0, 130).replaceAll(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replaceAll(/\s{2,}/g," ");
+        lftWords = lftWords.toLowerCase()
+        lftWords = lftWords.split(' ');
+        // console.log(lftWords.slice(-7))
+        // console.log(lftWords.slice(-5,-1))
+        lftWords = lftWords.slice(-5,-1)
+        for (var k =0; k < lftWords.length; k++) {
+            var val = lftWords[k]
+            if(countWords[k][val] === undefined) {
+              countWords[k][val] = 1;
+              countWordsTot[val] = 1;
+                } else {
+                    countWords[k][val] = countWords[k][val] + 1;
+                    countWordsTot[val] = countWordsTot[val] + 1;
+                }
+            }
+
+        var rightWords = conc[3].slice((130+ keyword.length),conc[2].length).replaceAll(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
+        rightWords = rightWords.replaceAll(/\s{2,}/g," ");
+        rightWords = rightWords.toLowerCase()
+        rightWords = rightWords.split(' ');
+        rightWords = rightWords.slice(1,5)
+        // console.log(rightWords)
+        for (var j =0; j < rightWords.length; j++) {
+            var val = rightWords[j]
+            if(countWords[j+5][val] === undefined) {
+              countWords[j+5][val] = 1;
+              countWordsTot[val] = 1;
+                } else {
+                    countWords[j+5][val] = countWords[j+5][val] + 1;
+                    countWordsTot[val] = countWordsTot[val] + 1;
+                }
+            }
+
+
+        var val = keyword.toLowerCase()
+        if(countWords[4][val] === undefined) {
+          countWords[4][val] = 1;
+            } else {
+                countWords[4][val] = countWords[4][val] + 1;
+            }
+        }
+
+    for (var l = 0; l < countWords.length; l++) {
+        var dict = countWords[l]
+        var keys = Object.entries(dict).sort((a,b)=>b[1]-a[1]).map(el=>el[0])
+        wordOrder.push(keys)
+    }
+    var dicttot = countWordsTot
+    var totkeys = Object.entries(dicttot).sort((a,b)=>b[1]-a[1]).map(el=>el[0])
+    totkeys = totkeys.slice(0,20)
+    // console.log(wordOrder)
+    // console.log(totkeys)
+
+     var div = document.createElement('div');
+    div.innerHTML = fns;
+    div.style.textAlign='middle'
+    div.classList.add('text-nowrap');
+    //div.style.backgroundColor = color;
+    // div.classList.add('p2');
+    document.getElementById("filename").appendChild(div);
+
+    var div = document.createElement('div');
+    div.innerHTML = leftctx;
+    div.style.textAlign='right'
+    div.classList.add('text-nowrap');
+    //div.style.backgroundColor = color;
+    // div.classList.add('p2');
+
+    document.getElementById("leftconc").appendChild(div);
+    var div = document.createElement('div');
+    div.innerHTML = keywordctx;
+    div.style.textAlign='center'
+    div.style.color = "Blue";
+
+    document.getElementById("keyworddisplay").appendChild(div);
+    var div = document.createElement('div');
+    div.innerHTML = rightctx;
+    document.getElementById("rightconc").appendChild(div);
+    div.classList.add('text-nowrap');
+
+    //coloring based on sort position
+    const collection = document.getElementsByClassName(sortpos);
+    for (let i = 0; i < collection.length ; i++) {
+        collection[i].style.color = "red";
+    }
+    //recolor metafacetn selections
+    var items =Array.from(removedViaMetafacet);
+    for (const collectionKey in items) {
+        var collection1 = document.getElementsByClassName(items[collectionKey]);
+        for (let i = 0; i < collection1.length; i++) {
+            collection1[i].style.backgroundColor = "salmon";
+        }
+    }
+
+}
+<!-- Mosaic -->
+var mosaicPositions = ["left4","left3","left2","left1","filename","right1","right2","right3","right4"]
+const stopwords = new Set(['i','me','my','myself','we','our','ours','ourselves','you','your','yours','yourself','yourselves','he','him','his','himself','she','her','hers','herself','it','its','itself','they','them','their','theirs','themselves','what','which','who','whom','this','that','these','those','am','is','are','was','were','be','been','being','have','has','had','having','do','does','did','doing','a','an','the','and','but','if','or','because','as','until','while','of','at','by','for','with','about','against','between','into','through','during','before','after','above','below','to','from','up','down','in','out','on','off','over','under','again','further','then','once','here','there','when','where','why','how','all','any','both','each','few','more','most','other','some','such','no','nor','not','only','own','same','so','than','too','very','s','t','can','will','just','don','should','now']);
+
+function dataProcessMosaic(data,keyword){
+  document.getElementById("chart").innerHTML = '';
+
+    var countWords = [{},{},{},{},{},{},{},{},{}];
+    var countWordsTot ={}
+    var wordOrder = [];
+    var  concJSON;
+    concJSON = JSON.stringify(data.split("\n").map(x => ({text: x})))
+    const concobj = JSON.parse(concJSON );
+    for (let l = indextoremove.length -1; l >= 0; l--)
+        concobj.splice(indextoremove[l],1);
+
+    var leftctx = "";
+    var keywordctx ="";
+    var rightctx = "";
+
+    for (var i = 1; i < concobj.length-1; i++){
+        conc = concobj[i]['text'].split("|")
+        leftctx += conc[3].slice(0, 130)+'<br> ';
+        keywordctx += conc[3].slice(130,(130 + keyword.length)) + '<br> ';
+        rightctx += conc[3].slice((130 + keyword.length),conc[3].length)+'<br> ';
+
+
+        var lftWords = conc[3].slice(0, 130).replaceAll(/[.,\/#!\<\>$%\^&\*;:{}=_`?~()]/g,"").replaceAll(/\s{2,}/g," ");
+        lftWords = lftWords.toLowerCase()
+        lftWords = lftWords.split(' ');
+        // console.log(lftWords.slice(-7))
+        // console.log(lftWords.slice(-5,-1))
+        lftWords = lftWords.slice(-5,-1)
+        for (var k =0; k < lftWords.length; k++) {
+            var val = lftWords[k]
+            if(countWords[k][val] === undefined) {
+              countWords[k][val] = 1;
+              countWordsTot[val] = 1;
+                } else {
+                    countWords[k][val] = countWords[k][val] + 1;
+                    countWordsTot[val] = countWordsTot[val] + 1;
+                }
+            }
+
+        var rightWords = conc[3].slice((130+ keyword.length),conc[3].length).replaceAll(/[.,\/#!\<\>$%\^&\*;:{}?=_`~()]/g,"")
+        rightWords = rightWords.replaceAll(/\s{2,}/g," ");
+        rightWords = rightWords.toLowerCase()
+        rightWords = rightWords.split(' ');
+        rightWords = rightWords.slice(1,5)
+
+        for (var j =0; j < rightWords.length; j++) {
+            var val = rightWords[j]
+            if(countWords[j+5][val] === undefined) {
+              countWords[j+5][val] = 1;
+              countWordsTot[val] = 1;
+                } else {
+                    countWords[j+5][val] = countWords[j+5][val] + 1;
+                    countWordsTot[val] = countWordsTot[val] + 1;
+                }
+            }
+
+
+        var val = keyword.toLowerCase()
+        if(countWords[4][val] === undefined) {
+          countWords[4][val] = 1;
+            } else {
+                countWords[4][val] = countWords[4][val] + 1;
+            }
+    }
+
+  for (var l = 0; l < countWords.length; l++) {
+      var dict = countWords[l]
+      var keys = Object.entries(dict).sort((a,b)=>b[1]-a[1]).map(el=>el[0])
+      wordOrder.push(keys)
+  }
+
+  var dicttot = countWordsTot
+
+  //this is for doing stuff with the top n words in the mosaic
+  var totkeys = Object.entries(dicttot).sort((a,b)=>b[1]-a[1]).map(el=>el[0])
+  totkeys = totkeys.slice(0,20)
+
+   var Mwidth = 1800
+   var colwidth = 200
+
+   var margin = {top: 50, right: 45, bottom: 80, left: 45}, width = (Mwidth) , height = 1000 ;
+
+    svg = d3.select("#chart").classed("svg-container", true)
+   .append("svg")
+   // Responsive SVG needs these 2 attributes and no width and height attr.
+   .attr("preserveAspectRatio", "xMinYMin meet")
+   .attr("viewBox", "0 0 1900 1000")
+   // Class to make it responsive.
+   .classed("svg-content-responsive", true)
+   // Fill with a rectangle for visualization.
+     .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  // d3.select('body')
+  //   .append('div')
+  //   .attr('id', 'tooltip')
+  //   .attr('style', 'position: absolute; opacity: 0;');
+
+    //Draw rectangles
+    var position = 0;
+
+    //var color = d3.scale.category20();
+    var color =["#ffcc99","#99bbff"]
+
+    var frequency_min = (document.getElementById("customRange3").value * 1.0)/100;
+    var frequency_max = (document.getElementById("customRange4").value * 1.0)/100;
+
+    // used to calculate total of columns
+    const sumValues = obj => Object.values(obj).reduce((a, b) => a + b, 0);
+
+    var max = countWords[4][keyword];
+    document.getElementById("linesreturned").innerHTML ="Lines returned : "+ max;
+
+    var selectedRect;
+    for (var col = 0; col < countWords.length; col++) {
+
+        var heigthUsed = 0;
+        var order = wordOrder[col]
+        var currentCol = countWords[col]
+        //remove values under min frequency threshold
+        for (var word in currentCol) {
+            if ((currentCol[word] * 1.0) / max <= frequency_min) {
+                if (col != 4)
+                    delete currentCol[word];
+            }
+        }
+
+        for (var word in currentCol) {
+            if ((currentCol[word] * 1.0) / max > frequency_max) {
+                if (col != 4)
+                    delete currentCol[word];
+            }
+        }
+
+        //stopword removal
+
+        if (filterStopwords) {
+            for (var word in currentCol) {
+                if (stopwords.has(word)) {
+                    if (col != 4)
+                        delete currentCol[word];
+                }
+            }
+        }
+
+
+        var colMax = sumValues(countWords[col])
+
+
+
+        for (var word = 0; word < order.length; word++) {
+            var wordstr = order[word]
+            if( wordstr in currentCol) {
+              var boxH = currentCol[wordstr]
+              var rect = svg.append('rect')
+                      .attrs({
+                        x: col * colwidth,
+                        y: heigthUsed,
+                        width: ((col + 1) * (colwidth) - (col * colwidth)),
+                        height: 1000 * ((1.0 * boxH) / colMax)
+                      })
+                      .attr("id", "s" + col.toString() + wordstr)
+                      .attr("column", col )
+                      .attr("word", wordstr )
+                      .attr("count", boxH )
+                      .attr("freq", Math.round( 10000 * ((1.0 * boxH) / colMax)) /100.0)
+                      .attr("memcol", function (d) {
+                        return col === 4 ? 'steelblue' : totkeys.includes(wordstr) ? color[0+((word + ((col+1)%2)) % 2)] : color[0+((word + ((col+1)%2)) % 2)];
+                      })
+                      .style("fill", function (d) {
+                        return col === 4 ? 'steelblue' : totkeys.includes(wordstr) ? color[0+((word + ((col+1)%2)) % 2)] : color[0+((word + ((col+1)%2)) % 2)];
+                      }).on("click", function(d){
+                          d3.select(selectedRect).style("fill", d3.select(this).attr("memcol"));
+                          d3.select(selectedRect).style("stroke", 'black')
+                                .style("stroke-width", 0);
+
+                          d3.select(this).style("stroke", 'black')
+                                .style("stroke-width", 2);
+                          d3.select(this).style("fill", "white");
+                          selectedRect = this;
+
+                         var sel = document.querySelector('#profile-tab')
+                         bootstrap.Tab.getOrCreateInstance(sel).show()
+
+                          sort(mosaicPositions[d3.select(this).attr("column")])
+                          highlightWord(mosaicPositions[d3.select(this).attr("column")]+d3.select(this).attr("word"))
+                      })
+                      .on("mousemove", function (d) {
+                        tooltip.style("left", d3.event.pageX - 50 + "px")
+                              .style("top", d3.event.pageY - 70 + "px")
+                              .style("display", "inline-block")
+                              .html("Keyword : " + d3.select(this).attr("word")+"<br>"
+                                  +"Count : " + d3.select(this).attr("count")+"  "
+                               +"Frequency : " + d3.select(this).attr("freq")+"<br>");
+                        })
+    		        .on("mouseout", function(d){ tooltip.style("display", "none");});;
+
+              // .style("stroke-color", 'black')
+              // .style("stroke-width", 1)
+              var adjust =1;
+              if(wordstr.length>8)
+                  adjust = .9
+              if(boxH/colMax>.49)
+                  adjust =0.7
+
+              svg.append("text")
+                      .attr("x", function (d) {
+                        return (col * colwidth) + 100;
+                      })
+                      .attr("y", function (d) {
+                        return heigthUsed + ((1000 * ((1.0 * boxH) / colMax)) / 2) + 5;
+                      })
+                      .attr("id", "st" + col.toString() + wordstr)
+                      .style("text-anchor", "middle")
+                      .style("font-size", function (d) {
+                        return Math.round(col === 4 ? 24 : wordstr.length>5 ? (adjust * 120 * ((1.0 * boxH) / colMax)) : (adjust* 190 * ((1.0 * boxH) / colMax)));
+                      })
+                      .attr("opacity", function (d) {
+                        return (1000 * ((1.0 * boxH) / colMax)) > 12 ? 1 : 0;
+                      })
+                      .style("fill", "black")
+                      .text(wordstr);
+
+              heigthUsed += 1000 * ((1.0 * boxH) / colMax);
+            }
+        }
+    }
+  }
+
+    //metafacet
+    function buildConcMetadata(){
+
+        json = "[";
+
+        for (let i = 1; i < concrdance.length ; i++) {
+            var next = concrdance[i];
+            var attributes = next.text.split("|")
+            if(attributes.length<=1)
+                 continue;
+            var fn =  attributes[0].split(".")[0].split("/");
+            fn = fn[fn.length-1]
+            var section = "s1"
+            if(isSectionedHeader){
+                section = attributes[2];
+            }
+            var key = fn+section;
+                json += headermap[key]+",";
+        }
+        json = json.replaceAll(/(^,)|(,$)/g, "");
+        json+="]"
+        let result = Function("return " + json)();
+
+
+        loadData(result);
+
+    }
+
+  var metasvg,
+      defs,
+      gBrush,
+      brush,
+      main_xScale,
+      mini_xScale,
+      main_yScale,
+      mini_yScale,
+      main_yZoom,
+      main_xAxis,
+      main_yAxis,
+      mini_width,
+      textScale,
+      numConclines,
+      dropdown,
+      initdata;
+
+var attrSelected ="Filename";
+var removedKeys = new Set();
+var shouldSort = false;
+
+//stores the reordered data so we can extraxt metadata assoiated with attribute keys
+var nested;
+
+dropdown = d3.select("#chart2").append("div")
+                .attr("id","drop")
+                .attr("align","centre")
+                ;
+
+//Added only for the mouse wheel
+var zoomer = d3.behavior.zoom()
+    .on("zoom", null);
+
+var main_margin = {top: 10, right: 10, bottom: 30, left: 190},
+    main_width = 700 - main_margin.left - main_margin.right,
+    main_height = 550 - main_margin.top - main_margin.bottom;
+
+var mini_margin = {top: 10, right: 10, bottom: 30, left: 10},
+    mini_height = 550 - mini_margin.top - mini_margin.bottom;
+mini_width = 100 - mini_margin.left - mini_margin.right;
+
+metasvg = d3.select("#chart2").append("svg")
+        .attr("class", "svgWrapper")
+        .attr("width", main_width + main_margin.left + main_margin.right + mini_width + mini_margin.left + mini_margin.right)
+        .attr("height", main_height + main_margin.top + main_margin.bottom)
+        .call(zoomer)
+        .on("wheel.zoom", scroll)
+        //.on("mousewheel.zoom", scroll)
+        //.on("DOMMouseScroll.zoom", scroll)
+        //.on("MozMousePixelScroll.zoom", scroll)
+        //Is this needed?
+        .on("mousedown.zoom", null)
+        .on("touchstart.zoom", null)
+        .on("touchmove.zoom", null)
+        .on("touchend.zoom", null);
+
+
+    var selector = d3.select("#drop")
+    .append("select")
+    .attr("id","dropdown")
+    .on("change", function(d){
+            selection = document.getElementById("dropdown");
+            metasvg.selectAll("*").remove();
+            //d3.select("#dropdown").remove();
+            attrSelected = selection.value;
+            dataProcessMetafacet(selection.value);
+    });
+
+    var checkbox = d3.select("#drop")
+    .append("input")
+    .attr("type","checkbox")
+    .attr("id","cb")
+    .attr("name","cb")
+    .on("change", function(d){
+            if(shouldSort ===true)
+                shouldSort = false
+            else
+                shouldSort = true;
+            selection = document.getElementById("dropdown");
+            dataProcessMetafacet(selection.value);
+
+    });
+    d3.select("#drop")
+    .append("label")
+    .attr("for","cb")
+    .text("Sort by frequency");
+
+
+//    var elements = ["Filename","Title", "Collection_Title", "Editor", "Author", "Publication_Date", "Authorship_Date", "Translator",
+//        "Source_Date", "Source_Filename", "Source_Language", "Original_Title" ,"Outlet", "Internet_Outlet","Format"];
+        var elements = ["Filename","Title", "Collection_Title", "Editor", "Author"];
+
+
+var tooltip = d3.select("body").append("div").attr("class", "toolTip");
+
+  function init() {
+
+
+    /////////////////////////////////////////////////////////////
+    ///////////////// Set-up SVG and wrappers ///////////////////
+    /////////////////////////////////////////////////////////////
+
+    selector.selectAll("option")
+      .data(elements)
+      .enter().append("option")
+      .attr("value", function(d){
+        return d;
+      })
+      .text(function(d){
+        return d;
+      });
+
+
+    var mainGroup = metasvg.append("g")
+            .attr("class","mainGroupWrapper")
+            .attr("transform","translate(" + main_margin.left + "," + main_margin.top + ")")
+            .append("g") //another one for the clip path - due to not wanting to clip the labels
+            .attr("clip-path", "url(#clip)")
+            .style("clip-path", "url(#clip)")
+            .attr("class","mainGroup")
+
+
+    var miniGroup = metasvg.append("g")
+            .attr("class","miniGroup")
+            .attr("transform","translate(" + (main_margin.left + main_width + main_margin.right + mini_margin.left) + "," + mini_margin.top + ")");
+
+    var brushGroup = metasvg.append("g")
+            .attr("class","brushGroup")
+            .attr("transform","translate(" + (main_margin.left + main_width + main_margin.right + mini_margin.left) + "," + mini_margin.top + ")");
+
+    /////////////////////////////////////////////////////////////
+    ////////////////////// Initiate scales //////////////////////
+    /////////////////////////////////////////////////////////////
+
+    main_xScale = d3.scale.linear().range([0, main_width]);
+    mini_xScale = d3.scale.linear().range([0, mini_width]);
+
+    main_yScale = d3.scale.ordinal().rangeBands([0, main_height], 0.4, 0);
+    mini_yScale = d3.scale.ordinal().rangeBands([0, mini_height], 0.4, 0);
+
+    //Based on the idea from: http://stackoverflow.com/questions/21485339/d3-brushing-on-grouped-bar-chart
+    main_yZoom = d3.scale.linear()
+        .range([0, main_height])
+        .domain([0, main_height]);
+
+    //Create x axis object
+    main_xAxis = d3.svg.axis()
+      .scale(main_xScale)
+      .orient("bottom")
+      .ticks(4)
+      //.tickSize(0)
+      .outerTickSize(0);
+
+    //Add group for the x axis
+    d3.select(".mainGroupWrapper").append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(" + 0 + "," + (main_height + 5) + ")");
+
+    //Create y axis object
+    main_yAxis = d3.svg.axis()
+      .scale(main_yScale)
+      .orient("left")
+      .tickSize(0)
+      .outerTickSize(0);
+
+    //Add group for the y axis
+    mainGroup.append("g")
+        .attr("class", "y axis")
+        .attr("transform", "translate(-5,0)");
+
+    /////////////////////////////////////////////////////////////
+    /////////////////////// Update scales ///////////////////////
+    /////////////////////////////////////////////////////////////
+
+    //Update the scales
+    main_xScale.domain([0, d3.max(data, function(d) { return d.values; })]);
+    mini_xScale.domain([0, d3.max(data, function(d) { return d.values; })]);
+    main_yScale.domain(data.map(function(d) { return d.key; }));
+    mini_yScale.domain(data.map(function(d) { return d.key; }));
+
+    //Create the visual part of the y axis
+    d3.select(".mainGroup").select(".y.axis").call(main_yAxis);
+    d3.select(".mainGroupWrapper").select(".x.axis").call(main_xAxis);
+
+
+
+
+    /////////////////////////////////////////////////////////////
+    ///////////////////// Label axis scales /////////////////////
+    /////////////////////////////////////////////////////////////
+
+    textScale = d3.scale.linear()
+      .domain([15,50])
+      .range([12,6])
+      .clamp(true);
+
+    /////////////////////////////////////////////////////////////
+    ///////////////////////// Create brush //////////////////////
+    /////////////////////////////////////////////////////////////
+
+    //What should the first extent of the brush become - a bit arbitrary this
+    var brushExtent = Math.max( 0,  Math.floor(data.length*.7)  );
+
+    brush = d3.svg.brush()
+        .y(mini_yScale)
+        .extent([mini_yScale(data[0].key), mini_height])
+        .on("brush", brushmove)
+        //.on("brushend", brushend);
+
+    //Set up the visual part of the brush
+    gBrush = d3.select(".brushGroup").append("g")
+      .attr("class", "brush")
+      .call(brush);
+
+    gBrush.selectAll(".resize")
+      .append("line")
+      .attr("x2", mini_width);
+
+    gBrush.selectAll(".resize")
+      .append("path")
+      .attr("d", d3.svg.symbol().type("triangle-up").size(20))
+      .attr("transform", function(d,i) {
+        return i ? "translate(" + (mini_width/2) + "," + 4 + ") rotate(180)" : "translate(" + (mini_width/2) + "," + -4 + ") rotate(0)";
+      });
+
+    gBrush.selectAll("rect")
+      .attr("width", mini_width);
+
+    //On a click recenter the brush window
+    gBrush.select(".background")
+      .on("mousedown.brush", brushcenter)
+      .on("touchstart.brush", brushcenter);
+
+    ///////////////////////////////////////////////////////////////////////////
+    /////////////////// Create a rainbow gradient - for fun ///////////////////
+    ///////////////////////////////////////////////////////////////////////////
+
+    defs = metasvg.append("defs")
+
+    //Create two separate gradients for the main and mini bar - just because it looks fun
+    createGradient("gradient-rainbow-main", "60%");
+    createGradient("gradient-rainbow-mini", "13%");
+
+    //Add the clip path for the main bar chart
+    defs.append("clipPath")
+      .attr("id", "clip")
+      .append("rect")
+	    .attr("x", -main_margin.left)
+      .attr("width", main_width + main_margin.left)
+      .attr("height", main_height);
+
+    /////////////////////////////////////////////////////////////
+    /////////////// Set-up the mini bar chart ///////////////////
+    /////////////////////////////////////////////////////////////
+
+    //The mini brushable bar
+    //DATA JOIN
+    var mini_bar = d3.select(".miniGroup").selectAll(".bar")
+      .data(data, function(d) { return d.key; });
+
+    //UDPATE
+    mini_bar
+      .attr("width", function(d) { return mini_xScale(d.values); })
+      .attr("y", function(d,i) { return mini_yScale(d.key); })
+      .attr("height", mini_yScale.rangeBand());
+
+    //ENTER
+    mini_bar.enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", 0)
+      .attr("width", function(d) { return mini_xScale(d.values); })
+      .attr("y", function(d,i) { return mini_yScale(d.key); })
+      .attr("height", mini_yScale.rangeBand())
+      .style("fill", "url(#gradient-rainbow-mini)");
+
+    //EXIT
+    mini_bar.exit()
+      .remove();
+
+    //Start the brush
+    gBrush.call(brush.event);
+    brushmove();
+
+
+    var dragstartPos;
+    function dragStart() {
+            dragstartPos = d3.mouse(this);
+        }
+
+    function dragMove() {
+        var p = d3.mouse(this);
+        d3.select(".mainGroup").selectAll(".bar")
+            .each(function(b) {
+                var shouldRemove = false;
+                var yval = +d3.select(this).attr('y')
+                var shouldremove = false;
+                if (dragstartPos[0] < main_width + main_margin.left + main_margin.right){
+                    if (p[1] > dragstartPos[1])
+                        shouldremove = yval > dragstartPos[1] && yval < p[1];
+                    if (p[1] < dragstartPos[1])
+                        shouldremove = yval < dragstartPos[1] && yval > p[1];
+                    if(shouldremove ){
+                        var currentColor =  "red" ;
+                        var opacity =  0.3;
+                        d3.select(this).style("fill", currentColor);
+                        d3.select(this).style("opacity", opacity);
+                    }
+                }
+      });
+  }
+
+    function dragEnd() {
+        var p = d3.mouse(this);
+        d3.select(".mainGroup").selectAll(".bar")
+            .each(function(b) {
+                var yval = +d3.select(this).attr('y')
+                var shouldremove = false;
+                if (dragstartPos[0] < main_width + main_margin.left + main_margin.right){
+                    if (p[1] > dragstartPos[1])
+                        shouldremove = yval > dragstartPos[1] && yval < p[1];
+                    if (p[1] < dragstartPos[1])
+                        shouldremove = yval < dragstartPos[1] && yval > p[1];
+                    if(shouldremove ){
+                        var currentColor = "red" ;
+                        var opacity =  0.3 ;
+                        d3.select(this).style("fill", currentColor);
+                        d3.select(this).style("opacity", opacity);
+                        remove(b.key);
+                     }
+                 }
+
+      });
+      // vec.redisplay();
+    }
+
+
+    var dragBehavior = d3.behavior.drag()
+    .on("dragstart", dragStart)
+    .on("drag", dragMove)
+    .on("dragend", dragEnd);
+
+    metasvg.call(dragBehavior);
+
+  }//init
+
+  //Function runs on a brush move - to update the big bar chart
+  function update() {
+
+    /////////////////////////////////////////////////////////////
+    ////////// Update the bars of the main bar chart ////////////
+    /////////////////////////////////////////////////////////////
+
+    //DATA JOIN
+    var bar = d3.select(".mainGroup").selectAll(".bar")
+        .data(data, function(d) { return d.key; });
+
+    //UPDATE
+    bar
+      .attr("x", 0)
+      .attr("width", function(d) { return main_xScale(d.values); })
+      .attr("y", function(d,i) { return main_yScale(d.key); })
+      .attr("height", main_yScale.rangeBand())
+      .on("click", function(d) {
+          if ( d3.event.ctrlKey) {
+            d3.select(".mainGroup").selectAll(".bar")
+                    .each(function(b) {
+                        var shouldRemove = true;
+                        if(b.key === d.key)
+                            shouldRemove = false;
+                        var currentColor =  shouldRemove ?  "red":"url(#gradient-rainbow-main)" ;
+                        var opacity =  shouldRemove ? 0.3 : 1.0;
+                        d3.select(this).style("fill", currentColor);
+                        d3.select(this).style("opacity", opacity);
+                        shouldRemove ? remove(b.key): add(b.key); ;
+              });
+        }
+        else{
+            var removed = false;
+            var allRemoved = true;
+            nested.map(function(m) {
+                if(m.key === d.key){
+                    m.values.map(function(v) { if(removedKeys.has(v.Filename+v.ID)){
+                            removed = true;
+                    }else{
+                        allRemoved = false;
+                    }});
+                };
+            });
+            var colChoice = allRemoved ?   "orange" :"red";
+            var currentColor =  removed ? "url(#gradient-rainbow-main)" : colChoice;
+            var opacity =  removed ? 1.0 : 0.3;
+            d3.select(this).style("fill", currentColor);
+            d3.select(this).style("opacity", opacity);
+            removed ? add(d.key) : remove(d.key);
+            }
+                 // vec.redisplay();
+    })
+      .on("mousemove", function(d){
+            tooltip
+              .style("left", d3.event.pageX - 50 + "px")
+              .style("top", d3.event.pageY - 70 + "px")
+              .style("display", "inline-block")
+              .html("Number of lines with attribute "+(d.key) +" : "+ (d.values)
+              +"<br>Concordance Size : " +numConclines);
+        })
+    		.on("mouseout", function(d){ tooltip.style("display", "none");});;
+
+    //ENTER
+    bar.enter().append("rect")
+      .attr("class", "bar")
+      .style("fill",function(d) {
+        var removed = false;
+        var allRemoved = true;
+        nested.map(function(m) {
+            if(m.key === d.key){
+                m.values.map(function(v) { if(removedKeys.has(v.Filename+v.ID)){
+                        removed = true;
+                }else{
+                    allRemoved = false;
+                }});
+            };
+        });
+        var colChoice = allRemoved ? "red" : "orange";
+        var col = removed ? colChoice : "url(#gradient-rainbow-main)";
+        return col;
+    })
+       .style("opacity", function(d) {
+            var removed = false;
+            nested.map(function(m) {
+                if(m.key === d.key){
+                    m.values.map(function(v) { if(removedKeys.has(v.Filename+v.ID)){
+                            removed = true;
+                    } });
+                };
+            });
+            var opacity =  removed ? 0.3 : 1.0;
+            return opacity;
+         })
+      .attr("x", 0)
+      .attr("width", function(d) { return main_xScale(d.values); })
+      .attr("y", function(d,i) { return main_yScale(d.key); })
+      .attr("height", main_yScale.rangeBand());
+
+    //EXIT
+    bar.exit()
+      .remove();
+
+  }//update
+
+  /////////////////////////////////////////////////////////////
+  ////////////////////// Brush functions //////////////////////
+  /////////////////////////////////////////////////////////////
+
+  //First function that runs on a brush move
+  function brushmove() {
+
+    var extent = brush.extent();
+
+    //Reset the part that is visible on the big chart
+    var originalRange = main_yZoom.range();
+    main_yZoom.domain( extent );
+
+    /////////////////////////////////////////////////////////////
+    ///////////////////// Update the axis ///////////////////////
+    /////////////////////////////////////////////////////////////
+
+    //Update the domain of the x & y scale of the big bar chart
+    main_yScale.domain(data.map(function(d) { return d.key; }));
+    main_yScale.rangeBands( [ main_yZoom(originalRange[0]), main_yZoom(originalRange[1]) ], 0.4, 0);
+
+    //Update the y axis of the big chart
+    d3.select(".mainGroup")
+      .select(".y.axis")
+      .call(main_yAxis);
+
+    /////////////////////////////////////////////////////////////
+    /////////////// Update the mini bar fills ///////////////////
+    /////////////////////////////////////////////////////////////
+
+    //Update the colors within the mini bar chart
+    var selected = mini_yScale.domain()
+      .filter(function(d) { return (extent[0] - mini_yScale.rangeBand() + 1e-2 <= mini_yScale(d)) && (mini_yScale(d) <= extent[1] - 1e-2); });
+    //Update the colors of the mini chart - Make everything outside the brush grey
+    d3.select(".miniGroup").selectAll(".bar")
+      .style("fill", function(d, i) { return selected.indexOf(d.key) > -1 ? "url(#gradient-rainbow-mini)" : "#e0e0e0"; });
+
+    //Update the label size
+    d3.selectAll(".y.axis text")
+      .style("font-size", textScale(selected.length));
+
+    //Update the big bar chart
+    update();
+
+  }//brushmove
+
+  /////////////////////////////////////////////////////////////
+  ////////////////////// Click functions //////////////////////
+  /////////////////////////////////////////////////////////////
+
+  //Based on http://bl.ocks.org/mbostock/6498000
+  //What to do when the user clicks on another location along the brushable bar chart
+  function brushcenter() {
+    var target = d3.event.target,
+        extent = brush.extent(),
+        size = extent[1] - extent[0],
+        range = mini_yScale.range(),
+        y0 = d3.min(range) + size / 2,
+        y1 = d3.max(range) + mini_yScale.rangeBand() - size / 2,
+        center = Math.max( y0, Math.min( y1, d3.mouse(target)[1] ) );
+
+    d3.event.stopPropagation();
+
+    gBrush
+        .call(brush.extent([center - size / 2, center + size / 2]))
+        .call(brush.event);
+
+  }//brushcenter
+
+  /////////////////////////////////////////////////////////////
+  ///////////////////// Scroll functions //////////////////////
+  /////////////////////////////////////////////////////////////
+
+  function scroll() {
+
+    //Mouse scroll on the mini chart
+    var extent = brush.extent(),
+      size = extent[1] - extent[0],
+      range = mini_yScale.range(),
+      y0 = d3.min(range),
+      y1 = d3.max(range) + mini_yScale.rangeBand(),
+      dy = d3.event.deltaY,
+      topSection;
+
+    if ( extent[0] - dy < y0 ) { topSection = y0; }
+    else if ( extent[1] - dy > y1 ) { topSection = y1 - size; }
+    else { topSection = extent[0] - dy; }
+
+    //Make sure the page doesn't scroll as well
+    d3.event.stopPropagation();
+    d3.event.preventDefault();
+
+    gBrush
+        .call(brush.extent([ topSection, topSection + size ]))
+        .call(brush.event);
+
+  }//scroll
+
+  /////////////////////////////////////////////////////////////
+  ///////////////////// Helper functions //////////////////////
+  /////////////////////////////////////////////////////////////
+
+  //Create a gradient
+  function createGradient(idName, endPerc) {
+
+    var coloursRainbow = ["#EFB605", "#E9A501", "#E48405", "#E34914", "#DE0D2B", "#CF003E", "#B90050", "#A30F65", "#8E297E", "#724097", "#4F54A8", "#296DA4", "#0C8B8C", "#0DA471", "#39B15E", "#7EB852"];
+
+    defs.append("linearGradient")
+      .attr("id", idName)
+      .attr("gradientUnits", "userSpaceOnUse")
+      .attr("x1", "0%").attr("y1", "0%")
+      .attr("x2", endPerc).attr("y2", "0%")
+      .selectAll("stop")
+      .data(coloursRainbow)
+      .enter().append("stop")
+      .attr("offset", function(d,i) { return i/(coloursRainbow.length-1); })
+      .attr("stop-color", function(d) { return d; });
+  }//createGradient
+
+  //Function to generate random strings of 5 letters - for the demo only
+  function makeWord() {
+      var possible_UC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      var text = possible_UC.charAt(Math.floor(Math.random() * possible_UC.length));
+
+      var possible_LC = "abcdefghijklmnopqrstuvwxyz";
+
+      for( var i=0; i < 5; i++ )
+          text += possible_LC.charAt(Math.floor(Math.random() * possible_LC.length));
+
+      return text;
+  }//makeWord
+
+    function loadData(arr){
+
+         initdata = arr;
+        // get data length == number of concordance lines
+         numConclines = initdata.length;
+         removedKeys = new Set();
+                // vec.updateVector();
+        data = initdata[0];
+        elements = Object.keys(data);
+        dataProcessMetafacet(elements[0]);
+    }
+
+    function dataProcessMetafacet(attribute){
+
+        metasvg.selectAll("*").remove();
+        var nameCount = d3.nest()
+        .key(function(d) { return d[attribute]; })
+        .rollup(function(v) { return v.length; })
+        .entries(initdata);
+
+        if(shouldSort)
+            nameCount= nameCount.sort(function(a, b){ return d3.descending(a.values, b.values); });
+         nested = d3.nest()
+        .key(function(d) { return d[attribute]; })
+        .entries(initdata);
+
+        data = nameCount;
+        init();
+    }
+
+    function remove(key){
+        nested.map(function(m) {
+            if (m.key === key) {
+                m.values.map(function (v) {
+                    if (v.ID === "ignore") {
+                        const collection = document.getElementsByClassName(v.Filename + ".xml");
+                        for (let i = 0; i < collection.length; i++) {
+                            collection[i].style.backgroundColor = "salmon";
+                            collection[i].classList.add("toremove");
+                            removedKeys.add(v.Filename + v.ID );
+                            removedViaMetafacet.add(v.Filename+".xml");
+                        }
+                    } else {
+                        const collection = document.getElementsByClassName(v.Filename + ".xml" + v.ID);
+                        for (let i = 0; i < collection.length; i++) {
+                            collection[i].style.backgroundColor = "salmon";
+                            collection[i].classList.add("toremove");
+                            removedKeys.add(v.Filename + v.ID);
+                            removedViaMetafacet.add(v.Filename+".xml"+ v.ID);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    function hide() {
+        const collection = document.getElementsByClassName("toremove");
+        for (let i = 0; i < collection.length; i++) {
+            collection[i].style.display = "none";
+        }
+        dataProcess(currentData,currentKeyword);
+        dataProcessMosaic(currentData,currentKeyword);
+        buildConcMetadata();
+        removedKeys = new Set();
+    }
+
+
+
+    function add(key){
+        nested.map(function(m) {
+            if (m.key === key) {
+                m.values.map(function (v) {
+                    if (v.ID === "ignore") {
+                        const collection = document.getElementsByClassName(v.Filename + ".xml");
+                        for (let i = 0; i < collection.length; i++) {
+                            collection[i].style.backgroundColor = "white";
+                            collection[i].classList.remove("toremove");
+                            removedKeys.delete(v.Filename + v.ID);
+                            removedViaMetafacet.delete(v.Filename+".xml");
+                        }
+                    } else {
+                        const collection = document.getElementsByClassName(v.Filename + ".xml" + v.ID);
+                        for (let i = 0; i < collection.length; i++) {
+                            collection[i].style.backgroundColor = "white";
+                            collection[i].classList.remove("toremove");
+                            removedKeys.delete(v.Filename  + v.ID);
+                            removedViaMetafacet.delete(v.Filename+".xml" + v.ID);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+
+  </script>
+
+
+
+
+
+
+
+  </body>
+</html>
