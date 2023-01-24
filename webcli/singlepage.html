@@ -187,8 +187,8 @@
       <div class="card card-body">
                 <!-- <img src="https://genealogies.mvm.ed.ac.uk/omc/headers/omc000001-figure-1-1.png"> -->
               <select class="form-select" id = "corpusSelect" onchange="corpChanged()">
-              <option value="1241">Gok English</option>
-              <option selected value="1245">OMC</option>
+              <option value="/gok-en-server">Gok English</option>
+              <option selected value="/omc-server">OMC</option>
             </select>
 
             <select class="form-select" id = "markdownSelect">
@@ -477,7 +477,7 @@ function updateTextBox(){
     };
 
 async function fetchSubcorpusAttributesd(corpus){
-    let text0 = 'http://genealogies.mvm.ed.ac.uk:'
+    let text0 = 'https://genealogies.mvm.ed.ac.uk'
     let text1 =text0.concat(corpus).concat('/attchooser?')
     let text3 ='request=attchooserspecs'
     let text4 = text1.concat(text3)
@@ -508,7 +508,7 @@ async function fetchSubcorpusAttributesd(corpus){
 
 // http://genealogies.mvm.ed.ac.uk:1245/attoptions?request=attoptions&xqueryattribs=
 async function fetchSubcorpusAttribute(corpus,selector){
-    let text0 = 'http://genealogies.mvm.ed.ac.uk:'
+    let text0 = 'https://genealogies.mvm.ed.ac.uk'
     let text1 =text0.concat(corpus).concat('/attoptions?')
     let text3 ='request=attoptions&xqueryattribs='
     let text4 = text1.concat(text3).concat(selector)
@@ -537,7 +537,7 @@ async function fetchSubcorpusAttribute(corpus,selector){
        removedViaMetafacet = new Set();
        indextoremove =[];
        sortpos ="filename";
-      let text0 = 'http://genealogies.mvm.ed.ac.uk:'
+      let text0 = 'https://genealogies.mvm.ed.ac.uk'
       let text1 =text0.concat(corpus).concat('/concordancer?sgml=').concat(markdowSelect).concat('&keyword=')
       let text2 =text1.concat(keyword.replaceAll("+","%2b"))
       let text3 ='&case=insensitive&context=130&request=concord'
@@ -568,7 +568,7 @@ async function fetchSubcorpusAttribute(corpus,selector){
 }
 
  async function fetchheader(corpus) {
-  let text0 = 'http://genealogies.mvm.ed.ac.uk:'
+  let text0 = 'https://genealogies.mvm.ed.ac.uk'
   let text1 =text0.concat(corpus).concat('/allheaders?request=dldHeaders')
   let headers = "";
   try {
