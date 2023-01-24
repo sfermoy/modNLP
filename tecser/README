@@ -17,6 +17,18 @@ Sample Unix (SystemV) startup scripts are included which can be
 adapted to your server (tecser-sysV-startup.sh for CentOS and 
 ../bin/tecser-init.d.sh for Debian/Ubuntu).
 
+In order to proxy the concordances etc via an apache webserver, user
+reverse proxying, by adding the following to
+/etc/httpd/conf/http.conf (for instance):
+
+ProxyRequests Off
+ProxyPass /omc-server http://localhost:1245
+ProxyPassReverse /omc-server http://localhost:1245
+
+ProxyPass /gok-en-server http://localhost:1241
+ProxyPassReverse /gok-en-server http://localhost:1241
+
+
 ABOUT TEC
 ==========
 
