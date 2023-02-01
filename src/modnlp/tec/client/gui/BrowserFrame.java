@@ -598,6 +598,14 @@ public class BrowserFrame extends BrowserGUI
     }
   }
 
+  /**
+   * Describe <code>addRemoteCorpusMenuItem</code> Add items from tecli.properties.
+   *
+   * @param server a <code>String</code> value
+   * @param port an <code>int</code> value
+   * @param mentry a <code>String</code> value
+   * @deprecated 
+   */
   public void addRemoteCorpusMenuItem (final String server, final int port, String mentry) {
     JMenuItem mi = new JMenuItem(mentry);
     fileMenu.add(mi, 3);
@@ -616,7 +624,26 @@ public class BrowserFrame extends BrowserGUI
     }
   }
   
-    
+
+  public void addRemoteCorpusMenuItem (final String webcli, String mentry) {
+    JMenuItem mi = new JMenuItem(mentry);
+    fileMenu.add(mi, 3);
+    try {
+      mi.addActionListener(
+                            new ActionListener(){
+                              public void actionPerformed(ActionEvent event)
+                              {
+                                parent.setRemoteCorpus(webcli);
+                              }
+                            });
+    }
+    catch (Exception e) {
+      System.err.println("Warning (BrowserFrame): error loading plugin: "+e);
+      e.printStackTrace(System.err);
+    }
+  }
+
+  
   // ok
   public void itemStateChanged(ItemEvent e) {
     JMenuItem source = (JMenuItem)(e.getSource());

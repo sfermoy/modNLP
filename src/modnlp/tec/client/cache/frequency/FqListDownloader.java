@@ -168,7 +168,7 @@ public class FqListDownloader implements Runnable{
       }
       else {
         TecClientRequest rq = new TecClientRequest();
-        rq.setServerURL("http://"+parent.getRemoteServer());
+        rq.setServerURL(parent.getRemoteWebcli());
         rq.setServerPORT(parent.getRemotePort());
         rq.put("request","freqlist");
         //if (parent.isSubCorpusSelectionON()){

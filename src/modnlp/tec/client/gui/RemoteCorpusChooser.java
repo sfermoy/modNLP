@@ -48,7 +48,7 @@ public class RemoteCorpusChooser {
   public int showChooseCorpus () {
     String nip  = JOptionPane.
       showInputDialog(parent, 
-                      "IP address of new corpus server (hostname:port)",
+                      "IP address of new corpus server (URL)",
                       ipaddress);
     if (nip == null)
       return CANCEL_OPTION;
@@ -58,12 +58,19 @@ public class RemoteCorpusChooser {
     return ENTER_OPTION;
   }
 
+  public String getFQDN() {
+    return ipaddress;
+  }
+
+  
   public String getServer() {
     return ipaddress.substring(0,ipaddress.indexOf(':'));
   }
 
   public int getPort() {
-    return new Integer(ipaddress.substring(ipaddress.indexOf(':')+1)).intValue();
+    if (ipaddress.indexOf(':') < 1)
+      return new Integer(0);
+    else
+      return new Integer(ipaddress.substring(ipaddress.indexOf(':')+1)).intValue();
   }
-
 }

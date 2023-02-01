@@ -78,17 +78,60 @@ public class TecClientRequest extends Hashtable<String,String> {
   public String getServerProgramPath () {
     return serverProgramPath;
   }
+
   public boolean isValidURL () {
     return (serverURL != null && serverProgramPath != null);
   }
+
   public String getURLQueryBase () {
     if (this.isValidURL())
       if (serverPORT > 0)
-        return getServerURL()+":"+getServerPORT()+getServerProgramPath()+"?";
+        return getServerURL().lastIndexOf(":") > 6 ?
+          getServerURL()+getServerProgramPath()+"?" :
+          getServerURL()+":"+getServerPORT()+getServerProgramPath()+"?";
       else
         return getServerURL()+getServerProgramPath()+"?";
     else
       return "";
+  }
+
+  // get fully qualified domain name (e.g. genealogies.mvm.ed.ac.uk)
+  public static String getServerFQDN (String url) {
+    String fqdn = getServerURLBase(url);
+    return fqdn.substring(fqdn.lastIndexOf("/")+1);
+  }
+
+  
+  
+  public static String getServerURLBase (String url) {
+      int ei = getServerURLBaseEnd(url);
+      if (ei < 0)
+        ei = url.length();
+      return url.substring(0,ei);
+  }
+
+  public static int getServerURLPort (String url) {
+    String port = getServerURLBase(url);
+    int st = port.lastIndexOf(":");
+    if (st < 0 || st+1 >= port.length())
+      return -1;
+    try {
+      return (new Integer(port.substring(st+1))).intValue();
+    }
+    catch (Exception e){
+      return -1;
+    }
+  }
+    
+  public static String getServerURLPath (String url) {
+      int ei = getServerURLBaseEnd(url);
+      if (ei < 0)
+        return "";
+      return url.substring(ei+1);
+  }
+    
+  public static int getServerURLBaseEnd (String url) {
+    return url.indexOf('/',10);
   }
 
   /** Test the type of request against a predefined table

@@ -70,7 +70,7 @@ public class Browser
 {
 
   // constants
-  public static final String RELEASE = "0.9.2";
+  public static final String RELEASE = "0.9.3";
   public static final String REVISION = "$Revision: 1.9 $";
   String BRANDNAME = "MODNLP/T";
   private static final String PLGLIST = "teclipluginlist.txt";
@@ -88,6 +88,7 @@ public class Browser
   /** Default port */
   private int remotePort = 1240;
   /** Deafult URL where to find header files */
+  private String remoteWebcli;
   private String headerBaseURL;
   private String headerExt = "hed";
   private String keywordString;
@@ -251,15 +252,15 @@ public class Browser
     System.err.println("addRemoteCorpusMenu: setting remote corpus menu: "+ st);
     while (st.hasMoreTokens()){
       String s = st.nextToken();
-      StringTokenizer st2 = new StringTokenizer(s, ":");
-      if (st2.countTokens() != 3){
+      StringTokenizer st2 = new StringTokenizer(s, "\t");
+      if (st2.countTokens() != 2){
         System.err.println("addRemoteCorpusMenu: wrong corpus spec in tecli.properties: "+ s);
       }
       else{
         String menudesc = st2.nextToken();
-        String server = st2.nextToken();
-        int port = new Integer(st2.nextToken()).intValue();
-        browserFrame.addRemoteCorpusMenuItem(server, port, menudesc);
+        String webcli_server = st2.nextToken();
+        //int port = new Integer(st2.nextToken()).intValue();
+        browserFrame.addRemoteCorpusMenuItem(webcli_server, menudesc);
       }
     }
   }
@@ -329,7 +330,7 @@ public class Browser
       concordanceProducer.start();
     }
     else {
-      request.setServerURL("http://"+remoteServer);
+      request.setServerURL(remoteWebcli);
       request.setServerPORT(remotePort);
       request.setServerProgramPath("/concordancer");
       concThread = new ConcordanceThread(concVector, request);
@@ -472,8 +473,8 @@ public class Browser
       request.put("position",filepos);
       request.put("request","extract");
       request.put("keyword",keywordString);
-      request.setServerURL("http://"+remoteServer);
-      request.setServerPORT(remotePort);
+      request.setServerURL(remoteWebcli);
+      //request.setServerPORT(remotePort);
       request.setServerProgramPath("/extractor");
       //if (concThread != null && concThread.isAlive() ){
       //concThread.stop();
@@ -704,9 +705,10 @@ public class Browser
   }
 
   public void chooseNewRemoteCorpus () {
+    // default corpus location
+    String dcl = clProperties.getCorpusURL();
     RemoteCorpusChooser rcc = 
-      new RemoteCorpusChooser(browserFrame, clProperties.getProperty("tec.client.server")+":"+
-                              clProperties.getProperty("tec.client.port"));
+      new RemoteCorpusChooser(browserFrame, dcl);
     int r;
     if ((r = rcc.showChooseCorpus()) == RemoteCorpusChooser.CANCEL_OPTION)
       return;
@@ -715,18 +717,34 @@ public class Browser
     else
       firstRemoteFlag = false;
 
-    String s = rcc.getServer();
-    int p =  rcc.getPort();
-    setRemoteCorpus(s,p);
+    //String s = rcc.getServer();
+    //int p =  rcc.getPort();
+    setRemoteCorpus(rcc.getFQDN());
   }
   
   public void setRemoteCorpus(String s, int p){
     remoteServer = s;
     remotePort = p;
+    remoteWebcli = "http://"+s+":"+p;
     standAlone = false;
     TecClientRequest request = new TecClientRequest();
     request.setServerURL("http://"+remoteServer);
     request.setServerPORT(remotePort);
+    setRemoteCorpus(request);
+  }
+  
+  public void setRemoteCorpus(String url){
+    remoteServer = TecClientRequest.getServerFQDN(url);
+    remotePort = TecClientRequest.getServerURLPort(url);
+    remoteWebcli = url;
+    standAlone = false;
+    TecClientRequest request = new TecClientRequest();
+    request.setServerURL(url);
+    request.setServerPORT(-1);
+    setRemoteCorpus(request);
+  }
+
+  private void setRemoteCorpus(TecClientRequest request) {   
     request.put("request","headerbaseurl");
     request.setServerProgramPath("/headerbaseurl");
     try {
@@ -822,7 +840,7 @@ public class Browser
     
     String lc = (sal != null && sal.equals("yes")) ?
       clProperties.getProperty("last.index.dir") :
-      clProperties.getProperty("tec.client.server")+":"+clProperties.getProperty("tec.client.port");
+      clProperties.getCorpusURL();
     
     String [] opts = {"Use last corpus", "Choose new remote corpus", "Choose new local corpus"};
     JPanel pl = new JPanel();
@@ -849,8 +867,13 @@ public class Browser
          if (sal != null && sal.equals("yes"))
            setLocalCorpus(clProperties.getProperty("last.index.dir"));
          else
-           setRemoteCorpus(clProperties.getProperty("tec.client.server"),
-                           (new Integer(clProperties.getProperty("tec.client.port"))).intValue());
+           if (clProperties.isWebcli()){
+             clProperties.setServerPortAndPath(clProperties.getProperty("tec.webcli.server"));
+             setRemoteCorpus(clProperties.getCorpusURL());
+           }
+           else
+             setRemoteCorpus(clProperties.getProperty("tec.client.server"),
+                             (new Integer(clProperties.getProperty("tec.client.port"))).intValue());
          break;
       case 1:
         chooseNewRemoteCorpus();
@@ -890,6 +913,10 @@ public class Browser
     return remoteServer;
   }
 
+  public final String getRemoteWebcli(){
+    return remoteWebcli;
+  }
+  
   public final Dictionary getDictionary(){
     return dictionary;
   }

@@ -259,9 +259,8 @@ public class GraphicalSubcorpusSaver extends JFrame {
       loadingDone = false;
       networkError = false;
       if (remoteServer) {
-        RemoteSubcorpusOptionRequest ror = 
-          new RemoteSubcorpusOptionRequest(parent.getRemoteServer(),
-                                           parent.getRemotePort());
+          RemoteSubcorpusOptionRequest ror =
+            new RemoteSubcorpusOptionRequest(parent.getRemoteWebcli());
         try{
           attChsrSpecs = ror.getAttributeChooserSpecs();
         }
@@ -276,7 +275,8 @@ public class GraphicalSubcorpusSaver extends JFrame {
           return;
         }
         catch(Exception e){
-          thisFrame.add(new JLabel("Sub-corpus selection not supported by "+parent.getRemoteServer()));
+          thisFrame.add(new JLabel("Sub-corpus selection not supported by "+
+                                   parent.getRemoteServer()));
           e.printStackTrace(System.err);
           final JButton doneButton = new JButton("OK");
           doneButton.addActionListener(new ActionListener(){
@@ -293,8 +293,8 @@ public class GraphicalSubcorpusSaver extends JFrame {
         progress = i;
         String[] o = {""};
         if (remoteServer) {
-          RemoteSubcorpusOptionRequest ror = 
-            new RemoteSubcorpusOptionRequest(parent.getRemoteServer(), parent.getRemotePort());
+          RemoteSubcorpusOptionRequest ror =
+            new RemoteSubcorpusOptionRequest(parent.getRemoteWebcli());
           try {
             System.err.println("Getting "+attChsrSpecs[i+1]);
             o = ror.getOptionSet(attChsrSpecs[i+1]);

@@ -9,8 +9,18 @@
 ;"./../../../teccli/org-modnlp/Mosaic/lib/mosaic.jar"
 ;"../../../teccli/org-modnlp/ConcTree/lib/conctree.jar"
 "./../../../teccli/org-modnlp/ConcTree/classes"
+"./../../../teccli/org-modnlp/Metafacet/classes"
+"./../../../teccli/org-modnlp/ComFre/classes"
+"./../../../teccli/org-modnlp/ComFre/lib/commons-io.jar"
 "./../../../teccli/org-modnlp/Mosaic/classes"
 "./../../../lib/stanford-segmenter-3.8.0.jar"
+"/usr/share/java/javafx-base.jar"
+"/usr/share/java/javafx-controls.jar"
+"/usr/share/java/javafx-fxml.jar"
+"/usr/share/java/javafx-graphics.jar"
+"/usr/share/java/javafx-media.jar"
+"/usr/share/java/javafx-swing.jar"
+"/usr/share/java/javafx-web.jar"
 )))
  '(jdee-run-working-directory "../../")
  '(jdee-run-option-application-args nil)

@@ -1,3 +1,10 @@
+2023-01-02  Saturnino Luz  <luzs@acm.org>
+
+	* release 0.9.3: Adapted all client requests and settings to the
+	new web-browser proxy requests; servers now use URL addresses
+	rather than FQDN:PORT specs, for compatibility with the new webcli
+	interface. 
+
 2022-03-09  Saturnino Luz  <luzs@acm.org>
 
 	* release 0.8.9: Now display visuals in metadata display.

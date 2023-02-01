@@ -2,10 +2,11 @@
 #Wed Feb 17 12:02:21 GMT 2010
 tokeniser.regexp=\\p{L}[\\p{L}-.]*'?s?
 browser.brand=modnlp/TEC Browser
-tec.client.port=1240
+tec.client.port=-1
 tec.client.server=genealogies.mvm.ed.ac.uk
 ignore.xml.tags=true
 last.index.dir=/home/luzs/corpora/indices/tec
 tec.client.headers=/home/luzs/corpora/tec/headers
 stand.alone=no
 download.headers=yes
+tec.webcli.server=https\://genealogies.mvm.ed.ac.uk/omc-server

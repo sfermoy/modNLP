@@ -352,8 +352,8 @@ public class FqListBrowser extends JFrame
       }
       else {
         TecClientRequest rq = new TecClientRequest();
-        rq.setServerURL("http://"+parent.getRemoteServer());
-        rq.setServerPORT(parent.getRemotePort());
+        rq.setServerURL(parent.getRemoteWebcli());
+        //rq.setServerPORT(parent.getRemotePort());
         rq.put("request","freqlist");
         //if (parent.isSubCorpusSelectionON()){
         rq.put("skipfirst",""+skipFirst);

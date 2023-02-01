@@ -77,6 +77,34 @@ public class ClientProperties extends Properties{
       System.err.println("Error writing property file "+FNAME+": "+e);
     }
   }
+
+  public String getCorpusURL(){
+    if (isWebcli())
+      return getProperty("tec.webcli.server");
+    else{
+      String server = getProperty("tec.client.server");
+      String port   = getProperty("tec.client.port");
+      String path   = getProperty("tec.client.path");
+      return "http://"+server+
+        (port == null? "" : ":"+port)+
+        (path == null? "" : "/"+path);
+    }
+  }
+
+  public boolean isWebcli (){
+    String webcli = getProperty("tec.webcli.server");
+    if (webcli == null || webcli.length() == 0)
+      return false;
+    else {
+      return true;      
+    }
+  }
+
+  public void setServerPortAndPath (String webcli){
+    setProperty("tec.client.server", TecClientRequest.getServerFQDN(webcli));
+    setProperty("tec.client.port", ""+TecClientRequest.getServerURLPort(webcli));
+    setProperty("tec.client.path", TecClientRequest.getServerURLPath(webcli));
+  }
   
   protected void finalize () throws java.lang.Throwable {
     save();

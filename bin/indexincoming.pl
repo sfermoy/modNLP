@@ -146,9 +146,10 @@ foreach (@TEXT_LIST){
         unlink($TEXT_LIST_FILE);
         PrepareToDie("Section ID mismatch in $t and $h.\n");  
     }
-    my $img = getImages($h);
-    push(@IMAGES, @$img);
-    
+    unless ($opt_i){
+        my $img = getImages($h);
+        push(@IMAGES, @$img);
+    }
     if (!$opt_x && -e "$TEXT_DIR/$t"){
         unlink($TEXT_LIST_FILE);
         PrepareToDie("Incoming files exists at destination '$TEXT_DIR/$t'\n", ($dry_run ? 'WARNING' : 0));

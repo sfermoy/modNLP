@@ -22,7 +22,7 @@ xquery.root.element.path=/omcheader/document
 xquery.return.attribute.path=/@id
 ## specs and paths all relative to xquery.root.element.path
 ## form: description_1;path_1;description_2;path_2,...
-xquery.attribute.chooser.specs=File name;/@filename;Pub. date;/@publication_date;Organisation;/organisation/@name;Author;/author/lastname;Text type;section/@type;Format;/@format;Visual class;/section/taxon/@class;Visual order;/section/taxon/@order;Visual family;/section/taxon/@family
+xquery.attribute.chooser.specs=File name;/@filename;Pub. date;/@publication_date;Organisation;/organisation/@name;Organisation/Author's surname;/author/lastname;Author's first name;/author/firstname;Text type;section/@type;Format;/@format;Visual class;/section/taxon/@class;Visual order;/section/taxon/@order;Visual family;/section/taxon/@family
 ## Extension Of the header files (e.g. .hed, .xml etc)
 header.extension=hed
 ## the maximum number of subcorpus constraint query results to be stored (by HeaderDBManager)

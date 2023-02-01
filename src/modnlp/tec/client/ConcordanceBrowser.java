@@ -66,6 +66,8 @@ public interface ConcordanceBrowser {
   public void concordanceChanged(ConcordanceDisplayEvent e);
 
   public void concordanceChanged(ConcordanceListSizeEvent e);
+
+  public void setRemoteCorpus(String s);
   
   public void setRemoteCorpus(String s, int p);
     
@@ -85,6 +87,8 @@ public interface ConcordanceBrowser {
 
   public HeaderDBManager getHeaderDBManager();
 
+  public String getRemoteWebcli();
+  
   public String getRemoteServer();
 
   public int getRemotePort();

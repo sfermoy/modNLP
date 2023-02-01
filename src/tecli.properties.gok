@@ -3,11 +3,13 @@
 tokeniser.regexp=\\p{L}[\\p{L}-.]*'?s?
 browser.brand=modnlp/Genealogies of Knowledge Browser
 browser.icon=modnlp/tec/client/icons/gok-300.jpg
-tec.client.port=1241
+tec.client.port=-1
+tec.client.path=omc-server
 tec.client.server=genealogies.mvm.ed.ac.uk
+tec.webcli.server=https\://genealogies.mvm.ed.ac.uk/omc-server
 ignore.xml.tags=true
 last.index.dir=/home/luzs/corpora/indices/tec
 tec.client.headers=/home/luzs/corpora/tec/headers
 stand.alone=no
+remote.corpora=Genealogies English\thttps\://genealogies.mvm.ed.ac.uk/gok-en-server;Genealogies Greek\thttps\://genealogies.mvm.ed.ac.uk/gok-gr-server;Genealogies Arabic\thttps\://genealogies.mvm.ed.ac.uk/gok-ar-server;Genealogies Latin\thttps\://genealogies.mvm.ed.ac.uk/gok-la-server
 download.headers=yes
-remote.corpora=Genealogies English\:genealogies.mvm.ed.ac.uk\:1241;Genealogies Greek\:genealogies.mvm.ed.ac.uk\:1242;Genealogies Arabic\:genealogies.mvm.ed.ac.uk\:1243;Genealogies Latin\:genealogies.mvm.ed.ac.uk\:1244

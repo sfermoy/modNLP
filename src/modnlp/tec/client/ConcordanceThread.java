@@ -121,7 +121,12 @@ public class ConcordanceThread
                          InputStreamReader(concurlConnection.getInputStream(),
                                            encoding));
       }
+      
       String temp = input.readLine();
+      while ( ! temp.matches("[0-9]+") ){
+        System.err.println("Discarding: "+temp);
+        temp = input.readLine();
+      }
       serverResponded = true;
       noFound = (new Integer(temp)).intValue();
       System.out.println("____noFound_____"+noFound);

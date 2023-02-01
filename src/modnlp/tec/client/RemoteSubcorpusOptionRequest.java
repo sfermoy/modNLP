@@ -36,6 +36,7 @@ public class RemoteSubcorpusOptionRequest {
 
   private String server;
   private int portnum;
+  private String webcli;
   String encoding = "UTF-8";
 
   public void setEncoding (String e){
@@ -51,11 +52,22 @@ public class RemoteSubcorpusOptionRequest {
     portnum = p;
   }
 
+  public RemoteSubcorpusOptionRequest(String w){
+    webcli = w;
+  }
+
+  
   public String[] getAttributeChooserSpecs() throws Exception{
     TecClientRequest request = new TecClientRequest();
     request.put("request","attchooserspecs");
-    request.setServerURL("http://"+server);
-    request.setServerPORT(portnum);
+    if (webcli != null){
+      request.setServerURL(webcli);
+      request.setServerPORT(-1);
+    }
+    else {
+      request.setServerURL("http://"+server);
+      request.setServerPORT(portnum);
+    }
     request.setServerProgramPath("/attchooser");
     URL exturl = new URL(request.toString());
     
@@ -73,8 +85,14 @@ public class RemoteSubcorpusOptionRequest {
       TecClientRequest request = new TecClientRequest();
       request.put("request","attoptions");
       request.put("xqueryattribs",xqatts);
-      request.setServerURL("http://"+server);
-      request.setServerPORT(portnum);
+      if (webcli != null){
+        request.setServerURL(webcli);
+        request.setServerPORT(-1);
+      }
+      else {
+        request.setServerURL("http://"+server);
+        request.setServerPORT(portnum);
+      }
       request.setServerProgramPath("/attoptions");
       URL exturl = new URL(request.toString());
       
