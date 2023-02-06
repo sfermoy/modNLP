@@ -9,4 +9,4 @@ last.index.dir=/home/luzs/corpora/indices/tec
 tec.client.headers=/home/luzs/corpora/tec/headers
 stand.alone=no
 download.headers=yes
-tec.webcli.server=https\://genealogies.mvm.ed.ac.uk/omc-server
+tec.webcli.server=https\://genealogies.mvm.ed.ac.uk/tec-server

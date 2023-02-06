@@ -151,7 +151,8 @@ public class ConcordanceObject {
        * numerals are always indexed (which may cause some problems in
        * corpora where they are not).
        */
-      tkr.setIndexNumerals(true); 
+      tkr.setIndexNumerals(true);
+      ((TokeniserRegex)tkr).setIndexXMLentities(true);
       break;
     case modnlp.Constants.LANG_JP:
       tkr = new TokeniserJPLucene("");

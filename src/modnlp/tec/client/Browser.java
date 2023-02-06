@@ -70,7 +70,7 @@ public class Browser
 {
 
   // constants
-  public static final String RELEASE = "0.9.3";
+  public static final String RELEASE = "0.9.4";
   public static final String REVISION = "$Revision: 1.9 $";
   String BRANDNAME = "MODNLP/T";
   private static final String PLGLIST = "teclipluginlist.txt";
@@ -810,7 +810,7 @@ public class Browser
     if (guiSubcorpusSaver.hasNetworkError())
       showErrorMessage("Error: couldn't select new remote corpus.");
     else
-      browserFrame.setTitle(getBrowserName()+": index at "+remoteServer+":"+remotePort);
+      browserFrame.setTitle(getBrowserName()+": index at "+remoteWebcli);
 
   }
   

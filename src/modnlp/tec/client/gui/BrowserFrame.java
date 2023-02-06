@@ -882,7 +882,7 @@ public class BrowserFrame extends BrowserGUI
       parent.getConcordanceVector().add(o); 
   }
    
-   public void redisplay(){
+  public void redisplay(){
        concListDisplay.redisplayConc();
        parent.concordanceChanged(new ConcordanceDisplayEvent(this, 0, ConcordanceDisplayEvent.DOWNLOADCOMPLETE_EVT, "redisplay"));
        

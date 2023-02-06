@@ -41,10 +41,12 @@ import java.util.regex.Matcher;
 public class TokeniserRegex extends Tokeniser {
 
   public static final String DEFAULTWORDREGEXP = "\\p{L}[\\p{L}-.]*|\\p{L}[\\p{L}-.]*'s"; // include dots for abbrev. (e.g. U.S.A.)
+  public static final String XMLENTITYWORDREGEXP = "&[a-zA-Z]+;"; // include dots for abbrev. (e.g. U.S.A.)
   public static final String PUNCTUATIONWORDREGEXP = "[.?!;:,](?:\\s"; // include dots for abbrev. (e.g. U.S.A.)
   public static final String NUMERALREGEXP = "[0-9,.]+[0-9]+%?";
 
-  
+  private Boolean indexXMLEntities = false;
+ 
   private String bigWordRegexp = DEFAULTWORDREGEXP; 
   private Pattern bigWordPattern = Pattern.compile(bigWordRegexp);
   private String wordRegexp = "[\\p{L}.]+|'s?";
@@ -93,14 +95,22 @@ public class TokeniserRegex extends Tokeniser {
   }
 
   /**
-   * Sets the value of indexPuntuation
+   * Sets the value of indexPuntuation 
    *
    * @param argIndexPuntuation Value to assign to this.indexPuntuation
    */
+  // SL Note: Refactor this method to correct typo: Puntuation -> Punctuation
   public final void setIndexPuntuation(final Boolean argIndexPuntuation) {
-    indexPuntuation = argIndexPuntuation;
-    if (indexPuntuation)
+    if (!indexPuntuation && argIndexPuntuation)
       setBigWordRegexp(bigWordRegexp+"|"+PUNCTUATIONWORDREGEXP);
+    if (!argIndexPuntuation){
+      setBigWordRegexp(DEFAULTWORDREGEXP);
+      if (indexNumerals)
+        setBigWordRegexp(getBigWordRegexp()+"|"+NUMERALREGEXP);
+      if (indexXMLEntities)
+        setBigWordRegexp(getBigWordRegexp()+"|"+XMLENTITYWORDREGEXP);
+    }
+    indexPuntuation = argIndexPuntuation;
   }
 
   /**
@@ -114,12 +124,30 @@ public class TokeniserRegex extends Tokeniser {
     if (!argIndexNumerals){
       setBigWordRegexp(DEFAULTWORDREGEXP);
       if (indexPuntuation)
-        setBigWordRegexp(DEFAULTWORDREGEXP+"|"+PUNCTUATIONWORDREGEXP);
+        setBigWordRegexp(getBigWordRegexp()+"|"+PUNCTUATIONWORDREGEXP);
+      if (indexXMLEntities)
+        setBigWordRegexp(getBigWordRegexp()+"|"+XMLENTITYWORDREGEXP);
     }
     indexNumerals = argIndexNumerals;
   }
 
-
+    /**
+   * Sets the value of indexNumerals
+   *
+   * @param argIndexNumerals Value to assign to this.indexNumerals
+   */
+  public final void setIndexXMLentities(final Boolean argIndexXMLentities) {
+    if (!indexXMLEntities && argIndexXMLentities)
+      setBigWordRegexp(bigWordRegexp+"|"+XMLENTITYWORDREGEXP);
+    if (!argIndexXMLentities){
+      setBigWordRegexp(DEFAULTWORDREGEXP);
+      if (indexNumerals)
+        setBigWordRegexp(getBigWordRegexp()+"|"+NUMERALREGEXP);
+      if (indexPuntuation)
+        setBigWordRegexp(getBigWordRegexp()+"|"+PUNCTUATIONWORDREGEXP);
+    }
+    indexXMLEntities = argIndexXMLentities;
+  }
   
   /**
    * Gets the value of wordRegexp
