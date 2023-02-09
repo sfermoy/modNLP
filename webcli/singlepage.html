@@ -11,7 +11,9 @@
 
     <!-- Bootstrap core CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 
     <!-- Favicons -->
 <meta name="theme-color" content="#7952b3">
@@ -168,7 +170,7 @@
           <input class="form-control me-2 " id="keyword" type="text" placeholder="Search" aria-label="Text">
           <button class="btn btn-outline-success" type="button" onclick="submitKeyword('keyword')">Search</button>
           <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-    Options
+    Corpus_Options
   </button>
         </form>
       </div>
@@ -216,10 +218,14 @@
 
 </div>
 
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
+<ul class="nav nav-tabs " id="myTab" role="tablist">
   <li class="nav-item" role="presentation">
     <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Mosaic</button>
   </li>
+  </li>
+<!--    <li class="nav-item" role="presentation">-->
+<!--    <button class="nav-link" id="colloc-tab" data-bs-toggle="tab" data-bs-target="#colloc" type="button" role="tab" aria-controls="images" aria-selected="false">Collocation Mosaic</button>-->
+<!--  </li>-->
   <li class="nav-item" role="presentation">
     <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Concordance</button>
   </li>
@@ -227,6 +233,7 @@
     <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Metafacet</button>
   </li>
 </ul>
+
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 
@@ -234,17 +241,20 @@
     <h1 class="mt-5">Mosaic Controls</h1>
       <div class="border rounded">
     <p></p>
-    <p>Set minimum frequency to display</p>
-    <input type="range" class="form-range w-50" min="0" max="20" step=".1" id="customRange3" value="0" onmouseup="redrawMosaic()" oninput="this.nextElementSibling.value = this.value">
-<output>0</output>
-<!--        </div>-->
-<!-- <div class="border rounded">-->
-<p></p>
-    <p>Set maximum frequency to display</p>
-    <input type="range" class="form-range w-50" min="0" max="100" step=".5" id="customRange4" value="100"  onmouseup="redrawMosaic()"   oninput="this.nextElementSibling.value = this.value">
-<output>100</output>
+<!--    <p>Set minimum frequency to display</p>-->
+<!--    <input type="range" class="form-range w-50" min="0" max="20" step=".1" id="customRange3" value="0" onmouseup="redrawMosaic()" oninput="this.nextElementSibling.value = this.value">-->
+<!--<output>0</output>-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash; <div class="border rounded">&ndash;&gt;-->
+<!--<p></p>-->
+<!--    <p>Set maximum frequency to display</p>-->
+<!--    <input type="range" class="form-range w-50" min="0" max="100" step=".5" id="customRange4" value="100"  onmouseup="redrawMosaic()"   oninput="this.nextElementSibling.value = this.value">-->
+<!--<output>100</output>-->
+          <div id="slider-range" class="w-50 m-3"></div>
+      <input id="amount" class="w-50 m-3" type="text"  />
 
- </div>
+    </div>
+
   <div class="border rounded">
 
 <div class="form-check form-switch" style="margin-left: 10px;">
@@ -287,16 +297,16 @@
         </div>
             <div id="linesreturned"> </div>
     </div>
-      <div class="d-inline-flex  overflow-auto"  style="height:600px;overflow-x: scroll;flex-shrink: 0; overflow-x: auto;">
-               <div class="flex-nowrap p-2 flex-fill" id="filename"  style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:14px;flex-shrink: 0;">
+      <div class="d-flex w-100  overflow-auto"  style="height:600px;overflow-x: scroll;flex-shrink: 0; ">
+               <div class="d-flex  " id="filename"  style="line-height:1.5em;padding-bottom:7px;padding-top:7px;margin-top: 30px;font-size:14px;flex-shrink: 0;left: 0;position: -webkit-sticky;position:-webkit-sticky;position: sticky;">
               </div>
-              <div class="flex-nowrap p-2 flex-fill" id="leftconc"  style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:14px;flex-shrink: 0;">
-              </div>
-
-              <div class="d-inline-flex p-2 flex-fill " id="keyworddisplay" style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:14px;flex-shrink: 0;">
+              <div class="d-flex p-2 " id="leftconc"  style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:14px;resize:horizontal;">
               </div>
 
-              <div class="d-inline-flex p-2 flex-fill " id="rightconc" style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:14px;flex-shrink: 0;">
+              <div class="d-flex p-2" id="keyworddisplay" style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:14px;flex-shrink: 0;">
+              </div>
+
+              <div class="d-flex p-2 " id="rightconc" style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:14px;flex-shrink: 0;">
               </div>
       </div>
       </div>
@@ -341,6 +351,14 @@
          <div id="chart2"></div>
        </div>
       </div>
+     <div class="tab-pane fade" id="colloc" role="tabpanel" aria-labelledby="collocation-tab">
+       <div class="container">
+<!--           <div class="border rounded">-->
+<!--               -->
+<!--          </div>-->
+
+       </div>
+      </div>
 </div>
 
 <!--end of HTML-->
@@ -350,12 +368,42 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
 
 <script src="https://d3js.org/d3.v3.min.js"></script>
 
 <script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
+
+<script>
+    var slider = $("#slider-range").slider({
+    range: true,
+    min: 0,
+    max: 100,
+    step: 1,
+    values: [0, 100],
+    slide: function (event, ui) {
+        $("#amount").val("Tiles with frequency above " + nonlinear(ui.values[0]) + " and below "+ nonlinear(ui.values[1])+"  will be displayed." );
+    },
+    change: function(event, ui) {
+            redrawMosaic()
+        }
+});
+
+$("#amount").val("Tiles with frequency above " + nonlinear($("#slider-range").slider("values", 0)) +
+    " and below "+ + nonlinear($("#slider-range").slider("values", 1))+"  will be displayed ");
+
+function nonlinear(val) {
+    var toPresent = 0;
+    if (val <= 50) {
+        toPresent = (val / 10) ;
+    } else if (val <= 92) {
+        toPresent = (val-46)/2;
+    } else {
+        toPresent = (val -90)*10 ;
+    };
+    return String(toPresent)
+}
+
+</script>
 
 <script type="text/javascript">
     var currentData;
@@ -464,7 +512,7 @@ function updateTextBox(){
     const collection = document.getElementsByClassName(selectedWord);
         setTimeout(function (d) {
             collection[0].scrollIntoView();
-                      },100)
+                      },700)
        for (let i = 0; i < collection.length; i++) {
            collection[i].style.color = "Orange";
            collection[i].parentElement.style.backgroundColor = "lightyellow";
@@ -743,7 +791,7 @@ function dataProcess(data,keyword) {
         if(rightSideHtml.length === 0){
             rightSideHtml = "*"
         }
-        fns +="<div"+ " class=\""+fn + section +" "+ fn +" \" " + "style=\"background-color:"+color+";color:red; \" >" + fn+' </div> ';
+        fns +="<div"+ " class=\""+fn + section +" "+ fn +" \" " + "style=\"background-color:"+color+";color:red; \" >  &nbsp  &nbsp " +fn+ " &nbsp</div> ";
         leftctx += "<div"+ " class=\""+fn + section +" "+ fn +" \" " + "style=\"background-color:"+color+" \" >"+leftSideHtml.replaceAll('&amp;','&').replaceAll('<visual>','').replaceAll('<caption>', '').replaceAll('image','image id =img'.concat(i)).replaceAll('uri','src')+' </div> ';
         keywordctx += "<div"+ " class=\""+fn + section +" "+ fn +" \" " +  "style=\"background-color:"+color+" \" >"+conc[3].slice(130,(130 + keyword.replaceAll('&amp;','&').split("+")[keyword.split("+").length - 1].length)) + '</div> ';
         rightctx += "<div"+ " class=\""+fn + section +" "+ fn +" \" " +  "style=\"background-color:"+color+" \" >"+rightSideHtml.replaceAll('&amp;','&').replaceAll('<visual>','').replaceAll('<caption>', '').replaceAll('image','image id =img'.concat(i)).replaceAll('uri','src')+' </div>  ';
@@ -873,11 +921,11 @@ function dataProcessMosaic(data,keyword){
 
 
         var lftWords = conc[3].slice(0, 130).replaceAll(/[.,\/#!\<\>$%\^&\*;:{}=_`?~()]/g,"").replaceAll(/\s{2,}/g," ");
-        lftWords = lftWords.toLowerCase()
+        lftWords = lftWords.toLowerCase().trim();
         lftWords = lftWords.split(' ');
         // console.log(lftWords.slice(-7))
         // console.log(lftWords.slice(-5,-1))
-        lftWords = lftWords.slice(-5,-1)
+        lftWords = lftWords.slice(-4)
         for (var k =0; k < lftWords.length; k++) {
             var val = lftWords[k]
             if(countWords[k][val] === undefined) {
@@ -936,7 +984,7 @@ function dataProcessMosaic(data,keyword){
    .append("svg")
    // Responsive SVG needs these 2 attributes and no width and height attr.
    .attr("preserveAspectRatio", "xMinYMin meet")
-   .attr("viewBox", "0 0 1900 1000")
+   .attr("viewBox", "0 0 1900 1200")
    // Class to make it responsive.
    .classed("svg-content-responsive", true)
    // Fill with a rectangle for visualization.
@@ -954,8 +1002,8 @@ function dataProcessMosaic(data,keyword){
     //var color = d3.scale.category20();
     var color =["#ffcc99","#99bbff"]
 
-    var frequency_min = (document.getElementById("customRange3").value * 1.0)/100;
-    var frequency_max = (document.getElementById("customRange4").value * 1.0)/100;
+    var frequency_min = (nonlinear($("#slider-range").slider("values", 0)) * 1.0)/100;
+    var frequency_max = (nonlinear($("#slider-range").slider("values", 1)) * 1.0)/100;
 
     // used to calculate total of columns
     const sumValues = obj => Object.values(obj).reduce((a, b) => a + b, 0);
@@ -964,6 +1012,8 @@ function dataProcessMosaic(data,keyword){
     document.getElementById("linesreturned").innerHTML ="Lines returned : "+ max;
 
     var selectedRect;
+    console.log(max)
+    console.log(frequency_min)
     for (var col = 0; col < countWords.length; col++) {
 
         var heigthUsed = 0;
@@ -1004,27 +1054,30 @@ function dataProcessMosaic(data,keyword){
             var wordstr = order[word]
             if( wordstr in currentCol) {
               var boxH = currentCol[wordstr]
+                var boxWidth =((col + 1) * (colwidth) - (col * colwidth));
+                var boxHeigth = 1000 * ((1.0 * boxH) / colMax);
               var rect = svg.append('rect')
                       .attrs({
                         x: col * colwidth,
                         y: heigthUsed,
-                        width: ((col + 1) * (colwidth) - (col * colwidth)),
-                        height: 1000 * ((1.0 * boxH) / colMax)
+                        width: boxWidth,
+                        height: boxHeigth
                       })
                       .attr("id", "s" + col.toString() + wordstr)
                       .attr("column", col )
                       .attr("word", wordstr )
                       .attr("count", boxH )
-                      .attr("freq", Math.round( 10000 * ((1.0 * boxH) / colMax)) /100.0)
+                      .attr("freq", Math.round( 10000 * ((1.0 * boxH) / max)) /100.0)
                       .attr("memcol", function (d) {
                         return col === 4 ? 'steelblue' : totkeys.includes(wordstr) ? color[0+((word + ((col+1)%2)) % 2)] : color[0+((word + ((col+1)%2)) % 2)];
-                      })
+                      }).style("stroke", 'black')
+                                .style("stroke-width", .1)
                       .style("fill", function (d) {
                         return col === 4 ? 'steelblue' : totkeys.includes(wordstr) ? color[0+((word + ((col+1)%2)) % 2)] : color[0+((word + ((col+1)%2)) % 2)];
                       }).on("click", function(d){
                           d3.select(selectedRect).style("fill", d3.select(this).attr("memcol"));
                           d3.select(selectedRect).style("stroke", 'black')
-                                .style("stroke-width", 0);
+                                .style("stroke-width", .1);
 
                           d3.select(this).style("stroke", 'black')
                                 .style("stroke-width", 2);
@@ -1056,25 +1109,52 @@ function dataProcessMosaic(data,keyword){
                   adjust =0.7
 
               svg.append("text")
+                  .attr("pointer-events", "none")
                       .attr("x", function (d) {
-                        return (col * colwidth) + 100;
+                        return (col * colwidth) + 95;
                       })
                       .attr("y", function (d) {
-                        return heigthUsed + ((1000 * ((1.0 * boxH) / colMax)) / 2) + 5;
+
+                          if(boxHeigth>12){
+                                var thisWidth = this.getComputedTextLength()
+                                scale = (boxWidth/thisWidth)
+                                scale = Math.min(scale,boxHeigth);
+                            }else{
+                                scale =  boxHeigth/1.5;
+                            }
+                          if(boxHeigth>700)
+                              scale =0;
+
+                        return heigthUsed + ((1000 * ((1.0 * boxH) / colMax)) / 2)  +scale/4 ;
+                      })
+                     .attr("boxH", function (d) {
+                        return boxH;
                       })
                       .attr("id", "st" + col.toString() + wordstr)
                       .style("text-anchor", "middle")
-                      .style("font-size", function (d) {
-                        return Math.round(col === 4 ? 24 : wordstr.length>5 ? (adjust * 120 * ((1.0 * boxH) / colMax)) : (adjust* 190 * ((1.0 * boxH) / colMax)));
-                      })
+                   .style("font-size", "1px")
+                      // .style("font-size", function (d) {
+                      //   return Math.round(col === 4 ? 24 : wordstr.length>5 ? (adjust * 120 * ((1.0 * boxH) / colMax)) : (adjust* 190 * ((1.0 * boxH) / colMax)));
+                      // })
                       .attr("opacity", function (d) {
                         return (1000 * ((1.0 * boxH) / colMax)) > 12 ? 1 : 0;
                       })
                       .style("fill", "black")
-                      .text(wordstr);
+                      .text(wordstr)
+                        .style("font-size", function(d) {
+                            if(boxHeigth>12){
+                                var thisWidth = this.getComputedTextLength()
+                                scale = (boxWidth/thisWidth)
+                                scale = Math.min(scale,boxHeigth);
+                            }else{
+                                scale =  boxHeigth/1.5;
+                            }
+                            return scale -2 + "px"; });
+
 
               heigthUsed += 1000 * ((1.0 * boxH) / colMax);
             }
+
         }
     }
   }
