@@ -232,6 +232,12 @@
   <li class="nav-item" role="presentation">
     <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Metafacet</button>
   </li>
+      <li class="nav-item" role="presentation">
+    <button class="nav-link" id="extract-tab" data-bs-toggle="tab" data-bs-target="#extract" type="button" role="tab" aria-controls="extract" aria-selected="false">Extract</button>
+  </li>
+    <li class="nav-item" role="presentation">
+    <button class="nav-link" id="metadata-tab" data-bs-toggle="tab" data-bs-target="#metadata" type="button" role="tab" aria-controls="metadata" aria-selected="false">Metadata</button>
+  </li>
 </ul>
 
 <div class="tab-content" id="myTabContent">
@@ -275,10 +281,11 @@
         <h1 class="mt-5">Concordance Controls</h1>
         <div class="border rounded">
             <p></p>
-            <p>Choose sort position</p>
+            <p>Choose sort positions</p>
+            <div class="input-group">
             <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
-                Sort position
+              <button class="btn btn-secondary dropdown-toggle btn-danger p-2" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+                Sort position 1
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                 <li><button class="dropdown-item" type="button" onclick="sort('filename')">Filename</button></li>
@@ -294,71 +301,126 @@
                 <li><button class="dropdown-item" type="button" onclick="sort('right5')">Right 5</button></li>
               </ul>
             </div>
-        </div>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle btn-warning p-2" type="button" id="dropdownMenu3" data-bs-toggle="dropdown" aria-expanded="false">
+                Sort position 2
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <li><button class="dropdown-item" type="button" onclick="sort1('filename')">Filename</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort1('left1')">Left 1</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort1('left2')">Left 2</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort1('left3')">Left 3</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort1('left4')">Left 4</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort1('left5')">Left 5</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort1('right1')">Right 1</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort1('right2')">Right 2</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort1('right3')">Right 3</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort1('right4')">Right 4</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort1('right5')">Right 5</button></li>
+              </ul>
+            </div>
+        <div class="dropdown">
+
+              <button class="btn btn-secondary dropdown-toggle btn-success p-2" type="button" id="dropdownMenu4" data-bs-toggle="dropdown" aria-expanded="false">
+                Sort position 3
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <li><button class="dropdown-item" type="button" onclick="sort2('filename')">Filename</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort2('left1')">Left 1</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort2('left2')">Left 2</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort2('left3')">Left 3</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort2('left4')">Left 4</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort2('left5')">Left 5</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort2('right1')">Right 1</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort2('right2')">Right 2</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort2('right3')">Right 3</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort2('right4')">Right 4</button></li>
+                <li><button class="dropdown-item" type="button" onclick="sort2('right5')">Right 5</button></li>
+              </ul>
+            </div>
+            </div>
             <div id="linesreturned"> </div>
     </div>
-      <div class="d-flex w-100  overflow-auto"  style="height:600px;overflow-x: scroll;flex-shrink: 0; ">
-               <div class="d-flex  " id="filename"  style="line-height:1.5em;padding-bottom:7px;padding-top:7px;margin-top: 30px;font-size:14px;flex-shrink: 0;left: 0;position: -webkit-sticky;position:-webkit-sticky;position: sticky;">
-              </div>
-              <div class="d-flex p-2 " id="leftconc"  style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:14px;resize:horizontal;">
-              </div>
+          <div class="d-flex w-100  overflow-auto"  style="height:600px;overflow-x: scroll;flex-shrink: 0; ">
+                   <div class="d-flex  " id="filename"  style="line-height:1.5em;padding-bottom:7px;padding-top:7px;margin-top: 30px;font-size:14px;flex-shrink: 0;left: 0;position: -webkit-sticky;position:-webkit-sticky;position: sticky;">
+                  </div>
+                  <div class="d-flex p-2 " id="leftconc"  style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:14px;resize:horizontal;">
+                  </div>
 
-              <div class="d-flex p-2" id="keyworddisplay" style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:14px;flex-shrink: 0;">
-              </div>
+                  <div class="d-flex p-2" id="keyworddisplay" style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:14px;flex-shrink: 0;">
+                  </div>
 
-              <div class="d-flex p-2 " id="rightconc" style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:14px;flex-shrink: 0;">
-              </div>
-      </div>
+                  <div class="d-flex p-2 " id="rightconc" style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:14px;flex-shrink: 0;">
+                  </div>
+          </div>
+
+        </div>
       </div>
 
 <!--    <p class="lead">Search word and display concordance</p>-->
 
+  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+   <div class="container">
+       <div class="border rounded">
+
+        <h1 class="mt-5">Metafacet: Concordance Metadata distributions</h1>
+
+            <p>Click or drag to select attributes and remove from the current concordance. Check the concordance tab to see the lines which will be removed if you cll the <b>"Remove Selected"</b> button. </p>
+            <p>Use the dropdown to view different facets. Items colored yellow have been partially removed by a previous deletion and will be updated by pressing the <b>"Remove Selected"</b> button.  <p>
+      </div>
+       <div id="legend2">
+               <div class="legend2"> <p class="country-name"><span class="key-dot removed"></span>All Lines Removed</p> </div>
+               <div class="legend2"> <p class="country-name"><span class="key-dot some"></span>Some Lines Removed</p> </div>
+            </div>
+       <br>
+       <button type="button" class="btn btn-primary " id="metafacetRemove" onclick="hide()">Remove Selected</button>
 
 
+     <div id="chart2"></div>
+   </div>
+  </div>
+<!--     <div class="tab-pane fade" id="colloc" role="tabpanel" aria-labelledby="collocation-tab">-->
+<!--           <div class="container">-->
+<!--    &lt;!&ndash;           <div class="border rounded">&ndash;&gt;-->
+<!--    &lt;!&ndash;               &ndash;&gt;-->
+<!--    &lt;!&ndash;          </div>&ndash;&gt;-->
+<!--    -->
+<!--           </div>-->
+<!--      </div>-->
 
+     <div class="tab-pane fade show" id="extract" role="tabpanel" aria-labelledby="home-tab">
 
-
-      <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-       <div class="container">
-           <div class="border rounded">
-
-            <h1 class="mt-5">Metafacet: Concordance Metadata distributions</h1>
-
-                <p>Click or drag to select attributes and remove from the current concordance. Check the concordance tab to see the lines which will be removed if you cll the <b>"Remove Selected"</b> button. </p>
-                <p>Use the dropdown to view different facets. Items colored yellow have been partially removed by a previous deletion and will be updated by pressing the <b>"Remove Selected"</b> button.  <p>
+    <div class="container">
+        <h1 class="mt-5">Extract Controls</h1>
+          <div class="border rounded">
+             <div class="form-outline" style="width: 22rem;">
+                 <label class="form-label" for="extractnumber">Extract Size</label>
+                 <div class="input-group">
+                <input value="300" type="number" max="600" id="extractnumber" class="form-control" />
+                     <br>
+                 <button type="button" class="btn btn-primary mr-1" id="updateExtract" onclick="updateExtract()">Update</button>
+                     </div>
+                 <br>
+            </div>
           </div>
-           <div id="legend2">
-                   <div class="legend2"> <p class="country-name"><span class="key-dot removed"></span>All Lines Removed</p> </div>
-                   <div class="legend2"> <p class="country-name"><span class="key-dot some"></span>Some Lines Removed</p> </div>
-                </div>
-           <br>
-           <button type="button" class="btn btn-primary" id="metafacetRemove" onclick="hide()">Remove Selected</button>
 
+          <div  class="border rounded">
+              <br>
+              <p id="extractDiv" class="text-center">Extract will display here. Please select a line in the concordance view.</p>
 
-<!--      <div id="explination"> This plugin can be used to see the number of lines in the current concordance which are associated with a-->
-<!--          particular piece of metadata, and to filter the concordance based on the metadata.-->
-<!--          <ul><li>EXAMPLE</li>-->
-<!--              <li>Select metafacet such as "author" form the dropdown.</li>-->
-<!--              <li>Then expand/contract/slide the range view to relevant data (Authors).</li>-->
-<!--          <li>Clicking on a bar will remove/add the concordance lines associated with the attribute</li>-->
-<!--          <li>Ctrl+click removes all lines but the ones associated with the attribute clicked</li>-->
-<!--          <li>Once you are happy with your new concordance list the "Update Bars/Load concordance" refreshes MetaFacet for the filtered list</li>-->
-<!--          <li>Mosiac plugin works with MetaFacet</li>-->
-<!--          <li>Removing lines from one attribute effects the other attribute views. Orange attribute bars are ones which have been partially removed from th concordance by another attribute interaction </li>-->
-<!--          </ul>-->
-<!--          </div>-->
-<!--    </div>-->
-         <div id="chart2"></div>
-       </div>
+          </div>
       </div>
-     <div class="tab-pane fade" id="colloc" role="tabpanel" aria-labelledby="collocation-tab">
-       <div class="container">
-<!--           <div class="border rounded">-->
-<!--               -->
-<!--          </div>-->
-
-       </div>
       </div>
+    <div class="tab-pane fade show" id="metadata" role="tabpanel" aria-labelledby="home-tab">
+    <div class="container">
+        <h1 class="mt-5">Metadata View</h1>
+          <div  class="border rounded">
+              <br>
+              <p id="metadatadiv" class="text-center">Metadata will display here. Please select a line in the concordance view.</p>
+          </div>
+      </div>
+      </div>
+
 </div>
 
 <!--end of HTML-->
@@ -420,6 +482,14 @@ function nonlinear(val) {
     var subcorpatts = [];
     var subcorpenabled = false;
     var socket ;
+    var sort1pos = "filename";
+    var sort2pos = "filename";
+    var sort3pos = "filename";
+
+    var filepath = ""
+    var extractpos = "";
+    var extractsection = "";
+
 
     var  selectHtml ="<div class=\"col-auto\"><select class=\"form-select theclass\" id=\"theclassSelect\"  onchange=\"updateTextBox()\" size=\"10\" multiple aria-label=\"size 10 select theclass\"></select></div>"
     var  optionHtml ="<option value=\"opVal\">opVal</option>"
@@ -504,9 +574,26 @@ function updateTextBox(){
    function sort(pos){
        sortClick = true;
        sortpos = pos;
+       sort1pos =pos
+       document.getElementById("dropdownMenu2").innerHTML = pos;
        dataProcess(currentData,currentKeyword)
        sortClick = false;
    }
+      function sort1(pos){
+       sortClick = true;
+       sort2pos =pos
+          document.getElementById("dropdownMenu3").innerHTML = pos;
+       dataProcess(currentData,currentKeyword)
+       sortClick = false;
+   }
+    function sort2(pos){
+       sortClick = true;
+       sort3pos =pos
+        document.getElementById("dropdownMenu4").innerHTML = pos;
+       dataProcess(currentData,currentKeyword)
+       sortClick = false;
+   }
+
 
    function highlightWord(selectedWord){
     const collection = document.getElementsByClassName(selectedWord);
@@ -639,6 +726,79 @@ function submitKeyword(id){
   fetchConcordance(value,selectvalue,markdowSelect)
 }
 
+function clickConc(file,filePos,section,line){
+    fetchextract(document.getElementById("corpusSelect").value,file,filePos,section)
+    extractpos = filePos;
+    filepath = file;
+      const collection0 = document.getElementsByClassName("concord");
+        for (let i = 0; i < collection0.length ; i++) {
+            collection0[i].style.backgroundColor = "white";
+        }
+
+       const collection = document.getElementsByClassName(line);
+        for (let i = 0; i < collection.length ; i++) {
+            collection[i].style.backgroundColor = "lightgrey";
+        }
+
+     fetchSingleMetadata(document.getElementById("corpusSelect").value,file)
+}
+
+async function fetchSingleMetadata(corpus,file,){
+        let text0 = 'https://genealogies.mvm.ed.ac.uk'
+      let text1 =text0.concat(corpus.split("-")[0]).concat('/headers//')
+      let text2 =text1.concat(file.split("/").pop().split(".")[0])
+      let text3 = text2.concat(".hed")
+      let text4 = text3
+      console.log(text4)
+        try {
+          let response = await fetch(text4,requestOptions)
+          data = await response.text();
+
+            var output = document.getElementById('metadatadiv');
+          output.innerHTML = data;
+        }
+        catch (e) {
+          return e.message;
+        }
+}
+
+async function fetchextract(corpus,file,filePos,section){
+    let text0 = 'https://genealogies.mvm.ed.ac.uk'
+      let text1 =text0.concat(corpus).concat('/extractor?sgml=').concat(document.getElementById("markdownSelect").value).concat('&keyword=')
+      let text2 =text1.concat(currentKeyword.trim())
+      let text3 ='&context='+document.getElementById("extractDiv")+'&request=extract&filename='.concat(file.trim()).concat('&position=').concat(filePos)
+      let text4 = text2.concat(text3)
+    console.log(text4)
+
+        try {
+          let response = await fetch(text4,requestOptions)
+          data = await response.text();
+            var output = document.getElementById('extractDiv');
+          output.innerHTML = data;
+        }
+        catch (e) {
+          return e.message;
+        }
+}
+
+async function updateExtract(){
+    let text0 = 'https://genealogies.mvm.ed.ac.uk'
+      let text1 =text0.concat(document.getElementById("corpusSelect").value).concat('/extractor?sgml=').concat(document.getElementById("markdownSelect").value).concat('&keyword=')
+      let text2 =text1.concat(currentKeyword.trim())
+      let text3 ='&context='+document.getElementById("extractnumber").value+'&request=extract&filename='.concat(filepath.trim()).concat('&position=').concat(extractpos)
+      let text4 = text2.concat(text3)
+        try {
+          let response = await fetch(text4,requestOptions)
+          data = await response.text();
+
+            var output = document.getElementById('extractDiv');
+          output.innerHTML = data;
+        }
+        catch (e) {
+          return e.message;
+        }
+}
+
 function processHeaders(hdrs){
     var hdrList = hdrs.split("\n")
     var hdrProps = hdrList[0].split("<section/>");
@@ -715,6 +875,7 @@ function dataProcess(data,keyword) {
     }else {
         for (var i = 1; i < concobj.length - 1; i++) {
             conc = concobj[i]['text'].split("|")
+            console.log(conc)
             var section = conc[2];
             var fn = conc[0].split("/")
             fn = fn[fn.length - 1];
@@ -737,7 +898,22 @@ function dataProcess(data,keyword) {
         //sort
         concrdance = concobj
     }
-    concobj.sort((a, b) => (a[sortpos] > b[sortpos]) ? 1 : -1)
+    //(a, b) => a.gsize == b.gsize ? a.glow - b.glow : a.gsize - b.gsize
+    // concobj.sort((a, b) => (a[sortpos] > b[sortpos]) ? 1 : -1)
+    concobj.sort(function (objA, objB) {
+        var sortArguments = [sort1pos, sort2pos, sort3pos]
+        console.log(sortArguments)
+        var result = 0;
+        for (var argIndex = 0; argIndex < sortArguments.length && result === 0; argIndex++) {
+            var propertyName = sortArguments[argIndex];
+            console.log(objA[propertyName])
+            console.log(objB[propertyName])
+            result = (objA[propertyName] < objB[propertyName]) ? -1 : (objA[propertyName] > objB[propertyName]) ? 1 : 0;
+            console.log(result)
+        }
+        return result;
+    });
+
     // save for metafacet
 
     for (var i = 1; i < concobj.length-1; i++){
@@ -745,6 +921,7 @@ function dataProcess(data,keyword) {
         conc = concobj[i]['text'].split("|")
         var fn = conc[0].split("/")
         var section = conc[2];
+         var posInFile =conc[1];
         fn=fn[fn.length -1];
         var lftWordtokens =  conc[3].slice(0, 130).trim().split(' ');
         var rightWordtokens =  conc[3].slice((130 + keyword.length),conc[3].length).trim().split(' ');
@@ -791,10 +968,10 @@ function dataProcess(data,keyword) {
         if(rightSideHtml.length === 0){
             rightSideHtml = "*"
         }
-        fns +="<div"+ " class=\""+fn + section +" "+ fn +" \" " + "style=\"background-color:"+color+";color:red; \" >  &nbsp  &nbsp " +fn+ " &nbsp</div> ";
-        leftctx += "<div"+ " class=\""+fn + section +" "+ fn +" \" " + "style=\"background-color:"+color+" \" >"+leftSideHtml.replaceAll('&amp;','&').replaceAll('<visual>','').replaceAll('<caption>', '').replaceAll('image','image id =img'.concat(i)).replaceAll('uri','src')+' </div> ';
-        keywordctx += "<div"+ " class=\""+fn + section +" "+ fn +" \" " +  "style=\"background-color:"+color+" \" >"+conc[3].slice(130,(130 + keyword.replaceAll('&amp;','&').split("+")[keyword.split("+").length - 1].length)) + '</div> ';
-        rightctx += "<div"+ " class=\""+fn + section +" "+ fn +" \" " +  "style=\"background-color:"+color+" \" >"+rightSideHtml.replaceAll('&amp;','&').replaceAll('<visual>','').replaceAll('<caption>', '').replaceAll('image','image id =img'.concat(i)).replaceAll('uri','src')+' </div>  ';
+        fns +="<div"+ " class=\"" + fn + section +" "+ fn + i +"  concord \" " + "style=\"background-color:"+color+";color:red; \" onclick=\"clickConc(\' "+conc[0]+"\',\'"+posInFile+"\',\'"+section+"\',\'"+fn+i+"\' )\" >  &nbsp  &nbsp " +fn+ " &nbsp</div> ";
+        leftctx += "<div"+ " class=\""+fn + section +" "+ fn + i +" concord \" " + "style=\"background-color:"+color+" \"  onclick=\"clickConc(\' "+conc[0]+"\',\'"+posInFile+"\',\'"+section+"\',\'"+fn+i+"\' )\" >"+leftSideHtml.replaceAll('&amp;','&').replaceAll('<visual>','').replaceAll('<caption>', '').replaceAll('image','image id =img'.concat(i)).replaceAll('uri','src')+' </div> ';
+        keywordctx += "<div"+ " class=\""+fn + section +" "+ fn + i +" concord \" " +  "style=\"background-color:"+color+" \" onclick=\"clickConc(\' "+conc[0]+"\',\'"+posInFile+"\',\'"+section+"\',\'"+fn+i+"\' )\" >"+conc[3].slice(130,(130 + keyword.replaceAll('&amp;','&').split("+")[keyword.split("+").length - 1].length)) + '</div> ';
+        rightctx += "<div"+ " class=\""+fn + section +" "+ fn + i +" concord \" " +  "style=\"background-color:"+color+" \" onclick=\"clickConc(\' "+conc[0]+"\',\'"+posInFile+"\',\'"+section+"\',\'"+fn+i+"\' )\" >"+rightSideHtml.replaceAll('&amp;','&').replaceAll('<visual>','').replaceAll('<caption>', '').replaceAll('image','image id =img'.concat(i)).replaceAll('uri','src')+' </div>  ';
 
 
         lftWords = conc[3].slice(0, 130).replaceAll(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replaceAll(/\s{2,}/g," ");
@@ -879,10 +1056,23 @@ function dataProcess(data,keyword) {
     div.classList.add('text-nowrap');
 
     //coloring based on sort position
-    const collection = document.getElementsByClassName(sortpos);
+    const collection = document.getElementsByClassName(sort1pos);
     for (let i = 0; i < collection.length ; i++) {
         collection[i].style.color = "red";
+        collection[i].style.fontWeight = "bold";
     }
+    const collection2 = document.getElementsByClassName(sort2pos);
+    for (let i = 0; i < collection2.length ; i++) {
+        collection2[i].style.color = "#ffc107";
+        collection2[i].style.fontWeight = "bold";
+    }
+
+    const collection3 = document.getElementsByClassName(sort3pos);
+    for (let i = 0; i < collection3.length ; i++) {
+        collection3[i].style.color = "#198754";
+        collection3[i].style.fontWeight = "bold";
+    }
+
     //recolor metafacetn selections
     var items =Array.from(removedViaMetafacet);
     for (const collectionKey in items) {
