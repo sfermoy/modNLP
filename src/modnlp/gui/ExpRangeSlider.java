@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 /**
  * An extension of RangeJSlider to select a range of values on an
  * log/exp scale using two thumb controls.
+ * @author S Luz <luzs@acm.org>
  */
 public class ExpRangeSlider extends RangeSlider {
 
