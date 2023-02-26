@@ -33,6 +33,8 @@ public class Constants {
   public static final int LANG_EN = 0;
   public static final int LANG_JP = 1;
   public static final int LANG_AR = 2;
+  public static final int LANG_GR = 3;
+  public static final int LANG_LN = 4;
 
   // Request types (see also modnlp/server/Request.java)
   public static final int REQ_CONCORD = 1;

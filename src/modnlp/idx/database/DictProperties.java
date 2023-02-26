@@ -125,14 +125,15 @@ public class DictProperties extends java.util.Properties{
       p = p.toLowerCase();
     }
 
-
-    if (p==null) 
-      return modnlp.Constants.LANG_EN;  // English is default
     if (p.equals("jp"))
       return modnlp.Constants.LANG_JP;
     if (p.equals("ar"))
       return modnlp.Constants.LANG_AR;
-
+    if (p.equals("gr"))
+      return modnlp.Constants.LANG_GR;
+    if (p.equals("ln"))
+      return modnlp.Constants.LANG_LN;
+    
     return modnlp.Constants.LANG_EN;  // English is default
   }
 

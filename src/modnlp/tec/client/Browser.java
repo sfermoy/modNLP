@@ -70,7 +70,7 @@ public class Browser
 {
 
   // constants
-  public static final String RELEASE = "0.9.5";
+  public static final String RELEASE = "0.9.6";
   public static final String REVISION = "$Revision: 1.9 $";
   String BRANDNAME = "MODNLP/T";
   private static final String PLGLIST = "teclipluginlist.txt";
@@ -768,7 +768,7 @@ public class Browser
       preferenceFrame.setHeaderBaseURL(headerBaseURL);
       encoding = input.readLine();
       String lg = input.readLine();
-       System.err.println("language (read)=>>>>"+encoding);
+       System.err.println("language (read)=>>>>"+lg);
       if (lg == null || lg.length() == 0) 
         language = Constants.LANG_EN;
       else
