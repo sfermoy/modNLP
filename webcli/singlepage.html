@@ -8,18 +8,28 @@
     <meta name="generator" content="SS1.0">
     <title>ModNLP LIVE</title>
 
-
-    <!-- Bootstrap core CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>-->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" ></script>
+
+
+
     <!-- Favicons -->
 <meta name="theme-color" content="#7952b3">
-
-
     <style>
+        body {
+  padding-top: 60px;
+}
+/*@media (max-width: 979px) {*/
+/*  body {*/
+/*    padding-top: 0px;*/
+/*  }*/
+/*}*/
+
       .bd-placeholder-img {
         font-size: 1.125rem;
         text-anchor: middle;
@@ -34,20 +44,22 @@
         }
       }
 
-          .svg-container {
-      display: inline-block;
-      position: relative;
-      width: 100%;
-      padding-bottom: 100%; /* aspect ratio */
-      vertical-align: top;
-      overflow: hidden;
-    }
-    .svg-content-responsive {
-      display: inline-block;
-      position: absolute;
-      top: 10px;
-      left: 0;
-    }
+    /*      .svg-container {*/
+    /*  display: inline-block;*/
+    /*  position: relative;*/
+    /*  width: 100%;*/
+    /*  padding-bottom: 100%; !* aspect ratio *!*/
+    /*  vertical-align: top;*/
+    /*  overflow: hidden;*/
+    /*}*/
+    /*.svg-content-responsive {*/
+    /*  display: inline-block;*/
+    /*  position: absolute;*/
+    /*  top: 10px;*/
+    /*  left: 0;*/
+    /*}*/
+
+
 
     /*body {*/
     /*  font-size: 16px;*/
@@ -90,6 +102,16 @@
       fill-opacity: .125;
       shape-rendering: crispEdges;
     }
+
+      .panel-resizable {
+          resize: both;
+          overflow: hidden;
+        }
+       .panel-resizable svg{
+      width:100% !important;
+
+    }
+
 
     .resize {
       display: inline !important; /* show when empty */
@@ -144,17 +166,18 @@
 
     <!-- Custom styles for this template -->
   </head>
-  <body class="d-flex flex-column h-100">
+
 
 <header>
   <!-- Fixed navbar -->
+
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">ModNLP LIVE</a>
+    <div class="container-fluid flex-row">
+      <a class="navbar-brand" href="#">ModNLP</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
+      <div class="collapse navbar-collapse flex-row" id="navbarCollapse">
 <!--        <ul class="navbar-nav me-auto mb-2 mb-md-0">-->
 <!--          <li class="nav-item">-->
 <!--            <a class="nav-link active" aria-current="page" href="/search">Search</a>-->
@@ -166,27 +189,52 @@
 <!--            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
 <!--          </li> &ndash;&gt;-->
 <!--        </ul>-->
-        <form class="d-flex" id="searchform">
-          <input class="form-control me-2 " id="keyword" type="text" placeholder="Search" aria-label="Text">
-          <button class="btn btn-outline-success" type="button" onclick="submitKeyword('keyword')">Search</button>
-          <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-    Corpus_Options
-  </button>
-        </form>
+         <button class="btn btn-secondary me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+          Options
+        </button>
+        <div class="d-flex justify-content-center col">
+          <form class="d-flex justify-content-end" id="searchform">
+            <input class="form-control me-2 " id="keyword" type="text" placeholder="Search" aria-label="Text">
+            <button class="btn btn-secondary  me-2" type="button" onclick="submitKeyword('keyword')">Search</button>
+
+  <!--          <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">-->
+  <!--    Options-->
+  <!--  </button>-->
+          </form>
+          </div>
       </div>
     </div>
   </nav>
 </header>
 
-<!--<main class="flex-shrink-0">-->
-<!-- Begin page content -->
-<div class="container">
-<!--    <h1 class="mt-5">ModNLP Live</h1>-->
-    <p class="lead">Search word and display concordance as a Mosaic or concordance list</p>
-  </div>
 
-<div class="collapse" id="collapseExample">
-      <div class="card card-body">
+
+<div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">ModNLP Options</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <button class="btn btn-secondary" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Corpus Selection
+  </button>
+<br>
+<!-- <h5 class="offcanvas-title" id="offcanvasExampleLabelsub">Components</h5>-->
+  </div>
+</div>
+
+
+
+      <!-- Modal corpus selection -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Corpus Selection</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+           <div class="card card-body col">
                 <!-- <img src="https://genealogies.mvm.ed.ac.uk/omc/headers/omc000001-figure-1-1.png"> -->
               <select class="form-select" id = "corpusSelect" onchange="corpChanged()">
               <option value="/gok-en-server">Gok English</option>
@@ -210,164 +258,232 @@
               </form>
 
           </div>
-
-
-
+  </div>
       </div>
-
-
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
 </div>
 
-<ul class="nav nav-tabs " id="myTab" role="tablist">
-  <li class="nav-item" role="presentation">
-    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Mosaic</button>
-  </li>
-  </li>
-<!--    <li class="nav-item" role="presentation">-->
-<!--    <button class="nav-link" id="colloc-tab" data-bs-toggle="tab" data-bs-target="#colloc" type="button" role="tab" aria-controls="images" aria-selected="false">Collocation Mosaic</button>-->
-<!--  </li>-->
-  <li class="nav-item" role="presentation">
-    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Concordance</button>
-  </li>
-  <li class="nav-item" role="presentation">
-    <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Metafacet</button>
-  </li>
-      <li class="nav-item" role="presentation">
-    <button class="nav-link" id="extract-tab" data-bs-toggle="tab" data-bs-target="#extract" type="button" role="tab" aria-controls="extract" aria-selected="false">Extract</button>
-  </li>
-    <li class="nav-item" role="presentation">
-    <button class="nav-link" id="metadata-tab" data-bs-toggle="tab" data-bs-target="#metadata" type="button" role="tab" aria-controls="metadata" aria-selected="false">Metadata</button>
-  </li>
-</ul>
 
-<div class="tab-content" id="myTabContent">
-  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-
-    <div class="container">
-    <h1 class="mt-5">Mosaic Controls</h1>
-      <div class="border rounded">
-    <p></p>
-<!--    <p>Set minimum frequency to display</p>-->
-<!--    <input type="range" class="form-range w-50" min="0" max="20" step=".1" id="customRange3" value="0" onmouseup="redrawMosaic()" oninput="this.nextElementSibling.value = this.value">-->
-<!--<output>0</output>-->
-<!--&lt;!&ndash;        </div>&ndash;&gt;-->
-<!--&lt;!&ndash; <div class="border rounded">&ndash;&gt;-->
-<!--<p></p>-->
-<!--    <p>Set maximum frequency to display</p>-->
-<!--    <input type="range" class="form-range w-50" min="0" max="100" step=".5" id="customRange4" value="100"  onmouseup="redrawMosaic()"   oninput="this.nextElementSibling.value = this.value">-->
-<!--<output>100</output>-->
-          <div id="slider-range" class="w-50 m-3"></div>
-      <input id="amount" class="w-50 m-3" type="text"  />
-
-    </div>
-
-  <div class="border rounded">
-
-<div class="form-check form-switch" style="margin-left: 10px;">
-  <input class="form-check-input" type="checkbox" id="flexSwitchStopword" onclick="checkSwitch()">
-  <label class="form-check-label" for="flexSwitchStopword">Remove Stopwords</label>
-</div>
- </div>
-
-
-  </div>
-<div id="chart"></div>
-
-
-  </div>
-
-  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-    <div class="container">
-        <h1 class="mt-5">Concordance Controls</h1>
-        <div class="border rounded">
-            <p></p>
-            <p>Choose sort positions</p>
-            <div class="input-group">
-            <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle btn-danger p-2" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
-                Sort position 1
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <li><button class="dropdown-item" type="button" onclick="sort('filename')">Filename</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort('left1')">Left 1</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort('left2')">Left 2</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort('left3')">Left 3</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort('left4')">Left 4</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort('left5')">Left 5</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort('right1')">Right 1</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort('right2')">Right 2</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort('right3')">Right 3</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort('right4')">Right 4</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort('right5')">Right 5</button></li>
-              </ul>
-            </div>
-            <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle btn-warning p-2" type="button" id="dropdownMenu3" data-bs-toggle="dropdown" aria-expanded="false">
-                Sort position 2
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <li><button class="dropdown-item" type="button" onclick="sort1('filename')">Filename</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort1('left1')">Left 1</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort1('left2')">Left 2</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort1('left3')">Left 3</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort1('left4')">Left 4</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort1('left5')">Left 5</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort1('right1')">Right 1</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort1('right2')">Right 2</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort1('right3')">Right 3</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort1('right4')">Right 4</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort1('right5')">Right 5</button></li>
-              </ul>
-            </div>
-        <div class="dropdown">
-
-              <button class="btn btn-secondary dropdown-toggle btn-success p-2" type="button" id="dropdownMenu4" data-bs-toggle="dropdown" aria-expanded="false">
-                Sort position 3
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <li><button class="dropdown-item" type="button" onclick="sort2('filename')">Filename</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort2('left1')">Left 1</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort2('left2')">Left 2</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort2('left3')">Left 3</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort2('left4')">Left 4</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort2('left5')">Left 5</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort2('right1')">Right 1</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort2('right2')">Right 2</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort2('right3')">Right 3</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort2('right4')">Right 4</button></li>
-                <li><button class="dropdown-item" type="button" onclick="sort2('right5')">Right 5</button></li>
-              </ul>
-            </div>
-            </div>
-            <div id="linesreturned"> </div>
-    </div>
-          <div class="d-flex w-100  overflow-auto"  style="height:600px;overflow-x: scroll;flex-shrink: 0; ">
-                   <div class="d-flex  " id="filename"  style="line-height:1.5em;padding-bottom:7px;padding-top:7px;margin-top: 30px;font-size:14px;flex-shrink: 0;left: 0;position: -webkit-sticky;position:-webkit-sticky;position: sticky;">
-                  </div>
-                  <div class="d-flex p-2 " id="leftconc"  style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:14px;resize:horizontal;">
-                  </div>
-
-                  <div class="d-flex p-2" id="keyworddisplay" style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:14px;flex-shrink: 0;">
-                  </div>
-
-                  <div class="d-flex p-2 " id="rightconc" style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:14px;flex-shrink: 0;">
-                  </div>
-          </div>
-
-        </div>
+   <!-- Extract metadata -->
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <div class="modal-body">
+           <div class="card card-body col">
+
+                      <div class="col fade show" id="extract" role="tabpanel" aria-labelledby="home-tab">
+
+                        <div class="container">
+                            <h1 class="mt-5">Extract Controls</h1>
+                              <div class="border rounded">
+                                 <div class="form-outline" style="width: 22rem;">
+                                     <label class="form-label" for="extractnumber">Extract Size</label>
+                                     <div class="input-group">
+                                    <input value="300" type="number" max="600" id="extractnumber" class="form-control" />
+                                         <br>
+                                     <button type="button" class="btn btn-primary mr-1" id="updateExtract" onclick="updateExtract()">Update</button>
+                                         </div>
+                                     <br>
+                                </div>
+                              </div>
+
+                              <div  class="border rounded">
+                                  <br>
+                                  <p id="extractDiv" class="text-center">Extract will display here. Please select a line in the concordance view.</p>
+
+                              </div>
+                          </div>
+                        <div class="col fade show" id="metadata" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="container">
+                            <h1 class="mt-5">Metadata View</h1>
+                              <div  class="border rounded">
+                                  <br>
+                                  <p id="metadatadiv" class="text-center">Metadata will display here. Please select a line in the concordance view.</p>
+                              </div>
+                          </div>
+                        </div>
+                    </div>
+
+  </div>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!--MAIN CANVAS-->
+  <div>
+  <div class="row">
+
+
+               <div class="border rounded">
+                  <a class="btn btn-secondary d-block" data-bs-toggle="collapse" href="#collapseExampleconc" role="button" aria-expanded="false" aria-controls="collapseExampleconc">
+                    Concordance Options
+                  </a>
+                </div>
+                <div class="collapse" id="collapseExampleconc">
+                  <div class="card card-body">
+                                          <div class="form-check form-switch" style="margin-left: 10px;">
+
+                            <p></p>
+                            <p>Choose sort positions</p>
+                            <div class="input-group">
+                            <div class="btn-group">
+                              <button class="btn dropdown-toggle btn-danger p-2" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                                Sort position 1
+                              </button>
+                              <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                <li><button class="dropdown-item" type="button" onclick="sort('filename')">Filename</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort('left1')">Left 1</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort('left2')">Left 2</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort('left3')">Left 3</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort('left4')">Left 4</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort('left5')">Left 5</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort('right1')">Right 1</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort('right2')">Right 2</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort('right3')">Right 3</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort('right4')">Right 4</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort('right5')">Right 5</button></li>
+                              </ul>
+                            </div>
+                            <div class="dropdown">
+                              <button class="btn btn-secondary dropdown-toggle btn-warning p-2" type="button" id="dropdownMenu3" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                                Sort position 2
+                              </button>
+                              <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                <li><button class="dropdown-item" type="button" onclick="sort1('filename')">Filename</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort1('left1')">Left 1</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort1('left2')">Left 2</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort1('left3')">Left 3</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort1('left4')">Left 4</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort1('left5')">Left 5</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort1('right1')">Right 1</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort1('right2')">Right 2</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort1('right3')">Right 3</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort1('right4')">Right 4</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort1('right5')">Right 5</button></li>
+                              </ul>
+                            </div>
+                        <div class="dropdown">
+
+                              <button class="btn btn-secondary dropdown-toggle btn-success p-2" type="button" id="dropdownMenu4" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                                Sort position 3
+                              </button>
+                              <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                <li><button class="dropdown-item" type="button" onclick="sort2('filename')">Filename</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort2('left1')">Left 1</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort2('left2')">Left 2</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort2('left3')">Left 3</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort2('left4')">Left 4</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort2('left5')">Left 5</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort2('right1')">Right 1</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort2('right2')">Right 2</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort2('right3')">Right 3</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort2('right4')">Right 4</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort2('right5')">Right 5</button></li>
+                              </ul>
+                            </div>
+                            </div>
+                            <div id="linesreturned"> </div>
+                    </div>
+                  </div>
+                </div>
+
+
+ <div class="col container panel panel-default" id="profile" role="tabpanel" aria-labelledby="profile-tab" >
+           <div class="border rounded panel-body panel-resizable" style="height:300px;overflow: scroll;">
+
+
+    <div class="d-flex w-100 " id="concbox"  style="height:auto;flex-shrink: 0; ">
+               <div class="d-flex  " id="filename"  style="line-height:1.5em;padding-bottom:7px;padding-top:7px;margin-top: 30px;font-size:12px;flex-shrink: 0;left: 0;position: -webkit-sticky;position:-webkit-sticky;position: sticky;">
+              </div>
+              <div class="d-flex p-2  " id="leftconc"  style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:12px;resize:horizontal;">
+              </div>
+
+              <div class="d-flex p-2" id="keyworddisplay" style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:12px;flex-shrink: 0;">
+              </div>
+
+              <div class="d-flex p-2 " id="rightconc" style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:12px;flex-shrink: 0;">
+              </div>
+    </div>
+           </div>
+   </div>
+  </div>
+
+
+
+  <div class="row">
+  <div class="col container panel panel-default " id="home" role="tabpanel" aria-labelledby="home-tab">
+
+      <div class="border rounded panel-body panel-resizable">
+
+
+<!--          <div class="card">-->
+<!--            <h5 class="card-header">-->
+<!--                <a class="collapsed d-block" data-toggle="collapse" href="#collapse-collapsed" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">-->
+<!--                    Collapsible Group Item #1-->
+<!--                </a>-->
+<!--            </h5>-->
+<!--            <div id="collapse-collapsed" class="collapse" aria-labelledby="heading-collapsed">-->
+<!--                <div class="card card-body">-->
+<!--                    sdfsdfsdads-->
+
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<div class="border rounded">
+  <a class="btn btn-secondary d-block" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+    Mosaic Options
+  </a>
+</div>
+<div class="collapse" id="collapseExample">
+  <div class="card card-body">
+                      <div class="form-check form-switch" style="margin-left: 10px;">
+                      <input class="form-check-input" type="checkbox" id="flexSwitchStopword" onclick="checkSwitch()">
+                      <label class="form-check-label" for="flexSwitchStopword">Remove Stopwords</label>
+                 </div>
+                      <div class="border rounded">
+                          <div id="slider-range" class="w-50 m-3"></div>
+                                 <input id="amount" class="w-50 m-3" type="text" />
+                       </div>
+  </div>
+</div>
+
+            <div id="chart"></div>
+
+  </div>
+
+  </div>
+
 
 <!--    <p class="lead">Search word and display concordance</p>-->
 
-  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-   <div class="container">
-       <div class="border rounded">
+  <div class="col container panel panel-default" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+       <div class="border rounded border rounded panel-body panel-resizable">
+             <a class="btn btn-secondary d-block" data-bs-toggle="collapse" href="#collapseExamplemeta" role="button" aria-expanded="false" aria-controls="collapseExamplemeta">
+                Metafacet Options
+              </a>
 
-        <h1 class="mt-5">Metafacet: Concordance Metadata distributions</h1>
+
+            <div class="collapse" id="collapseExamplemeta">
+              <div class="card card-body">
+                        <h1 class="mt-5">Metafacet: Concordance Metadata Distribution</h1>
 
             <p>Click or drag to select attributes and remove from the current concordance. Check the concordance tab to see the lines which will be removed if you cll the <b>"Remove Selected"</b> button. </p>
             <p>Use the dropdown to view different facets. Items colored yellow have been partially removed by a previous deletion and will be updated by pressing the <b>"Remove Selected"</b> button.  <p>
-      </div>
+
        <div id="legend2">
                <div class="legend2"> <p class="country-name"><span class="key-dot removed"></span>All Lines Removed</p> </div>
                <div class="legend2"> <p class="country-name"><span class="key-dot some"></span>Some Lines Removed</p> </div>
@@ -376,66 +492,22 @@
        <button type="button" class="btn btn-primary " id="metafacetRemove" onclick="hide()">Remove Selected</button>
 
 
-     <div id="chart2"></div>
-   </div>
-  </div>
-<!--     <div class="tab-pane fade" id="colloc" role="tabpanel" aria-labelledby="collocation-tab">-->
-<!--           <div class="container">-->
-<!--    &lt;!&ndash;           <div class="border rounded">&ndash;&gt;-->
-<!--    &lt;!&ndash;               &ndash;&gt;-->
-<!--    &lt;!&ndash;          </div>&ndash;&gt;-->
-<!--    -->
-<!--           </div>-->
-<!--      </div>-->
 
-     <div class="tab-pane fade show" id="extract" role="tabpanel" aria-labelledby="home-tab">
-
-    <div class="container">
-        <h1 class="mt-5">Extract Controls</h1>
-          <div class="border rounded">
-             <div class="form-outline" style="width: 22rem;">
-                 <label class="form-label" for="extractnumber">Extract Size</label>
-                 <div class="input-group">
-                <input value="300" type="number" max="600" id="extractnumber" class="form-control" />
-                     <br>
-                 <button type="button" class="btn btn-primary mr-1" id="updateExtract" onclick="updateExtract()">Update</button>
-                     </div>
-                 <br>
+              </div>
             </div>
-          </div>
 
-          <div  class="border rounded">
-              <br>
-              <p id="extractDiv" class="text-center">Extract will display here. Please select a line in the concordance view.</p>
-
-          </div>
-      </div>
-      </div>
-    <div class="tab-pane fade show" id="metadata" role="tabpanel" aria-labelledby="home-tab">
-    <div class="container">
-        <h1 class="mt-5">Metadata View</h1>
-          <div  class="border rounded">
-              <br>
-              <p id="metadatadiv" class="text-center">Metadata will display here. Please select a line in the concordance view.</p>
-          </div>
-      </div>
-      </div>
+     <div id="chart2"></div>
+       </div>
+  </div>
+  </div>
 
 </div>
-
-<!--end of HTML-->
-
-
-
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-
 
 <script src="https://d3js.org/d3.v3.min.js"></script>
 
 <script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
 
-<script>
+  <script>
     var slider = $("#slider-range").slider({
     range: true,
     min: 0,
@@ -700,6 +772,7 @@ async function fetchSubcorpusAttribute(corpus,selector){
             buildConcMetadata();
         }
 
+
 }
 
  async function fetchheader(corpus) {
@@ -724,6 +797,14 @@ function submitKeyword(id){
   var selectvalue = document.getElementById("corpusSelect").value
   var markdowSelect = document.getElementById("markdownSelect").value
   fetchConcordance(value,selectvalue,markdowSelect)
+document.getElementById('keyworddisplay').scrollIntoView({
+            behavior: 'auto',
+            block: 'center',
+            inline: 'center'
+        });
+
+
+
 }
 
 function clickConc(file,filePos,section,line){
@@ -741,6 +822,9 @@ function clickConc(file,filePos,section,line){
         }
 
      fetchSingleMetadata(document.getElementById("corpusSelect").value,file)
+
+    var myModal1 = new bootstrap.Modal(document.getElementById("exampleModal1"), {});
+    myModal1.show();
 }
 
 async function fetchSingleMetadata(corpus,file,){
@@ -749,7 +833,6 @@ async function fetchSingleMetadata(corpus,file,){
       let text2 =text1.concat(file.split("/").pop().split(".")[0])
       let text3 = text2.concat(".hed")
       let text4 = text3
-      console.log(text4)
         try {
           let response = await fetch(text4,requestOptions)
           data = await response.text();
@@ -768,7 +851,6 @@ async function fetchextract(corpus,file,filePos,section){
       let text2 =text1.concat(currentKeyword.trim())
       let text3 ='&context='+document.getElementById("extractDiv")+'&request=extract&filename='.concat(file.trim()).concat('&position=').concat(filePos)
       let text4 = text2.concat(text3)
-    console.log(text4)
 
         try {
           let response = await fetch(text4,requestOptions)
@@ -851,6 +933,7 @@ function processHeaders(hdrs){
 }
 
 function dataProcess(data,keyword) {
+    console.log(keyword)
     document.getElementById("filename").innerHTML = '';
     document.getElementById("leftconc").innerHTML = '';
     document.getElementById("keyworddisplay").innerHTML = '';
@@ -875,11 +958,11 @@ function dataProcess(data,keyword) {
     }else {
         for (var i = 1; i < concobj.length - 1; i++) {
             conc = concobj[i]['text'].split("|")
-            console.log(conc)
             var section = conc[2];
             var fn = conc[0].split("/")
             fn = fn[fn.length - 1];
             var lftWordtokens = conc[3].slice(0, 130).replaceAll(/[.,\/#!$%\^&\*;?:{\'}=_`~()]/g, "").replaceAll(/\s{2,}/g, " ").replaceAll(/\s{2,}/g, " ").toLowerCase().trim().split(' ');
+            // console.log(lftWordtokens)
             var rightWordtokens = conc[3].slice((130 + keyword.length), conc[3].length).replaceAll(/[.,\/#!$%\^&\*;?\':{}=_`~()]/g, "").replaceAll(/\s{2,}/g, " ").toLowerCase().trim().split(' ');
             if (removedViaMetafacet.has(fn) || removedViaMetafacet.has(fn + section)) {
                 indextoremove.push(i);
@@ -902,14 +985,11 @@ function dataProcess(data,keyword) {
     // concobj.sort((a, b) => (a[sortpos] > b[sortpos]) ? 1 : -1)
     concobj.sort(function (objA, objB) {
         var sortArguments = [sort1pos, sort2pos, sort3pos]
-        console.log(sortArguments)
+
         var result = 0;
         for (var argIndex = 0; argIndex < sortArguments.length && result === 0; argIndex++) {
             var propertyName = sortArguments[argIndex];
-            console.log(objA[propertyName])
-            console.log(objB[propertyName])
             result = (objA[propertyName] < objB[propertyName]) ? -1 : (objA[propertyName] > objB[propertyName]) ? 1 : 0;
-            console.log(result)
         }
         return result;
     });
@@ -968,10 +1048,11 @@ function dataProcess(data,keyword) {
         if(rightSideHtml.length === 0){
             rightSideHtml = "*"
         }
-        fns +="<div"+ " class=\"" + fn + section +" "+ fn + i +"  concord \" " + "style=\"background-color:"+color+";color:red; \" onclick=\"clickConc(\' "+conc[0]+"\',\'"+posInFile+"\',\'"+section+"\',\'"+fn+i+"\' )\" >  &nbsp  &nbsp " +fn+ " &nbsp</div> ";
-        leftctx += "<div"+ " class=\""+fn + section +" "+ fn + i +" concord \" " + "style=\"background-color:"+color+" \"  onclick=\"clickConc(\' "+conc[0]+"\',\'"+posInFile+"\',\'"+section+"\',\'"+fn+i+"\' )\" >"+leftSideHtml.replaceAll('&amp;','&').replaceAll('<visual>','').replaceAll('<caption>', '').replaceAll('image','image id =img'.concat(i)).replaceAll('uri','src')+' </div> ';
-        keywordctx += "<div"+ " class=\""+fn + section +" "+ fn + i +" concord \" " +  "style=\"background-color:"+color+" \" onclick=\"clickConc(\' "+conc[0]+"\',\'"+posInFile+"\',\'"+section+"\',\'"+fn+i+"\' )\" >"+conc[3].slice(130,(130 + keyword.replaceAll('&amp;','&').split("+")[keyword.split("+").length - 1].length)) + '</div> ';
-        rightctx += "<div"+ " class=\""+fn + section +" "+ fn + i +" concord \" " +  "style=\"background-color:"+color+" \" onclick=\"clickConc(\' "+conc[0]+"\',\'"+posInFile+"\',\'"+section+"\',\'"+fn+i+"\' )\" >"+rightSideHtml.replaceAll('&amp;','&').replaceAll('<visual>','').replaceAll('<caption>', '').replaceAll('image','image id =img'.concat(i)).replaceAll('uri','src')+' </div>  ';
+
+        fns +="<div"+ " class=\"" + fn + section +" "+ fn + " "+ fn + i +"  concord \" " + "style=\"background-color:"+color+";color:red; \" ondblclick=\"clickConc(\' "+conc[0]+"\',\'"+posInFile+"\',\'"+section+"\',\'"+fn+i+"\' )\" >  &nbsp  &nbsp " +fn+ " &nbsp</div> ";
+        leftctx += "<div"+ " class=\""+fn + section+" "+ fn +" "+ fn + i +" concord \" " + "style=\"background-color:"+color+" \"  ondblclick=\"clickConc(\' "+conc[0]+"\',\'"+posInFile+"\',\'"+section+"\',\'"+fn+i+"\' )\" >"+leftSideHtml.replaceAll('&amp;','&').replaceAll('<visual>','').replaceAll('<caption>', '').replaceAll('image','image id =img'.concat(i)).replaceAll('uri','src')+' </div> ';
+        keywordctx += "<div"+ " class=\""+fn + section+" "+ fn +" "+ fn + i +" concord \" " +  "style=\"background-color:"+color+" \" ondblclick=\"clickConc(\' "+conc[0]+"\',\'"+posInFile+"\',\'"+section+"\',\'"+fn+i+"\' )\" >"+conc[3].slice(130,(130 + keyword.replaceAll('&amp;','&').split("+")[keyword.split("+").length - 1].length)) + '</div> ';
+        rightctx += "<div"+ " class=\""+fn + section+" "+ fn +" "+ fn + i +" concord \" " +  "style=\"background-color:"+color+" \" ondblclick=\"clickConc(\' "+conc[0]+"\',\'"+posInFile+"\',\'"+section+"\',\'"+fn+i+"\' )\" >"+rightSideHtml.replaceAll('&amp;','&').replaceAll('<visual>','').replaceAll('<caption>', '').replaceAll('image','image id =img'.concat(i)).replaceAll('uri','src')+' </div>  ';
 
 
         lftWords = conc[3].slice(0, 130).replaceAll(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replaceAll(/\s{2,}/g," ");
@@ -1075,12 +1156,17 @@ function dataProcess(data,keyword) {
 
     //recolor metafacetn selections
     var items =Array.from(removedViaMetafacet);
+    console.log(removedViaMetafacet)
     for (const collectionKey in items) {
         var collection1 = document.getElementsByClassName(items[collectionKey]);
         for (let i = 0; i < collection1.length; i++) {
             collection1[i].style.backgroundColor = "salmon";
         }
     }
+
+             setTimeout(function (d) {
+            $('concbox').scrollLeft(200);
+                      },2000)
 
 }
 <!-- Mosaic -->
@@ -1168,13 +1254,16 @@ function dataProcessMosaic(data,keyword){
    var Mwidth = 1800
    var colwidth = 200
 
-   var margin = {top: 50, right: 45, bottom: 80, left: 45}, width = (Mwidth) , height = 1000 ;
+   var margin = {top: 50, right: 45, bottom: 80, left: 45}, width = (Mwidth) , height = 800 ;
 
     svg = d3.select("#chart").classed("svg-container", true)
    .append("svg")
    // Responsive SVG needs these 2 attributes and no width and height attr.
    .attr("preserveAspectRatio", "xMinYMin meet")
-   .attr("viewBox", "0 0 1900 1200")
+   //      .attr("preserveAspectRatio", "none")
+   //      .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("viewBox", "0 0 1900 1050")
    // Class to make it responsive.
    .classed("svg-content-responsive", true)
    // Fill with a rectangle for visualization.
@@ -1202,8 +1291,7 @@ function dataProcessMosaic(data,keyword){
     document.getElementById("linesreturned").innerHTML ="Lines returned : "+ max;
 
     var selectedRect;
-    console.log(max)
-    console.log(frequency_min)
+
     for (var col = 0; col < countWords.length; col++) {
 
         var heigthUsed = 0;
@@ -1274,8 +1362,8 @@ function dataProcessMosaic(data,keyword){
                           d3.select(this).style("fill", "white");
                           selectedRect = this;
 
-                         var sel = document.querySelector('#profile-tab')
-                         bootstrap.Tab.getOrCreateInstance(sel).show()
+                         // var sel = document.querySelector('#profile-tab')
+                         // bootstrap.Tab.getOrCreateInstance(sel).show()
 
                           sort(mosaicPositions[d3.select(this).attr("column")])
                           highlightWord(mosaicPositions[d3.select(this).attr("column")]+d3.select(this).attr("word"))
@@ -1403,8 +1491,7 @@ var nested;
 
 dropdown = d3.select("#chart2").append("div")
                 .attr("id","drop")
-                .attr("align","centre")
-                ;
+                .attr("align","centre");
 
 //Added only for the mouse wheel
 var zoomer = d3.behavior.zoom()
@@ -1412,16 +1499,22 @@ var zoomer = d3.behavior.zoom()
 
 var main_margin = {top: 10, right: 10, bottom: 30, left: 190},
     main_width = 700 - main_margin.left - main_margin.right,
-    main_height = 550 - main_margin.top - main_margin.bottom;
+    main_height = 450 - main_margin.top - main_margin.bottom;
 
 var mini_margin = {top: 10, right: 10, bottom: 30, left: 10},
-    mini_height = 550 - mini_margin.top - mini_margin.bottom;
+    mini_height = 450 - mini_margin.top - mini_margin.bottom;
 mini_width = 100 - mini_margin.left - mini_margin.right;
-
+// console.log( main_width + main_margin.left + main_margin.right + mini_width + mini_margin.left + mini_margin.right)
+//     console.log( main_height + main_margin.top + main_margin.bottom)
 metasvg = d3.select("#chart2").append("svg")
         .attr("class", "svgWrapper")
         .attr("width", main_width + main_margin.left + main_margin.right + mini_width + mini_margin.left + mini_margin.right)
         .attr("height", main_height + main_margin.top + main_margin.bottom)
+        .attr("preserveAspectRatio", "xMinYMin meet")
+   //      .attr("preserveAspectRatio", "none")
+   //      .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("viewBox", "0 0 800 450")
         .call(zoomer)
         .on("wheel.zoom", scroll)
         //.on("mousewheel.zoom", scroll)
@@ -1770,8 +1863,10 @@ var tooltip = d3.select("body").append("div").attr("class", "toolTip");
             var opacity =  removed ? 1.0 : 0.3;
             d3.select(this).style("fill", currentColor);
             d3.select(this).style("opacity", opacity);
+            console.log(removed)
             removed ? add(d.key) : remove(d.key);
             }
+          //dataProcess(currentData,currentKeyword);
                  // vec.redisplay();
     })
       .on("mousemove", function(d){
@@ -1991,6 +2086,7 @@ var tooltip = d3.select("body").append("div").attr("class", "toolTip");
     function remove(key){
         nested.map(function(m) {
             if (m.key === key) {
+                console.log("here 1")
                 m.values.map(function (v) {
                     if (v.ID === "ignore") {
                         const collection = document.getElementsByClassName(v.Filename + ".xml");
@@ -1999,6 +2095,7 @@ var tooltip = d3.select("body").append("div").attr("class", "toolTip");
                             collection[i].classList.add("toremove");
                             removedKeys.add(v.Filename + v.ID );
                             removedViaMetafacet.add(v.Filename+".xml");
+
                         }
                     } else {
                         const collection = document.getElementsByClassName(v.Filename + ".xml" + v.ID);
@@ -2007,6 +2104,7 @@ var tooltip = d3.select("body").append("div").attr("class", "toolTip");
                             collection[i].classList.add("toremove");
                             removedKeys.add(v.Filename + v.ID);
                             removedViaMetafacet.add(v.Filename+".xml"+ v.ID);
+
                         }
                     }
                 });
@@ -2054,12 +2152,8 @@ var tooltip = d3.select("body").append("div").attr("class", "toolTip");
     }
 
 
+
   </script>
-
-
-
-
-
 
 
   </body>
