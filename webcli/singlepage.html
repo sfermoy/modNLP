@@ -111,6 +111,39 @@
       width:100% !important;
 
     }
+        .panel-resizable-vert {
+          resize: vertical;
+          overflow: hidden;
+        }
+
+        .panel-resizable-vert::-webkit-resizer {
+    background: lightpink;
+    background-image: url(resize-center-vertical.svg);
+    /*size does not work*/
+    display:block;
+    width: 150px !important;
+    height: 150px !important;
+}
+
+        .panel-resizable-horz {
+          resize: horizontal;
+          overflow: hidden;
+        }
+
+         .panel-resizable-horz::-webkit-resizer {
+    background: lightpink;
+             background-repeat: no-repeat;
+  background-size: contain;
+    background-image: url(resize-width.svg);
+    /*size does not work*/
+    display:block;
+    width: 150px !important;
+    height: 150px !important;
+}
+               .panel-resizable-horz svg{
+      width:100% !important;
+
+    }
 
 
     .resize {
@@ -403,7 +436,7 @@
 
 
  <div class="col container panel panel-default" id="profile" role="tabpanel" aria-labelledby="profile-tab" >
-           <div class="border rounded panel-body panel-resizable" style="height:300px;overflow: scroll;">
+           <div class="border rounded panel-body panel-resizable-vert" style="height:300px;overflow: scroll;">
 
 
     <div class="d-flex w-100 " id="concbox"  style="height:auto;flex-shrink: 0; ">
@@ -427,7 +460,7 @@
   <div class="row">
   <div class="col container panel panel-default " id="home" role="tabpanel" aria-labelledby="home-tab">
 
-      <div class="border rounded panel-body panel-resizable">
+      <div class="border rounded panel-body panel-resizable-horz">
 
 
 <!--          <div class="card">-->
@@ -471,7 +504,7 @@
 <!--    <p class="lead">Search word and display concordance</p>-->
 
   <div class="col container panel panel-default" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-       <div class="border rounded border rounded panel-body panel-resizable">
+       <div class="border rounded border rounded panel-body panel-resizable-horz">
              <a class="btn btn-secondary d-block" data-bs-toggle="collapse" href="#collapseExamplemeta" role="button" aria-expanded="false" aria-controls="collapseExamplemeta">
                 Metafacet Options
               </a>
