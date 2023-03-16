@@ -29,6 +29,12 @@
 /*    padding-top: 0px;*/
 /*  }*/
 /*}*/
+        .btn-group-xs > .btn, .btn-xs {
+          padding: .25rem .4rem;
+          font-size: .875rem;
+          line-height: .5;
+          border-radius: .2rem;
+        }
 
       .bd-placeholder-img {
         font-size: 1.125rem;
@@ -58,6 +64,14 @@
     /*  top: 10px;*/
     /*  left: 0;*/
     /*}*/
+
+    .svg-container {
+      background-color: white;
+    }
+        #chart2 {
+      background-color: white;
+    }
+
 
 
 
@@ -131,10 +145,9 @@
         }
 
          .panel-resizable-horz::-webkit-resizer {
-    background: lightpink;
-             background-repeat: no-repeat;
+
   background-size: contain;
-    background-image: url(resize-width.svg);
+
     /*size does not work*/
     display:block;
     width: 150px !important;
@@ -193,6 +206,12 @@
 .legend2 {
     float:left;
     margin-right: 1em;
+}
+#outerdiv {
+
+  margin-bottom: 10px;
+  margin-right: 15px;
+  margin-left: 15px;
 }
     </style>
 
@@ -357,24 +376,21 @@
 
 
 <!--MAIN CANVAS-->
-  <div>
+  <div id="outerdiv">
   <div class="row">
 
 
                <div class="border rounded">
-                  <a class="btn btn-secondary d-block" data-bs-toggle="collapse" href="#collapseExampleconc" role="button" aria-expanded="false" aria-controls="collapseExampleconc">
+                  <a class="btn btn-secondary btn-xs d-block" data-bs-toggle="collapse" href="#collapseExampleconc" role="button" aria-expanded="false" aria-controls="collapseExampleconc">
                     Concordance Options
                   </a>
                 </div>
                 <div class="collapse" id="collapseExampleconc">
                   <div class="card card-body">
-                                          <div class="form-check form-switch" style="margin-left: 10px;">
-
-                            <p></p>
-                            <p>Choose sort positions</p>
+                      <div class="form-check form-switch" style="margin-left: 10px;">
                             <div class="input-group">
-                            <div class="btn-group">
-                              <button class="btn dropdown-toggle btn-danger p-2" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                            <div class="btn-group ">
+                              <button class="btn dropdown-toggle btn-danger p-2 btn-xs" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                                 Sort position 1
                               </button>
                               <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
@@ -392,7 +408,7 @@
                               </ul>
                             </div>
                             <div class="dropdown">
-                              <button class="btn btn-secondary dropdown-toggle btn-warning p-2" type="button" id="dropdownMenu3" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                              <button class="btn btn-secondary dropdown-toggle btn-warning p-2 btn-xs" type="button" id="dropdownMenu3" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                                 Sort position 2
                               </button>
                               <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
@@ -411,7 +427,7 @@
                             </div>
                         <div class="dropdown">
 
-                              <button class="btn btn-secondary dropdown-toggle btn-success p-2" type="button" id="dropdownMenu4" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                              <button class="btn btn-secondary dropdown-toggle btn-success p-2 btn-xs" type="button" id="dropdownMenu4" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                                 Sort position 3
                               </button>
                               <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
@@ -429,12 +445,12 @@
                               </ul>
                             </div>
                             </div>
-                            <div id="linesreturned"> </div>
+
                     </div>
                   </div>
                 </div>
 
-
+<div id="linesreturned"> </div>
  <div class="col container panel panel-default" id="profile" role="tabpanel" aria-labelledby="profile-tab" >
            <div class="border rounded panel-body panel-resizable-vert" style="height:300px;overflow: scroll;">
 
@@ -457,7 +473,7 @@
 
 
 
-  <div class="row">
+  <div class="row" id="sortable">
   <div class="col container panel panel-default " id="home" role="tabpanel" aria-labelledby="home-tab">
 
       <div class="border rounded panel-body panel-resizable-horz">
@@ -477,7 +493,7 @@
 <!--            </div>-->
 <!--        </div>-->
 <div class="border rounded">
-  <a class="btn btn-secondary d-block" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+  <a class="btn btn-secondary btn-xs d-block" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
     Mosaic Options
   </a>
 </div>
@@ -503,9 +519,9 @@
 
 <!--    <p class="lead">Search word and display concordance</p>-->
 
-  <div class="col container panel panel-default" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+  <div class="col container panel panel-default" id="contact" role="tabpanel" aria-labelledby="contact-tab" >
        <div class="border rounded border rounded panel-body panel-resizable-horz">
-             <a class="btn btn-secondary d-block" data-bs-toggle="collapse" href="#collapseExamplemeta" role="button" aria-expanded="false" aria-controls="collapseExamplemeta">
+             <a class="btn btn-secondary btn-xs d-block" data-bs-toggle="collapse" href="#collapseExamplemeta" role="button" aria-expanded="false" aria-controls="collapseExamplemeta">
                 Metafacet Options
               </a>
 
@@ -522,7 +538,7 @@
                <div class="legend2"> <p class="country-name"><span class="key-dot some"></span>Some Lines Removed</p> </div>
             </div>
        <br>
-       <button type="button" class="btn btn-primary " id="metafacetRemove" onclick="hide()">Remove Selected</button>
+       <button type="button" class="btn btn-primary btn-sm " id="metafacetRemove" onclick="hide()">Remove Selected</button>
 
 
 
@@ -541,12 +557,18 @@
 <script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
 
   <script>
+
+      $( document ).ready(function() {
+    $("#sortable").sortable();
+    $(".panel-resizable-horz").resizable();
+    });
+
     var slider = $("#slider-range").slider({
     range: true,
     min: 0,
     max: 100,
     step: 1,
-    values: [0, 100],
+    values: [5, 100],
     slide: function (event, ui) {
         $("#amount").val("Tiles with frequency above " + nonlinear(ui.values[0]) + " and below "+ nonlinear(ui.values[1])+"  will be displayed." );
     },
@@ -991,6 +1013,7 @@ function dataProcess(data,keyword) {
     }else {
         for (var i = 1; i < concobj.length - 1; i++) {
             conc = concobj[i]['text'].split("|")
+            keyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0];
             var section = conc[2];
             var fn = conc[0].split("/")
             fn = fn[fn.length - 1];
@@ -1032,6 +1055,7 @@ function dataProcess(data,keyword) {
     for (var i = 1; i < concobj.length-1; i++){
         var color ='white'// i % 2===0 ? "lightgrey": "grey";
         conc = concobj[i]['text'].split("|")
+        keyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0];
         var fn = conc[0].split("/")
         var section = conc[2];
          var posInFile =conc[1];
@@ -1075,17 +1099,33 @@ function dataProcess(data,keyword) {
         }
         var leftSideHtml = lftWordtokens.join(" ")
         var rightSideHtml = rightWordtokens.join(" ")
-        if(leftSideHtml.length === 0){
-            leftSideHtml = "*"
+        rightSideHtml = rightSideHtml.replaceAll('&amp;','&').replaceAll('<visual>','').replaceAll('<caption>', '').replaceAll('image','image id =img'.concat(i)).replaceAll('uri','src');
+        leftSideHtml = leftSideHtml.replaceAll('&amp;','&').replaceAll('<visual>','').replaceAll('<caption>', '').replaceAll('image','image id =img'.concat(i)).replaceAll('uri','src')
+        keywordctxhtml = keyword
+
+        if(lftWordtokens.length === 1){
+            leftSideHtml = "<div style='color: transparent;'>*</div>"
         }
-        if(rightSideHtml.length === 0){
-            rightSideHtml = "*"
+        if(rightWordtokens.length === 1){
+            rightSideHtml = "<div style='color: transparent;'>*</div>"
         }
+        if(keywordctxhtml.length === 0){
+            keywordctxhtml  = "*"
+        }
+        // if(fn === "omc000118.xml"){
+        //      console.log("-------------------------------------------------")
+        //     console.log(leftSideHtml)
+        //     console.log(keyword)
+        //     console.log(rightSideHtml)
+        //     console.log(lftWordtokens.length)
+        //     console.log(lftWordtokens)
+        //
+        // }
 
         fns +="<div"+ " class=\"" + fn + section +" "+ fn + " "+ fn + i +"  concord \" " + "style=\"background-color:"+color+";color:red; \" ondblclick=\"clickConc(\' "+conc[0]+"\',\'"+posInFile+"\',\'"+section+"\',\'"+fn+i+"\' )\" >  &nbsp  &nbsp " +fn+ " &nbsp</div> ";
-        leftctx += "<div"+ " class=\""+fn + section+" "+ fn +" "+ fn + i +" concord \" " + "style=\"background-color:"+color+" \"  ondblclick=\"clickConc(\' "+conc[0]+"\',\'"+posInFile+"\',\'"+section+"\',\'"+fn+i+"\' )\" >"+leftSideHtml.replaceAll('&amp;','&').replaceAll('<visual>','').replaceAll('<caption>', '').replaceAll('image','image id =img'.concat(i)).replaceAll('uri','src')+' </div> ';
-        keywordctx += "<div"+ " class=\""+fn + section+" "+ fn +" "+ fn + i +" concord \" " +  "style=\"background-color:"+color+" \" ondblclick=\"clickConc(\' "+conc[0]+"\',\'"+posInFile+"\',\'"+section+"\',\'"+fn+i+"\' )\" >"+conc[3].slice(130,(130 + keyword.replaceAll('&amp;','&').split("+")[keyword.split("+").length - 1].length)) + '</div> ';
-        rightctx += "<div"+ " class=\""+fn + section+" "+ fn +" "+ fn + i +" concord \" " +  "style=\"background-color:"+color+" \" ondblclick=\"clickConc(\' "+conc[0]+"\',\'"+posInFile+"\',\'"+section+"\',\'"+fn+i+"\' )\" >"+rightSideHtml.replaceAll('&amp;','&').replaceAll('<visual>','').replaceAll('<caption>', '').replaceAll('image','image id =img'.concat(i)).replaceAll('uri','src')+' </div>  ';
+        leftctx += "<div"+ " class=\""+fn + section+" "+ fn +" "+ fn + i +" concord \" " + "style=\"background-color:"+color+" \"  ondblclick=\"clickConc(\' "+conc[0]+"\',\'"+posInFile+"\',\'"+section+"\',\'"+fn+i+"\' )\" >"+leftSideHtml+' </div> ';
+        keywordctx += "<div"+ " class=\""+fn + section+" "+ fn +" "+ fn + i +" concord \" " +  "style=\"background-color:"+color+" \" ondblclick=\"clickConc(\' "+conc[0]+"\',\'"+posInFile+"\',\'"+section+"\',\'"+fn+i+"\' )\" >"+keywordctxhtml + '</div> ';
+        rightctx += "<div"+ " class=\""+fn + section+" "+ fn +" "+ fn + i +" concord \" " +  "style=\"background-color:"+color+" \" ondblclick=\"clickConc(\' "+conc[0]+"\',\'"+posInFile+"\',\'"+section+"\',\'"+fn+i+"\' )\" >"+rightSideHtml+' </div>  ';
 
 
         lftWords = conc[3].slice(0, 130).replaceAll(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replaceAll(/\s{2,}/g," ");
@@ -1189,11 +1229,10 @@ function dataProcess(data,keyword) {
 
     //recolor metafacetn selections
     var items =Array.from(removedViaMetafacet);
-    console.log(removedViaMetafacet)
     for (const collectionKey in items) {
         var collection1 = document.getElementsByClassName(items[collectionKey]);
         for (let i = 0; i < collection1.length; i++) {
-            collection1[i].style.backgroundColor = "salmon";
+            collection1[i].style.border = "thin solid red";
         }
     }
 
@@ -2124,7 +2163,8 @@ var tooltip = d3.select("body").append("div").attr("class", "toolTip");
                     if (v.ID === "ignore") {
                         const collection = document.getElementsByClassName(v.Filename + ".xml");
                         for (let i = 0; i < collection.length; i++) {
-                            collection[i].style.backgroundColor = "salmon";
+                            collection[i].style.border = "thin solid red";
+                            collection[i].style.borderColor = "red";
                             collection[i].classList.add("toremove");
                             removedKeys.add(v.Filename + v.ID );
                             removedViaMetafacet.add(v.Filename+".xml");
@@ -2133,7 +2173,8 @@ var tooltip = d3.select("body").append("div").attr("class", "toolTip");
                     } else {
                         const collection = document.getElementsByClassName(v.Filename + ".xml" + v.ID);
                         for (let i = 0; i < collection.length; i++) {
-                            collection[i].style.backgroundColor = "salmon";
+                            collection[i].style.border = "thin solid red";
+                            collection[i].style.borderColor = "red";
                             collection[i].classList.add("toremove");
                             removedKeys.add(v.Filename + v.ID);
                             removedViaMetafacet.add(v.Filename+".xml"+ v.ID);
@@ -2165,7 +2206,8 @@ var tooltip = d3.select("body").append("div").attr("class", "toolTip");
                     if (v.ID === "ignore") {
                         const collection = document.getElementsByClassName(v.Filename + ".xml");
                         for (let i = 0; i < collection.length; i++) {
-                            collection[i].style.backgroundColor = "white";
+
+                            collection[i].style.borderColor = "white";
                             collection[i].classList.remove("toremove");
                             removedKeys.delete(v.Filename + v.ID);
                             removedViaMetafacet.delete(v.Filename+".xml");
@@ -2173,7 +2215,7 @@ var tooltip = d3.select("body").append("div").attr("class", "toolTip");
                     } else {
                         const collection = document.getElementsByClassName(v.Filename + ".xml" + v.ID);
                         for (let i = 0; i < collection.length; i++) {
-                            collection[i].style.backgroundColor = "white";
+                            collection[i].style.borderColor = "white";
                             collection[i].classList.remove("toremove");
                             removedKeys.delete(v.Filename  + v.ID);
                             removedViaMetafacet.delete(v.Filename+".xml" + v.ID);
