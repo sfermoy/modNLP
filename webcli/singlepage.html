@@ -246,7 +246,7 @@
         </button>
         <div class="d-flex justify-content-center col">
           <form class="d-flex justify-content-end" id="searchform">
-            <input class="form-control me-2 " id="keyword" type="text" placeholder="Search" aria-label="Text">
+            <input class="form-control me-2 " id="keyword" type="text" placeholder="Search" value="keyword" aria-label="Text">
             <button class="btn btn-secondary  me-2" type="button" onclick="submitKeyword('keyword')">Search</button>
 
   <!--          <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">-->
@@ -473,8 +473,8 @@
 
 
 
-  <div class="row" id="sortable">
-  <div class="col container panel panel-default " id="home" role="tabpanel" aria-labelledby="home-tab">
+  <div class="row" >
+  <div class="draggable col container panel panel-default " id="home" role="tabpanel" aria-labelledby="home-tab">
 
       <div class="border rounded panel-body panel-resizable-horz">
 
@@ -519,7 +519,7 @@
 
 <!--    <p class="lead">Search word and display concordance</p>-->
 
-  <div class="col container panel panel-default" id="contact" role="tabpanel" aria-labelledby="contact-tab" >
+  <div class="draggable col container panel panel-default" id="contact" role="tabpanel" aria-labelledby="contact-tab" >
        <div class="border rounded border rounded panel-body panel-resizable-horz">
              <a class="btn btn-secondary btn-xs d-block" data-bs-toggle="collapse" href="#collapseExamplemeta" role="button" aria-expanded="false" aria-controls="collapseExamplemeta">
                 Metafacet Options
@@ -528,17 +528,13 @@
 
             <div class="collapse" id="collapseExamplemeta">
               <div class="card card-body">
-                        <h1 class="mt-5">Metafacet: Concordance Metadata Distribution</h1>
-
-            <p>Click or drag to select attributes and remove from the current concordance. Check the concordance tab to see the lines which will be removed if you cll the <b>"Remove Selected"</b> button. </p>
-            <p>Use the dropdown to view different facets. Items colored yellow have been partially removed by a previous deletion and will be updated by pressing the <b>"Remove Selected"</b> button.  <p>
 
        <div id="legend2">
                <div class="legend2"> <p class="country-name"><span class="key-dot removed"></span>All Lines Removed</p> </div>
                <div class="legend2"> <p class="country-name"><span class="key-dot some"></span>Some Lines Removed</p> </div>
             </div>
        <br>
-       <button type="button" class="btn btn-primary btn-sm " id="metafacetRemove" onclick="hide()">Remove Selected</button>
+       <button type="button" class="btn btn-primary btn-xs " id="metafacetRemove" onclick="hide()">Remove Selected</button>
 
 
 
@@ -555,13 +551,54 @@
 <script src="https://d3js.org/d3.v3.min.js"></script>
 
 <script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
   <script>
 
-      $( document ).ready(function() {
-    $("#sortable").sortable();
-    $(".panel-resizable-horz").resizable();
-    });
+      const position = {x: 0, y: 0}
+
+    interact('.draggable').draggable({
+        listeners: {
+            start(event) {
+                console.log(event.type, event.target)
+            },
+            move(event) {
+                position.x += event.dx
+                position.y += event.dy
+
+                event.target.style.transform =
+                    `translate(${position.x}px, ${position.y}px)`
+            },
+        }
+    })
+
+      interact('.panel-resizable-horz')
+  .resizable({
+    edges: { top: true, left: true, bottom: true, right: true },
+    listeners: {
+      move: function (event) {
+        let { x, y } = event.target.dataset
+
+        x = (parseFloat(x) || 0) + event.deltaRect.left
+        y = (parseFloat(y) || 0) + event.deltaRect.top
+
+        Object.assign(event.target.style, {
+          width: `${event.rect.width}px`,
+          height: `${event.rect.height}px`,
+          transform: `translate(${x}px, ${y}px)`
+        })
+
+        Object.assign(event.target.dataset, { x, y })
+      }
+    }
+  })
+
+
+ $( document ).ready(function() {
+        $(".panel-resizable-horz").resizable({
+        handles: "n, e, s, w, ne, se, sw, nw"
+      });
+       submitKeyword("keyword")
+ });
 
     var slider = $("#slider-range").slider({
     range: true,
@@ -852,13 +889,11 @@ function submitKeyword(id){
   var selectvalue = document.getElementById("corpusSelect").value
   var markdowSelect = document.getElementById("markdownSelect").value
   fetchConcordance(value,selectvalue,markdowSelect)
-document.getElementById('keyworddisplay').scrollIntoView({
-            behavior: 'auto',
-            block: 'center',
-            inline: 'center'
-        });
-
-
+// document.getElementById('keyworddisplay').scrollIntoView({
+//             behavior: 'auto',
+//             block: 'center',
+//             inline: 'center'
+//         });
 
 }
 
