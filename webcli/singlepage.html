@@ -29,11 +29,26 @@
 /*    padding-top: 0px;*/
 /*  }*/
 /*}*/
+
+
+        .icon {
+            background-color: white;
+            background-image: url(https://cdn-icons-png.flaticon.com/512/2926/2926322.png);
+             background-size: contain;
+            /*size does not work*/
+            display:block;
+            width: 8px;
+            background-repeat: no-repeat;
+            padding-right: 20px;
+            }
+        .icon svg{
+      width:100% !important;
+    }
         .btn-group-xs > .btn, .btn-xs {
-          padding: .25rem .4rem;
+            /*padding: .25rem .4rem;*/
           font-size: .875rem;
           line-height: .5;
-          border-radius: .2rem;
+          /*border-radius: .2rem;*/
         }
 
       .bd-placeholder-img {
@@ -474,7 +489,7 @@
 
 
   <div class="row" >
-  <div class="draggable col container panel panel-default " id="home" role="tabpanel" aria-labelledby="home-tab">
+  <div class="draggable1 col container panel panel-default " id="home" role="tabpanel" aria-labelledby="home-tab">
 
       <div class="border rounded panel-body panel-resizable-horz">
 
@@ -492,10 +507,14 @@
 <!--                </div>-->
 <!--            </div>-->
 <!--        </div>-->
-<div class="border rounded">
-  <a class="btn btn-secondary btn-xs d-block" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-    Mosaic Options
-  </a>
+<div class="border rounded row">
+
+      <a class="btn btn-secondary btn-xs d-block col " data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+        Mosaic Options
+      </a>
+    <div class="icon handle rounded col-xs ">
+    </div>
+
 </div>
 <div class="collapse" id="collapseExample">
   <div class="card card-body">
@@ -519,11 +538,15 @@
 
 <!--    <p class="lead">Search word and display concordance</p>-->
 
-  <div class="draggable col container panel panel-default" id="contact" role="tabpanel" aria-labelledby="contact-tab" >
+  <div class="draggable2 col container panel panel-default" id="contact" role="tabpanel" aria-labelledby="contact-tab" >
        <div class="border rounded border rounded panel-body panel-resizable-horz">
-             <a class="btn btn-secondary btn-xs d-block" data-bs-toggle="collapse" href="#collapseExamplemeta" role="button" aria-expanded="false" aria-controls="collapseExamplemeta">
+
+           <div class="border rounded row">
+             <a class="btn btn-secondary btn-xs d-block col" id="metabtn" data-bs-toggle="collapse" href="#collapseExamplemeta" role="button" aria-expanded="false" aria-controls="collapseExamplemeta">
                 Metafacet Options
               </a>
+            <div class="icon handle rounded col-xs "></div>
+           </div>
 
 
             <div class="collapse" id="collapseExamplemeta">
@@ -554,9 +577,10 @@
 <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
   <script>
 
-      const position = {x: 0, y: 0}
 
-    interact('.draggable').draggable({
+
+  const position = {x: 0, y: 0}
+    interact('.draggable1').draggable({
         listeners: {
             start(event) {
                 console.log(event.type, event.target)
@@ -567,35 +591,54 @@
 
                 event.target.style.transform =
                     `translate(${position.x}px, ${position.y}px)`
-            },
-        }
+            }
+
+        },
+        allowFrom: '.handle',
     })
 
-      interact('.panel-resizable-horz')
-  .resizable({
-    edges: { top: true, left: true, bottom: true, right: true },
-    listeners: {
-      move: function (event) {
-        let { x, y } = event.target.dataset
+  const position2 = {x: 0, y: 0}
+    interact('.draggable2').draggable({
+        listeners: {
+            start(event) {
+                console.log(event.type, event.target)
+            },
+            move(event) {
+                position2.x += event.dx
+                position2.y += event.dy
 
-        x = (parseFloat(x) || 0) + event.deltaRect.left
-        y = (parseFloat(y) || 0) + event.deltaRect.top
+                event.target.style.transform =
+                    `translate(${position2.x}px, ${position2.y}px)`
+            }
 
-        Object.assign(event.target.style, {
-          width: `${event.rect.width}px`,
-          height: `${event.rect.height}px`,
-          transform: `translate(${x}px, ${y}px)`
-        })
+        },
+        allowFrom: '.handle',
+    })
 
-        Object.assign(event.target.dataset, { x, y })
-      }
-    }
-  })
-
+  //     interact('.panel-resizable-horz')
+  // .resizable({
+  //   edges: { top: true, left: true, bottom: true, right: true },
+  //   listeners: {
+  //     move: function (event) {
+  //       let { x, y } = event.target.dataset
+  //
+  //       x = (parseFloat(x) || 0) + event.deltaRect.left
+  //       y = (parseFloat(y) || 0) + event.deltaRect.top
+  //
+  //       Object.assign(event.target.style, {
+  //         width: `${event.rect.width}px`,
+  //         height: `${event.rect.height}px`,
+  //         transform: `translate(${x}px, ${y}px)`
+  //       })
+  //
+  //       Object.assign(event.target.dataset, { x, y })
+  //     }
+  //   }
+  // })
 
  $( document ).ready(function() {
         $(".panel-resizable-horz").resizable({
-        handles: "n, e, s, w, ne, se, sw, nw"
+        handles: "e, s, w, ne, se, sw, nw"
       });
        submitKeyword("keyword")
  });
