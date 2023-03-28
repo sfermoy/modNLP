@@ -227,6 +227,16 @@
 #metadatadiv img {
    width: 100%;
 }
+/*Sets the maximum height of the entire modal to 95% of the screen height*/
+#flistModal .modal-content {
+  max-height: 95vh;
+  overflow: scroll;
+}
+
+/*!*Sets the maximum height of the modal body to 90% of the screen height*!*/
+/*.modal-body {*/
+/*  max-height: 90vh;*/
+/*}*/
     </style>
 
 
@@ -256,7 +266,7 @@
 <!--          </li> &ndash;&gt;-->
 <!--        </ul>-->
          <button class="btn btn-secondary me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-          Options
+          Menu
         </button>
         <div class="d-flex justify-content-center col">
           <form class="d-flex justify-content-end" id="searchform">
@@ -346,11 +356,11 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="flistModalLabel">Corpus Selection</h5>
+        <h5 class="modal-title" id="flistModalLabel">Frequency List</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="closeflist()" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-           <div id ="flistdiv" class="card card-body col">
+      <div class="modal-body  overflow-scroll">
+           <div id ="flistdiv" class="card card-body col ">
                <div class="spinner-border text-primary" role="status">
                   <span class="visually-hidden">Loading...</span>
                 </div>
@@ -409,7 +419,7 @@
 
   <!-- metadata -->
 <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">
-  <div class="modal-dialog modal-xlg">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -421,7 +431,7 @@
                             <h1 class="mt-5">Metadata View</h1>
                               <div  class="border rounded">
                                   <br>
-                                  <p id="metadatadiv" class="text-center">Metadata will display here. Please select a line in the concordance view.</p>
+                                  <p id="metadatadiv" class="text-left">Metadata will display here. Please select a line in the concordance view.</p>
                               </div>
                           </div>
                         </div>
@@ -744,6 +754,7 @@ function nonlinear(val) {
     var indextoremove =[];
     var sortClick = false;
     var subcorpatts = [];
+    var subcorpattsLabels = [];
     var subcorpenabled = false;
     var socket ;
     var sort1pos = "filename";
@@ -758,7 +769,15 @@ function nonlinear(val) {
 
     var  selectHtml ="<div class=\"col-md-3 form-group border rounded \"><label for=\"theclassSelect\">titleText</label><div class=\"col-auto\"><select class=\"form-select theclass\" id=\"theclassSelect\"  onchange=\"updateTextBox()\" size=\"10\" multiple aria-label=\"size 10 select theclass\"></select> <div class=\"form-check\">" +
         "<input class=\"form-check-input\" type=\"checkbox\" onclick='checkboxClick()' value=\"\" id=\"theclassChecked\">" +
-        "<label class=\"form-check-label\" for=\"theclassChecked\">exclude?</label></div></div></div>"
+        "<label class=\"form-check-label\" for=\"theclassChecked\">exclude</label></div><div class=\"dropdown\">" +
+        " <button class=\"btn btn-secondary dropdown-toggle btn-secondary p-2 btn-xs\" type=\"button\" id=\"theclassdropper\"  data-bs-toggle=\"dropdown\" data-bs-display=\"static\" aria-expanded=\"false\">" +
+        "                                And" +
+        "                              </button>" +
+        "                              <ul class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu2\">" +
+        "                                <li><button class=\"dropdown-item\" type=\"button\" onclick='dropdownclick(\"Or\",\"theclassdropper\")'>Or</button></li>" +
+        "                                <li><button class=\"dropdown-item\" type=\"button\" onclick='dropdownclick(\"And\",\"theclassdropper\")'>And</button></li>" +
+        "                              </ul>" +
+        "                            </div></div></div>"
     var  optionHtml ="<option value=\"opVal\">opVal</option>"
     var  subTextHtml =" <label for=\"supcorptextbox\">Text Query</label><textarea class=\"border rounded form-control text-wrap\" id=\"supcorptextbox\"  type=\"text\"  style=\"width: 45rem;height: 20rem;margin:13px\"></textarea>"
 
@@ -783,8 +802,6 @@ function checkSwitch()
   }
 }
 
-
-
 function subcorpusSwitch()
 {
   var checkbox = document.getElementById('flexSwitchsubcorpus');
@@ -797,11 +814,11 @@ function subcorpusSwitch()
 }
 
 function checkboxClick(){
+
     updateTextBox();
 }
 
 function activateSubcorpus(){
-    console.log("act")
     $("#flexSwitchsubcorpus").prop('checked', true);
     subcorpenabled = true;
 }
@@ -813,20 +830,27 @@ function corpChanged(){
 
 }
 
+function dropdownclick(logic,classstr){
+    let dropper = document.getElementById(classstr);
+    dropper.innerText = logic;
+    updateTextBox();
+}
+
 function updateTextBox(){
     let tb = document.getElementById("supcorptextbox")
-    tb.innerHTML = ''
+    tb.value = ""
     let first = true;
     for (const attElement of subcorpatts) {
         let selbox = document.getElementById(attElement + "Select")
         let cbox = document.getElementById(attElement + "Checked")
+        let dropper = document.getElementById(attElement + "dropper")
         varselecteditems = $(selbox).val();
         var txtstring = "";
         if (varselecteditems.length > 0 & !first) {
-          txtstring +="and "
+            txtstring += dropper.innerText.toString().toLowerCase().trim() + " ";
         }
         for (const selitm of varselecteditems) {
-            if (txtstring === "" || txtstring === "and ") {
+            if (txtstring === "" || txtstring === "and " || txtstring === "or ") {
                 if (cbox.checked){
                     txtstring += "(not ($s/" + attElement + "=%27" + selitm.trim() + "%27";
                 }else{
@@ -838,16 +862,14 @@ function updateTextBox(){
         }
         if (varselecteditems.length > 0) {
             if (cbox.checked){
-                tb.insertAdjacentHTML('beforeend', txtstring + ")) ");
+                tb.value += txtstring + ")) ";
                 first = false;
             }else{
-                tb.insertAdjacentHTML('beforeend', txtstring + ") ");
+                tb.value += txtstring + ") ";
                 first = false;
             }
 
          }
-
-
     }
 
 }
@@ -856,12 +878,12 @@ function updateTextBox(){
        dataProcessMosaic(currentData,currentKeyword);
    }
 
-   function sort(pos){
+   async function sort(pos){
        sortClick = true;
        sortpos = pos;
        sort1pos =pos
        document.getElementById("dropdownMenu2").innerHTML = pos;
-       dataProcess(currentData,currentKeyword)
+       await dataProcess(currentData,currentKeyword);
        sortClick = false;
    }
       function sort1(pos){
@@ -923,9 +945,13 @@ async function fetchSubcorpusAttributesd(corpus){
     let selectors = attributes.filter((element, index) => {
       return index % 2 === 1;
     })
-    subcorpatts=selectors;
+    let selectorLabels = attributes.filter((element, index) => {
+      return index % 2 === 0;
+    })
+    subcorpatts = selectors;
+    subcorpattsLabels = selectorLabels;
     for (const selectorsKey in selectors) {
-        fetchSubcorpusAttribute(corpus,selectors[selectorsKey])
+        fetchSubcorpusAttribute(corpus,selectors[selectorsKey],selectorLabels[selectorsKey])
     }
 
     form.insertAdjacentHTML( 'beforeend', subTextHtml);
@@ -934,21 +960,20 @@ async function fetchSubcorpusAttributesd(corpus){
 }
 
 // http://genealogies.mvm.ed.ac.uk:1245/attoptions?request=attoptions&xqueryattribs=
-async function fetchSubcorpusAttribute(corpus,selector){
+async function fetchSubcorpusAttribute(corpus,selector,title){
     let text0 = 'https://genealogies.mvm.ed.ac.uk'
     let text1 =text0.concat(corpus).concat('/attoptions?')
     let text3 ='request=attoptions&xqueryattribs='
     let text4 = text1.concat(text3).concat(selector)
     let attoption ="";
     let form = document.getElementById("subcorpusForm")
-    var title = selector.split('/')
-    title = title[title.length-1]
-    title = title.replaceAll("@","")
+    title = title.split("/");
+    title= title[title.length-1]
     form.insertAdjacentHTML( 'beforeend',selectHtml.replaceAll("theclass",selector).replaceAll("titleText",title))
     try {
-      let response = await fetch(text4,requestOptions)
+       let response = await fetch(text4,requestOptions)
        attoption = (await response.text()).replaceAll("_"," ");
-        attoption = attoption.split(',')
+       attoption = attoption.split(',');
     }
     catch (e) {
       return e.message;
@@ -958,8 +983,6 @@ async function fetchSubcorpusAttribute(corpus,selector){
         thisBox.insertAdjacentHTML( 'beforeend',optionHtml.replaceAll("opVal",attoptionElement));
     }
 }
-
-
 
 
   async function fetchConcordance(keyword,corpus,markdowSelect) {
@@ -973,7 +996,7 @@ async function fetchSubcorpusAttribute(corpus,selector){
       let text3 ='&case=insensitive&context=130&request=concord'
       let text4 = text2.concat(text3)
       if(subcorpenabled) {
-          text4 = text4.concat("&xquerywhere=" + document.getElementById("supcorptextbox").innerHTML)
+          text4 = text4.concat("&xquerywhere=" + document.getElementById("supcorptextbox").value)
       }
         try {
           let response = await fetch(text4,requestOptions)
@@ -986,7 +1009,6 @@ async function fetchSubcorpusAttribute(corpus,selector){
         currentKeyword = keyword;
         dataProcess(data,keyword);
         dataProcessMosaic(data,keyword);
-
         if(!headersfetched) {
             console.log("getting headers "+corpus)
             fetchheader(corpus);
@@ -1069,27 +1091,34 @@ async function getFreqkList(){
       let text1 =text0.concat(document.getElementById("corpusSelect").value).concat('/freqlist//')
       let text2 =text1.concat("?casesensitive=FALSE&maxlistsize=0&request=freqlist&skipfirst=0")
       let text4 = text2
+        if(subcorpenabled) {
+              text4 = text4.concat("&xquerywhere=" + document.getElementById("supcorptextbox").value)
+          }
         try {
           let response = await fetch(text4,requestOptions)
           data = await response.text();
-            htmlstr ="<table class=\"table\">\n" +
-                "  <thead>\n" +
-                "    <tr>\n" +
-                "      <th scope=\"col\">#</th>\n" +
-                "      <th scope=\"col\">First</th>\n" +
-                "      <th scope=\"col\">Last</th>\n" +
-                "      <th scope=\"col\">Handle</th>\n" +
-                "    </tr>\n" +
-                "  </thead>\n" +
+            htmlstr ="<table class=\"table\">" +
+                "  <thead>" +
+                "    <tr>" +
+                "      <th scope=\"col\">Rank</th>" +
+                "      <th scope=\"col\">Type</th>" +
+                "      <th scope=\"col\">Count</th>" +
+                "    </tr>" +
+                "  </thead>" +
                 "  <tbody>"
+
             var output = document.getElementById('flistdiv');
-      //       for (let i = 2; i < data.length ; i++) {
-      //           var line = data[i].split("</sep>")
-      //           htmlstr+= "<tr>
-      // <th scope="row">"
-      //       }
-      //       }
-          output.innerHTML = data;
+            var lines = data.split("\n")
+            for (let i = 2; i < lines.length ; i++) {
+                line = lines[i].toString();
+                linesplit = line.split("<sep/>")
+                htmlstr += "<tr><th scope=\"row\">"+ linesplit[0] +"</th>"
+                htmlstr += "<th scope=\"row\">"+ linesplit[1] +"</th>"
+                htmlstr += "<th scope=\"row\">"+ linesplit[2] +"</th>"
+                htmlstr += "</tr>"
+            }
+             htmlstr += "</tbody></table>"
+          output.innerHTML = htmlstr;
         }
         catch (e) {
           return e.message;
@@ -1114,17 +1143,35 @@ async function fetchSingleMetadata(corpus,file,){
       let text4 = text3
         try {
           let response = await fetch(text4,requestOptions)
-          data = await response.text();
-
+            data = await response.text();
             var output = document.getElementById('metadatadiv');
             data = data.replaceAll("src=\"","src=\"https://genealogies.mvm.ed.ac.uk/omc/headers/")
-            data = data.replaceAll("<document","")
-            data = data.replaceAll("<author>","<br>Author: ")
+            data = data.replaceAll("<document","<b>Document:</b> <p> ")
+            data = data.replaceAll("filename=","Filename: ")
+            data = data.replaceAll("publication_date=","<br>Publication date: ")
+            data = data.replaceAll("capture_date=","<br>Capture date: ")
+            data = data.replaceAll("format=","<br>Format: ")
+            data = data.replaceAll("<title>","</p> <br><b>Title:</b> ")
+            data = data.replaceAll("<author>"," <br><b>Author:</b> ")
             data = data.replaceAll("</author>","")
-            data = data.replaceAll("<organisation","<br>Organisation: ")
-            data = data.replaceAll("<copyright","<br><br><br>Copyright: ")
-            data = data.replaceAll("<comments>"," ")
-
+            data = data.replaceAll("<organisation","<br><b>Organisation:</b> ")
+            data = data.replaceAll("<copyright","<br><br><b>Copyright: </b>")
+            data = data.replaceAll("<copyright","<br><br><b>Copyright: </b>")
+            data = data.replaceAll("status=","<br>Status: ")
+            data = data.replaceAll("<holder>","<br>Holder: ")
+            data = data.replaceAll("<section","<br><br><b>Section:</b> ")
+            data = data.replaceAll("id=","<br>id: ")
+            data = data.replaceAll("<visual>","<br><b>Visual:</b> ")
+            data = data.replaceAll("</visual>","")
+            data = data.replaceAll("<caption>","<br><b>Caption:</b> ")
+            data = data.replaceAll("<taxon","<br><b>Taxon:</b> ")
+            data = data.replaceAll("class=","<br>Class: ")
+            data = data.replaceAll("order=","<br>Order: ")
+            data = data.replaceAll("family=","<br>Family: ")
+            data = data.replaceAll("qualifier=","<br>Qualifier: ")
+            //ata = data.replaceAll("src=","<br>src: ")
+            data = data.replaceAll("\">","\"")
+            data = data.replaceAll("\'>","\'")
 
 
           output.innerHTML = data;
@@ -1245,22 +1292,74 @@ function dataProcess(data,keyword) {
         concobj = concrdance;
     }else {
         for (var i = 1; i < concobj.length - 1; i++) {
-            conc = concobj[i]['text'].split("|")
-            keyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0];
-            var section = conc[2];
-            var fn = conc[0].split("/")
-            fn = fn[fn.length - 1];
-            var lftWordtokens = conc[3].slice(0, 130).replaceAll(/[.,\/#!$%\^&\*;?:{\'}=_`~()]/g, "").replaceAll(/\s{2,}/g, " ").replaceAll(/\s{2,}/g, " ").toLowerCase().trim().split(' ');
-            // console.log(lftWordtokens)
-            var rightWordtokens = conc[3].slice((130 + keyword.length), conc[3].length).replaceAll(/[.,\/#!$%\^&\*;?\':{}=_`~()]/g, "").replaceAll(/\s{2,}/g, " ").toLowerCase().trim().split(' ');
+        conc = concobj[i]['text'].split("|")
+        var outkey =""
+        if(keyword.includes("*") || keyword.includes("+") || keyword.match(/\".+?\"/g) ){
+            splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0];
+            outkey = splitKeyword;
+        }else{
+            splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("-")[0].split("/")[0];
+            outkey = keyword;
+        }
+        var fn = conc[0].split("/")
+        var section = conc[2];
+        fn=fn[fn.length -1];
+        var lftWordtokens =  conc[3].slice(0, 130).trim().toLowerCase().split(' ');
+        var rightWordtokens =  conc[3].slice((130 + splitKeyword.length),conc[3].length).trim().toLowerCase().split(' ');
+        var leftincrement =0;
+        var rightincrement =0;
+        rightWordtokens = rightWordtokens.filter(item => item);
+        lftWordtokens = lftWordtokens.filter(item => item);
+        if(lftWordtokens.length < 7){
+            for (let j = lftWordtokens.length; j < 7; j++) {
+                lftWordtokens.push("zzzz")
+            }
+        }
+        if(rightWordtokens.length < 7){
+            for (let j = rightWordtokens.length; j < 7; j++) {
+                rightWordtokens.push("zzzz")
+            }
+        }
+
             if (removedViaMetafacet.has(fn) || removedViaMetafacet.has(fn + section)) {
                 indextoremove.push(i);
             }
 
+
             for (let j = 1; j < 7; j++) {
-                concobj[i]['left' + j] = lftWordtokens[lftWordtokens.length - j];
-                concobj[i]['right' + j] = rightWordtokens[j - 1];
+            var dontSkipleft = 1;
+            var dontSkipright = 1;
+
+            if (j - 1 + rightincrement < rightWordtokens.length && !(rightWordtokens[j - 1 + rightincrement] ==='')) {
+                while (j - 1 + rightincrement < rightWordtokens.length && rightWordtokens[j - 1 + rightincrement].replaceAll(/[.,\/#!$%\^&\*;?:\-{}\'=\>_`~\<()]/g, "").length === 0 ) {
+                    rightincrement += 1;
+                    if (j - 1 + rightincrement > rightWordtokens.length ) {
+                        dontSkipright = 0;
+                        break;
+                    }
+                }
             }
+            if (lftWordtokens.length - j - leftincrement > 0) {
+                while (lftWordtokens.length - j - leftincrement > 0 && lftWordtokens[lftWordtokens.length - j - leftincrement].replaceAll(/[.,\/#!$%\^&\*;?\':\-{}=_\>`~\<()]/g, "").length === 0 ) {
+                    leftincrement += 1;
+                    if (lftWordtokens.length - j - leftincrement < 0) {
+                        dontSkipleft = 0;
+                        break;
+                    }
+                }
+            }
+            if (dontSkipleft) {
+                if (lftWordtokens.length - j - leftincrement >= 0) {
+                    concobj[i]['left' + j] = lftWordtokens[lftWordtokens.length - j - leftincrement].replaceAll(/[.,\/#!$%\^&\*;?:\-{}\'=_\>`~\<()]/g, "").trim().toLowerCase();
+                }
+            }
+            if (dontSkipright) {
+                if (j - 1 + rightincrement < rightWordtokens.length && !(rightWordtokens[j - 1 + rightincrement] === '')) {
+                    concobj[i]['right' + j] = rightWordtokens[j - 1 + rightincrement].replaceAll(/[.,\/#!$%\^&\*;?:\-{}\'=_\>`~\<()]/g, "").trim().toLowerCase();
+                }
+            }
+        }
+
             conc = concobj[i]['text'].split("|")
             concobj[i]['filename'] = fn;
         }
@@ -1290,22 +1389,29 @@ function dataProcess(data,keyword) {
     for (var i = 1; i < concobj.length-1; i++){
         var color ='white'// i % 2===0 ? "lightgrey": "grey";
         conc = concobj[i]['text'].split("|")
-        keyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0];
+        var outkey =""
+        if(keyword.includes("*") || keyword.includes("+") || keyword.match(/\".+?\"/g) ){
+            splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0];
+            outkey = splitKeyword;
+        }else{
+            splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("-")[0].split("/")[0];
+            outkey = keyword;
+        }
         var fn = conc[0].split("/")
         var section = conc[2];
          var posInFile =conc[1];
         fn=fn[fn.length -1];
         var lftWordtokens =  conc[3].slice(0, 130).trim().split(' ');
-        var rightWordtokens =  conc[3].slice((130 + keyword.length),conc[3].length).trim().split(' ');
+        var rightWordtokens =  conc[3].slice((130 + splitKeyword.length),conc[3].length).trim().split(' ');
         var leftincrement =0;
         var rightincrement =0;
-         // rightWordtokens = rightWordtokens.filter(item => item);
-         // lftWordtokens = lftWordtokens.filter(item => item);
+        rightWordtokens = rightWordtokens.filter(item => item);
+        lftWordtokens = lftWordtokens.filter(item => item);
         for (let j = 1; j < 7; j++) {
             var dontSkipleft = 1;
             var dontSkipright = 1;
             if (j - 1 + rightincrement < rightWordtokens.length && !(rightWordtokens[j - 1 + rightincrement] ==='')) {
-                while (rightWordtokens[j - 1 + rightincrement].replaceAll(/[.,\/#!$%\^&\*;?:{}\'=_`~()]/g, "").length === 0) {
+                while (j - 1 + rightincrement < rightWordtokens.length && rightWordtokens[j - 1 + rightincrement].replaceAll(/[.,\/#!$%\^&\*;?\':\-{}=_\>`~\<()]/g, "").length === 0 ) {
                     rightincrement += 1;
                     if (j - 1 + rightincrement > rightWordtokens.length ) {
                         dontSkipright = 0;
@@ -1314,7 +1420,7 @@ function dataProcess(data,keyword) {
                 }
             }
             if (lftWordtokens.length - j - leftincrement > 0) {
-                while (lftWordtokens[lftWordtokens.length - j - leftincrement].replaceAll(/[.,\/#!$%\^&\*;?\':{}=_`~()]/g, "").length === 0) {
+                while (lftWordtokens.length - j - leftincrement > 0 && lftWordtokens[lftWordtokens.length - j - leftincrement].replaceAll(/[.,\/#!$%\^&\*;?\':\-{}=_\>`~\<()]/g, "").length === 0 ) {
                     leftincrement += 1;
                     if (lftWordtokens.length - j - leftincrement < 0) {
                         dontSkipleft = 0;
@@ -1324,40 +1430,30 @@ function dataProcess(data,keyword) {
             }
             if (dontSkipleft) {
                 if (lftWordtokens.length - j - leftincrement >= 0) {
-                    lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&\*;?\':{}=_`~()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                    lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
                 }
             }
             if (dontSkipright) {
                 if (j - 1 + rightincrement < rightWordtokens.length && !(rightWordtokens[j - 1 + rightincrement] === '')) {
-                    rightWordtokens[j - 1 + rightincrement] = " <span class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&\*;?\':{}=_`~()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
+                    rightWordtokens[j - 1 + rightincrement] = " <span class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
                 }
             }
         }
-        var leftSideHtml = lftWordtokens.join(" ")
-        var rightSideHtml = rightWordtokens.join(" ")
+        var leftSideHtml = lftWordtokens.join(" ");
+        var rightSideHtml = rightWordtokens.join(" ");
         rightSideHtml = rightSideHtml.replaceAll('&amp;','&').replaceAll('<visual>','').replaceAll('<caption>', '').replaceAll('image','image id =img'.concat(i)).replaceAll('uri','src');
-        leftSideHtml = leftSideHtml.replaceAll('&amp;','&').replaceAll('<visual>','').replaceAll('<caption>', '').replaceAll('image','image id =img'.concat(i)).replaceAll('uri','src')
-        keywordctxhtml = keyword
+        leftSideHtml = leftSideHtml.replaceAll('&amp;','&').replaceAll('<visual>','').replaceAll('<caption>', '').replaceAll('image','image id =img'.concat(i)).replaceAll('uri','src');
+        keywordctxhtml = outkey;
 
-        if(lftWordtokens.length === 1){
+        if(lftWordtokens.length === 1 || lftWordtokens.length === 0){
             leftSideHtml = "<div style='color: transparent;'>*</div>"
         }
-        if(rightWordtokens.length === 1){
+        if(rightWordtokens.length === 1 || rightWordtokens.length === 0){
             rightSideHtml = "<div style='color: transparent;'>*</div>"
         }
         if(keywordctxhtml.length === 0){
             keywordctxhtml  = "*"
         }
-        // if(fn === "omc000118.xml"){
-        //      console.log("-------------------------------------------------")
-        //     console.log(leftSideHtml)
-        //     console.log(keyword)
-        //     console.log(rightSideHtml)
-        //     console.log(lftWordtokens.length)
-        //     console.log(lftWordtokens)
-        //
-        // }
-
         if (!removedViaDelete.has(fn+i)) {
 
             fns += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + "  concord \" " + "style=\"background-color:" + color + ";color:red; \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >  &nbsp  &nbsp " + fn + " &nbsp</div> ";
@@ -1373,6 +1469,8 @@ function dataProcess(data,keyword) {
         // console.log(lftWords.slice(-7))
         // console.log(lftWords.slice(-5,-1))
         lftWords = lftWords.slice(-5,-1)
+
+        lftWords = lftWords.filter(item => item);
         for (var k =0; k < lftWords.length; k++) {
             var val = lftWords[k]
             if(countWords[k][val] === undefined) {
@@ -1384,11 +1482,12 @@ function dataProcess(data,keyword) {
                 }
             }
 
-        var rightWords = conc[3].slice((130+ keyword.length),conc[2].length).replaceAll(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
+        var rightWords = conc[3].slice((130+ splitKeyword.length),conc[2].length).replaceAll(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
         rightWords = rightWords.replaceAll(/\s{2,}/g," ");
         rightWords = rightWords.toLowerCase()
         rightWords = rightWords.split(' ');
         rightWords = rightWords.slice(1,5)
+        rightWords = rightWords.filter(item => item);
         // console.log(rightWords)
         for (var j =0; j < rightWords.length; j++) {
             var val = rightWords[j]
@@ -2280,7 +2379,10 @@ var tooltip = d3.select("body").append("div").attr("class", "toolTip");
     //Update the y axis of the big chart
     d3.select(".mainGroup")
       .select(".y.axis")
-      .call(main_yAxis);
+      .call(main_yAxis)
+        .selectAll(".y.axis text")
+         .call(wrap, main_yScale.rangeBand());
+
 
     /////////////////////////////////////////////////////////////
     /////////////// Update the mini bar fills ///////////////////
@@ -2295,7 +2397,7 @@ var tooltip = d3.select("body").append("div").attr("class", "toolTip");
 
     //Update the label size
     d3.selectAll(".y.axis text")
-      .style("font-size", textScale(selected.length));
+       .style("font-size", textScale(selected.length));
 
     //Update the big bar chart
     update();
@@ -2491,6 +2593,32 @@ var tooltip = d3.select("body").append("div").attr("class", "toolTip");
             }
         });
     }
+
+function wrap(text, width) {
+  text.each(function() {
+    var text = d3.select(this),
+        words = text.text().split(/\s+/).reverse(),
+        word,
+        line = [],
+        lineNumber = 0,
+        lineHeight = 1.1, // ems
+        y = text.attr("y"),
+        x = text.attr("x"),
+        dy = parseFloat(text.attr("dy")),
+        tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+    while (word = words.pop()) {
+      line.push(word);
+      tspan.text(line.join(" "));
+      if (tspan.node().getComputedTextLength() > width) {
+        line.pop();
+        tspan.text(line.join(" "));
+        line = [word];
+        tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+      }
+    }
+  });
+}
+
 
 
 
