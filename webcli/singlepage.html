@@ -209,6 +209,17 @@
 .some { background: orange;
          opacity:0.3}
 
+.concord{
+    background: white;
+}
+
+.concHighlight{
+    background: lightyellow;
+}
+
+.concselected {
+    background: lightgray;
+}
 
 #legend2{
     overflow:hidden;
@@ -218,7 +229,6 @@
     margin-right: 1em;
 }
 #outerdiv {
-
   margin-bottom: 10px;
   margin-right: 15px;
   margin-left: 15px;
@@ -237,7 +247,7 @@
 /*.modal-body {*/
 /*  max-height: 90vh;*/
 /*}*/
-    </style>
+</style>
 
 
     <!-- Custom styles for this template -->
@@ -249,7 +259,7 @@
 
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <div class="container-fluid flex-row">
-      <a class="navbar-brand" href="#">ModNLP</a>
+      <a class="navbar-brand" onclick="location.reload()" >ModNLP</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -449,13 +459,13 @@
 
 
 <!--MAIN CANVAS-->
-  <div id="outerdiv border-rounded ">
+  <div id="outerdiv">
   <div class="border">
 
-      <a class="btn btn-secondary btn-xs d-block" data-bs-toggle="collapse" href="#collapseExampleconc" role="button" aria-expanded="false" aria-controls="collapseExampleconc">
+      <a class="btn btn-secondary btn-xs d-block" data-bs-toggle="collapse" href="#collapseExampleconc" role="button" aria-expanded="true" aria-controls="collapseExampleconc">
         Concordance Options
       </a>
-                <div class="collapse" id="collapseExampleconc">
+                <div class="collapse show" id="collapseExampleconc">
                   <div class="card card-body">
                       <div class="form-check form-switch" style="margin-left: 10px;">
                             <div class="input-group row ">
@@ -560,8 +570,8 @@
 
 
 
-  <div class="row" >
-  <div class="draggable1 col container panel panel-default " id="home" role="tabpanel" aria-labelledby="home-tab">
+  <div class="row"  >
+  <div class="draggable1 col container panel panel-default" style="clear:both" id="home" role="tabpanel" aria-labelledby="home-tab">
 
       <div class="border rounded panel-body panel-resizable-horz">
 
@@ -610,7 +620,7 @@
 
 <!--    <p class="lead">Search word and display concordance</p>-->
 
-  <div class="draggable2 col container panel panel-default" id="contact" role="tabpanel" aria-labelledby="contact-tab" >
+  <div class="draggable2 col container panel panel-default" style="clear:both" id="contact" role="tabpanel" aria-labelledby="contact-tab" >
        <div class="border rounded border rounded panel-body panel-resizable-horz">
 
            <div class="border rounded row">
@@ -657,7 +667,6 @@
             move(event) {
                 position.x += event.dx
                 position.y += event.dy
-
                 event.target.style.transform =
                     `translate(${position.x}px, ${position.y}px)`
             }
@@ -672,7 +681,6 @@
             move(event) {
                 position2.x += event.dx
                 position2.y += event.dy
-
                 event.target.style.transform =
                     `translate(${position2.x}px, ${position2.y}px)`
             }
@@ -706,6 +714,8 @@
         $(".panel-resizable-horz").resizable({
         handles: "n, e, s, w, ne, se, sw, nw"
       });
+
+
        submitKeyword("keyword")
  });
 
@@ -904,19 +914,18 @@ function updateTextBox(){
 
    function highlightWord(selectedWord){
     const collection = document.getElementsByClassName(selectedWord);
-        setTimeout(function (d) {
-            collection[0].scrollIntoView();
-                      },700)
        for (let i = 0; i < collection.length; i++) {
 
-           collection[i].style.color = "cyan";
-           collection[i].parentElement.style.backgroundColor = "lightyellow";
+           collection[i].style.color = "purple";
+           collection[i].parentElement.classList.add("concHighlight");
            const collection2 = document.getElementsByClassName(collection[i].parentElement.classList[2]);
-
+            console.log(collection[i].parentElement.classList[2])
+            console.log(collection2)
             for (let k = 0; k < collection2.length; k++) {
-                collection2[k].style.backgroundColor = "lightyellow";
+                 collection2[k].classList.add("concHighlight");
             }
 
+             console.log(collection2)
        }
    }
 
@@ -1041,12 +1050,14 @@ function submitKeyword(id){
   var value = document.getElementById(id).value
   var selectvalue = document.getElementById("corpusSelect").value
   var markdowSelect = document.getElementById("markdownSelect").value
+    sort1pos = "filename";
+  sort2pos = "filename";
+  sort3pos = "filename";
+  document.getElementById("dropdownMenu2").innerText = "Sort position 1";
+    document.getElementById("dropdownMenu3").innerText = "Sort position 2";
+    document.getElementById("dropdownMenu4").innerText = "Sort position 3";
+
   fetchConcordance(value,selectvalue,markdowSelect)
-    document.getElementById('keyworddisplay').scrollIntoView({
-                behavior: 'auto',
-                block: 'center',
-                inline: 'center'
-            });
 }
 
 function clickExtract() {
@@ -1077,12 +1088,13 @@ function clickConc(file,filePos,section,line){
     cline = line;
       const collection0 = document.getElementsByClassName("concord");
         for (let i = 0; i < collection0.length ; i++) {
-            collection0[i].style.backgroundColor = "white";
+            collection0[i].classList.remove("concselected");
         }
 
        const collection = document.getElementsByClassName(line);
         for (let i = 0; i < collection.length ; i++) {
-            collection[i].style.backgroundColor = "lightgrey";
+             collection[i].classList.add("concselected");
+            //collection[i].style.backgroundColor = "lightgrey";
         }
 }
 
@@ -1155,6 +1167,7 @@ async function fetchSingleMetadata(corpus,file,){
             data = data.replaceAll("<author>"," <br><b>Author:</b> ")
             data = data.replaceAll("</author>","")
             data = data.replaceAll("<organisation","<br><b>Organisation:</b> ")
+            data = data.replaceAll("name=","")
             data = data.replaceAll("<copyright","<br><br><b>Copyright: </b>")
             data = data.replaceAll("<copyright","<br><br><b>Copyright: </b>")
             data = data.replaceAll("status=","<br>Status: ")
@@ -1185,7 +1198,7 @@ async function fetchextract(corpus,file,filePos){
     let text0 = 'https://genealogies.mvm.ed.ac.uk'
       let text1 =text0.concat(corpus).concat('/extractor?sgml=').concat(document.getElementById("markdownSelect").value).concat('&keyword=')
       let text2 =text1.concat(currentKeyword.trim())
-      let text3 ='&context='+document.getElementById("extractDiv")+'&request=extract&filename='.concat(file.trim()).concat('&position=').concat(filePos)
+      let text3 ='&context='+document.getElementById("extractnumber").value+'&request=extract&filename='.concat(file.trim()).concat('&position=').concat(filePos)
       let text4 = text2.concat(text3)
 
         try {
@@ -1457,9 +1470,9 @@ function dataProcess(data,keyword) {
         if (!removedViaDelete.has(fn+i)) {
 
             fns += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + "  concord \" " + "style=\"background-color:" + color + ";color:red; \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >  &nbsp  &nbsp " + fn + " &nbsp</div> ";
-            leftctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" " + "style=\"background-color:" + color + " \"  onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + leftSideHtml + ' </div> ';
-            keywordctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" " + "style=\"background-color:" + color + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + keywordctxhtml + '</div> ';
-            rightctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" " + "style=\"background-color:" + color + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + rightSideHtml + ' </div>  ';
+            leftctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" " +  " \"  onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + leftSideHtml + ' </div> ';
+            keywordctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" " + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + keywordctxhtml + '</div> ';
+            rightctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" "  + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + rightSideHtml + ' </div>  ';
 
         }
 
@@ -1574,9 +1587,6 @@ function dataProcess(data,keyword) {
         }
     }
 
-             setTimeout(function (d) {
-            $('concbox').scrollLeft(200);
-                      },2000)
 
 }
 <!-- Mosaic -->
@@ -1584,6 +1594,9 @@ var mosaicPositions = ["left4","left3","left2","left1","filename","right1","righ
 const stopwords = new Set(['i','me','my','myself','we','our','ours','ourselves','you','your','yours','yourself','yourselves','he','him','his','himself','she','her','hers','herself','it','its','itself','they','them','their','theirs','themselves','what','which','who','whom','this','that','these','those','am','is','are','was','were','be','been','being','have','has','had','having','do','does','did','doing','a','an','the','and','but','if','or','because','as','until','while','of','at','by','for','with','about','against','between','into','through','during','before','after','above','below','to','from','up','down','in','out','on','off','over','under','again','further','then','once','here','there','when','where','why','how','all','any','both','each','few','more','most','other','some','such','no','nor','not','only','own','same','so','than','too','very','s','t','can','will','just','don','should','now']);
 
 function dataProcessMosaic(data,keyword){
+                 setTimeout(function (d) {
+            $('concbox').scrollLeft(250);
+                      },2000)
   document.getElementById("chart").innerHTML = '';
 
     var countWords = [{},{},{},{},{},{},{},{},{}];
