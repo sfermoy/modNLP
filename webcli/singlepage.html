@@ -243,6 +243,11 @@
   overflow: scroll;
 }
 
+.kwhilight{
+     font-weight: bold;
+     color: blue;
+}
+
 /*!*Sets the maximum height of the modal body to 90% of the screen height*!*/
 /*.modal-body {*/
 /*  max-height: 90vh;*/
@@ -259,7 +264,7 @@
 
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <div class="container-fluid flex-row">
-      <a class="navbar-brand" onclick="location.reload()" >ModNLP</a>
+      <a class="navbar-brand" id="corpLabel" onclick="location.reload()" >OMC</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -278,7 +283,7 @@
          <button class="btn btn-secondary me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
           Menu
         </button>
-        <div class="d-flex justify-content-center col">
+        <div class="d-flex justify-content-end col">
           <form class="d-flex justify-content-end" id="searchform">
             <input class="form-control me-2 " id="keyword" type="text" placeholder="Search" value="keyword" aria-label="Text">
             <button class="btn btn-secondary  me-2" type="button" onclick="submitKeyword('keyword')">Search</button>
@@ -288,6 +293,10 @@
   <!--  </button>-->
           </form>
           </div>
+
+            <div class="d-flex justify-content-end col">
+                 <a class="navbar-brand" href="https://sourceforge.net/projects/modnlp/" >ModNLP</a>
+            </div>
       </div>
     </div>
   </nav>
@@ -302,6 +311,7 @@
   </div>
   <div class="offcanvas-body">
       <div class="border rounded my-3 p-4">
+          <h3>Selection Tools</h3>
        <div class="form-check form-switch" style="margin-left: 10px;">
               <input class="form-check-input" type="checkbox" id="flexSwitchsubcorpus" onclick="subcorpusSwitch()">
               <label class="form-check-label" for="flexSwitchsubcorpus">Activate/Deactivate Subcorpus Selection</label>
@@ -312,8 +322,21 @@
   </button>
       </div>
 <br><div class="border rounded my-3 p-4">
+      <h3>Analysis Tools</h3>
           <button class="btn btn-secondary" type="button" class="btn btn-primary" data-bs-toggle="modal" onclick="getFreqkList()" data-bs-target="#flistModal">
     Frequency List
+  </button>
+</div>
+<br>
+
+      <br><div class="border rounded my-3 p-4">
+      <h3>Save/Load Concordance</h3>
+          <button class="btn btn-secondary" type="button" class="btn btn-primary"  onclick="dlConcordance()" >
+    Download Concordance
+  </button>
+      <br> <br>
+       <button class="btn btn-secondary" type="button" class="btn btn-primary"  onclick="loadConcordance()">
+    Load Concordance
   </button>
 </div>
 <br>
@@ -552,7 +575,7 @@
            <div class="border rounded panel-body panel-resizable-vert" style="height:300px;overflow: scroll;">
 
 
-    <div class="d-flex w-100 " id="concbox"  style="height:auto;flex-shrink: 0; ">
+    <div class="d-flex w-100  " id="concbox"  style="height:auto;flex-shrink: 0; ">
                <div class="d-flex  " id="filename"  style="line-height:1.5em;padding-bottom:7px;padding-top:7px;margin-top: 30px;font-size:12px;flex-shrink: 0;left: 0;position: -webkit-sticky;position:-webkit-sticky;position: sticky;">
               </div>
               <div class="d-flex p-2  " id="leftconc"  style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:12px;resize:horizontal;">
@@ -836,6 +859,9 @@ function activateSubcorpus(){
 function corpChanged(){
     let corp = document.getElementById("corpusSelect").value;
     fetchSubcorpusAttributesd(corp)
+    var el = document.getElementById("corpusSelect");
+    var text = el.options[el.selectedIndex].innerHTML;
+    document.getElementById("corpLabel").innerHTML = text;
     headersfetched =false;
 
 }
@@ -884,6 +910,47 @@ function updateTextBox(){
 
 }
 
+function dlConcordance(){
+    var element = document.createElement('a');
+     var filename = "concordance.txt";
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(keyword.value+"\n"+currentData));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+}
+function loadConcordance(){
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.onchange = e => {
+
+   // getting a hold of the file reference
+   var file = e.target.files[0];
+
+   // setting up the reader
+   var reader = new FileReader();
+   reader.readAsText(file,'UTF-8');
+
+   // here we tell the reader what to do when it's done reading...
+   reader.onload = readerEvent => {
+       var content = readerEvent.target.result; // this is the content!
+       var lines = content.split('\n');
+       var kword= lines[0]
+        // remove one line, starting at the first position
+        lines.splice(0,1);
+        // join the array back into a single string
+        content = lines.join('\n');
+        dataProcess(content,kword)
+   }
+}
+    input.click();
+}
+
+
    function redrawMosaic(){
        dataProcessMosaic(currentData,currentKeyword);
    }
@@ -915,18 +982,14 @@ function updateTextBox(){
    function highlightWord(selectedWord){
     const collection = document.getElementsByClassName(selectedWord);
        for (let i = 0; i < collection.length; i++) {
-
            collection[i].style.color = "purple";
            collection[i].parentElement.classList.add("concHighlight");
            const collection2 = document.getElementsByClassName(collection[i].parentElement.classList[2]);
-            console.log(collection[i].parentElement.classList[2])
-            console.log(collection2)
             for (let k = 0; k < collection2.length; k++) {
                  collection2[k].classList.add("concHighlight");
             }
-
-             console.log(collection2)
        }
+        collection[0].scrollIntoView()
    }
 
     let data = ""
@@ -1008,6 +1071,26 @@ async function fetchSubcorpusAttribute(corpus,selector,title){
           text4 = text4.concat("&xquerywhere=" + document.getElementById("supcorptextbox").value)
       }
         try {
+           let concordancebox = document.getElementById("keyworddisplay")
+          concordancebox.innerHTML = "<div class=\"spinner-border text-success d-flex align-items-center justify-content-center\" role=\"status\">" +
+        "  <span class=\"visually-hidden\">Loading...</span>" +
+        "</div>";
+        let fnfn = document.getElementById("filename")
+        fnfn.innerHTML = "<br><br><h2>Loading Concordance          </h2>";
+         let lctx = document.getElementById("leftconc")
+        lctx.innerHTML = "";
+        let rttx = document.getElementById("rightconc")
+        rttx.innerHTML = "";
+        let chartBox = document.getElementById("chart")
+          chartBox.innerHTML = "<br><br><h2>Loading Concordance          </h2><div class=\"spinner-border text-success d-flex align-items-center justify-content-center\" role=\"status\">" +
+        "  <span class=\"visually-hidden\">Loading...</span>" +
+        "</div>";
+        let chartBox2 = document.getElementById("metachart")
+          chartBox2.innerHTML = "<div class=\"spinner-border text-success d-flex align-items-center justify-content-center\" role=\"status\">" +
+        "  <span class=\"visually-hidden\">Loading...</span>" +
+        "</div>";
+
+
           let response = await fetch(text4,requestOptions)
           data = await response.text();
         }
@@ -1031,7 +1114,7 @@ async function fetchSubcorpusAttribute(corpus,selector,title){
 
  async function fetchheader(corpus) {
   let text0 = 'https://genealogies.mvm.ed.ac.uk'
-  let text1 =text0.concat(corpus).concat('/allheaders?request=dldHeaders')
+  let text1 = text0.concat(corpus).concat('/allheaders?request=dldHeaders')
   let headers = "";
   try {
       let response = await fetch(text1,requestOptions)
@@ -1097,7 +1180,7 @@ function clickConc(file,filePos,section,line){
             //collection[i].style.backgroundColor = "lightgrey";
         }
 }
-
+//https://genealogies.mvm.ed.ac.uk/freqlist//?casesensitive=FALSE&maxlistsize=0&request=freqlist&skipfirst=0
 async function getFreqkList(){
     let text0 = 'https://genealogies.mvm.ed.ac.uk'
       let text1 =text0.concat(document.getElementById("corpusSelect").value).concat('/freqlist//')
@@ -1109,7 +1192,13 @@ async function getFreqkList(){
         try {
           let response = await fetch(text4,requestOptions)
           data = await response.text();
-            htmlstr ="<table class=\"table\">" +
+
+
+            var output = document.getElementById('flistdiv');
+            var lines = data.split("\n")
+             htmlstr = "<h3> Number of Tokens: </h3>"
+             htmlstr += "<h3>"+lines[0].split("<sep/>")[2]+"</h3><br><br>"
+            htmlstr +="<table class=\"table\">" +
                 "  <thead>" +
                 "    <tr>" +
                 "      <th scope=\"col\">Rank</th>" +
@@ -1119,8 +1208,6 @@ async function getFreqkList(){
                 "  </thead>" +
                 "  <tbody>"
 
-            var output = document.getElementById('flistdiv');
-            var lines = data.split("\n")
             for (let i = 2; i < lines.length ; i++) {
                 line = lines[i].toString();
                 linesplit = line.split("<sep/>")
@@ -1307,10 +1394,14 @@ function dataProcess(data,keyword) {
         for (var i = 1; i < concobj.length - 1; i++) {
         conc = concobj[i]['text'].split("|")
         var outkey =""
-        if(keyword.includes("*") || keyword.includes("+") || keyword.match(/\".+?\"/g) ){
-            splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0];
+        if(keyword.includes("*") || keyword.includes("-") || keyword.match(/\".+?\"/g) ){
+            splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("/")[0];
             outkey = splitKeyword;
-        }else{
+        }else if ( keyword.includes("+") ){
+            splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("/")[0];
+            outkey = splitKeyword.replaceAll(/[.,\/#!$%\^&\*;?:\-{}\"\'=\>_`~\<()]/g, "");
+        }
+        else{
             splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("-")[0].split("/")[0];
             outkey = keyword;
         }
@@ -1344,7 +1435,7 @@ function dataProcess(data,keyword) {
             var dontSkipright = 1;
 
             if (j - 1 + rightincrement < rightWordtokens.length && !(rightWordtokens[j - 1 + rightincrement] ==='')) {
-                while (j - 1 + rightincrement < rightWordtokens.length && rightWordtokens[j - 1 + rightincrement].replaceAll(/[.,\/#!$%\^&\*;?:\-{}\'=\>_`~\<()]/g, "").length === 0 ) {
+                while (j - 1 + rightincrement < rightWordtokens.length && rightWordtokens[j - 1 + rightincrement].replaceAll(/[.,\/#!$%\^&\*;?“:\-{}\'=\>_`~\<()]/g, "").length === 0 ) {
                     rightincrement += 1;
                     if (j - 1 + rightincrement > rightWordtokens.length ) {
                         dontSkipright = 0;
@@ -1353,7 +1444,7 @@ function dataProcess(data,keyword) {
                 }
             }
             if (lftWordtokens.length - j - leftincrement > 0) {
-                while (lftWordtokens.length - j - leftincrement > 0 && lftWordtokens[lftWordtokens.length - j - leftincrement].replaceAll(/[.,\/#!$%\^&\*;?\':\-{}=_\>`~\<()]/g, "").length === 0 ) {
+                while (lftWordtokens.length - j - leftincrement > 0 && lftWordtokens[lftWordtokens.length - j - leftincrement].replaceAll(/[.,\/#!$%“\^&\*;?\':\-{}=_\>`~\<()]/g, "").length === 0 ) {
                     leftincrement += 1;
                     if (lftWordtokens.length - j - leftincrement < 0) {
                         dontSkipleft = 0;
@@ -1363,12 +1454,12 @@ function dataProcess(data,keyword) {
             }
             if (dontSkipleft) {
                 if (lftWordtokens.length - j - leftincrement >= 0) {
-                    concobj[i]['left' + j] = lftWordtokens[lftWordtokens.length - j - leftincrement].replaceAll(/[.,\/#!$%\^&\*;?:\-{}\'=_\>`~\<()]/g, "").trim().toLowerCase();
+                    concobj[i]['left' + j] = lftWordtokens[lftWordtokens.length - j - leftincrement].replaceAll(/[.,\/#“!$%\^&\*;?:\-{}\'=_\>`~\<()]/g, "").trim().toLowerCase();
                 }
             }
             if (dontSkipright) {
                 if (j - 1 + rightincrement < rightWordtokens.length && !(rightWordtokens[j - 1 + rightincrement] === '')) {
-                    concobj[i]['right' + j] = rightWordtokens[j - 1 + rightincrement].replaceAll(/[.,\/#!$%\^&\*;?:\-{}\'=_\>`~\<()]/g, "").trim().toLowerCase();
+                    concobj[i]['right' + j] = rightWordtokens[j - 1 + rightincrement].replaceAll(/[.,\/#!“$%\^&\*;?:\-{}\'=_\>`~\<()]/g, "").trim().toLowerCase();
                 }
             }
         }
@@ -1403,10 +1494,15 @@ function dataProcess(data,keyword) {
         var color ='white'// i % 2===0 ? "lightgrey": "grey";
         conc = concobj[i]['text'].split("|")
         var outkey =""
-        if(keyword.includes("*") || keyword.includes("+") || keyword.match(/\".+?\"/g) ){
-            splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0];
+        if(keyword.includes("*") || keyword.includes("-") || keyword.match(/\".+?\"/g) ){
+            splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("/")[0];
             outkey = splitKeyword;
-        }else{
+            console.log("1")
+        }else if ( keyword.includes("+") ){
+            splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("/")[0];
+            outkey = splitKeyword.replaceAll(/[.,\/#!$%\^&\*;?”\":\-{}\'=\>_`~\<()]/g, "");;
+        }
+        else{
             splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("-")[0].split("/")[0];
             outkey = keyword;
         }
@@ -1424,7 +1520,7 @@ function dataProcess(data,keyword) {
             var dontSkipleft = 1;
             var dontSkipright = 1;
             if (j - 1 + rightincrement < rightWordtokens.length && !(rightWordtokens[j - 1 + rightincrement] ==='')) {
-                while (j - 1 + rightincrement < rightWordtokens.length && rightWordtokens[j - 1 + rightincrement].replaceAll(/[.,\/#!$%\^&\*;?\':\-{}=_\>`~\<()]/g, "").length === 0 ) {
+                while (j - 1 + rightincrement < rightWordtokens.length && rightWordtokens[j - 1 + rightincrement].replaceAll(/[.,\/#!“$”%\^&\*;?\':\-{}=_\>`~\<()]/g, "").length === 0 ) {
                     rightincrement += 1;
                     if (j - 1 + rightincrement > rightWordtokens.length ) {
                         dontSkipright = 0;
@@ -1433,7 +1529,7 @@ function dataProcess(data,keyword) {
                 }
             }
             if (lftWordtokens.length - j - leftincrement > 0) {
-                while (lftWordtokens.length - j - leftincrement > 0 && lftWordtokens[lftWordtokens.length - j - leftincrement].replaceAll(/[.,\/#!$%\^&\*;?\':\-{}=_\>`~\<()]/g, "").length === 0 ) {
+                while (lftWordtokens.length - j - leftincrement > 0 && lftWordtokens[lftWordtokens.length - j - leftincrement].replaceAll(/[.,\/#“!$%\^&\*;?\':\-{}”=_\>`~\<()]/g, "").length === 0 ) {
                     leftincrement += 1;
                     if (lftWordtokens.length - j - leftincrement < 0) {
                         dontSkipleft = 0;
@@ -1443,12 +1539,17 @@ function dataProcess(data,keyword) {
             }
             if (dontSkipleft) {
                 if (lftWordtokens.length - j - leftincrement >= 0) {
-                    lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
-                }
+                     if(keyword.includes("+") && ( lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase() == (keyword.split("+")[0]) ) ){
+                         lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+
+                     }else{
+                         lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                     }
+                    }
             }
             if (dontSkipright) {
                 if (j - 1 + rightincrement < rightWordtokens.length && !(rightWordtokens[j - 1 + rightincrement] === '')) {
-                    rightWordtokens[j - 1 + rightincrement] = " <span class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
+                    rightWordtokens[j - 1 + rightincrement] = " <span class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
                 }
             }
         }
@@ -1476,7 +1577,7 @@ function dataProcess(data,keyword) {
 
         }
 
-        lftWords = conc[3].slice(0, 130).replaceAll(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replaceAll(/\s{2,}/g," ");
+        lftWords = conc[3].slice(0, 130).replaceAll(/[.,\/#!$%\^&\*;“:{}=\-_`~()]/g,"").replaceAll(/\s{2,}/g," ");
         lftWords = lftWords.toLowerCase()
         lftWords = lftWords.split(' ');
         // console.log(lftWords.slice(-7))
@@ -1495,7 +1596,7 @@ function dataProcess(data,keyword) {
                 }
             }
 
-        var rightWords = conc[3].slice((130+ splitKeyword.length),conc[2].length).replaceAll(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
+        var rightWords = conc[3].slice((130+ splitKeyword.length),conc[2].length).replaceAll(/[.,\/#!“$%\^&“\*;:{}=\-_`~()]/g,"")
         rightWords = rightWords.replaceAll(/\s{2,}/g," ");
         rightWords = rightWords.toLowerCase()
         rightWords = rightWords.split(' ');
@@ -1514,7 +1615,7 @@ function dataProcess(data,keyword) {
             }
 
 
-        var val = keyword.toLowerCase()
+        var val = splitKeyword
         if(countWords[4][val] === undefined) {
           countWords[4][val] = 1;
             } else {
@@ -1547,14 +1648,14 @@ function dataProcess(data,keyword) {
     div.classList.add('text-nowrap');
     //div.style.backgroundColor = color;
     // div.classList.add('p2');
-
     document.getElementById("leftconc").appendChild(div);
+
     var div = document.createElement('div');
     div.innerHTML = keywordctx;
     div.style.textAlign='center'
     div.style.color = "Blue";
-
     document.getElementById("keyworddisplay").appendChild(div);
+
     var div = document.createElement('div');
     div.innerHTML = rightctx;
     document.getElementById("rightconc").appendChild(div);
@@ -1620,7 +1721,6 @@ function dataProcessMosaic(data,keyword){
      }
 
     concobj.sort(function (objA, objB) {
-        console.log("sorting")
         var sortArguments = [sort1pos, sort2pos, sort3pos]
 
         var result = 0;
@@ -1641,7 +1741,7 @@ function dataProcessMosaic(data,keyword){
             keywordctx += conc[3].slice(130, (130 + keyword.length)) + '<br> ';
             rightctx += conc[3].slice((130 + keyword.length), conc[3].length) + '<br> ';
 
-            var lftWords = conc[3].slice(0, 130).replaceAll(/[.,\/#!\<\>$%\^&\*;:{}=_`?~()]/g, "").replaceAll(/\s{2,}/g, " ");
+            var lftWords = conc[3].slice(0, 130).replaceAll(/[.,\/#!\<\>$“%\^&\*;:{}=”_`?~()]/g, "").replaceAll(/\s{2,}/g, " ");
             lftWords = lftWords.toLowerCase().trim();
             lftWords = lftWords.split(' ');
             // console.log(lftWords.slice(-7))
@@ -1658,7 +1758,18 @@ function dataProcessMosaic(data,keyword){
                 }
             }
 
-            var rightWords = conc[3].slice((130 + keyword.length), conc[3].length).replaceAll(/[.,\/#!\<\>$%\^&\*;:{}?=_`~()]/g, "")
+            if(keyword.includes("*") || keyword.includes("-") || keyword.match(/\".+?\"/g) ){
+            splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("/")[0];
+            }else if ( keyword.includes("+") ){
+                splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("/")[0];
+            }
+            else{
+                splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("-")[0].split("/")[0];
+
+            }
+
+            var rightWords = conc[3].slice((130+ splitKeyword.length),conc[3].length).replaceAll(/[.,\/#“!$%\^&\*;:{}=\-_`”~()]/g,"")
+            //var rightWords = conc[3].slice((130 + keyword.length), conc[3].length).replaceAll(/[.,\/#!\<\>$%\^&\*;:{}?=_`~()]/g, "")
             rightWords = rightWords.replaceAll(/\s{2,}/g, " ");
             rightWords = rightWords.toLowerCase()
             rightWords = rightWords.split(' ');
@@ -1676,7 +1787,7 @@ function dataProcessMosaic(data,keyword){
             }
 
 
-            var val = keyword.toLowerCase()
+            var val = splitKeyword.toLowerCase().replaceAll(/[.,\/#!“$%\^&\*;?\':\-{}=_\>`\"~\<(”)]/g, "")
             if (countWords[4][val] === undefined) {
                 countWords[4][val] = 1;
             } else {
@@ -1733,7 +1844,7 @@ function dataProcessMosaic(data,keyword){
     // used to calculate total of columns
     const sumValues = obj => Object.values(obj).reduce((a, b) => a + b, 0);
 
-    var max = countWords[4][keyword];
+    var max = concobj.length-2;
     document.getElementById("linesreturned").innerHTML ="Lines returned : "+ max;
 
     var selectedRect;
@@ -1956,6 +2067,7 @@ mini_width = 100 - mini_margin.left - mini_margin.right;
 //     console.log( main_height + main_margin.top + main_margin.bottom)
 metasvg = d3.select("#chart2").append("svg")
         .attr("class", "svgWrapper")
+        .attr("id", "metachart")
         .attr("width", main_width + main_margin.left + main_margin.right + mini_width + mini_margin.left + mini_margin.right)
         .attr("height", main_height + main_margin.top + main_margin.bottom)
         .attr("preserveAspectRatio", "xMinYMin meet")
