@@ -499,6 +499,7 @@
                               </button>
                               <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                 <li><button class="dropdown-item" type="button" onclick="sort('filename')">Filename</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort('keyword')">Keyword</button></li>
                                 <li><button class="dropdown-item" type="button" onclick="sort('left1')">Left 1</button></li>
                                 <li><button class="dropdown-item" type="button" onclick="sort('left2')">Left 2</button></li>
                                 <li><button class="dropdown-item" type="button" onclick="sort('left3')">Left 3</button></li>
@@ -517,6 +518,7 @@
                               </button>
                               <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                 <li><button class="dropdown-item" type="button" onclick="sort1('filename')">Filename</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort1('keyword')">Keyword</button></li>
                                 <li><button class="dropdown-item" type="button" onclick="sort1('left1')">Left 1</button></li>
                                 <li><button class="dropdown-item" type="button" onclick="sort1('left2')">Left 2</button></li>
                                 <li><button class="dropdown-item" type="button" onclick="sort1('left3')">Left 3</button></li>
@@ -536,6 +538,7 @@
                               </button>
                               <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                 <li><button class="dropdown-item" type="button" onclick="sort2('filename')">Filename</button></li>
+                                <li><button class="dropdown-item" type="button" onclick="sort2('keyword')">Keyword</button></li>
                                 <li><button class="dropdown-item" type="button" onclick="sort2('left1')">Left 1</button></li>
                                 <li><button class="dropdown-item" type="button" onclick="sort2('left2')">Left 2</button></li>
                                 <li><button class="dropdown-item" type="button" onclick="sort2('left3')">Left 3</button></li>
@@ -569,7 +572,7 @@
                     </div>
                   </div>
                 </div>
-
+<div id="contentBox">
 <div id="linesreturned"> </div>
 <!-- <div class="col container panel panel-default" id="profile" role="tabpanel" aria-labelledby="profile-tab" >-->
            <div class="border rounded panel-body panel-resizable-vert" style="height:300px;overflow: scroll;">
@@ -589,11 +592,11 @@
     </div>
            </div>
 <!--   </div>-->
-  </div>
 
 
 
-  <div class="row"  >
+
+  <div class="row">
   <div class="draggable1 col container panel panel-default" style="clear:both" id="home" role="tabpanel" aria-labelledby="home-tab">
 
       <div class="border rounded panel-body panel-resizable-horz">
@@ -673,19 +676,28 @@
        </div>
   </div>
   </div>
+  </div>
+  </div>
 
-</div>
 
 <script src="https://d3js.org/d3.v3.min.js"></script>
 
 <script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/gh/tofsjonas/sortable@latest/sortable.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/gh/tofsjonas/sortable@latest/sortable.min.js"></script>
   <script>
 
 
 
   const position = {x: 0, y: 0}
     interact('.draggable1').draggable({
+         modifiers: [
+            interact.modifiers.restrict({
+              restriction: '#contentBox',
+              endOnly: true
+            })
+          ],
         listeners: {
             move(event) {
                 position.x += event.dx
@@ -700,6 +712,12 @@
 
   const position2 = {x: 0, y: 0}
     interact('.draggable2').draggable({
+        modifiers: [
+            interact.modifiers.restrict({
+              restriction: '#contentBox',
+              endOnly: true
+            })
+          ],
         listeners: {
             move(event) {
                 position2.x += event.dx
@@ -958,21 +976,21 @@ function loadConcordance(){
    async function sort(pos){
        sortClick = true;
        sortpos = pos;
-       sort1pos =pos
+       sort1pos = pos
        document.getElementById("dropdownMenu2").innerHTML = pos;
        await dataProcess(currentData,currentKeyword);
        sortClick = false;
    }
       function sort1(pos){
        sortClick = true;
-       sort2pos =pos
+       sort2pos = pos
           document.getElementById("dropdownMenu3").innerHTML = pos;
        dataProcess(currentData,currentKeyword)
        sortClick = false;
    }
     function sort2(pos){
        sortClick = true;
-       sort3pos =pos
+       sort3pos = pos
         document.getElementById("dropdownMenu4").innerHTML = pos;
        dataProcess(currentData,currentKeyword)
        sortClick = false;
@@ -989,8 +1007,10 @@ function loadConcordance(){
                  collection2[k].classList.add("concHighlight");
             }
        }
-        collection[0].scrollIntoView()
-   }
+       setTimeout(function (d) {
+            collection[0].scrollIntoView();
+                      },800)
+        }
 
     let data = ""
       var requestOptions = {
@@ -1198,7 +1218,7 @@ async function getFreqkList(){
             var lines = data.split("\n")
              htmlstr = "<h3> Number of Tokens: </h3>"
              htmlstr += "<h3>"+lines[0].split("<sep/>")[2]+"</h3><br><br>"
-            htmlstr +="<table class=\"table\">" +
+            htmlstr +="<table class=\"table sortable\">" +
                 "  <thead>" +
                 "    <tr>" +
                 "      <th scope=\"col\">Rank</th>" +
@@ -1211,9 +1231,9 @@ async function getFreqkList(){
             for (let i = 2; i < lines.length ; i++) {
                 line = lines[i].toString();
                 linesplit = line.split("<sep/>")
-                htmlstr += "<tr><th scope=\"row\">"+ linesplit[0] +"</th>"
-                htmlstr += "<th scope=\"row\">"+ linesplit[1] +"</th>"
-                htmlstr += "<th scope=\"row\">"+ linesplit[2] +"</th>"
+                htmlstr += "<tr><td>"+ linesplit[0] +"</td>"
+                htmlstr += "<td>"+ linesplit[1] +"</td>"
+                htmlstr += "<td>"+ linesplit[2] +"</td>"
                 htmlstr += "</tr>"
             }
              htmlstr += "</tbody></table>"
@@ -1466,6 +1486,7 @@ function dataProcess(data,keyword) {
 
             conc = concobj[i]['text'].split("|")
             concobj[i]['filename'] = fn;
+            concobj[i]['keyword'] = splitKeyword;
         }
 
         for (var l = indextoremove.length - 1; l >= 0; l--)
@@ -1741,7 +1762,7 @@ function dataProcessMosaic(data,keyword){
             keywordctx += conc[3].slice(130, (130 + keyword.length)) + '<br> ';
             rightctx += conc[3].slice((130 + keyword.length), conc[3].length) + '<br> ';
 
-            var lftWords = conc[3].slice(0, 130).replaceAll(/[.,\/#!\<\>$“%\^&\*;:{}=”_`?~()]/g, "").replaceAll(/\s{2,}/g, " ");
+            var lftWords = conc[3].slice(0, 130).replaceAll(/[.,\/#!“$”%\^&\*;?\':\-{}=_\>`~\<()]/g, "").replaceAll(/\s{2,}/g, " ");
             lftWords = lftWords.toLowerCase().trim();
             lftWords = lftWords.split(' ');
             // console.log(lftWords.slice(-7))
@@ -1768,7 +1789,7 @@ function dataProcessMosaic(data,keyword){
 
             }
 
-            var rightWords = conc[3].slice((130+ splitKeyword.length),conc[3].length).replaceAll(/[.,\/#“!$%\^&\*;:{}=\-_`”~()]/g,"")
+            var rightWords = conc[3].slice((130+ splitKeyword.length),conc[3].length).replaceAll(/[.,\/#!“$”%\^&\*;?\':\-{}=_\>`~\<()]/g, "")
             //var rightWords = conc[3].slice((130 + keyword.length), conc[3].length).replaceAll(/[.,\/#!\<\>$%\^&\*;:{}?=_`~()]/g, "")
             rightWords = rightWords.replaceAll(/\s{2,}/g, " ");
             rightWords = rightWords.toLowerCase()
@@ -1880,10 +1901,7 @@ function dataProcessMosaic(data,keyword){
             }
         }
 
-
         var colMax = sumValues(countWords[col])
-
-
 
         for (var word = 0; word < order.length; word++) {
             var wordstr = order[word]
