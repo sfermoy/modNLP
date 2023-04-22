@@ -72,7 +72,6 @@ public class ConcordanceVector extends Vector<ConcordanceObject> implements List
   public final String getBrowserQuery(){
     return browserQuery;
   }
-
   
   public final void setLanguage(int l){
     language = l;

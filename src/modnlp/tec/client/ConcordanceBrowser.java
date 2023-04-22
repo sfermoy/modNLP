@@ -26,7 +26,7 @@ import modnlp.tec.client.gui.event.ConcordanceDisplayEvent;
 import modnlp.tec.client.gui.event.ConcordanceListSizeEvent;
 import modnlp.idx.database.Dictionary;
 import modnlp.idx.headers.HeaderDBManager;
-
+import java.io.BufferedReader;
 /**
  *  General concordance browser. Classes implementing this interface
  *  will typically control {@link modnlp.tec.client.gui.BrowserFrame}
@@ -59,6 +59,8 @@ public interface ConcordanceBrowser {
 
   public void downloadConcordance(Download dld) throws java.io.IOException;
 
+  public void loadConcordance(BufferedReader file, String query);
+
   public void chooseNewLocalCorpus();
 
   public void chooseNewRemoteCorpus();
@@ -88,6 +90,8 @@ public interface ConcordanceBrowser {
   public HeaderDBManager getHeaderDBManager();
 
   public String getRemoteWebcli();
+
+  public String getRemoteWebcliEnc();
   
   public String getRemoteServer();
 

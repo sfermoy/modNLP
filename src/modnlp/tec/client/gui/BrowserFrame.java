@@ -28,10 +28,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
 import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
@@ -117,7 +119,8 @@ public class BrowserFrame extends BrowserGUI
   
   private JMenuItem nlcButton = new JMenuItem("New local corpus...");
   private JMenuItem nrcButton = new JMenuItem("New remote corpus...");    
-  private JMenuItem dldButton = new JMenuItem("Save concordances...");  
+  private JMenuItem dldButton = new JMenuItem("Save concordances...");
+  private JMenuItem uldButton = new JMenuItem("Load concordances...");  
   private JMenuItem quitButton = new JMenuItem(QUITBUT);
 
   private JMenu  prefMenu = new JMenu("Options");
@@ -198,6 +201,7 @@ public class BrowserFrame extends BrowserGUI
     fileMenu.add(nlcButton);
     fileMenu.add(nrcButton);
     fileMenu.add(dldButton);
+    fileMenu.add(uldButton);
     fileMenu.addSeparator();
     fileMenu.add(quitButton);
     
@@ -275,6 +279,7 @@ public class BrowserFrame extends BrowserGUI
     nlcButton.setToolTipText("Select a new corpus index");
     nrcButton.setToolTipText("Select a new corpus index server");
     dldButton.setToolTipText("Save the displayed concordances to disk");
+    uldButton.setToolTipText("Read saved concordance list from disk");
     stlButton.setToolTipText("Sort with left context horizon indicated on the box");
     sortFileButton.setToolTipText("Sort by file name column");
     strButton.setToolTipText("Sort with right context horizon indicated on the box");
@@ -477,8 +482,14 @@ public class BrowserFrame extends BrowserGUI
         public void actionPerformed(java.awt.event.ActionEvent evt) {
           try
             {
-              JFileChooser filedial = new JFileChooser(keyword.getText()
-                                                       +".tec");
+              FileNameExtensionFilter filter =
+                new FileNameExtensionFilter("ModNLP/teccli concordance files",
+                                            "tec");
+              JFileChooser filedial =
+                new JFileChooser(keyword.getText()+".tec");
+              filedial.setSelectedFile(new File(keyword.getText()+".tec"));
+              filedial.setFileFilter(filter);
+
               int returnVal = filedial.showDialog(myself, "Save to disk");
               if (returnVal == JFileChooser.APPROVE_OPTION)
                 {
@@ -486,6 +497,7 @@ public class BrowserFrame extends BrowserGUI
                   //System.out.println(file.getName());
                   Download dlf =
                     new Download(file);
+                  dlf.setKeyword(keyword.getText());
                   parent.downloadConcordance(dlf);
                 }
             }
@@ -494,6 +506,36 @@ public class BrowserFrame extends BrowserGUI
           }}}
       );
 
+    uldButton.addActionListener(new ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+          FileNameExtensionFilter filter =
+            new FileNameExtensionFilter("ModNLP/teccli concordance files",
+                                        "tec");
+          JFileChooser filedial =
+            new JFileChooser();
+          filedial.setFileFilter(filter);
+          
+          int returnVal = filedial.showDialog(myself, "Load file");
+          if (returnVal == JFileChooser.APPROVE_OPTION)
+            {
+              File file = filedial.getSelectedFile();
+              //System.out.println(file.getName());
+              try {
+                BufferedReader input = new BufferedReader(new java.io.FileReader(file));
+                String kw = input.readLine();
+                keyword.setText(kw);
+                parent.loadConcordance(input, kw);
+              }
+              catch (Exception e){
+                System.err.println("BrowserFrame: Error reading file: "+file+
+                                   "\n  "+e);
+                labelMessage("Error reading concordance file "+file);
+              }
+            }
+        }}
+      );
+
+    
     helpButton.addActionListener(new ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
           parent.showHelp();
@@ -608,7 +650,7 @@ public class BrowserFrame extends BrowserGUI
    */
   public void addRemoteCorpusMenuItem (final String server, final int port, String mentry) {
     JMenuItem mi = new JMenuItem(mentry);
-    fileMenu.add(mi, 3);
+    fileMenu.add(mi, 4);
     try {
       mi.addActionListener(
                             new ActionListener(){
@@ -627,7 +669,7 @@ public class BrowserFrame extends BrowserGUI
 
   public void addRemoteCorpusMenuItem (final String webcli, String mentry) {
     JMenuItem mi = new JMenuItem(mentry);
-    fileMenu.add(mi, 3);
+    fileMenu.add(mi, 4);
     try {
       mi.addActionListener(
                             new ActionListener(){
@@ -903,7 +945,7 @@ public class BrowserFrame extends BrowserGUI
         }
     }
     
-    public JMenu getRecentMenu() {
+  public JMenu getRecentMenu() {
         return recent;
     }
 

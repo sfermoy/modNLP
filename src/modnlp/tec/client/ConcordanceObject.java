@@ -255,7 +255,7 @@ public class ConcordanceObject {
   }
 
   public String csvConcLine (){
-    return sfilename+"|"+coVector.getHalfConcordance()+"|"+concordance;
+    return sfilename+"|"+coVector.getHalfConcordance()+"|"+sectionID+"|"+concordance;
   }
 
   public int getFilenameLength() {
@@ -276,17 +276,37 @@ public class ConcordanceObject {
 
   public String getLeftContext(){
     //System.out.println("=='"+concordance+"'");
-    return concordance.substring(0,coVector.getHalfConcordance());
+    try {
+      return concordance.substring(0,coVector.getHalfConcordance());
+    }
+    catch (Exception e) {
+      System.err.println("Error processing concordance:\n"+concordance);
+      return("");
+    }
   }
 
   public String getLeftContextAndKeyword(){
     //System.out.println("=='"+concordance+"'");
+    try {
     return concordance.substring(0,coVector.getHalfConcordance())+" "+keyword;
+    }
+    catch (Exception e) {
+      System.err.println("Error processing concordance:\n"+concordance);
+      return("");
+    }
+
   }
 
   
   public final String getKeywordAndRightContext(){
-    return concordance.substring(coVector.getHalfConcordance());
+    try {
+      return concordance.substring(coVector.getHalfConcordance());
+    }
+    catch (Exception e) {
+      System.err.println("Error processing concordance:\n"+concordance);
+      return("");
+    }
+
   }
 
  public final String getKeyword(){

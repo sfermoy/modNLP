@@ -1,3 +1,7 @@
+2023-04-05  Saturnino Luz  <luzs@acm.org>
+
+	* release 0.9.7: Added sale/load concordance functions
+
 2023-01-02  Saturnino Luz  <luzs@acm.org>
 
 	* release 0.9.3: Adapted all client requests and settings to the

@@ -85,6 +85,7 @@ public class ConcordanceThread
     serverResponded = false;
   }
 
+  
   public ConcordanceThread(ConcordanceVector clm, BufferedReader in, TecClientRequest cr)
   {
     input = in;

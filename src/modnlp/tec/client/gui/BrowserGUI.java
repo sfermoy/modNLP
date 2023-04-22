@@ -47,7 +47,7 @@ public abstract class BrowserGUI extends JFrame
 
   public abstract int getPreferredFontSize();
   
-    public abstract boolean getPunctuation();
+  public abstract boolean getPunctuation();
   
   public abstract int getLanguage();
 

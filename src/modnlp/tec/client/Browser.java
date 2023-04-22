@@ -41,6 +41,7 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.io.File;
@@ -70,7 +71,7 @@ public class Browser
 {
 
   // constants
-  public static final String RELEASE = "0.9.6";
+  public static final String RELEASE = "0.9.7";
   public static final String REVISION = "$Revision: 1.9 $";
   String BRANDNAME = "MODNLP/T";
   private static final String PLGLIST = "teclipluginlist.txt";
@@ -295,6 +296,34 @@ public class Browser
     }
   }
 
+  public void loadConcordance(BufferedReader input, String query){
+    keywordString = query;
+    if (sortThread != null)
+      sortThread.stop();
+    browserFrame.labelMessage("Load concordance list. Please wait...");
+    browserFrame.updateStatusLabelScroll("");
+    if ( (concThread != null) ) {
+      concThread.stop();
+    }
+    concVector.clear();
+    concVector.setHalfConcordance(preferenceFrame.getContextSize());
+    concVector.setSortContextHorizon(0);
+    concVector.setBrowserQuery(query);
+    concThread = 
+      new ConcordanceThread(concVector, 
+                            input,
+                            null);
+    concThread.start();
+    //--??--concThread.addConcordanceDisplayListener(concVector);
+    //SwingUtilities.invokeLater(concThread);
+    //concList = new ListDisplay(this, concThread.conc);
+    //currentIndex = 0;
+    concThread.addConcordanceDisplayListener(browserFrame);
+    concThread.addConcordanceDisplayListener(this);
+    browserFrame.progressBarUnknownStart("Loading... ");
+  }
+
+
   public void requestConcordance(String query){
     keywordString = query;
     if (sortThread != null)
@@ -321,7 +350,7 @@ public class Browser
     //concList.reset();
     if (standAlone) {
       concThread = 
-        new ConcordanceThread(concVector, 
+        new ConcordanceThread(concVector,
                               concordanceProducer.getBufferedReader(), 
                               request);
            
@@ -915,6 +944,18 @@ public class Browser
 
   public final String getRemoteWebcli(){
     return remoteWebcli;
+  }
+
+  public final String getRemoteWebcliEnc(){
+    try {
+      return URLEncoder.encode(remoteWebcli, "UTF-8");
+    }
+    catch (Exception e){
+      System.err.println(e+"Error encoding "+remoteWebcli+
+                         "\n  UTF-8 not supported; Returning remoteServer ("+remoteServer+")");
+      e.printStackTrace();
+      return(remoteServer);
+    }
   }
   
   public final Dictionary getDictionary(){

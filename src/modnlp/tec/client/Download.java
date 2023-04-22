@@ -34,6 +34,8 @@ import java.util.Iterator;
 */
 public class Download extends PrintWriter {
 
+  private String keyword = "";
+  
   public Download(String fname) throws java.io.IOException
   {
     super(new BufferedWriter(new FileWriter(fname))); 
@@ -44,12 +46,13 @@ public class Download extends PrintWriter {
     super(new BufferedWriter(new FileWriter(file))); 
   }
 
-
   public void dumpConcordance(ConcordanceVector conc) throws java.io.IOException
   {
     int lfn = conc.getLengthLongestFname();
     if ( conc == null )
       return;
+    this.println(keyword);
+    this.println(conc.getSize());
     for (Iterator<ConcordanceObject> p = conc.iterator(); p.hasNext(); )
       {
         ConcordanceObject co = p.next();
@@ -61,7 +64,10 @@ public class Download extends PrintWriter {
     this.close();
   }
 
-
+  public void setKeyword(String s){
+    keyword = s;
+  }
+  
   public String adjustOffSet(int maxs, int size){
 
     char[] auxA = new char[maxs-size];
