@@ -996,18 +996,19 @@
 
 
              function highlightWord(selectedWord){
-                 const collection = document.getElementsByClassName(selectedWord);
-                 for (let i = 0; i < collection.length; i++) {
-                     collection[i].style.color = "purple";
-                     collection[i].parentElement.classList.add("concHighlight");
-                     const collection2 = document.getElementsByClassName(collection[i].parentElement.classList[2]);
-                     for (let k = 0; k < collection2.length; k++) {
-                         collection2[k].classList.add("concHighlight");
-                     }
-                 }
+                    const collection = Array.from(document.getElementsByClassName(selectedWord));
+                    collection.forEach(element => {
+                      element.style.color = "purple";
+                      element.classList.add("concHighlight");
+                      element.parentElement.classList.add("concHighlight")
+                      // const collection2 = Array.from(document.getElementsByClassName(element.parentElement.classList[2]));
+                      // collection2.forEach(element2 => {
+                      //   element2.classList.add("concHighlight");
+                      // });
+                    });
                  setTimeout(function (d) {
                      collection[0].scrollIntoView();
-                 },800)
+                 },200)
              }
 
              let data = ""
