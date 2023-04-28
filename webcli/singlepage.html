@@ -12,9 +12,20 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 
+        <script src="https://d3js.org/d3.v3.min.js"></script>
+
+            <script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/interactjs@1.10.17/dist/interact.min.js"></script>
+<!--            <link href="https://cdn.jsdelivr.net/npm/interactjs@1.10.17/dist/api/styles/jsdoc-default.min.css" rel="stylesheet">-->
+
+
+
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" ></script>
+
+            <link href="https://cdn.jsdelivr.net/gh/tofsjonas/sortable@latest/sortable.min.css" rel="stylesheet" />
+<!--            <script src="https://cdn.jsdelivr.net/gh/tofsjonas/sortable@latest/sortable.min.js"></script>-->
 
         <!-- Favicons -->
         <meta name="theme-color" content="#7952b3">
@@ -62,21 +73,6 @@
                  font-size: 3.5rem;
              }
          }
-
-         /*      .svg-container {*/
-         /*  display: inline-block;*/
-         /*  position: relative;*/
-         /*  width: 100%;*/
-         /*  padding-bottom: 100%; !* aspect ratio *!*/
-         /*  vertical-align: top;*/
-         /*  overflow: hidden;*/
-         /*}*/
-         /*.svg-content-responsive {*/
-         /*  display: inline-block;*/
-         /*  position: absolute;*/
-         /*  top: 10px;*/
-         /*  left: 0;*/
-         /*}*/
 
          .svg-container {
              background-color: white;
@@ -573,13 +569,13 @@
                 <div id="contentBox">
                     <div id="linesreturned"> </div>
                     <!-- <div class="col container panel panel-default" id="profile" role="tabpanel" aria-labelledby="profile-tab" >-->
-                    <div class="border rounded panel-body panel-resizable-vert" style="height:300px;overflow: scroll;">
+                    <div class="border rounded panel-body panel-resizable-vert " style="height:300px;overflow: scroll;">
 
 
                         <div class="d-flex w-100  " id="concbox"  style="height:auto;flex-shrink: 0; ">
-                            <div class="d-flex  " id="filename"  style="line-height:1.5em;padding-bottom:7px;padding-top:7px;margin-top: 30px;font-size:12px;flex-shrink: 0;left: 0;position: -webkit-sticky;position:-webkit-sticky;position: sticky;">
+                            <div class="d-flex lazy " id="filename"  style="line-height:1.5em;padding-bottom:7px;padding-top:7px;margin-top: 30px;font-size:12px;flex-shrink: 0;left: 0;position: -webkit-sticky;position:-webkit-sticky;position: sticky;">
                             </div>
-                            <div class="d-flex p-2  " id="leftconc"  style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:12px;resize:horizontal;">
+                            <div class="d-flex p-2" id="leftconc"  style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:12px;resize:horizontal;">
                             </div>
 
                             <div class="d-flex p-2" id="keyworddisplay" style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:12px;flex-shrink: 0;">
@@ -618,8 +614,8 @@
                                     <a class="btn btn-secondary dropdown-toggle btn-xs d-block col " data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                                         Mosaic Options
                                     </a>
-                                    <div class="icon handle rounded col-xs ">
-                                    </div>
+<!--                                    <div class="icon handle rounded col-xs ">-->
+
 
                                 </div>
                                 <div class="collapse" id="collapseExample">
@@ -637,8 +633,8 @@
 
                                 <div id="chart"></div>
 
-                            </div>
 
+                            </div>
                         </div>
 
 
@@ -651,7 +647,7 @@
                                     <a class="btn btn-secondary dropdown-toggle btn-xs d-block col" id="metabtn" data-bs-toggle="collapse" href="#collapseExamplemeta" role="button" aria-expanded="false" aria-controls="collapseExamplemeta">
                                         Metafacet Options
                                     </a>
-                                    <div class="icon handle rounded col-xs "></div>
+<!--                                    <div class="icon handle rounded col-xs "></div>-->
                                 </div>
 
 
@@ -678,55 +674,55 @@
             </div>
 
 
-            <script src="https://d3js.org/d3.v3.min.js"></script>
 
-            <script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
-            <link href="https://cdn.jsdelivr.net/gh/tofsjonas/sortable@latest/sortable.min.css" rel="stylesheet" />
-            <script src="https://cdn.jsdelivr.net/gh/tofsjonas/sortable@latest/sortable.min.js"></script>
+
+
+
             <script>
 
 
 
-             const position = {x: 0, y: 0}
-             interact('.draggable1').draggable({
-                 modifiers: [
-                     interact.modifiers.restrict({
-                         restriction: '#contentBox',
-                         endOnly: true
-                     })
-                 ],
-                 listeners: {
-                     move(event) {
-                         position.x += event.dx
-                         position.y += event.dy
-                         event.target.style.transform =
-                             `translate(${position.x}px, ${position.y}px)`
-                     }
 
-                 },
-                 allowFrom: '.handle',
-             })
 
-             const position2 = {x: 0, y: 0}
-             interact('.draggable2').draggable({
-                 modifiers: [
-                     interact.modifiers.restrict({
-                         restriction: '#contentBox',
-                         endOnly: true
-                     })
-                 ],
-                 listeners: {
-                     move(event) {
-                         position2.x += event.dx
-                         position2.y += event.dy
-                         event.target.style.transform =
-                             `translate(${position2.x}px, ${position2.y}px)`
-                     }
-
-                 },
-                 allowFrom: '.handle',
-             })
+             // const position = {x: 0, y: 0}
+             // interact('.draggable1').draggable({
+             //     modifiers: [
+             //         interact.modifiers.restrict({
+             //             restriction: '#contentBox',
+             //             endOnly: true
+             //         })
+             //     ],
+             //     listeners: {
+             //         move(event) {
+             //             position.x += event.dx
+             //             position.y += event.dy
+             //             event.target.style.transform =
+             //                 `translate(${position.x}px, ${position.y}px)`
+             //         }
+             //
+             //     },
+             //     allowFrom: '.handle',
+             // })
+             //
+             // const position2 = {x: 0, y: 0}
+             // interact('.draggable2').draggable({
+             //     modifiers: [
+             //         interact.modifiers.restrict({
+             //             restriction: '#contentBox',
+             //             endOnly: true
+             //         })
+             //     ],
+             //     listeners: {
+             //         move(event) {
+             //             position2.x += event.dx
+             //             position2.y += event.dy
+             //             event.target.style.transform =
+             //                 `translate(${position2.x}px, ${position2.y}px)`
+             //         }
+             //
+             //     },
+             //     allowFrom: '.handle',
+             // })
 
              //     interact('.panel-resizable-horz')
              // .resizable({
@@ -861,6 +857,10 @@
                      subcorpenabled = true;
                  }
              }
+             function ProcessMosaicClick(pos,wordpos){
+                 sort(pos);
+                 highlightWord(wordpos);
+             }
 
              function checkboxClick(){
 
@@ -879,7 +879,7 @@
                  var text = el.options[el.selectedIndex].innerHTML;
                  document.getElementById("corpLabel").innerHTML = text;
                  headersfetched =false;
-
+                 console.log("corpus changed");
              }
 
              function dropdownclick(logic,classstr){
@@ -904,12 +904,12 @@
                      for (const selitm of varselecteditems) {
                          if (txtstring === "" || txtstring === "and " || txtstring === "or ") {
                              if (cbox.checked){
-                                 txtstring += "(not ($s/" + attElement + "=%27" + selitm.trim() + "%27";
+                                 txtstring += "(not ($s/" + attElement + "=%27" + selitm.trim().replaceAll(" ","_") + "%27";
                              }else{
-                                 txtstring += "($s/" + attElement + "=%27" + selitm.trim() + "%27";
+                                 txtstring += "($s/" + attElement + "=%27" + selitm.trim().replaceAll(" ","_") + "%27";
                              }
                          } else {
-                             txtstring += " or $s/" + attElement + "=%27" + selitm.trim() + "%27";
+                             txtstring += " or $s/" + attElement + "=%27" + selitm.trim().replaceAll(" ","_") + "%27";
                          }
                      }
                      if (varselecteditems.length > 0) {
@@ -971,12 +971,12 @@
                  dataProcessMosaic(currentData,currentKeyword);
              }
 
-             async function sort(pos){
+             function sort(pos){
                  sortClick = true;
                  sortpos = pos;
                  sort1pos = pos
                  document.getElementById("dropdownMenu2").innerHTML = pos;
-                 await dataProcess(currentData,currentKeyword);
+                 dataProcess(currentData,currentKeyword);
                  sortClick = false;
              }
              function sort1(pos){
@@ -985,6 +985,7 @@
                  document.getElementById("dropdownMenu3").innerHTML = pos;
                  dataProcess(currentData,currentKeyword)
                  sortClick = false;
+                 return true;
              }
              function sort2(pos){
                  sortClick = true;
@@ -1001,6 +1002,7 @@
                       element.style.color = "purple";
                       element.classList.add("concHighlight");
                       element.parentElement.classList.add("concHighlight")
+                        //Disabled highlight of full line as nested selections are killing performance
                       // const collection2 = Array.from(document.getElementsByClassName(element.parentElement.classList[2]));
                       // collection2.forEach(element2 => {
                       //   element2.classList.add("concHighlight");
@@ -1086,7 +1088,8 @@
                  let text2 =text1.concat(keyword.replaceAll("+","%2b"))
                  let text3 ='&case=insensitive&context=130&request=concord'
                  let text4 = text2.concat(text3)
-                 if(subcorpenabled) {
+
+                 if(subcorpenabled && document.getElementById("supcorptextbox").value != "" ) {
                      text4 = text4.concat("&xquerywhere=" + document.getElementById("supcorptextbox").value)
                  }
                  try {
@@ -1109,11 +1112,11 @@
                                            "  <span class=\"visually-hidden\">Loading...</span>" +
                                            "</div>";
 
-
                      let response = await fetch(text4,requestOptions)
                      data = await response.text();
                  }
                  catch (e) {
+                     console.log(e.message)
                      return e.message;
                  }
                  currentData = data;
@@ -1127,8 +1130,6 @@
                  else{
                      buildConcMetadata();
                  }
-
-
              }
 
              async function fetchheader(corpus) {
@@ -1175,11 +1176,11 @@
              }
 
              function deleteLine() {
-                 const collection = document.getElementsByClassName(cline);
-                 for (let i = 0; i < collection.length ; i++) {
-                     collection[i].style.display = "none";
-                     removedViaDelete.add(collection[i].classList[2])
-                 }
+                 const collection = Array.from(document.getElementsByClassName(cline));
+                    collection.forEach(element1 => {
+                        element1.style.display = "none";
+                        removedViaDelete.add(element1.classList[2])
+                    });
                  redrawMosaic();
                  buildConcMetadata();
              }
@@ -1188,16 +1189,18 @@
                  extractpos = filePos;
                  filepath = file;
                  cline = line;
-                 const collection0 = document.getElementsByClassName("concord");
-                 for (let i = 0; i < collection0.length ; i++) {
-                     collection0[i].classList.remove("concselected");
-                 }
 
-                 const collection = document.getElementsByClassName(line);
-                 for (let i = 0; i < collection.length ; i++) {
-                     collection[i].classList.add("concselected");
-                     //collection[i].style.backgroundColor = "lightgrey";
-                 }
+
+                    const collection0 = Array.from(document.getElementsByClassName("concord"));
+                    collection0.forEach(element => {
+                        element.classList.remove("concselected");
+                    });
+
+                    const collection = Array.from(document.getElementsByClassName(line));
+                    collection.forEach(element1 => {
+                        element1.classList.add("concselected");
+                    });
+
              }
              //https://genealogies.mvm.ed.ac.uk/freqlist//?casesensitive=FALSE&maxlistsize=0&request=freqlist&skipfirst=0
              async function getFreqkList(){
@@ -1241,6 +1244,22 @@
                  catch (e) {
                      return e.message;
                  }
+                 $('th').click(function(){
+                        var table = $(this).parents('table').eq(0)
+                        var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+                        this.asc = !this.asc
+                        if (!this.asc){rows = rows.reverse()}
+                        for (var i = 0; i < rows.length; i++){table.append(rows[i])}
+                    })
+
+                    function comparer(index) {
+                        return function(a, b) {
+                            var valA = getCellValue(a, index), valB = getCellValue(b, index)
+                            return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+                        }
+                    }
+                    function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
+
              }
 
              function closeflist(){
@@ -1388,6 +1407,8 @@
              }
 
              function dataProcess(data,keyword) {
+                 // var startTime = performance.now()
+
                  document.getElementById("filename").innerHTML = '';
                  document.getElementById("leftconc").innerHTML = '';
                  document.getElementById("keyworddisplay").innerHTML = '';
@@ -1507,7 +1528,8 @@
                  });
                  //sort
                  concrdance = concobj
-
+                            // var endTime = performance.now()
+                            // console.log(`Call to sort conc took ${endTime - startTime} milliseconds`)
                  // save for metafacet
 
                  for (var i = 1; i < concobj.length-1; i++){
@@ -1517,7 +1539,6 @@
                      if(keyword.includes("*") || keyword.includes("-") || keyword.match(/\".+?\"/g) ){
                          splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("/")[0];
                          outkey = splitKeyword;
-                         console.log("1")
                      }else if ( keyword.includes("+") ){
                          splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("/")[0];
                          outkey = splitKeyword.replaceAll(/[.,\/#!$%\^&\*;?”\":\-{}\'=\>_`~\<()]/g, "");;
@@ -1559,7 +1580,7 @@
                          }
                          if (dontSkipleft) {
                              if (lftWordtokens.length - j - leftincrement >= 0) {
-                                 if(keyword.includes("+") && ( lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase() == (keyword.split("+")[0]) ) ){
+                                 if(keyword.includes("+") && ( lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase() === (keyword.split("+")[0]) ) ){
                                      lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
 
                                  }else{
@@ -1594,63 +1615,70 @@
                          leftctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" " +  " \"  onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + leftSideHtml + ' </div> ';
                          keywordctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" " + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + keywordctxhtml + '</div> ';
                          rightctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" "  + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + rightSideHtml + ' </div>  ';
+                         // fns += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + "  concord \" " + "style=\"background-color:" + color + ";color:red; >  &nbsp  &nbsp " + fn + " &nbsp</div> ";
+                         // leftctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" " +  "  >" + leftSideHtml + ' </div> ';
+                         // keywordctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" " + "  >" + keywordctxhtml + '</div> ';
+                         // rightctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" "  + "  >" + rightSideHtml + ' </div>  ';
 
                      }
 
-                     lftWords = conc[3].slice(0, 130).replaceAll(/[.,\/#!$%\^&\*;“:{}=\-_`~()]/g,"").replaceAll(/\s{2,}/g," ");
-                     lftWords = lftWords.toLowerCase()
-                     lftWords = lftWords.split(' ');
-                     // console.log(lftWords.slice(-7))
-                     // console.log(lftWords.slice(-5,-1))
-                     lftWords = lftWords.slice(-5,-1)
-
-                     lftWords = lftWords.filter(item => item);
-                     for (var k =0; k < lftWords.length; k++) {
-                         var val = lftWords[k]
-                         if(countWords[k][val] === undefined) {
-                             countWords[k][val] = 1;
-                             countWordsTot[val] = 1;
-                         } else {
-                             countWords[k][val] = countWords[k][val] + 1;
-                             countWordsTot[val] = countWordsTot[val] + 1;
-                         }
-                     }
-
-                     var rightWords = conc[3].slice((130+ splitKeyword.length),conc[2].length).replaceAll(/[.,\/#!“$%\^&“\*;:{}=\-_`~()]/g,"")
-                     rightWords = rightWords.replaceAll(/\s{2,}/g," ");
-                     rightWords = rightWords.toLowerCase()
-                     rightWords = rightWords.split(' ');
-                     rightWords = rightWords.slice(1,5)
-                     rightWords = rightWords.filter(item => item);
+                     // lftWords = conc[3].slice(0, 130).replaceAll(/[.,\/#!$%\^&\*;“:{}=\-_`~()]/g,"").replaceAll(/\s{2,}/g," ");
+                     // lftWords = lftWords.toLowerCase()
+                     // lftWords = lftWords.split(' ');
+                     // // console.log(lftWords.slice(-7))
+                     // // console.log(lftWords.slice(-5,-1))
+                     // lftWords = lftWords.slice(-5,-1)
+                     //
+                     // lftWords = lftWords.filter(item => item);
+                     // for (var k =0; k < lftWords.length; k++) {
+                     //     var val = lftWords[k]
+                     //     if(countWords[k][val] === undefined) {
+                     //         countWords[k][val] = 1;
+                     //         countWordsTot[val] = 1;
+                     //     } else {
+                     //         countWords[k][val] = countWords[k][val] + 1;
+                     //         countWordsTot[val] = countWordsTot[val] + 1;
+                     //     }
+                     // }
+                     //
+                     // var rightWords = conc[3].slice((130+ splitKeyword.length),conc[2].length).replaceAll(/[.,\/#!“$%\^&“\*;:{}=\-_`~()]/g,"")
+                     // rightWords = rightWords.replaceAll(/\s{2,}/g," ");
+                     // rightWords = rightWords.toLowerCase()
+                     // rightWords = rightWords.split(' ');
+                     // rightWords = rightWords.slice(1,5)
+                     // rightWords = rightWords.filter(item => item);
                      // console.log(rightWords)
-                     for (var j =0; j < rightWords.length; j++) {
-                         var val = rightWords[j]
-                         if(countWords[j+5][val] === undefined) {
-                             countWords[j+5][val] = 1;
-                             countWordsTot[val] = 1;
-                         } else {
-                             countWords[j+5][val] = countWords[j+5][val] + 1;
-                             countWordsTot[val] = countWordsTot[val] + 1;
-                         }
-                     }
-
-
-                     var val = splitKeyword
-                     if(countWords[4][val] === undefined) {
-                         countWords[4][val] = 1;
-                     } else {
-                         countWords[4][val] = countWords[4][val] + 1;
-                     }
+                 //     for (var j =0; j < rightWords.length; j++) {
+                 //         var val = rightWords[j]
+                 //         if(countWords[j+5][val] === undefined) {
+                 //             countWords[j+5][val] = 1;
+                 //             countWordsTot[val] = 1;
+                 //         } else {
+                 //             countWords[j+5][val] = countWords[j+5][val] + 1;
+                 //             countWordsTot[val] = countWordsTot[val] + 1;
+                 //         }
+                 //     }
+                 //
+                 //
+                 //     var val = splitKeyword
+                 //     if(countWords[4][val] === undefined) {
+                 //         countWords[4][val] = 1;
+                 //     } else {
+                 //         countWords[4][val] = countWords[4][val] + 1;
+                 //     }
+                 // }
+                 //
+                 // for (var l = 0; l < countWords.length; l++) {
+                 //     var dict = countWords[l]
+                 //     var keys = Object.entries(dict).sort((a,b)=>b[1]-a[1]).map(el=>el[0])
+                 //     wordOrder.push(keys)
                  }
 
-                 for (var l = 0; l < countWords.length; l++) {
-                     var dict = countWords[l]
-                     var keys = Object.entries(dict).sort((a,b)=>b[1]-a[1]).map(el=>el[0])
-                     wordOrder.push(keys)
-                 }
-                 var dicttot = countWordsTot
-                 var totkeys = Object.entries(dicttot).sort((a,b)=>b[1]-a[1]).map(el=>el[0])
-                 totkeys = totkeys.slice(0,20)
+                 // var endTime = performance.now()
+                 //            console.log(`Call to build conc took ${endTime - startTime} milliseconds`)
+                 //var dicttot = countWordsTot
+                 //var totkeys = Object.entries(dicttot).sort((a,b)=>b[1]-a[1]).map(el=>el[0])
+                 //totkeys = totkeys.slice(0,20)
                  // console.log(wordOrder)
                  // console.log(totkeys)
 
@@ -1682,42 +1710,47 @@
                  div.classList.add('text-nowrap');
 
                  //coloring based on sort position
-                 const collection = document.getElementsByClassName(sort1pos);
-                 for (let i = 0; i < collection.length ; i++) {
-                     collection[i].style.color = "red";
-                     collection[i].style.fontWeight = "bold";
-                 }
-                 const collection2 = document.getElementsByClassName(sort2pos);
-                 for (let i = 0; i < collection2.length ; i++) {
-                     collection2[i].style.color = "#ffc107";
-                     collection2[i].style.fontWeight = "bold";
-                 }
 
-                 const collection3 = document.getElementsByClassName(sort3pos);
-                 for (let i = 0; i < collection3.length ; i++) {
-                     collection3[i].style.color = "#198754";
-                     collection3[i].style.fontWeight = "bold";
-                 }
+                const collection = Array.from(document.getElementsByClassName(sort1pos));
+                collection.forEach(element => {
+                    element.style.color = "red";
+                    element.style.fontWeight = "bold";
+                });
+
+                const collection2 = Array.from(document.getElementsByClassName(sort2pos));
+                collection2.forEach(element => {
+                    element.style.color = "#ffc107";
+                    element.style.fontWeight = "bold";
+                });
+
+                const collection3 = Array.from(document.getElementsByClassName(sort3pos));
+                collection2.forEach(element => {
+                    element.style.color = "#198754";
+                    element.style.fontWeight = "bold";
+                });
 
                  //recolor metafacetn selections
                  var items =Array.from(removedViaMetafacet);
-                 for (const collectionKey in items) {
-                     var collection1 = document.getElementsByClassName(items[collectionKey]);
-                     for (let i = 0; i < collection1.length; i++) {
-                         collection1[i].style.border = "thin solid red";
-                     }
-                 }
+                 items.forEach(element => {
+                     var collection1 = Array.from(document.getElementsByClassName(items[element]));
+                     collection1.forEach(element => {
+                        element.style.border = "thin solid red";
+                     });
+                 });
 
-
+                            // var endTime = performance.now()
+                            // console.log(`Call to render conc took ${endTime - startTime} milliseconds`)
              }
+
              <!-- Mosaic -->
              var mosaicPositions = ["left4","left3","left2","left1","filename","right1","right2","right3","right4"]
              const stopwords = new Set(['i','me','my','myself','we','our','ours','ourselves','you','your','yours','yourself','yourselves','he','him','his','himself','she','her','hers','herself','it','its','itself','they','them','their','theirs','themselves','what','which','who','whom','this','that','these','those','am','is','are','was','were','be','been','being','have','has','had','having','do','does','did','doing','a','an','the','and','but','if','or','because','as','until','while','of','at','by','for','with','about','against','between','into','through','during','before','after','above','below','to','from','up','down','in','out','on','off','over','under','again','further','then','once','here','there','when','where','why','how','all','any','both','each','few','more','most','other','some','such','no','nor','not','only','own','same','so','than','too','very','s','t','can','will','just','don','should','now']);
 
-             function dataProcessMosaic(data,keyword){
-                 setTimeout(function (d) {
-                     $('concbox').scrollLeft(250);
-                 },2000)
+             async function dataProcessMosaic(data,keyword){
+                 // var startTime = performance.now()
+                 // setTimeout(function (d) {
+                 //     $('concbox').scrollLeft(250);
+                 // },100)
                  document.getElementById("chart").innerHTML = '';
 
                  var countWords = [{},{},{},{},{},{},{},{},{}];
@@ -1739,7 +1772,8 @@
                      fn=fn[fn.length -1];
                      concobj[i]['filename'] = fn;
                  }
-
+                var endTime = performance.now()
+                 // console.log(`Call to build mosaic starttook ${endTime - startTime} milliseconds`)
                  concobj.sort(function (objA, objB) {
                      var sortArguments = [sort1pos, sort2pos, sort3pos]
 
@@ -1751,9 +1785,11 @@
                      return result;
                  });
 
+                 // var endTime = performance.now()
+                 // console.log(`Call to sort mosaic took ${endTime - startTime} milliseconds`)
+
 
                  for (var i = 1; i < concobj.length-1; i++){
-
                      conc = concobj[i]['text'].split("|")
                      var fn = concobj[i]['filename']
                      if (!removedViaDelete.has(fn+i)) {
@@ -1815,12 +1851,16 @@
                          }
                      }
                  }
+                 // var endTime = performance.now()
+                 // console.log(`Call to count words took ${endTime - startTime} milliseconds`)
 
                  for (var l = 0; l < countWords.length; l++) {
                      var dict = countWords[l]
                      var keys = Object.entries(dict).sort((a,b)=>b[1]-a[1]).map(el=>el[0])
                      wordOrder.push(keys)
                  }
+                 //  var endTime = performance.now()
+                 // console.log(`Call to map keys took ${endTime - startTime} milliseconds`)
 
                  var dicttot = countWordsTot
 
@@ -1868,31 +1908,26 @@
                  document.getElementById("linesreturned").innerHTML ="Lines returned : "+ max;
 
                  var selectedRect;
-
+                 // var endTime = performance.now()
+                 // console.log(`Call to box heigths took ${endTime - startTime} milliseconds`)
                  for (var col = 0; col < countWords.length; col++) {
 
                      var heigthUsed = 0;
                      var order = wordOrder[col]
                      var currentCol = countWords[col]
                      //remove values under min frequency threshold
+
                      for (var word in currentCol) {
                          if ((currentCol[word] * 1.0) / max <= frequency_min) {
                              if (col != 4)
                                  delete currentCol[word];
                          }
-                     }
-
-                     for (var word in currentCol) {
                          if ((currentCol[word] * 1.0) / max > frequency_max) {
                              if (col != 4)
                                  delete currentCol[word];
                          }
-                     }
-
-                     //stopword removal
-
-                     if (filterStopwords) {
-                         for (var word in currentCol) {
+                         if (filterStopwords) {
+                             //stopword removal
                              if (stopwords.has(word)) {
                                  if (col != 4)
                                      delete currentCol[word];
@@ -1926,21 +1961,34 @@
                                            .style("stroke-width", .1)
                                            .style("fill", function (d) {
                                                return col === 4 ? 'steelblue' : totkeys.includes(wordstr) ? color[0+((word + ((col+1)%2)) % 2)] : color[0+((word + ((col+1)%2)) % 2)];
-                                           }).on("click", function(d){
-                                               d3.select(selectedRect).style("fill", d3.select(this).attr("memcol"));
-                                               d3.select(selectedRect).style("stroke", 'black')
-                                                 .style("stroke-width", .1);
+                                           }).on("click", async function(d){
+                                                    d3.select(selectedRect).style("fill", d3.select(this).attr("memcol"));
 
-                                               d3.select(this).style("stroke", 'black')
-                                                 .style("stroke-width", 2);
-                                               d3.select(this).style("fill", "white");
-                                               selectedRect = this;
+                                                    d3.select(selectedRect).style("stroke", 'black')
+                                                       .style("stroke-width", .1);
 
-                                               // var sel = document.querySelector('#profile-tab')
-                                               // bootstrap.Tab.getOrCreateInstance(sel).show()
+                                                   d3.select(this).style("stroke", 'black')
+                                                       .style("stroke-width", 2);
+                                                   d3.select(this).style("fill", "white");
+                                                   selectedRect = this;
 
-                                               sort(mosaicPositions[d3.select(this).attr("column")])
-                                               highlightWord(mosaicPositions[d3.select(this).attr("column")]+d3.select(this).attr("word"))
+                                                   let concordancebox = document.getElementById("keyworddisplay")
+                                                   concordancebox.innerHTML = "<div class=\"spinner-border text-success d-flex align-items-center justify-content-center\" role=\"status\">" +
+                                                       "  <span class=\"visually-hidden\">Loading...</span>" +
+                                                       "</div>";
+                                                   concordancebox.style.display = 'none';
+                                                   concordancebox.style.display = 'block';
+
+                                                   let fnfn = document.getElementById("filename")
+                                                   fnfn.innerHTML = "<br><br><h2>Loading Concordance          </h2>";
+                                                   fnfn.parentElement.style.display = 'none';
+                                                   fnfn.parentElement.style.display = 'block';
+                                                   let lctx = document.getElementById("leftconc")
+                                                   lctx.innerHTML = "";
+                                                   let rttx = document.getElementById("rightconc")
+                                                   rttx.innerHTML = "";
+                                                  setTimeout(await ProcessMosaicClick(mosaicPositions[d3.select(this).attr("column")],mosaicPositions[d3.select(this).attr("column")]+d3.select(this).attr("word")), 100);
+
                                            })
                                            .on("mousemove", function (d) {
                                                tooltip.style("left", d3.event.pageX - 50 + "px")
@@ -2002,13 +2050,12 @@
                                                   scale =  boxHeigth/1.5;
                                               }
                                               return scale -2 + "px"; });
-
-
                              heigthUsed += 1000 * ((1.0 * boxH) / colMax);
                          }
-
                      }
                  }
+                 // var endTime = performance.now()
+                 // console.log(`Call to end mosaic took ${endTime - startTime} milliseconds`)
              }
 
              //metafacet
@@ -2035,10 +2082,7 @@
                  json = json.replaceAll(/(^,)|(,$)/g, "");
                  json+="]"
                  let result = Function("return " + json)();
-
-
                  loadData(result);
-
              }
 
              var metasvg,
@@ -2410,6 +2454,7 @@
                      .attr("y", function(d,i) { return main_yScale(d.key); })
                      .attr("height", main_yScale.rangeBand())
                      .on("click", function(d) {
+
                          if ( d3.event.ctrlKey) {
                              d3.select(".mainGroup").selectAll(".bar")
                                .each(function(b) {
@@ -2441,6 +2486,7 @@
                              d3.select(this).style("fill", currentColor);
                              d3.select(this).style("opacity", opacity);
                              removed ? add(d.key) : remove(d.key);
+
                          }
                          //dataProcess(currentData,currentKeyword);
                          // vec.redisplay();
@@ -2671,25 +2717,24 @@
                      if (m.key === key) {
                          m.values.map(function (v) {
                              if (v.ID === "ignore") {
-                                 const collection = document.getElementsByClassName(v.Filename + ".xml");
-                                 for (let i = 0; i < collection.length; i++) {
-                                     collection[i].style.border = "thin solid red";
-                                     collection[i].style.borderColor = "red";
-                                     collection[i].classList.add("toremove");
+                                 const collection = Array.from(document.getElementsByClassName(v.Filename + ".xml"));
+                                 collection.forEach(element => {
+                                     element.style.border = "thin solid red";
+                                     element.style.borderColor = "red";
+                                     element.classList.add("toremove");
                                      removedKeys.add(v.Filename + v.ID );
                                      removedViaMetafacet.add(v.Filename+".xml");
 
-                                 }
+                                 })
                              } else {
-                                 const collection = document.getElementsByClassName(v.Filename + ".xml" + v.ID);
-                                 for (let i = 0; i < collection.length; i++) {
-                                     collection[i].style.border = "thin solid red";
-                                     collection[i].style.borderColor = "red";
-                                     collection[i].classList.add("toremove");
-                                     removedKeys.add(v.Filename + v.ID);
-                                     removedViaMetafacet.add(v.Filename+".xml"+ v.ID);
-
-                                 }
+                                 const collection = Array.from(document.getElementsByClassName(v.Filename + ".xml" + v.ID));
+                                 collection.forEach(element => {
+                                      element.style.border = "thin solid red";
+                                      element.style.borderColor = "red";
+                                      element.classList.add("toremove");
+                                      removedKeys.add(v.Filename + v.ID);
+                                      removedViaMetafacet.add(v.Filename+".xml"+ v.ID);
+                                 });
                              }
                          });
                      }
@@ -2760,10 +2805,6 @@
                      }
                  });
              }
-
-
-
-
             </script>
 
 
