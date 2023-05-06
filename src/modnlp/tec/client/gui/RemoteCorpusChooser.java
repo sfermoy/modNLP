@@ -48,7 +48,7 @@ public class RemoteCorpusChooser {
   public int showChooseCorpus () {
     String nip  = JOptionPane.
       showInputDialog(parent, 
-                      "IP address of new corpus server (URL)",
+                      "Address of new corpus server (URL)",
                       ipaddress);
     if (nip == null)
       return CANCEL_OPTION;
