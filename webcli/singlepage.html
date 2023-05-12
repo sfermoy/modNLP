@@ -689,6 +689,7 @@
 let config = {
     grid: {
         name: 'grid',
+        recordHeight : 20,
         show: {
             footer: false,
             toolbar: false
@@ -705,7 +706,6 @@ let config = {
 
 // initialization
 let grid = new w2grid(config.grid)
-
 
              const position = {x: 0, y: 0}
              // interact('.draggable1').draggable({
@@ -822,6 +822,7 @@ let grid = new w2grid(config.grid)
              var isSectionedHeader = true;
              var filterStopwords = false;
              var removedViaMetafacet = new Set();
+             var toberemovedViaMetafacet =  new Set();
              var removedViaDelete = new Set();
              var indextoremove =[];
              var sortClick = false;
@@ -838,6 +839,7 @@ let grid = new w2grid(config.grid)
              var cline = "";
              var extractsection = "";
              var Mosaicword ="";
+             hidmetafacetsel = false;
 
 
              var  selectHtml ="<div class=\"col-md-3 form-group border rounded \"><label for=\"theclassSelect\">titleText</label><div class=\"col-auto\"><select class=\"form-select theclass\" id=\"theclassSelect\"  onchange=\"updateTextBox()\" size=\"10\" multiple aria-label=\"size 10 select theclass\"></select> <div class=\"form-check\">" +
@@ -1110,6 +1112,7 @@ let grid = new w2grid(config.grid)
 
              async function fetchConcordance(keyword,corpus,markdowSelect) {
                  removedViaMetafacet = new Set();
+                 toberemovedViaMetafacet = new Set();
                  removedViaDelete = new Set();
                  indextoremove =[];
                  sortpos ="filename";
@@ -1501,7 +1504,7 @@ let grid = new w2grid(config.grid)
                              }
                          }
 
-                         if (removedViaMetafacet.has(fn) || removedViaMetafacet.has(fn + section)) {
+                         if ((removedViaMetafacet.has(fn) || removedViaMetafacet.has(fn + section))) {
                              indextoremove.push(i);
                          }
 
@@ -1677,18 +1680,20 @@ let grid = new w2grid(config.grid)
                          keywordctxhtml  = "*"
                      }
 
-                     if (!removedViaDelete.has(fn+i)) {
-                         // fns += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + "  concord \" " + "style=\"background-color:" + color + ";color:red; \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >  &nbsp  &nbsp " + fn + " &nbsp</div> ";
-                         // leftctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" " +  " \"  onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + leftSideHtml + ' </div> ';
-                         // keywordctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" " + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + keywordctxhtml + '</div> ';
-                         // rightctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" "  + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + rightSideHtml + ' </div>  ';
 
-                         // fns += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + "  concord \" " + "style=\"background-color:" + color + ";color:red; >  &nbsp  &nbsp " + fn + " &nbsp</div> ";
-                         // leftctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" " +  "  >" + leftSideHtml + ' </div> ';
-                         // keywordctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" " + "  >" + keywordctxhtml + '</div> ';
-                         // rightctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" "  + "  >" + rightSideHtml + ' </div>  ';
+                     if (!removedViaDelete.has(fn+i)) {
                          if(lineshighlight) {
-                             grid.records.push({
+                             if( (toberemovedViaMetafacet.has(fn) || toberemovedViaMetafacet.has(fn + section) )){
+                                 grid.records.push({
+                                 recid: i,
+                                 tablefname: "<div style=\"border:thin solid red;background-color:lightyellow;color:red;\" " + " class=\"" + fn + section + " " + fn + " " + i + "  concord \" " + " onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >  &nbsp  &nbsp " + fn + " &nbsp</div> ",
+                                 tableLeftCtx: "<div style=\"border:thin solid red;background-color:lightyellow\" " + " class=\"" + fn + section + " " + fn + " " + i + " concord \" " + " \"  onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + leftSideHtml + ' </div> ',
+                                 tablekeyword: "<div style=\"border:thin solid red;background-color:lightyellow\" " + " class=\"" + fn + section + " " + fn + " " + i + " concord \" " + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + keywordctxhtml + '</div> ',
+                                 tableRightCtx: "<div style=\"border:thin solid red;background-color:lightyellow\" " + " class=\"" + fn + section + " " + fn + " " + i + " concord \" " + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + rightSideHtml + ' </div> ',
+                                 w2ui: {"style": "background-color: lightyellow"}
+                             });
+                                }else{
+                                 grid.records.push({
                                  recid: i,
                                  tablefname: "<div style=\"background-color:lightyellow;color:red;\" " + " class=\"" + fn + section + " " + fn + " " + i + "  concord \" " + " onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >  &nbsp  &nbsp " + fn + " &nbsp</div> ",
                                  tableLeftCtx: "<div style=\"background-color:lightyellow\" " + " class=\"" + fn + section + " " + fn + " " + i + " concord \" " + " \"  onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + leftSideHtml + ' </div> ',
@@ -1696,14 +1701,27 @@ let grid = new w2grid(config.grid)
                                  tableRightCtx: "<div style=\"background-color:lightyellow\" " + " class=\"" + fn + section + " " + fn + " " + i + " concord \" " + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + rightSideHtml + ' </div> ',
                                  w2ui: {"style": "background-color: lightyellow"}
                              });
+                             }
+
                          }else{
-                              grid.records.push({
-                             recid: i,
-                             tablefname: "<div" + " class=\"" + fn + section + " " + fn + " " +  i + "  concord \" " + "style=\"background-color:" + color + ";color:red; \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >  &nbsp  &nbsp " + fn + " &nbsp</div> ",
-                             tableLeftCtx: "<div" + " class=\"" + fn + section + " " + fn + " " +  i + " concord \" " +  " \"  onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + leftSideHtml + ' </div> ',
-                             tablekeyword:  "<div" + " class=\"" + fn + section + " " + fn + " " +  i + " concord \" " + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + keywordctxhtml + '</div> ',
-                             tableRightCtx:  "<div" + " class=\"" + fn + section + " " + fn + " " +  i + " concord \" "  + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + rightSideHtml + ' </div> ',
-                         });
+                              if( (toberemovedViaMetafacet.has(fn) || toberemovedViaMetafacet.has(fn + section) )){
+                                  grid.records.push({
+                                     recid: i,
+                                     tablefname: "<div" + " class=\"" + fn + section + " " + fn + " " +  i + "  concord \" " + "style=\"border:thin solid red;background-color:" + color + ";color:red; \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >  &nbsp  &nbsp " + fn + " &nbsp</div> ",
+                                     tableLeftCtx: "<div style=\"border:thin solid red;\"" + " class=\"" + fn + section + " " + fn + " " +  i + " concord \" " +  " \"  onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + leftSideHtml + ' </div> ',
+                                     tablekeyword:  "<div style=\"border:thin solid red;\"" + " class=\"" + fn + section + " " + fn + " " +  i + " concord \" " + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + keywordctxhtml + '</div> ',
+                                     tableRightCtx:  "<div style=\"border:thin solid red;\"" + " class=\"" + fn + section + " " + fn + " " +  i + " concord \" "  + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + rightSideHtml + ' </div> ',
+                                 });
+                              }else{
+                                   grid.records.push({
+                                     recid: i,
+                                     tablefname: "<div" + " class=\"" + fn + section + " " + fn + " " +  i + "  concord \" " + "style=\"background-color:" + color + ";color:red; \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >  &nbsp  &nbsp " + fn + " &nbsp</div> ",
+                                     tableLeftCtx: "<div" + " class=\"" + fn + section + " " + fn + " " +  i + " concord \" " +  " \"  onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + leftSideHtml + ' </div> ',
+                                     tablekeyword:  "<div" + " class=\"" + fn + section + " " + fn + " " +  i + " concord \" " + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + keywordctxhtml + '</div> ',
+                                     tableRightCtx:  "<div" + " class=\"" + fn + section + " " + fn + " " +  i + " concord \" "  + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + rightSideHtml + ' </div> ',
+                                 });
+                              }
+
                          }
 
 
@@ -2556,6 +2574,8 @@ let grid = new w2grid(config.grid)
                                    d3.select(this).style("opacity", opacity);
                                    shouldRemove ? remove(b.key): add(b.key); ;
                                });
+                             dataProcess(currentData,currentKeyword);
+
                          }
                          else{
                              var removed = false;
@@ -2575,7 +2595,7 @@ let grid = new w2grid(config.grid)
                              d3.select(this).style("fill", currentColor);
                              d3.select(this).style("opacity", opacity);
                              removed ? add(d.key) : remove(d.key);
-
+                             dataProcess(currentData,currentKeyword);
                          }
                          //dataProcess(currentData,currentKeyword);
                          // vec.redisplay();
@@ -2806,24 +2826,26 @@ let grid = new w2grid(config.grid)
                      if (m.key === key) {
                          m.values.map(function (v) {
                              if (v.ID === "ignore") {
-                                 const collection = Array.from(document.getElementsByClassName(v.Filename + ".xml"));
-                                 collection.forEach(element => {
-                                     element.style.border = "thin solid red";
-                                     element.style.borderColor = "red";
-                                     element.classList.add("toremove");
-                                     removedKeys.add(v.Filename + v.ID );
-                                     removedViaMetafacet.add(v.Filename+".xml");
+                                 // const collection = Array.from(document.getElementsByClassName(v.Filename + ".xml"));
+                                 // collection.forEach(element => {
+                                 //     element.style.border = "thin solid red";
+                                 //     element.style.borderColor = "red";
+                                 //     element.classList.add("toremove");
+                                      removedKeys.add(v.Filename + v.ID );
+                                     //removedViaMetafacet.add(v.Filename+".xml");
+                                     toberemovedViaMetafacet.add(v.Filename+".xml");
 
-                                 })
+                                 // })
                              } else {
-                                 const collection = Array.from(document.getElementsByClassName(v.Filename + ".xml" + v.ID));
-                                 collection.forEach(element => {
-                                      element.style.border = "thin solid red";
-                                      element.style.borderColor = "red";
-                                      element.classList.add("toremove");
+                                 // const collection = Array.from(document.getElementsByClassName(v.Filename + ".xml" + v.ID));
+                                 // collection.forEach(element => {
+                                 //      element.style.border = "thin solid red";
+                                 //      element.style.borderColor = "red";
+                                 //      element.classList.add("toremove");
                                       removedKeys.add(v.Filename + v.ID);
-                                      removedViaMetafacet.add(v.Filename+".xml"+ v.ID);
-                                 });
+                                      //removedViaMetafacet.add(v.Filename+".xml"+ v.ID);
+                                      toberemovedViaMetafacet.add(v.Filename+".xml"+ v.ID);
+                                 // });
                              }
                          });
                      }
@@ -2831,13 +2853,17 @@ let grid = new w2grid(config.grid)
              }
 
              function hide() {
-                 const collection = document.getElementsByClassName("toremove");
-                 for (let i = 0; i < collection.length; i++) {
-                     collection[i].style.display = "none";
-                 }
+                 // const collection = document.getElementsByClassName("toremove");
+                 // for (let i = 0; i < collection.length; i++) {
+                 //     collection[i].style.display = "none";
+                 // }
+                toberemovedViaMetafacet.forEach(element => {
+                    removedViaMetafacet.add(element);
+                });
                  dataProcess(currentData,currentKeyword);
                  dataProcessMosaic(currentData,currentKeyword);
                  buildConcMetadata();
+                 toberemovedViaMetafacet = new Set();
                  removedKeys = new Set();
              }
 
@@ -2854,7 +2880,7 @@ let grid = new w2grid(config.grid)
                                      collection[i].style.borderColor = "white";
                                      collection[i].classList.remove("toremove");
                                      removedKeys.delete(v.Filename + v.ID);
-                                     removedViaMetafacet.delete(v.Filename+".xml");
+                                     toberemovedViaMetafacet.delete(v.Filename+".xml");
                                  }
                              } else {
                                  const collection = document.getElementsByClassName(v.Filename + ".xml" + v.ID);
@@ -2862,7 +2888,7 @@ let grid = new w2grid(config.grid)
                                      collection[i].style.borderColor = "white";
                                      collection[i].classList.remove("toremove");
                                      removedKeys.delete(v.Filename  + v.ID);
-                                     removedViaMetafacet.delete(v.Filename+".xml" + v.ID);
+                                     toberemovedViaMetafacet.delete(v.Filename+".xml" + v.ID);
                                  }
                              }
                          });
