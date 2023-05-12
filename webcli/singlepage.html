@@ -26,6 +26,7 @@
 
             <link href="https://cdn.jsdelivr.net/gh/tofsjonas/sortable@latest/sortable.min.css" rel="stylesheet" />
 <!--            <script src="https://cdn.jsdelivr.net/gh/tofsjonas/sortable@latest/sortable.min.js"></script>-->
+         <link rel="stylesheet" type="text/css" href="https://rawgit.com/vitmalina/w2ui/master/dist/w2ui.min.css">
 
         <!-- Favicons -->
         <meta name="theme-color" content="#7952b3">
@@ -246,6 +247,13 @@
          /*.modal-body {*/
          /*  max-height: 90vh;*/
          /*}*/
+         .concord{
+          position: relative;
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 100%;
+         }
         </style>
 
 
@@ -569,21 +577,20 @@
                 <div id="contentBox">
                     <div id="linesreturned"> </div>
                     <!-- <div class="col container panel panel-default" id="profile" role="tabpanel" aria-labelledby="profile-tab" >-->
-                    <div class="border rounded panel-body panel-resizable-vert " style="height:300px;overflow: scroll;">
+                    <div class="border rounded panel-body panel-resizable-vert " id="concbox" style="width: 100%; height: 300px;">
 
 
-                        <div class="d-flex w-100  " id="concbox"  style="height:auto;flex-shrink: 0; ">
-                            <div class="d-flex lazy " id="filename"  style="line-height:1.5em;padding-bottom:7px;padding-top:7px;margin-top: 30px;font-size:12px;flex-shrink: 0;left: 0;position: -webkit-sticky;position:-webkit-sticky;position: sticky;">
-                            </div>
-                            <div class="d-flex p-2" id="leftconc"  style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:12px;resize:horizontal;">
-                            </div>
 
-                            <div class="d-flex p-2" id="keyworddisplay" style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:12px;flex-shrink: 0;">
-                            </div>
+<!--                            <div class="d-flex lazy " id="filename"  style="line-height:1.5em;padding-bottom:7px;padding-top:7px;margin-top: 30px;font-size:12px;flex-shrink: 0;left: 0;position: -webkit-sticky;position:-webkit-sticky;position: sticky;">-->
+<!--                            </div>-->
+<!--                            <div class="d-flex p-2" id="leftconc"  style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:12px;resize:horizontal;">-->
+<!--                            </div>-->
 
-                            <div class="d-flex p-2 " id="rightconc" style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:12px;flex-shrink: 0;">
-                            </div>
-                        </div>
+<!--                            <div class="d-flex p-2" id="keyworddisplay" style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:12px;flex-shrink: 0;">-->
+<!--                            </div>-->
+
+<!--                            <div class="d-flex p-2 " id="rightconc" style="line-height:1.5em;padding:5px;margin-top: 30px;font-size:12px;flex-shrink: 0;">-->
+<!--                            </div>-->
                     </div>
                     <!--   </div>-->
 
@@ -675,16 +682,32 @@
 
 
 
+<script type="text/javascript" src="https://rawgit.com/vitmalina/w2ui/master/dist/w2ui.js"></script>
+<script>
+// widget configuration
+
+let config = {
+    grid: {
+        name: 'grid',
+        show: {
+            footer: false,
+            toolbar: false
+        },
+        columns: [
+            { field: 'tablefname', text: 'Filename', size: '120px', sortable: false, resizable: true },
+            { field: 'tableLeftCtx', text: 'Left context', size: '800px', sortable: false, resizable: true,  attr: 'align=right' },
+            { field: 'tablekeyword', text: 'Keyword', size: '85px', sortable: false, resizable: true, attr: 'align=center' },
+            { field: 'tableRightCtx', text: 'Right Context', size: '800px', sortable: false, resizable: true, attr: 'align=left' }
+        ]
+    }
+}
 
 
-
-            <script>
-
-
+// initialization
+let grid = new w2grid(config.grid)
 
 
-
-             // const position = {x: 0, y: 0}
+             const position = {x: 0, y: 0}
              // interact('.draggable1').draggable({
              //     modifiers: [
              //         interact.modifiers.restrict({
@@ -724,26 +747,26 @@
              //     allowFrom: '.handle',
              // })
 
-             //     interact('.panel-resizable-horz')
-             // .resizable({
-             //   edges: { top: true, left: true, bottom: true, right: true },
-             //   listeners: {
-             //     move: function (event) {
-             //       let { x, y } = event.target.dataset
-             //
-             //       x = (parseFloat(x) || 0) + event.deltaRect.left
-             //       y = (parseFloat(y) || 0) + event.deltaRect.top
-             //
-             //       Object.assign(event.target.style, {
-             //         width: `${event.rect.width}px`,
-             //         height: `${event.rect.height}px`,
-             //         transform: `translate(${x}px, ${y}px)`
-             //       })
-             //
-             //       Object.assign(event.target.dataset, { x, y })
-             //     }
-             //   }
-             // })
+                 interact('.panel-resizable-horz')
+             .resizable({
+               edges: { top: true, left: true, bottom: true, right: true },
+               listeners: {
+                 move: function (event) {
+                   let { x, y } = event.target.dataset
+
+                   x = (parseFloat(x) || 0) + event.deltaRect.left
+                   y = (parseFloat(y) || 0) + event.deltaRect.top
+
+                   Object.assign(event.target.style, {
+                     width: `${event.rect.width}px`,
+                     height: `${event.rect.height}px`,
+                     transform: `translate(${x}px, ${y}px)`
+                   })
+
+                   Object.assign(event.target.dataset, { x, y })
+                 }
+               }
+             })
 
              $( document ).ready(function() {
                  $(".panel-resizable-horz").resizable({
@@ -753,6 +776,8 @@
 
                  submitKeyword("keyword")
              });
+
+
 
              var slider = $("#slider-range").slider({
                  range: true,
@@ -786,6 +811,8 @@
             </script>
 
             <script type="text/javascript">
+
+
              var currentData;
              var currentKeyword;
              var sortpos ="filename";
@@ -810,6 +837,7 @@
              var extractpos = "";
              var cline = "";
              var extractsection = "";
+             var Mosaicword ="";
 
 
              var  selectHtml ="<div class=\"col-md-3 form-group border rounded \"><label for=\"theclassSelect\">titleText</label><div class=\"col-auto\"><select class=\"form-select theclass\" id=\"theclassSelect\"  onchange=\"updateTextBox()\" size=\"10\" multiple aria-label=\"size 10 select theclass\"></select> <div class=\"form-check\">" +
@@ -858,8 +886,8 @@
                  }
              }
              function ProcessMosaicClick(pos,wordpos){
+                 highlightWord(pos, wordpos);
                  sort(pos);
-                 highlightWord(wordpos);
              }
 
              function checkboxClick(){
@@ -996,21 +1024,23 @@
              }
 
 
-             function highlightWord(selectedWord){
-                    const collection = Array.from(document.getElementsByClassName(selectedWord));
-                    collection.forEach(element => {
-                      element.style.color = "purple";
-                      element.classList.add("concHighlight");
-                      element.parentElement.classList.add("concHighlight")
-                        //Disabled highlight of full line as nested selections are killing performance
-                      // const collection2 = Array.from(document.getElementsByClassName(element.parentElement.classList[2]));
-                      // collection2.forEach(element2 => {
-                      //   element2.classList.add("concHighlight");
-                      // });
-                    });
-                 setTimeout(function (d) {
-                     collection[0].scrollIntoView();
-                 },200)
+             function highlightWord(pos,selectedWord){
+                    Mosaicword = selectedWord;
+                    // const collection = Array.from(document.getElementsByClassName(selectedWord));
+                    // collection.forEach(element => {
+                    //   element.style.color = "purple";
+                    //   element.classList.add("concHighlight");
+                    //   element.parentElement.classList.add("concHighlight")
+                    //     //Disabled highlight of full line as nested selections are killing performance
+                    //   // const collection2 = Array.from(document.getElementsByClassName(element.parentElement.classList[2]));
+                    //   // collection2.forEach(element2 => {
+                    //   //   element2.classList.add("concHighlight");
+                    //   // });
+                    // });
+                 // setTimeout(function (d) {
+                 //     console.log(collection[0])
+                 //     w2ui.grid.scrollIntoView(parseInt(collection[0].parentElement.classList[2]));
+                 // },200)
              }
 
              let data = ""
@@ -1093,16 +1123,16 @@
                      text4 = text4.concat("&xquerywhere=" + document.getElementById("supcorptextbox").value)
                  }
                  try {
-                     let concordancebox = document.getElementById("keyworddisplay")
+                     let concordancebox = document.getElementById("concbox")
                      concordancebox.innerHTML = "<div class=\"spinner-border text-success d-flex align-items-center justify-content-center\" role=\"status\">" +
                                                 "  <span class=\"visually-hidden\">Loading...</span>" +
                                                 "</div>";
-                     let fnfn = document.getElementById("filename")
-                     fnfn.innerHTML = "<br><br><h2>Loading Concordance          </h2>";
-                     let lctx = document.getElementById("leftconc")
-                     lctx.innerHTML = "";
-                     let rttx = document.getElementById("rightconc")
-                     rttx.innerHTML = "";
+                     // let fnfn = document.getElementById("filename")
+                     // fnfn.innerHTML = "<br><br><h2>Loading Concordance          </h2>";
+                     // let lctx = document.getElementById("leftconc")
+                     // lctx.innerHTML = "";
+                     // let rttx = document.getElementById("rightconc")
+                     // rttx.innerHTML = "";
                      let chartBox = document.getElementById("chart")
                      chartBox.innerHTML = "<br><br><h2>Loading Concordance          </h2><div class=\"spinner-border text-success d-flex align-items-center justify-content-center\" role=\"status\">" +
                                           "  <span class=\"visually-hidden\">Loading...</span>" +
@@ -1145,11 +1175,10 @@
                  }
                  headersfetched = true;
                  processHeaders(headers)
-
              }
 
-
              function submitKeyword(id){
+                 Mosaicword ="";
                  var value = document.getElementById(id).value
                  var selectvalue = document.getElementById("corpusSelect").value
                  var markdowSelect = document.getElementById("markdownSelect").value
@@ -1176,13 +1205,17 @@
              }
 
              function deleteLine() {
-                 const collection = Array.from(document.getElementsByClassName(cline));
-                    collection.forEach(element1 => {
-                        element1.style.display = "none";
-                        removedViaDelete.add(element1.classList[2])
-                    });
-                 redrawMosaic();
-                 buildConcMetadata();
+                 // console.log(grid.getSelection())
+                 //     grid.getSelection().forEach(element1 => {
+                 //         console.log(element1)
+                 //         console.log(grid.get(element1)["tablefname"].split("class=\"")[1].split(" ")[1])
+                 //        removedViaDelete.add(grid.get(element1)["tablefname"].split("class=\"")[1].split(" ")[1]);
+                 //    });
+
+                 w2ui.grid.delete(true);
+
+                 //buildConcMetadata();
+                 //redrawMosaic();
              }
 
              function clickConc(file,filePos,section,line){
@@ -1284,10 +1317,13 @@
                      var output = document.getElementById('metadatadiv');
                      data = data.replaceAll("src=\"","src=\"https://genealogies.mvm.ed.ac.uk/omc/headers/")
                      data = data.replaceAll("<document","<b>Document:</b> <p> ")
-                     data = data.replaceAll("filename=","Filename: ")
-                     data = data.replaceAll("publication_date=","<br>Publication date: ")
-                     data = data.replaceAll("capture_date=","<br>Capture date: ")
-                     data = data.replaceAll("format=","<br>Format: ")
+                     data = data.replaceAll("filename=","<b>Filename:</b> ")
+                     data = data.replaceAll("publication_date=","<br><b>Publication date:</b> ")
+                     data = data.replaceAll("capture_date=","<br><b>Capture date:</b> ")
+                     data = data.replaceAll("format=","<br><b>Format:</b> ")
+                     data = data.replaceAll("article_type=","<br><b>Article type:</b> ")
+                     data = data.replaceAll("journal=","<br><b>Journal=</b> ")
+                     data = data.replaceAll("journal=","<br><b>Journal=</b> ")
                      data = data.replaceAll("<title>","</p> <br><b>Title:</b> ")
                      data = data.replaceAll("<author>"," <br><b>Author:</b> ")
                      data = data.replaceAll("</author>","")
@@ -1295,8 +1331,11 @@
                      data = data.replaceAll("name=","")
                      data = data.replaceAll("<copyright","<br><br><b>Copyright: </b>")
                      data = data.replaceAll("<copyright","<br><br><b>Copyright: </b>")
-                     data = data.replaceAll("status=","<br>Status: ")
-                     data = data.replaceAll("<holder>","<br>Holder: ")
+                     data = data.replaceAll("status=","<br><b>Status:</b> ")
+                     data = data.replaceAll("<holder>","<br><b>Holder:</b> ")
+                     data = data.replaceAll("<comment>","<br>")
+                     data = data.replaceAll("<comments>","<br><b>Licence:</b> ")
+                     data = data.replaceAll("<DOI>","<br><b>doi:</b> ")
                      data = data.replaceAll("<section","<br><br><b>Section:</b> ")
                      data = data.replaceAll("id=","<br>id: ")
                      data = data.replaceAll("<visual>","<br><b>Visual:</b> ")
@@ -1408,15 +1447,12 @@
 
              function dataProcess(data,keyword) {
                  // var startTime = performance.now()
-
-                 document.getElementById("filename").innerHTML = '';
-                 document.getElementById("leftconc").innerHTML = '';
-                 document.getElementById("keyworddisplay").innerHTML = '';
-                 document.getElementById("rightconc").innerHTML = '';
+                 w2ui['grid'].clear();
                  var countWords = [{}, {}, {}, {}, {}, {}, {}, {}, {}];
 
                  var countWordsTot = {}
                  var wordOrder = [];
+                 var scrolpos = 0;
 
                  var concJSON;
                  concJSON = JSON.stringify(data.split("\n").map(x => ({text: x})))
@@ -1512,7 +1548,6 @@
                      for (var l = indextoremove.length - 1; l >= 0; l--)
                          concobj.splice(indextoremove[l], 1);
 
-
                  }
                  //(a, b) => a.gsize == b.gsize ? a.glow - b.glow : a.gsize - b.gsize
                  // concobj.sort((a, b) => (a[sortpos] > b[sortpos]) ? 1 : -1)
@@ -1530,11 +1565,13 @@
                  concrdance = concobj
                             // var endTime = performance.now()
                             // console.log(`Call to sort conc took ${endTime - startTime} milliseconds`)
-                 // save for metafacet
 
+                 var firstpos = false;
                  for (var i = 1; i < concobj.length-1; i++){
+                     var lineshighlight = false;
+
                      var color ='white'// i % 2===0 ? "lightgrey": "grey";
-                     conc = concobj[i]['text'].split("|")
+                     conc = concobj[i]['text'].split("|",4)
                      var outkey =""
                      if(keyword.includes("*") || keyword.includes("-") || keyword.match(/\".+?\"/g) ){
                          splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("/")[0];
@@ -1553,8 +1590,8 @@
                      fn=fn[fn.length -1];
                      var lftWordtokens =  conc[3].slice(0, 130).trim().split(' ');
                      var rightWordtokens =  conc[3].slice((130 + splitKeyword.length),conc[3].length).trim().split(' ');
-                     var leftincrement =0;
-                     var rightincrement =0;
+                     var leftincrement = 0;
+                     var rightincrement = 0;
                      rightWordtokens = rightWordtokens.filter(item => item);
                      lftWordtokens = lftWordtokens.filter(item => item);
                      for (let j = 1; j < 7; j++) {
@@ -1581,16 +1618,46 @@
                          if (dontSkipleft) {
                              if (lftWordtokens.length - j - leftincrement >= 0) {
                                  if(keyword.includes("+") && ( lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase() === (keyword.split("+")[0]) ) ){
-                                     lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                     if("left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "")===Mosaicword){
+                                          lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span style=\"color:purple\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                          if( firstpos === false){
+                                               scrolpos = i ;
+                                               firstpos = true;
+                                          }
+                                          lineshighlight = true;
+                                     }else{
+                                          lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                     }
+                                    // lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
 
                                  }else{
-                                     lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                     if("left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "")===Mosaicword){
+                                         lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span style=\"color:purple\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                           if( firstpos === false){
+                                               scrolpos = i ;
+                                               firstpos = true;
+                                          }
+                                          lineshighlight =true
+
+                                     }else{
+                                         lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                     }
                                  }
                              }
                          }
                          if (dontSkipright) {
                              if (j - 1 + rightincrement < rightWordtokens.length && !(rightWordtokens[j - 1 + rightincrement] === '')) {
-                                 rightWordtokens[j - 1 + rightincrement] = " <span class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
+                                 if("right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") === Mosaicword){
+                                      if( firstpos === false){
+                                               scrolpos = i ;
+                                               firstpos = true;
+                                          }
+                                     lineshighlight = true
+                                     rightWordtokens[j - 1 + rightincrement] = " <span style=\"color:purple\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
+                                 }else{
+                                     rightWordtokens[j - 1 + rightincrement] = " <span class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
+                                 }
+
                              }
                          }
                      }
@@ -1609,16 +1676,36 @@
                      if(keywordctxhtml.length === 0){
                          keywordctxhtml  = "*"
                      }
-                     if (!removedViaDelete.has(fn+i)) {
 
-                         fns += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + "  concord \" " + "style=\"background-color:" + color + ";color:red; \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >  &nbsp  &nbsp " + fn + " &nbsp</div> ";
-                         leftctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" " +  " \"  onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + leftSideHtml + ' </div> ';
-                         keywordctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" " + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + keywordctxhtml + '</div> ';
-                         rightctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" "  + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + rightSideHtml + ' </div>  ';
+                     if (!removedViaDelete.has(fn+i)) {
+                         // fns += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + "  concord \" " + "style=\"background-color:" + color + ";color:red; \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >  &nbsp  &nbsp " + fn + " &nbsp</div> ";
+                         // leftctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" " +  " \"  onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + leftSideHtml + ' </div> ';
+                         // keywordctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" " + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + keywordctxhtml + '</div> ';
+                         // rightctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" "  + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + rightSideHtml + ' </div>  ';
+
                          // fns += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + "  concord \" " + "style=\"background-color:" + color + ";color:red; >  &nbsp  &nbsp " + fn + " &nbsp</div> ";
                          // leftctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" " +  "  >" + leftSideHtml + ' </div> ';
                          // keywordctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" " + "  >" + keywordctxhtml + '</div> ';
                          // rightctx += "<div" + " class=\"" + fn + section + " " + fn + " " + fn + i + " concord \" "  + "  >" + rightSideHtml + ' </div>  ';
+                         if(lineshighlight) {
+                             grid.records.push({
+                                 recid: i,
+                                 tablefname: "<div style=\"background-color:lightyellow;color:red;\" " + " class=\"" + fn + section + " " + fn + " " + i + "  concord \" " + " onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >  &nbsp  &nbsp " + fn + " &nbsp</div> ",
+                                 tableLeftCtx: "<div style=\"background-color:lightyellow\" " + " class=\"" + fn + section + " " + fn + " " + i + " concord \" " + " \"  onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + leftSideHtml + ' </div> ',
+                                 tablekeyword: "<div style=\"background-color:lightyellow\" " + " class=\"" + fn + section + " " + fn + " " + i + " concord \" " + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + keywordctxhtml + '</div> ',
+                                 tableRightCtx: "<div style=\"background-color:lightyellow\" " + " class=\"" + fn + section + " " + fn + " " + i + " concord \" " + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + rightSideHtml + ' </div> ',
+                                 w2ui: {"style": "background-color: lightyellow"}
+                             });
+                         }else{
+                              grid.records.push({
+                             recid: i,
+                             tablefname: "<div" + " class=\"" + fn + section + " " + fn + " " +  i + "  concord \" " + "style=\"background-color:" + color + ";color:red; \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >  &nbsp  &nbsp " + fn + " &nbsp</div> ",
+                             tableLeftCtx: "<div" + " class=\"" + fn + section + " " + fn + " " +  i + " concord \" " +  " \"  onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + leftSideHtml + ' </div> ',
+                             tablekeyword:  "<div" + " class=\"" + fn + section + " " + fn + " " +  i + " concord \" " + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + keywordctxhtml + '</div> ',
+                             tableRightCtx:  "<div" + " class=\"" + fn + section + " " + fn + " " +  i + " concord \" "  + " \" onclick=\"clickConc(\' " + conc[0] + "\',\'" + posInFile + "\',\'" + section + "\',\'" + fn + i + "\' )\" >" + rightSideHtml + ' </div> ',
+                         });
+                         }
+
 
                      }
 
@@ -1682,61 +1769,63 @@
                  // console.log(wordOrder)
                  // console.log(totkeys)
 
-                 var div = document.createElement('div');
-                 div.innerHTML = fns;
-                 div.style.textAlign='middle'
-                 div.classList.add('text-nowrap');
-                 //div.style.backgroundColor = color;
-                 // div.classList.add('p2');
-                 document.getElementById("filename").appendChild(div);
-
-                 var div = document.createElement('div');
-                 div.innerHTML = leftctx;
-                 div.style.textAlign='right'
-                 div.classList.add('text-nowrap');
-                 //div.style.backgroundColor = color;
-                 // div.classList.add('p2');
-                 document.getElementById("leftconc").appendChild(div);
-
-                 var div = document.createElement('div');
-                 div.innerHTML = keywordctx;
-                 div.style.textAlign='center'
-                 div.style.color = "Blue";
-                 document.getElementById("keyworddisplay").appendChild(div);
-
-                 var div = document.createElement('div');
-                 div.innerHTML = rightctx;
-                 document.getElementById("rightconc").appendChild(div);
-                 div.classList.add('text-nowrap');
-
-                 //coloring based on sort position
-
-                const collection = Array.from(document.getElementsByClassName(sort1pos));
-                collection.forEach(element => {
-                    element.style.color = "red";
-                    element.style.fontWeight = "bold";
-                });
-
-                const collection2 = Array.from(document.getElementsByClassName(sort2pos));
-                collection2.forEach(element => {
-                    element.style.color = "#ffc107";
-                    element.style.fontWeight = "bold";
-                });
-
-                const collection3 = Array.from(document.getElementsByClassName(sort3pos));
-                collection2.forEach(element => {
-                    element.style.color = "#198754";
-                    element.style.fontWeight = "bold";
-                });
-
-                 //recolor metafacetn selections
-                 var items =Array.from(removedViaMetafacet);
-                 items.forEach(element => {
-                     var collection1 = Array.from(document.getElementsByClassName(items[element]));
-                     collection1.forEach(element => {
-                        element.style.border = "thin solid red";
-                     });
-                 });
+                //  var div = document.createElement('div');
+                //  div.innerHTML = fns;
+                //  div.style.textAlign='middle'
+                //  div.classList.add('text-nowrap');
+                //  //div.style.backgroundColor = color;
+                //  // div.classList.add('p2');
+                //  document.getElementById("filename").appendChild(div);
+                //
+                //  var div = document.createElement('div');
+                //  div.innerHTML = leftctx;
+                //  div.style.textAlign='right'
+                //  div.classList.add('text-nowrap');
+                //  //div.style.backgroundColor = color;
+                //  // div.classList.add('p2');
+                //  document.getElementById("leftconc").appendChild(div);
+                //
+                //  var div = document.createElement('div');
+                //  div.innerHTML = keywordctx;
+                //  div.style.textAlign='center'
+                //  div.style.color = "Blue";
+                //  document.getElementById("keyworddisplay").appendChild(div);
+                //
+                //  var div = document.createElement('div');
+                //  div.innerHTML = rightctx;
+                //  document.getElementById("rightconc").appendChild(div);
+                //  div.classList.add('text-nowrap');
+                //
+                //  //coloring based on sort position
+                //
+                // const collection = Array.from(document.getElementsByClassName(sort1pos));
+                // collection.forEach(element => {
+                //     element.style.color = "red";
+                //     element.style.fontWeight = "bold";
+                // });
+                //
+                // const collection2 = Array.from(document.getElementsByClassName(sort2pos));
+                // collection2.forEach(element => {
+                //     element.style.color = "#ffc107";
+                //     element.style.fontWeight = "bold";
+                // });
+                //
+                // const collection3 = Array.from(document.getElementsByClassName(sort3pos));
+                // collection2.forEach(element => {
+                //     element.style.color = "#198754";
+                //     element.style.fontWeight = "bold";
+                // });
+                //
+                //  //recolor metafacetn selections
+                //  var items =Array.from(removedViaMetafacet);
+                //  items.forEach(element => {
+                //      var collection1 = Array.from(document.getElementsByClassName(items[element]));
+                //      collection1.forEach(element => {
+                //         element.style.border = "thin solid red";
+                //      });
+                //  });
+                 grid.render('#concbox')
+                 w2ui.grid.scrollIntoView(scrolpos);
 
                             // var endTime = performance.now()
                             // console.log(`Call to render conc took ${endTime - startTime} milliseconds`)
@@ -1747,10 +1836,10 @@
              const stopwords = new Set(['i','me','my','myself','we','our','ours','ourselves','you','your','yours','yourself','yourselves','he','him','his','himself','she','her','hers','herself','it','its','itself','they','them','their','theirs','themselves','what','which','who','whom','this','that','these','those','am','is','are','was','were','be','been','being','have','has','had','having','do','does','did','doing','a','an','the','and','but','if','or','because','as','until','while','of','at','by','for','with','about','against','between','into','through','during','before','after','above','below','to','from','up','down','in','out','on','off','over','under','again','further','then','once','here','there','when','where','why','how','all','any','both','each','few','more','most','other','some','such','no','nor','not','only','own','same','so','than','too','very','s','t','can','will','just','don','should','now']);
 
              async function dataProcessMosaic(data,keyword){
-                 // var startTime = performance.now()
-                 // setTimeout(function (d) {
-                 //     $('concbox').scrollLeft(250);
-                 // },100)
+                 var startTime = performance.now()
+                 setTimeout(function (d) {
+                     $('concbox').scrollLeft(250);
+                 },100)
                  document.getElementById("chart").innerHTML = '';
 
                  var countWords = [{},{},{},{},{},{},{},{},{}];
@@ -1972,22 +2061,22 @@
                                                    d3.select(this).style("fill", "white");
                                                    selectedRect = this;
 
-                                                   let concordancebox = document.getElementById("keyworddisplay")
+                                                   let concordancebox = document.getElementById("concbox")
                                                    concordancebox.innerHTML = "<div class=\"spinner-border text-success d-flex align-items-center justify-content-center\" role=\"status\">" +
                                                        "  <span class=\"visually-hidden\">Loading...</span>" +
                                                        "</div>";
                                                    concordancebox.style.display = 'none';
                                                    concordancebox.style.display = 'block';
 
-                                                   let fnfn = document.getElementById("filename")
-                                                   fnfn.innerHTML = "<br><br><h2>Loading Concordance          </h2>";
-                                                   fnfn.parentElement.style.display = 'none';
-                                                   fnfn.parentElement.style.display = 'block';
-                                                   let lctx = document.getElementById("leftconc")
-                                                   lctx.innerHTML = "";
-                                                   let rttx = document.getElementById("rightconc")
-                                                   rttx.innerHTML = "";
-                                                  setTimeout(await ProcessMosaicClick(mosaicPositions[d3.select(this).attr("column")],mosaicPositions[d3.select(this).attr("column")]+d3.select(this).attr("word")), 100);
+                                                   // let fnfn = document.getElementById("filename")
+                                                   // fnfn.innerHTML = "<br><br><h2>Loading Concordance          </h2>";
+                                                   // fnfn.parentElement.style.display = 'none';
+                                                   // fnfn.parentElement.style.display = 'block';
+                                                   // let lctx = document.getElementById("leftconc")
+                                                   // lctx.innerHTML = "";
+                                                   // let rttx = document.getElementById("rightconc")
+                                                   // rttx.innerHTML = "";
+                                                  setTimeout(await ProcessMosaicClick(mosaicPositions[d3.select(this).attr("column")],mosaicPositions[d3.select(this).attr("column")]+d3.select(this).attr("word")), 10);
 
                                            })
                                            .on("mousemove", function (d) {
@@ -2806,7 +2895,6 @@
                  });
              }
             </script>
-
 
   </body>
 </html>
