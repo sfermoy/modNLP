@@ -749,7 +749,7 @@ let grid = new w2grid(config.grid)
 
                  interact('.panel-resizable-horz')
              .resizable({
-               edges: { top: true, left: true, bottom: true, right: true },
+               edges: { top: false, left: true, bottom: true, right: true },
                listeners: {
                  move: function (event) {
                    let { x, y } = event.target.dataset
@@ -770,7 +770,7 @@ let grid = new w2grid(config.grid)
 
              $( document ).ready(function() {
                  $(".panel-resizable-horz").resizable({
-                     handles: "n, e, s, w, ne, se, sw, nw"
+                     handles: " e, s, w, se, sw"
                  });
 
 
@@ -1216,16 +1216,17 @@ let grid = new w2grid(config.grid)
                  //    });
 
                  w2ui.grid.delete(true);
+                 document.getElementById("linesreturned").innerHTML ="Lines returned : "+ grid.records.length;
 
-                 //buildConcMetadata();
-                 //redrawMosaic();
+                 // buildConcMetadata();
+                 // redrawMosaic();
              }
 
              function clickConc(file,filePos,section,line){
                  extractpos = filePos;
                  filepath = file;
                  cline = line;
-
+                 extractsection = section;
 
                     const collection0 = Array.from(document.getElementsByClassName("concord"));
                     collection0.forEach(element => {
@@ -1319,40 +1320,41 @@ let grid = new w2grid(config.grid)
                      data = await response.text();
                      var output = document.getElementById('metadatadiv');
                      data = data.replaceAll("src=\"","src=\"https://genealogies.mvm.ed.ac.uk/omc/headers/")
-                     data = data.replaceAll("<document","<b>Document:</b> <p> ")
-                     data = data.replaceAll("filename=","<b>Filename:</b> ")
+                     data = data.replaceAll("<document","<b>Document:</b>")
+                     data = data.replaceAll("filename=","<br><b>Filename:</b> ")
                      data = data.replaceAll("publication_date=","<br><b>Publication date:</b> ")
                      data = data.replaceAll("capture_date=","<br><b>Capture date:</b> ")
                      data = data.replaceAll("format=","<br><b>Format:</b> ")
                      data = data.replaceAll("article_type=","<br><b>Article type:</b> ")
-                     data = data.replaceAll("journal=","<br><b>Journal=</b> ")
-                     data = data.replaceAll("journal=","<br><b>Journal=</b> ")
-                     data = data.replaceAll("<title>","</p> <br><b>Title:</b> ")
-                     data = data.replaceAll("<author>"," <br><b>Author:</b> ")
+                     data = data.replaceAll("journal=","<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>Journal=</b> ")
+                     data = data.replaceAll("<title>","<br><b>Title:</b> ")
+                     data = data.replaceAll("<author>"," <br>&nbsp;&nbsp;&nbsp;&nbsp;<b>Author:</b> ")
                      data = data.replaceAll("</author>","")
                      data = data.replaceAll("<organisation","<br><b>Organisation:</b> ")
                      data = data.replaceAll("name=","")
-                     data = data.replaceAll("<copyright","<br><br><b>Copyright: </b>")
-                     data = data.replaceAll("<copyright","<br><br><b>Copyright: </b>")
-                     data = data.replaceAll("status=","<br><b>Status:</b> ")
-                     data = data.replaceAll("<holder>","<br><b>Holder:</b> ")
+                     data = data.replaceAll("<copyright","<br><b>Copyright: </b>")
+                     data = data.replaceAll("<visual_copyright","<br><b>Visual Copyright: </b>")
+                     data = data.replaceAll("status=","<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>Status:</b> ")
+                     data = data.replaceAll("<holder>","<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>Holder:</b> ")
                      data = data.replaceAll("<comment>","<br>")
-                     data = data.replaceAll("<comments>","<br><b>Licence:</b> ")
+                     data = data.replaceAll("<comments>","<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>Comments:</b> ")
                      data = data.replaceAll("<DOI>","<br><b>doi:</b> ")
-                     data = data.replaceAll("<section","<br><br><b>Section:</b> ")
-                     data = data.replaceAll("id=","<br>id: ")
+                     data = data.replaceAll("<section","<br><b>Section:</b> ")
+                     data = data.replaceAll("id=","<br>&nbsp;&nbsp;&nbsp;&nbsp; id: ")
                      data = data.replaceAll("<visual>","<br><b>Visual:</b> ")
                      data = data.replaceAll("</visual>","")
-                     data = data.replaceAll("<caption>","<br><b>Caption:</b> ")
-                     data = data.replaceAll("<taxon","<br><b>Taxon:</b> ")
-                     data = data.replaceAll("class=","<br>Class: ")
-                     data = data.replaceAll("order=","<br>Order: ")
-                     data = data.replaceAll("family=","<br>Family: ")
-                     data = data.replaceAll("qualifier=","<br>Qualifier: ")
+                     data = data.replaceAll("<caption>","<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>Caption:</b> ")
+                     data = data.replaceAll("<taxon","<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>Taxon:</b> ")
+                     data = data.replaceAll("class=","<br>&nbsp;&nbsp;&nbsp;&nbsp;Class: ")
+                     data = data.replaceAll("order=","<br>&nbsp;&nbsp;&nbsp;&nbsp;Order: ")
+                     data = data.replaceAll("family=","<br>&nbsp;&nbsp;&nbsp;&nbsp;Family: ")
+                     data = data.replaceAll("qualifier=","<br>&nbsp;&nbsp;&nbsp;&nbsp;Qualifier: ")
                      //ata = data.replaceAll("src=","<br>src: ")
                      data = data.replaceAll("\">","\"")
                      data = data.replaceAll("\'>","\'")
-
+                     data = data.replaceAll(" />","")
+                     data = data.replaceAll(" >","")
+                    data = data.replaceAll(extractsection,"<b><mark>"+extractsection+"</mark></b> ")
 
                      output.innerHTML = data;
                  }
@@ -1629,7 +1631,16 @@ let grid = new w2grid(config.grid)
                                           }
                                           lineshighlight = true;
                                      }else{
-                                          lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                         if(sort1pos ===('left'+j) ){
+                                             lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span style=\"color:red\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                         }
+                                         if(sort2pos ===('left'+j) )
+                                             lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span style=\"color:orange\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                         if(sort3pos ===('left'+j) ) {
+                                             lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span style=\"color:lightgreen\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                         }else{
+                                             lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                         }
                                      }
                                     // lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
 
@@ -1643,7 +1654,15 @@ let grid = new w2grid(config.grid)
                                           lineshighlight =true
 
                                      }else{
-                                         lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                          if(sort1pos ===('left'+j) )
+                                              lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span style=\"color:red\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                          if(sort2pos ===('left'+j) )
+                                               lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span style=\"color:orange\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                          if(sort3pos ===('left'+j) ) {
+                                              lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span style=\"color:lightgreen\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                          }else{
+                                              lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                          }
                                      }
                                  }
                              }
@@ -1658,9 +1677,16 @@ let grid = new w2grid(config.grid)
                                      lineshighlight = true
                                      rightWordtokens[j - 1 + rightincrement] = " <span style=\"color:purple\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
                                  }else{
-                                     rightWordtokens[j - 1 + rightincrement] = " <span class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
+                                     if(sort1pos ===('right'+j) )
+                                         rightWordtokens[j - 1 + rightincrement] = " <span style=\"color:red\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
+                                     if(sort2pos ===('right'+j) )
+                                         rightWordtokens[j - 1 + rightincrement] = " <span style=\"color:orange\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
+                                     if(sort3pos ===('right'+j) ) {
+                                         rightWordtokens[j - 1 + rightincrement] = " <span style=\"color:lightgreen\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
+                                     }else{
+                                         rightWordtokens[j - 1 + rightincrement] = " <span class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
+                                     }
                                  }
-
                              }
                          }
                      }
