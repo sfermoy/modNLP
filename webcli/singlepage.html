@@ -20,7 +20,7 @@
 
 
 
-        <link href="css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <link href="css/bootstrap.min.css" rel="stylesheet"  crossorigin="anonymous">
         <!--<script src="js/bootstrap.min.js"></script>-->
         <script src="js/bootstrap.bundle.min.js" ></script>
 
@@ -1353,9 +1353,11 @@ let grid = new w2grid(config.grid)
                      data = data.replaceAll("\">","\"")
                      data = data.replaceAll("\'>","\'")
                      data = data.replaceAll(" />","")
+                     data = data.replaceAll("\'/>","'")
                      data = data.replaceAll(" >","")
-                    data = data.replaceAll(extractsection,"<b><mark>"+extractsection+"</mark></b> ")
-
+                     if(extractsection != "na"){
+                         data = data.replaceAll(extractsection,"<b><mark>"+extractsection+"</mark></b> ")
+                     }
                      output.innerHTML = data;
                  }
                  catch (e) {
@@ -1624,7 +1626,7 @@ let grid = new w2grid(config.grid)
                              if (lftWordtokens.length - j - leftincrement >= 0) {
                                  if(keyword.includes("+") && ( lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase() === (keyword.split("+")[0]) ) ){
                                      if("left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "")===Mosaicword){
-                                          lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span style=\"color:purple\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                          lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:purple\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
                                           if( firstpos === false){
                                                scrolpos = i ;
                                                firstpos = true;
@@ -1632,12 +1634,12 @@ let grid = new w2grid(config.grid)
                                           lineshighlight = true;
                                      }else{
                                          if(sort1pos ===('left'+j) ){
-                                             lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span style=\"color:red\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                             lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:red\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
                                          }
                                          if(sort2pos ===('left'+j) )
-                                             lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span style=\"color:orange\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                             lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:#ffc107\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
                                          if(sort3pos ===('left'+j) ) {
-                                             lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span style=\"color:lightgreen\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                             lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:#198754\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
                                          }else{
                                              lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
                                          }
@@ -1646,7 +1648,7 @@ let grid = new w2grid(config.grid)
 
                                  }else{
                                      if("left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "")===Mosaicword){
-                                         lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span style=\"color:purple\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                         lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:purple\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
                                            if( firstpos === false){
                                                scrolpos = i ;
                                                firstpos = true;
@@ -1655,11 +1657,11 @@ let grid = new w2grid(config.grid)
 
                                      }else{
                                           if(sort1pos ===('left'+j) )
-                                              lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span style=\"color:red\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                              lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:red\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
                                           if(sort2pos ===('left'+j) )
-                                               lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span style=\"color:orange\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                               lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:#ffc107\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
                                           if(sort3pos ===('left'+j) ) {
-                                              lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span style=\"color:lightgreen\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
+                                              lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:#198754\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
                                           }else{
                                               lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
                                           }
@@ -1675,16 +1677,16 @@ let grid = new w2grid(config.grid)
                                                firstpos = true;
                                           }
                                      lineshighlight = true
-                                     rightWordtokens[j - 1 + rightincrement] = " <span style=\"color:purple\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
+                                     rightWordtokens[j - 1 + rightincrement] = " <b><span style=\"color:purple\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span></b>";
                                  }else{
                                      if(sort1pos ===('right'+j) )
-                                         rightWordtokens[j - 1 + rightincrement] = " <span style=\"color:red\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
+                                         rightWordtokens[j - 1 + rightincrement] = "<b><span style=\"color:red\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span></b>";
                                      if(sort2pos ===('right'+j) )
-                                         rightWordtokens[j - 1 + rightincrement] = " <span style=\"color:orange\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
+                                         rightWordtokens[j - 1 + rightincrement] = "<b><span style=\"color:#ffc107\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span></b>";
                                      if(sort3pos ===('right'+j) ) {
-                                         rightWordtokens[j - 1 + rightincrement] = " <span style=\"color:lightgreen\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
+                                         rightWordtokens[j - 1 + rightincrement] = "<b><span style=\"color:#198754\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span></b>";
                                      }else{
-                                         rightWordtokens[j - 1 + rightincrement] = " <span class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
+                                         rightWordtokens[j - 1 + rightincrement] = "<span class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
                                      }
                                  }
                              }
