@@ -10618,7 +10618,7 @@ class w2grid extends w2base {
         if (Array.isArray(this.defaultSearches)) {
             this.defaultSearches.forEach((search, ind) => {
                 search.id = 'default-'+ ind
-                search.icon ??= 'w2ui-icon-search'
+                search.icon ?? (search.icon = 'w2ui-icon-search')
             })
         }
         // check if there are saved searches in localStorage
@@ -12602,7 +12602,7 @@ class w2grid extends w2base {
         if (w2utils.hasLocalStorage && this.useLocalStorage) {
             try {
                 let data = JSON.parse(localStorage.w2ui || '{}')
-                data[(this.stateId || this.name)] ??= {}
+                data[(this.stateId || this.name)] ?? (data[(this.stateId || this.name)] = {})
                 return data[(this.stateId || this.name)][type]
             } catch (e) {
             }
@@ -12613,7 +12613,7 @@ class w2grid extends w2base {
         if (w2utils.hasLocalStorage && this.useLocalStorage) {
             try {
                 let data = JSON.parse(localStorage.w2ui || '{}')
-                data[(this.stateId || this.name)] ??= {}
+                data[(this.stateId || this.name)] ?? (data[(this.stateId || this.name)] = {})
                 data[(this.stateId || this.name)][type] = value
                 localStorage.w2ui = JSON.stringify(data)
                 return true

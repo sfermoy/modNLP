@@ -652,28 +652,44 @@
 
                                 <div class="border rounded row">
                                     <a class="btn btn-secondary dropdown-toggle btn-xs d-block col" id="metabtn" data-bs-toggle="collapse" href="#collapseExamplemeta" role="button" aria-expanded="false" aria-controls="collapseExamplemeta">
-                                        Metafacet Options
+<!--                                    <a class="btn btn-secondary dropdown-toggle btn-xs d-block col" id="metabtn" data-bs-toggle="collapse"  role="button" aria-expanded="false" aria-controls="collapseExamplemeta">-->
+                                        Metafacet Help
                                     </a>
 <!--                                    <div class="icon handle rounded col-xs "></div>-->
+                                    
+
                                 </div>
 
 
                                 <div class="collapse" id="collapseExamplemeta">
                                     <div class="card card-body">
+                                        <ul>
+                                            <li> Click on an attribute bar to outline related lines in the concordance window</li>
 
-                                        <div id="legend2">
-                                            <div class="legend2"> <p class="country-name"><span class="key-dot removed"></span>All Lines Removed</p> </div>
-                                            <div class="legend2"> <p class="country-name"><span class="key-dot some"></span>Some Lines Removed</p> </div>
-                                        </div>
+                                            <li> Click again on a selected attribute to un-outline selected lines</li>
+
+                                            <li> Ctrl + click is used to select everything except for clicked attribute bar</li>
+
+                                            <li> Multiple attribute bars can be selected across the facets available via the dropdown</li>
+
+                                            <li> Click the "Remove Selected" button to remove all outlined concordance lines and recalculate the attribute bars</li>
+                                        </ul>
+<!--                                        <div id="legend2">-->
+<!--                                            <div class="legend2"> <p class="country-name"><span class="key-dot removed"></span>All Lines Removed</p> </div>-->
+<!--                                            <div class="legend2"> <p class="country-name"><span class="key-dot some"></span>Some Lines Removed</p> </div>-->
+<!--                                        </div>-->
                                         <br>
-                                        <button type="button" class="btn btn-primary btn-xs " id="metafacetRemove" onclick="hide()">Remove Selected</button>
+<!--                                        <button type="button" class="btn btn-primary btn-xs " id="metafacetRemove" onclick="hide()">Remove Selected</button>-->
 
 
 
                                     </div>
                                 </div>
-
-                                <div id="chart2"></div>
+                                <div>
+                                <label for="metatextbox">Selected Attributes</label><textarea class="border rounded form-control text-wrap" id="metatextbox"  type="text"  style="height: 2rem;" readonly></textarea>
+                                <button type="button" class="btn btn-primary btn-xs " id="metafacetRemove" onclick="hide()">Remove Selected</button>
+                                </div>
+                                <br><div id="chart2"></div>
                             </div>
                         </div>
                     </div>
@@ -842,7 +858,7 @@ let grid = new w2grid(config.grid)
              hidmetafacetsel = false;
 
 
-             var  selectHtml ="<div class=\"col-md-3 form-group border rounded \"><label for=\"theclassSelect\">titleText</label><div class=\"col-auto\"><select class=\"form-select theclass\" id=\"theclassSelect\"  onchange=\"updateTextBox()\" size=\"10\" multiple aria-label=\"size 10 select theclass\"></select> <div class=\"form-check\">" +
+             var  selectHtml ="<div class=\"col-md-3 form-group border rounded \"><label for=\"theclassSelect\">titleText</label><div class=\"col-auto\"  ><select class=\"form-select theclass\"  style=\"overflow-x:scroll;\" id=\"theclassSelect\"  onchange=\"updateTextBox()\" size=\"10\" multiple aria-label=\"size 10 select theclass\"></select> <div class=\"form-check\">" +
                               "<input class=\"form-check-input\" type=\"checkbox\" onclick='checkboxClick()' value=\"\" id=\"theclassChecked\">" +
                               "<label class=\"form-check-label\" for=\"theclassChecked\">exclude</label></div><div class=\"dropdown\">" +
                               " <button class=\"btn btn-secondary dropdown-toggle btn-secondary p-2 btn-xs\" type=\"button\" id=\"theclassdropper\"  data-bs-toggle=\"dropdown\" data-bs-display=\"static\" aria-expanded=\"false\">" +
@@ -1309,23 +1325,24 @@ let grid = new w2grid(config.grid)
 
 
              //need to parse correctly
-             async function fetchSingleMetadata(corpus,file,){
+             async function fetchSingleMetadata(corpus,file){
                  let text0 = 'https://genealogies.mvm.ed.ac.uk'
                  let text1 =text0.concat(corpus.split("-")[0]).concat('/headers//')
                  let text2 =text1.concat(file.split("/").pop().split(".")[0])
                  let text3 = text2.concat(".hed")
                  let text4 = text3
+
                  try {
                      let response = await fetch(text4,requestOptions)
                      data = await response.text();
                      var output = document.getElementById('metadatadiv');
                      data = data.replaceAll("src=\"","src=\"https://genealogies.mvm.ed.ac.uk/omc/headers/")
                      data = data.replaceAll("<document","<b>Document:</b>")
-                     data = data.replaceAll("filename=","<br><b>Filename:</b> ")
-                     data = data.replaceAll("publication_date=","<br><b>Publication date:</b> ")
-                     data = data.replaceAll("capture_date=","<br><b>Capture date:</b> ")
-                     data = data.replaceAll("format=","<br><b>Format:</b> ")
-                     data = data.replaceAll("article_type=","<br><b>Article type:</b> ")
+                     data = data.replaceAll("filename=","<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Filename:</b> ")
+                     data = data.replaceAll("publication_date=","<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Publication Date:</b> ")
+                     data = data.replaceAll("capture_date=","<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Capture Date:</b> ")
+                     data = data.replaceAll("format=","<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Format:</b> ")
+                     data = data.replaceAll("article_type=","<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Article Type:</b> ")
                      data = data.replaceAll("journal=","<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>Journal=</b> ")
                      data = data.replaceAll("<title>","<br><b>Title:</b> ")
                      data = data.replaceAll("<author>"," <br>&nbsp;&nbsp;&nbsp;&nbsp;<b>Author:</b> ")
@@ -1334,13 +1351,13 @@ let grid = new w2grid(config.grid)
                      data = data.replaceAll("name=","")
                      data = data.replaceAll("<copyright","<br><b>Copyright: </b>")
                      data = data.replaceAll("<visual_copyright","<br><b>Visual Copyright: </b>")
-                     data = data.replaceAll("status=","<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>Status:</b> ")
+                     data = data.replaceAll(" status=","<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>Status:</b> ")
                      data = data.replaceAll("<holder>","<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>Holder:</b> ")
                      data = data.replaceAll("<comment>","<br>")
                      data = data.replaceAll("<comments>","<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>Comments:</b> ")
                      data = data.replaceAll("<DOI>","<br><b>doi:</b> ")
-                     data = data.replaceAll("<section","<br><b>Section:</b> ")
-                     data = data.replaceAll("id=","<br>&nbsp;&nbsp;&nbsp;&nbsp; id: ")
+                     data = data.replaceAll("<section","<br><br><b>Section:</b> ")
+                     data = data.replaceAll(" id=","<br>&nbsp;&nbsp;&nbsp;&nbsp; id: ")
                      data = data.replaceAll("<visual>","<br><b>Visual:</b> ")
                      data = data.replaceAll("</visual>","")
                      data = data.replaceAll("<caption>","<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>Caption:</b> ")
@@ -1349,15 +1366,62 @@ let grid = new w2grid(config.grid)
                      data = data.replaceAll("order=","<br>&nbsp;&nbsp;&nbsp;&nbsp;Order: ")
                      data = data.replaceAll("family=","<br>&nbsp;&nbsp;&nbsp;&nbsp;Family: ")
                      data = data.replaceAll("qualifier=","<br>&nbsp;&nbsp;&nbsp;&nbsp;Qualifier: ")
+                     //gok Collection_title:
+                     data = data.replaceAll("<collection_title>","<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Collection Title: </b> ")
+                     data = data.replaceAll("</collection_title>","")
+                     data = data.replaceAll("subcorpusid=","<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Subcorpus id: </b> ")
+                     data = data.replaceAll(" language=","<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Language: </b> ")
+                     data = data.replaceAll(" authorship_date=","<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Authorship Date: </b> ")
+                     data = data.replaceAll(" publication_date=","<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Publication Date: </b> ")
+                     data = data.replaceAll(" outlet=","<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Outlet: </b> ")
+                     data = data.replaceAll("internet_outlet=","<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Internet Outlet: </b> ")
+
+
+
+                     data = data.replaceAll("<summary>","<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Summary:</b> ")
+                     data = data.replaceAll("</summary>","")
+                     data = data.replaceAll("<translation","<br><b>Translation:</b> ")
+                     data = data.replaceAll("</translation>","")
+                     data = data.replaceAll("<translator","<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Translator:</b> ")
+                     data = data.replaceAll("</translator>","")
+                     data = data.replaceAll("<source","<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Source:</b> ")
+                     data = data.replaceAll(" date=","<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Date: </b> ")
+                     data = data.replaceAll("<original_title>","<br><b>&nbsp;&nbsp;&nbsp;Original Title: </b> ")
+                     data = data.replaceAll("<terms>","<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Terms: </b> ")
+                     data = data.replaceAll("</terms>","")
+                     data = data.replaceAll("</source>","")
+
+
+                        //Terms: Not available for commercial purposes
+//                      Translation:
+                            // status: translation
+                            // language: English
+                            // Translator:
+                                // certainty: certain
+                                // Name: Cadenza Academic Translations
+                            // Source:
+                                // language: French
+                                // date: 2013
+                                // Original_title: Sur une lacune de la théorie mimétique : l’absence du politique dans le système girardien
+
+
                      //ata = data.replaceAll("src=","<br>src: ")
                      data = data.replaceAll("\">","\"")
                      data = data.replaceAll("\'>","\'")
                      data = data.replaceAll(" />","")
                      data = data.replaceAll("\'/>","'")
                      data = data.replaceAll(" >","")
+                     data = data.replaceAll("/>","")
+
+
                      if(extractsection != "na"){
                          data = data.replaceAll(extractsection,"<b><mark>"+extractsection+"</mark></b> ")
+                     }else{
+                         data = data.replaceAll("s1","<b><mark>"+"s1"+"</mark></b> ")
                      }
+                     // else{
+                     //     data = data.replaceAll("s1","<b><mark>"+s1+"</mark></b> ")
+                     // }
                      output.innerHTML = data;
                  }
                  catch (e) {
@@ -1476,6 +1540,8 @@ let grid = new w2grid(config.grid)
                  }else {
                      for (var i = 1; i < concobj.length - 1; i++) {
                          conc = concobj[i]['text'].split("|")
+                         conc[3] = conc.slice(3).join('');
+
                          var outkey =""
                          if(keyword.includes("*") || keyword.includes("-") || keyword.match(/\".+?\"/g) ){
                              splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("/")[0];
@@ -1548,6 +1614,7 @@ let grid = new w2grid(config.grid)
                          }
 
                          conc = concobj[i]['text'].split("|")
+                         conc[3] = conc.slice(3).join('');
                          concobj[i]['filename'] = fn;
                          concobj[i]['keyword'] = splitKeyword;
                      }
@@ -1578,7 +1645,9 @@ let grid = new w2grid(config.grid)
                      var lineshighlight = false;
 
                      var color ='white'// i % 2===0 ? "lightgrey": "grey";
-                     conc = concobj[i]['text'].split("|",4)
+                     conc = concobj[i]['text'].split("|")
+                     conc[3] = conc.slice(3).join('');
+
                      var outkey =""
                      if(keyword.includes("*") || keyword.includes("-") || keyword.match(/\".+?\"/g) ){
                          splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("/")[0];
@@ -1871,7 +1940,11 @@ let grid = new w2grid(config.grid)
                 //      });
                 //  });
                  grid.render('#concbox')
-                 w2ui.grid.scrollIntoView(scrolpos);
+                 console.log(scrolpos)
+                 // w2ui.grid.scrollIntoView(scrolpos);
+                  setTimeout(function (d) {
+                     grid.scrollIntoView(scrolpos);
+                 },100)
 
                             // var endTime = performance.now()
                             // console.log(`Call to render conc took ${endTime - startTime} milliseconds`)
@@ -1903,6 +1976,7 @@ let grid = new w2grid(config.grid)
 
                  for (var i = 1; i < concobj.length-1; i++) {
                      var conc = concobj[i]['text'].split("|")
+                     conc[3] = conc.slice(3).join('');
                      var fn = conc[0].split("/")
                      fn=fn[fn.length -1];
                      concobj[i]['filename'] = fn;
@@ -1926,6 +2000,7 @@ let grid = new w2grid(config.grid)
 
                  for (var i = 1; i < concobj.length-1; i++){
                      conc = concobj[i]['text'].split("|")
+                     conc[3] = conc.slice(3).join('');
                      var fn = concobj[i]['filename']
                      if (!removedViaDelete.has(fn+i)) {
                          leftctx += conc[3].slice(0, 130) + '<br> ';
@@ -2195,7 +2270,8 @@ let grid = new w2grid(config.grid)
 
              //metafacet
              function buildConcMetadata(){
-
+                 document.getElementById("metatextbox").innerHTML ="";
+                 removedatts = new Set();
                  json = "[";
                  for (let i = 1; i < concrdance.length ; i++) {
 
@@ -2240,6 +2316,9 @@ let grid = new w2grid(config.grid)
              var attrSelected ="Format";
              var removedKeys = new Set();
              var shouldSort = false;
+
+             var removedatts = new Set();
+
 
              //stores the reordered data so we can extraxt metadata assoiated with attribute keys
              var nested;
@@ -2322,7 +2401,6 @@ let grid = new w2grid(config.grid)
              var tooltip = d3.select("body").append("div").attr("class", "toolTip");
 
              function init() {
-
 
                  /////////////////////////////////////////////////////////////
                  ///////////////// Set-up SVG and wrappers ///////////////////
@@ -2465,7 +2543,7 @@ let grid = new w2grid(config.grid)
 
                  defs = metasvg.append("defs")
 
-                 //Create two separate gradients for the main and mini bar - just because it looks fun
+                 //Create two separate gradients for the main and mini bar
                  createGradient("gradient-rainbow-main", "60%");
                  createGradient("gradient-rainbow-mini", "13%");
 
@@ -2597,7 +2675,7 @@ let grid = new w2grid(config.grid)
                                    if(b.key === d.key)
                                        shouldRemove = false;
                                    var currentColor =  shouldRemove ?  "red":"url(#gradient-rainbow-main)" ;
-                                   var opacity =  shouldRemove ? 0.3 : 1.0;
+                                   var opacity =  shouldRemove ? 1.0 : 1.0;
                                    d3.select(this).style("fill", currentColor);
                                    d3.select(this).style("opacity", opacity);
                                    shouldRemove ? remove(b.key): add(b.key); ;
@@ -2617,9 +2695,9 @@ let grid = new w2grid(config.grid)
                                      }});
                                  };
                              });
-                             var colChoice = allRemoved ?   "orange" :"red";
+                             var colChoice = allRemoved ?   "url(#gradient-rainbow-main)" :"red";
                              var currentColor =  removed ? "url(#gradient-rainbow-main)" : colChoice;
-                             var opacity =  removed ? 1.0 : 0.3;
+                             var opacity =  allRemoved ? 1.0 : 1.0;
                              d3.select(this).style("fill", currentColor);
                              d3.select(this).style("opacity", opacity);
                              removed ? add(d.key) : remove(d.key);
@@ -2653,7 +2731,7 @@ let grid = new w2grid(config.grid)
                                 }});
                             };
                         });
-                        var colChoice = allRemoved ? "red" : "orange";
+                        var colChoice = allRemoved ? "red" : "url(#gradient-rainbow-main)";
                         var col = removed ? colChoice : "url(#gradient-rainbow-main)";
                         return col;
                     })
@@ -2666,7 +2744,7 @@ let grid = new w2grid(config.grid)
                                 } });
                             };
                         });
-                        var opacity =  removed ? 0.3 : 1.0;
+                        var opacity =  removed ? 1.0 : 1.0;
                         return opacity;
                     })
                     .attr("x", 0)
@@ -2850,6 +2928,13 @@ let grid = new w2grid(config.grid)
              }
 
              function remove(key){
+                 removedatts.add(key)
+                 var metatext = document.getElementById("metatextbox")
+                 var ihtml = "";
+                 for (const item of removedatts) {
+                    ihtml+= "\'"+item+"\' ";
+                 }
+                 metatext.innerHTML = ihtml;
                  nested.map(function(m) {
                      if (m.key === key) {
                          m.values.map(function (v) {
@@ -2898,26 +2983,23 @@ let grid = new w2grid(config.grid)
 
 
              function add(key){
+                removedatts.delete(key)
+                 var metatext = document.getElementById("metatextbox")
+                 var ihtml = "";
+                 for (const item of removedatts) {
+                    ihtml+= "\'"+item+"\' ";
+                 }
+                 metatext.innerHTML = ihtml;
                  nested.map(function(m) {
                      if (m.key === key) {
                          m.values.map(function (v) {
                              if (v.ID === "ignore") {
-                                 const collection = document.getElementsByClassName(v.Filename + ".xml");
-                                 for (let i = 0; i < collection.length; i++) {
-
-                                     collection[i].style.borderColor = "white";
-                                     collection[i].classList.remove("toremove");
-                                     removedKeys.delete(v.Filename + v.ID);
-                                     toberemovedViaMetafacet.delete(v.Filename+".xml");
-                                 }
-                             } else {
-                                 const collection = document.getElementsByClassName(v.Filename + ".xml" + v.ID);
-                                 for (let i = 0; i < collection.length; i++) {
-                                     collection[i].style.borderColor = "white";
-                                     collection[i].classList.remove("toremove");
+                                 removedKeys.delete(v.Filename + v.ID);
+                                 toberemovedViaMetafacet.delete(v.Filename+".xml");
+                             }
+                              else {
                                      removedKeys.delete(v.Filename  + v.ID);
                                      toberemovedViaMetafacet.delete(v.Filename+".xml" + v.ID);
-                                 }
                              }
                          });
                      }
@@ -2927,11 +3009,11 @@ let grid = new w2grid(config.grid)
              function wrap(text, width) {
                  text.each(function() {
                      var text = d3.select(this),
-                         words = text.text().split(/\s+/).reverse(),
+                         words = text.text().replaceAll("_"," ").split(/\s+/).reverse(),
                          word,
                          line = [],
                          lineNumber = 0,
-                         lineHeight = 1.1, // ems
+                         lineHeight = 1, // ems
                          y = text.attr("y"),
                          x = text.attr("x"),
                          dy = parseFloat(text.attr("dy")),
