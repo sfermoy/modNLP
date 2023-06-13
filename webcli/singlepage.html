@@ -162,6 +162,27 @@
              width:100% !important;
 
          }
+          .panel-resizable-horz1 {
+             resize: horizontal;
+             overflow: hidden;
+         }
+
+         .panel-resizable-horz1::-webkit-resizer {
+             background: lightsteelblue;
+             background-image: url(https://cdn-icons-png.flaticon.com/512/10025/10025081.png);
+
+             background-size: contain;
+
+             /*size does not work*/
+             display:block;
+             width: 150px !important;
+             height: 150px !important;
+         }
+         .panel-resizable-horz1 svg{
+             background: white;
+             width:100% !important;
+
+         }
 
 
          .resize {
@@ -312,36 +333,34 @@
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <div class="border rounded my-3 p-4">
-                <h3>Selection Tools</h3>
+            <div class="border rounded my-2 p-2">
+                <h4>Selection Tools</h4>
                 <div class="form-check form-switch" style="margin-left: 10px;">
                     <input class="form-check-input" type="checkbox" id="flexSwitchsubcorpus" onclick="subcorpusSwitch()">
                     <label class="form-check-label" for="flexSwitchsubcorpus">Activate/Deactivate Subcorpus Selection</label>
                 </div>
-                <br>
                 <button class="btn btn-secondary" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Corpus Selection
                 </button>
             </div>
-            <br><div class="border rounded my-3 p-4">
-                <h3>Analysis Tools</h3>
+            <div class="border rounded my-2 p-2">
+                <h4>Analysis Tools</h4>
                 <button class="btn btn-secondary" type="button" class="btn btn-primary" data-bs-toggle="modal" onclick="getFreqkList()" data-bs-target="#flistModal">
                     Frequency List
                 </button>
             </div>
-            <br>
-
-            <br><div class="border rounded my-3 p-4">
-                <h3>Save/Load Concordance</h3>
+            <div class="border rounded my-2 p-2">
+                <h4>Save/Load Concordance</h4>
                 <button class="btn btn-secondary" type="button" class="btn btn-primary"  onclick="dlConcordance()" >
                     Download Concordance
                 </button>
-                <br> <br>
-                <button class="btn btn-secondary" type="button" class="btn btn-primary"  onclick="loadConcordance()">
+                <div class="mt-2">
+                <button class="btn btn-secondary" type="button" class="btn btn-primary "  onclick="loadConcordance()">
                     Load Concordance
                 </button>
+                </div>
             </div>
-            <br>
+
             <!-- <h5 class="offcanvas-title" id="offcanvasExampleLabelsub">Components</h5>-->
         </div>
     </div>
@@ -395,7 +414,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="closeflist()" aria-label="Close"></button>
                 </div>
                 <div class="modal-body  overflow-scroll">
-                    <div id ="flistdiv" class="card card-body col ">
+                    <div id ="FLNUM" class="card-body col " style="height: 50px;"></div>
+                    <div id ="flistdiv" class="card card-body col " style="height: 600px;">
                         <div class="spinner-border text-primary" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
@@ -424,9 +444,9 @@
                                 <h1 class="mt-5">Extract Controls</h1>
                                 <div class="border rounded">
                                     <div class="form-outline" style="width: 22rem;">
-                                        <label class="form-label" for="extractnumber">Extract Size</label>
+                                        <label class="form-label" for="extractnumber">Extract Size (number of characters)</label>
                                         <div class="input-group">
-                                            <input value="300" type="number" max="600" id="extractnumber" class="form-control" />
+                                            <input value="300" type="number" max="1000" id="extractnumber" class="form-control" />
                                             <br>
                                             <button type="button" class="btn btn-primary mr-1" id="updateExtract" onclick="updateExtract()">Update</button>
                                         </div>
@@ -632,8 +652,8 @@
                                             <label class="form-check-label" for="flexSwitchStopword">Remove Stopwords</label>
                                         </div>
                                         <div class="border rounded">
-                                            <div id="slider-range" class="w-50 m-3"></div>
-                                            <input id="amount" class="w-50 m-3" type="text" />
+                                            <div id="slider-range" class="w-50 m-2 "></div>
+                                            <input id="amount" class="w-100 " type="text" />
                                         </div>
                                     </div>
                                 </div>
@@ -648,10 +668,10 @@
                         <!--    <p class="lead">Search word and display concordance</p>-->
 
                         <div class="draggable2 col container panel panel-default" style="clear:both" id="contact" role="tabpanel" aria-labelledby="contact-tab" >
-                            <div class="border rounded border rounded panel-body panel-resizable-horz">
+                            <div class="border rounded panel-body panel-resizable-horz1">
 
                                 <div class="border rounded row">
-                                    <a class="btn btn-secondary dropdown-toggle btn-xs d-block col" id="metabtn" data-bs-toggle="collapse" href="#collapseExamplemeta" role="button" aria-expanded="false" aria-controls="collapseExamplemeta">
+                                    <a class="btn btn-secondary dropdown-toggle btn-xs d-block" id="metabtn" data-bs-toggle="collapse" href="#collapseExamplemeta" role="button" aria-expanded="false" aria-controls="collapseExamplemeta">
 <!--                                    <a class="btn btn-secondary dropdown-toggle btn-xs d-block col" id="metabtn" data-bs-toggle="collapse"  role="button" aria-expanded="false" aria-controls="collapseExamplemeta">-->
                                         Metafacet Help
                                     </a>
@@ -660,41 +680,47 @@
 
                                 </div>
 
+·
 
+·
+
+·
                                 <div class="collapse" id="collapseExamplemeta">
                                     <div class="card card-body">
                                         <ul>
-                                            <li> Click on an attribute bar to outline related lines in the concordance window</li>
+                                            <li> Click once to select an attribute, click again to unselect it</li>
 
-                                            <li> Click again on a selected attribute to un-outline selected lines</li>
+                                            <li> Click Remove Selected to delete concordance lines associated with attribute</li>
 
-                                            <li> Ctrl + click is used to select everything except for clicked attribute bar</li>
+                                            <li> Shift+click on an attribute to select all others, click Remove Selected to delete all lines except those associated with the clicked attribute</li>
 
-                                            <li> Multiple attribute bars can be selected across the facets available via the dropdown</li>
-
-                                            <li> Click the "Remove Selected" button to remove all outlined concordance lines and recalculate the attribute bars</li>
+                                            <li> Use the dropdown to switch between attribute facets</li>
                                         </ul>
 <!--                                        <div id="legend2">-->
 <!--                                            <div class="legend2"> <p class="country-name"><span class="key-dot removed"></span>All Lines Removed</p> </div>-->
 <!--                                            <div class="legend2"> <p class="country-name"><span class="key-dot some"></span>Some Lines Removed</p> </div>-->
 <!--                                        </div>-->
-                                        <br>
 <!--                                        <button type="button" class="btn btn-primary btn-xs " id="metafacetRemove" onclick="hide()">Remove Selected</button>-->
-
-
 
                                     </div>
                                 </div>
                                 <div>
-                                <label for="metatextbox">Selected Attributes</label><textarea class="border rounded form-control text-wrap" id="metatextbox"  type="text"  style="height: 2rem;" readonly></textarea>
-                                <button type="button" class="btn btn-primary btn-xs " id="metafacetRemove" onclick="hide()">Remove Selected</button>
+                                <div class="container-fluid row">
+                                    <div class=" col">
+                                        <label for="metatextbox">Selected Attributes</label><textarea class="border rounded text-wrap w-100" id="metatextbox"  type="text"  style="font-size: 12px;overflow-y:scroll;resize: none; height: 30px" readonly></textarea>
+                                    </div>
+                                    <div class=" col">
+                                        <label for="metatextbox1">Removed Attributes</label><textarea class="border rounded text-wrap w-100" id="metatextbox1"  type="text"  style="font-size: 12px;overflow-y:scroll;resize: none;height: 30px" readonly></textarea>
+                                    </div>
                                 </div>
-                                <br><div id="chart2"></div>
+                                <button type="button" class="btn btn-primary btn-xs m-1 " id="metafacetRemove" onclick="hide()">Remove Selected</button>
+                                <div id="chart2"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+           </div>
 
 
 
@@ -719,9 +745,26 @@ let config = {
     }
 }
 
+let flistConfig = {
+    grid: {
+        name: 'grid1',
+        recordHeight : 20,
+        show: {
+            footer: false,
+            toolbar: true
+        },
+        columns: [
+            { field: 'rank', text: 'Rank', sortable: true, resizable: true },
+            { field: 'type', text: 'Type', sortable: true, resizable: true,  attr: 'align=left' },
+            { field: 'count', text: 'Count', sortable: true, resizable: true, attr: 'align=left' }
+        ]
+    }
+}
+
 
 // initialization
 let grid = new w2grid(config.grid)
+let grid1 = new w2grid(flistConfig.grid)
 
              const position = {x: 0, y: 0}
              // interact('.draggable1').draggable({
@@ -784,9 +827,33 @@ let grid = new w2grid(config.grid)
                }
              })
 
+interact('.panel-resizable-horz1')
+             .resizable({
+               edges: { top: false, left: true, bottom: false, right: true },
+               listeners: {
+                 move: function (event) {
+                   let { x, y } = event.target.dataset
+
+                   x = (parseFloat(x) || 0) + event.deltaRect.left
+                   y = (parseFloat(y) || 0) + event.deltaRect.top
+
+                   Object.assign(event.target.style, {
+                     width: `${event.rect.width}px`,
+                     height: `${event.rect.height}px`,
+                     transform: `translate(${x}px, ${y}px)`
+                   })
+
+                   Object.assign(event.target.dataset, { x, y })
+                 }
+               }
+             })
+
              $( document ).ready(function() {
                  $(".panel-resizable-horz").resizable({
                      handles: " e, s, w, se, sw"
+                 });
+                 $(".panel-resizable-horz1").resizable({
+                     handles: " e, w"
                  });
 
 
@@ -1207,6 +1274,7 @@ let grid = new w2grid(config.grid)
                  document.getElementById("dropdownMenu2").innerText = "Sort position 1";
                  document.getElementById("dropdownMenu3").innerText = "Sort position 2";
                  document.getElementById("dropdownMenu4").innerText = "Sort position 3";
+                 document.getElementById("metatextbox1").innerHTML = "";
 
                  fetchConcordance(value,selectvalue,markdowSelect)
              }
@@ -1269,49 +1337,47 @@ let grid = new w2grid(config.grid)
                      data = await response.text();
 
 
-                     var output = document.getElementById('flistdiv');
+                     // var output = document.getElementById('flistdiv');
                      var lines = data.split("\n")
-                     htmlstr = "<h3> Number of Tokens: </h3>"
-                     htmlstr += "<h3>"+lines[0].split("<sep/>")[2]+"</h3><br><br>"
-                     htmlstr +="<table class=\"table sortable\">" +
-                               "  <thead>" +
-                               "    <tr>" +
-                               "      <th scope=\"col\">Rank</th>" +
-                               "      <th scope=\"col\">Type</th>" +
-                               "      <th scope=\"col\">Count</th>" +
-                               "    </tr>" +
-                               "  </thead>" +
-                               "  <tbody>"
+                     htmlstr = "<h3> Number of Tokens: "
+                     htmlstr += lines[0].split("<sep/>")[2]+"</h3>>"
 
-                               for (let i = 2; i < lines.length ; i++) {
-                                   line = lines[i].toString();
-                                   linesplit = line.split("<sep/>")
-                                   htmlstr += "<tr><td>"+ linesplit[0] +"</td>"
-                                   htmlstr += "<td>"+ linesplit[1] +"</td>"
-                                   htmlstr += "<td>"+ linesplit[2] +"</td>"
-                                   htmlstr += "</tr>"
-                               }
-                     htmlstr += "</tbody></table>"
-                     output.innerHTML = htmlstr;
+                       for (let i = 2; i < lines.length ; i++) {
+
+
+                           line = lines[i].toString();
+                           linesplit = line.split("<sep/>")
+                           grid1.records.push({
+                                 recid: i-2,
+                                 rank: Number(linesplit[0]),
+                                 type: linesplit[1],
+                                 count: Number(linesplit[2])
+
+                             });
+                       }
+                     //htmlstr += "</tbody></table>"
+                     // output.innerHTML = htmlstr;
+                     grid1.render('#flistdiv');
+                     document.getElementById("FLNUM").innerHTML =htmlstr
                  }
                  catch (e) {
                      return e.message;
                  }
-                 $('th').click(function(){
-                        var table = $(this).parents('table').eq(0)
-                        var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
-                        this.asc = !this.asc
-                        if (!this.asc){rows = rows.reverse()}
-                        for (var i = 0; i < rows.length; i++){table.append(rows[i])}
-                    })
-
-                    function comparer(index) {
-                        return function(a, b) {
-                            var valA = getCellValue(a, index), valB = getCellValue(b, index)
-                            return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
-                        }
-                    }
-                    function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
+                 // $('th').click(function(){
+                 //        var table = $(this).parents('table').eq(0)
+                 //        var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+                 //        this.asc = !this.asc
+                 //        if (!this.asc){rows = rows.reverse()}
+                 //        for (var i = 0; i < rows.length; i++){table.append(rows[i])}
+                 //    })
+                 //
+                 //    function comparer(index) {
+                 //        return function(a, b) {
+                 //            var valA = getCellValue(a, index), valB = getCellValue(b, index)
+                 //            return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+                 //        }
+                 //    }
+                 //    function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
 
              }
 
@@ -1433,7 +1499,7 @@ let grid = new w2grid(config.grid)
                  let text0 = 'https://genealogies.mvm.ed.ac.uk'
                  let text1 =text0.concat(corpus).concat('/extractor?sgml=').concat(document.getElementById("markdownSelect").value).concat('&keyword=')
                  let text2 =text1.concat(currentKeyword.trim())
-                 let text3 ='&context='+document.getElementById("extractnumber").value+'&request=extract&filename='.concat(file.trim()).concat('&position=').concat(filePos)
+                 let text3 ='&context='+(document.getElementById("extractnumber").value/2)+'&request=extract&filename='.concat(file.trim()).concat('&position=').concat(filePos)
                  let text4 = text2.concat(text3)
 
                  try {
@@ -1451,7 +1517,7 @@ let grid = new w2grid(config.grid)
                  let text0 = 'https://genealogies.mvm.ed.ac.uk'
                  let text1 =text0.concat(document.getElementById("corpusSelect").value).concat('/extractor?sgml=').concat(document.getElementById("markdownSelect").value).concat('&keyword=')
                  let text2 =text1.concat(currentKeyword.trim())
-                 let text3 ='&context='+document.getElementById("extractnumber").value+'&request=extract&filename='.concat(filepath.trim()).concat('&position=').concat(extractpos)
+                 let text3 ='&context='+(document.getElementById("extractnumber").value/2)+'&request=extract&filename='.concat(filepath.trim()).concat('&position=').concat(extractpos)
                  let text4 = text2.concat(text3)
                  try {
                      let response = await fetch(text4,requestOptions)
@@ -1548,7 +1614,7 @@ let grid = new w2grid(config.grid)
                              outkey = splitKeyword;
                          }else if ( keyword.includes("+") ){
                              splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("/")[0];
-                             outkey = splitKeyword.replaceAll(/[.,\/#!$%\^&\*;?:\-{}\"\'=\>_`~\<()]/g, "");
+                             outkey = splitKeyword.replaceAll(/[.,\/#!$%\^&\*;?:\-{}\"\'=\>_`\‘\"~\<()]/g, "");
                          }
                          else{
                              splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("-")[0].split("/")[0];
@@ -1565,11 +1631,11 @@ let grid = new w2grid(config.grid)
                          lftWordtokens = lftWordtokens.filter(item => item);
                          if(lftWordtokens.length < 7){
                              for (let j = lftWordtokens.length; j < 7; j++) {
-                                 lftWordtokens.push("zzzz")
+                                 lftWordtokens.unshift("zzzz")
                              }
                          }
                          if(rightWordtokens.length < 7){
-                             for (let j = rightWordtokens.length; j < 7; j++) {
+                             for (let j = rightWordtokens.length+1; j < 7; j++) {
                                  rightWordtokens.push("zzzz")
                              }
                          }
@@ -1584,7 +1650,7 @@ let grid = new w2grid(config.grid)
                              var dontSkipright = 1;
 
                              if (j - 1 + rightincrement < rightWordtokens.length && !(rightWordtokens[j - 1 + rightincrement] ==='')) {
-                                 while (j - 1 + rightincrement < rightWordtokens.length && rightWordtokens[j - 1 + rightincrement].replaceAll(/[.,\/#!$%\^&\*;?“:\-{}\'=\>_`~\<()]/g, "").length === 0 ) {
+                                 while (j - 1 + rightincrement < rightWordtokens.length && rightWordtokens[j - 1 + rightincrement].replaceAll(/[.,\/#!$%\^&\*;?“:\-{}\'=\>_`\‘\"~\<()]/g, "").length === 0 ) {
                                      rightincrement += 1;
                                      if (j - 1 + rightincrement > rightWordtokens.length ) {
                                          dontSkipright = 0;
@@ -1593,7 +1659,7 @@ let grid = new w2grid(config.grid)
                                  }
                              }
                              if (lftWordtokens.length - j - leftincrement > 0) {
-                                 while (lftWordtokens.length - j - leftincrement > 0 && lftWordtokens[lftWordtokens.length - j - leftincrement].replaceAll(/[.,\/#!$%“\^&\*;?\':\-{}=_\>`~\<()]/g, "").length === 0 ) {
+                                 while (lftWordtokens.length - j - leftincrement > 0 && lftWordtokens[lftWordtokens.length - j - leftincrement].replaceAll(/[.,\/#!$%“\^&\*;?\':\-{}=_\>`\‘\"~\<()]/g, "").length === 0 ) {
                                      leftincrement += 1;
                                      if (lftWordtokens.length - j - leftincrement < 0) {
                                          dontSkipleft = 0;
@@ -1603,12 +1669,12 @@ let grid = new w2grid(config.grid)
                              }
                              if (dontSkipleft) {
                                  if (lftWordtokens.length - j - leftincrement >= 0) {
-                                     concobj[i]['left' + j] = lftWordtokens[lftWordtokens.length - j - leftincrement].replaceAll(/[.,\/#“!$%\^&\*;?:\-{}\'=_\>`~\<()]/g, "").trim().toLowerCase();
+                                     concobj[i]['left' + j] = lftWordtokens[lftWordtokens.length - j - leftincrement].replaceAll(/[.,\/#“!$%\^&\*;?:\-{}\‘\"=_\>`~\<()]/g, "").trim().toLowerCase();
                                  }
                              }
                              if (dontSkipright) {
                                  if (j - 1 + rightincrement < rightWordtokens.length && !(rightWordtokens[j - 1 + rightincrement] === '')) {
-                                     concobj[i]['right' + j] = rightWordtokens[j - 1 + rightincrement].replaceAll(/[.,\/#!“$%\^&\*;?:\-{}\'=_\>`~\<()]/g, "").trim().toLowerCase();
+                                     concobj[i]['right' + j] = rightWordtokens[j - 1 + rightincrement].replaceAll(/[.,\/#!“$%\^&\*;?:\-{}\'=_\>`\‘\"~\<()]/g, "").trim().toLowerCase();
                                  }
                              }
                          }
@@ -1647,14 +1713,13 @@ let grid = new w2grid(config.grid)
                      var color ='white'// i % 2===0 ? "lightgrey": "grey";
                      conc = concobj[i]['text'].split("|")
                      conc[3] = conc.slice(3).join('');
-
                      var outkey =""
                      if(keyword.includes("*") || keyword.includes("-") || keyword.match(/\".+?\"/g) ){
                          splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("/")[0];
                          outkey = splitKeyword;
                      }else if ( keyword.includes("+") ){
                          splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("/")[0];
-                         outkey = splitKeyword.replaceAll(/[.,\/#!$%\^&\*;?”\":\-{}\'=\>_`~\<()]/g, "");;
+                         outkey = splitKeyword.replaceAll(/[.,\/#!$%\^&\*;?”\":\-{}\'=\>_`\‘\"~\<()]/g, "");;
                      }
                      else{
                          splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("-")[0].split("/")[0];
@@ -1674,7 +1739,7 @@ let grid = new w2grid(config.grid)
                          var dontSkipleft = 1;
                          var dontSkipright = 1;
                          if (j - 1 + rightincrement < rightWordtokens.length && !(rightWordtokens[j - 1 + rightincrement] ==='')) {
-                             while (j - 1 + rightincrement < rightWordtokens.length && rightWordtokens[j - 1 + rightincrement].replaceAll(/[.,\/#!“$”%\^&\*;?\':\-{}=_\>`~\<()]/g, "").length === 0 ) {
+                             while (j - 1 + rightincrement < rightWordtokens.length && rightWordtokens[j - 1 + rightincrement].replaceAll(/[.,\/#!“$”%\^&\*;?\':\-{}=_\>`\‘\"~\<()]/g, "").length === 0 ) {
                                  rightincrement += 1;
                                  if (j - 1 + rightincrement > rightWordtokens.length ) {
                                      dontSkipright = 0;
@@ -1683,7 +1748,7 @@ let grid = new w2grid(config.grid)
                              }
                          }
                          if (lftWordtokens.length - j - leftincrement > 0) {
-                             while (lftWordtokens.length - j - leftincrement > 0 && lftWordtokens[lftWordtokens.length - j - leftincrement].replaceAll(/[.,\/#“!$%\^&\*;?\':\-{}”=_\>`~\<()]/g, "").length === 0 ) {
+                             while (lftWordtokens.length - j - leftincrement > 0 && lftWordtokens[lftWordtokens.length - j - leftincrement].replaceAll(/[.,\/#“!$%\^&\*;?\':\-{}”=_\>`\‘\"~\<()]/g, "").length === 0 ) {
                                  leftincrement += 1;
                                  if (lftWordtokens.length - j - leftincrement < 0) {
                                      dontSkipleft = 0;
@@ -1695,7 +1760,7 @@ let grid = new w2grid(config.grid)
                              if (lftWordtokens.length - j - leftincrement >= 0) {
                                  if(keyword.includes("+") && ( lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase() === (keyword.split("+")[0]) ) ){
                                      if("left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "")===Mosaicword){
-                                          lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:purple\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
+                                          lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:purple\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`\‘\"~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
                                           if( firstpos === false){
                                                scrolpos = i ;
                                                firstpos = true;
@@ -1703,12 +1768,12 @@ let grid = new w2grid(config.grid)
                                           lineshighlight = true;
                                      }else{
                                          if(sort1pos ===('left'+j) ){
-                                             lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:red\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
+                                             lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:red\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`\‘\"~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
                                          }
                                          if(sort2pos ===('left'+j) )
-                                             lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:#ffc107\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
+                                             lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:#ffc107\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`\‘\"~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
                                          if(sort3pos ===('left'+j) ) {
-                                             lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:#198754\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
+                                             lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:#198754\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`\‘\"~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
                                          }else{
                                              lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
                                          }
@@ -1717,7 +1782,7 @@ let grid = new w2grid(config.grid)
 
                                  }else{
                                      if("left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "")===Mosaicword){
-                                         lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:purple\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
+                                         lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:purple\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`\‘\"~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
                                            if( firstpos === false){
                                                scrolpos = i ;
                                                firstpos = true;
@@ -1726,11 +1791,11 @@ let grid = new w2grid(config.grid)
 
                                      }else{
                                           if(sort1pos ===('left'+j) )
-                                              lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:red\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
+                                              lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:red\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`\‘\"~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
                                           if(sort2pos ===('left'+j) )
-                                               lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:#ffc107\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
+                                               lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:#ffc107\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`\‘\"~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
                                           if(sort3pos ===('left'+j) ) {
-                                              lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:#198754\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
+                                              lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:#198754\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`\‘\"~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
                                           }else{
                                               lftWordtokens[lftWordtokens.length - j - leftincrement] = "<span class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") + "'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span>"
                                           }
@@ -1740,20 +1805,20 @@ let grid = new w2grid(config.grid)
                          }
                          if (dontSkipright) {
                              if (j - 1 + rightincrement < rightWordtokens.length && !(rightWordtokens[j - 1 + rightincrement] === '')) {
-                                 if("right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") === Mosaicword){
+                                 if("right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`\‘\"~\<()]/g, "") === Mosaicword){
                                       if( firstpos === false){
                                                scrolpos = i ;
                                                firstpos = true;
                                           }
                                      lineshighlight = true
-                                     rightWordtokens[j - 1 + rightincrement] = " <b><span style=\"color:purple\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span></b>";
+                                     rightWordtokens[j - 1 + rightincrement] = " <b><span style=\"color:purple\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`\‘\"~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span></b>";
                                  }else{
                                      if(sort1pos ===('right'+j) )
-                                         rightWordtokens[j - 1 + rightincrement] = "<b><span style=\"color:red\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span></b>";
+                                         rightWordtokens[j - 1 + rightincrement] = "<b><span style=\"color:red\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`\‘\"~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span></b>";
                                      if(sort2pos ===('right'+j) )
-                                         rightWordtokens[j - 1 + rightincrement] = "<b><span style=\"color:#ffc107\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span></b>";
+                                         rightWordtokens[j - 1 + rightincrement] = "<b><span style=\"color:#ffc107\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`\‘\"~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span></b>";
                                      if(sort3pos ===('right'+j) ) {
-                                         rightWordtokens[j - 1 + rightincrement] = "<b><span style=\"color:#198754\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span></b>";
+                                         rightWordtokens[j - 1 + rightincrement] = "<b><span style=\"color:#198754\" class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`\‘\"~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span></b>";
                                      }else{
                                          rightWordtokens[j - 1 + rightincrement] = "<span class='right" + j + " right" + j + rightWordtokens[j - 1 + rightincrement].toLowerCase().replaceAll(/[.,\/#!$%\^&”\*;“?\':\-{}=_\>`~\<()]/g, "") + "'>" + rightWordtokens[j - 1 + rightincrement] + "</span>";
                                      }
@@ -1767,10 +1832,10 @@ let grid = new w2grid(config.grid)
                      leftSideHtml = leftSideHtml.replaceAll('&amp;','&').replaceAll('<visual>','').replaceAll('<caption>', '').replaceAll('image','image id =img'.concat(i)).replaceAll('uri','src');
                      keywordctxhtml = outkey;
 
-                     if(lftWordtokens.length === 1 || lftWordtokens.length === 0){
+                     if(lftWordtokens.length === 0){
                          leftSideHtml = "<div style='color: transparent;'>*</div>"
                      }
-                     if(rightWordtokens.length === 1 || rightWordtokens.length === 0){
+                     if(rightWordtokens.length === 0){
                          rightSideHtml = "<div style='color: transparent;'>*</div>"
                      }
                      if(keywordctxhtml.length === 0){
@@ -1940,14 +2005,13 @@ let grid = new w2grid(config.grid)
                 //      });
                 //  });
                  grid.render('#concbox')
-                 console.log(scrolpos)
                  // w2ui.grid.scrollIntoView(scrolpos);
                   setTimeout(function (d) {
                      grid.scrollIntoView(scrolpos);
                  },100)
 
-                            // var endTime = performance.now()
-                            // console.log(`Call to render conc took ${endTime - startTime} milliseconds`)
+                // var endTime = performance.now()
+                // console.log(`Call to render conc took ${endTime - startTime} milliseconds`)
              }
 
              <!-- Mosaic -->
@@ -2007,7 +2071,7 @@ let grid = new w2grid(config.grid)
                          keywordctx += conc[3].slice(130, (130 + keyword.length)) + '<br> ';
                          rightctx += conc[3].slice((130 + keyword.length), conc[3].length) + '<br> ';
 
-                         var lftWords = conc[3].slice(0, 130).replaceAll(/[.,\/#!“$”%\^&\*;?\':\-{}=_\>`~\<()]/g, "").replaceAll(/\s{2,}/g, " ");
+                         var lftWords = conc[3].slice(0, 130).replaceAll(/[.,\/#!“$”%\^&\*;?\':\-{}=_\>`\‘\"~\<()]/g, "").replaceAll(/\s{2,}/g, " ");
                          lftWords = lftWords.toLowerCase().trim();
                          lftWords = lftWords.split(' ');
                          // console.log(lftWords.slice(-7))
@@ -2034,7 +2098,7 @@ let grid = new w2grid(config.grid)
 
                          }
 
-                         var rightWords = conc[3].slice((130+ splitKeyword.length),conc[3].length).replaceAll(/[.,\/#!“$”%\^&\*;?\':\-{}=_\>`~\<()]/g, "")
+                         var rightWords = conc[3].slice((130+ splitKeyword.length),conc[3].length).replaceAll(/[.,\/#!“$”%\^&\*;?\':\-{}\‘\"=_\>`~\<()]/g, "")
                          //var rightWords = conc[3].slice((130 + keyword.length), conc[3].length).replaceAll(/[.,\/#!\<\>$%\^&\*;:{}?=_`~()]/g, "")
                          rightWords = rightWords.replaceAll(/\s{2,}/g, " ");
                          rightWords = rightWords.toLowerCase()
@@ -2053,7 +2117,7 @@ let grid = new w2grid(config.grid)
                          }
 
 
-                         var val = splitKeyword.toLowerCase().replaceAll(/[.,\/#!“$%\^&\*;?\':\-{}=_\>`\"~\<(”)]/g, "")
+                         var val = splitKeyword.toLowerCase().replaceAll(/[.,\/#!“$%\^&\*;?\':\-{}=_\>`\‘\"~\<(”)]/g, "")
                          if (countWords[4][val] === undefined) {
                              countWords[4][val] = 1;
                          } else {
@@ -2271,7 +2335,9 @@ let grid = new w2grid(config.grid)
              //metafacet
              function buildConcMetadata(){
                  document.getElementById("metatextbox").innerHTML ="";
-                 removedatts = new Set();
+
+                 toRemoveAtts = new Set();
+
                  json = "[";
                  for (let i = 1; i < concrdance.length ; i++) {
 
@@ -2317,7 +2383,8 @@ let grid = new w2grid(config.grid)
              var removedKeys = new Set();
              var shouldSort = false;
 
-             var removedatts = new Set();
+             var toRemoveAtts = new Set();
+             var removeAtts = new Set();
 
 
              //stores the reordered data so we can extraxt metadata assoiated with attribute keys
@@ -2406,6 +2473,7 @@ let grid = new w2grid(config.grid)
                  ///////////////// Set-up SVG and wrappers ///////////////////
                  /////////////////////////////////////////////////////////////
 
+
                  selector.selectAll("option")
                          .data(elements)
                          .enter().append("option")
@@ -2415,6 +2483,8 @@ let grid = new w2grid(config.grid)
                          .text(function(d){
                              return d;
                          });
+
+
 
 
                  var mainGroup = metasvg.append("g")
@@ -2640,12 +2710,12 @@ let grid = new w2grid(config.grid)
                  }
 
 
-                 var dragBehavior = d3.behavior.drag()
-                                      .on("dragstart", dragStart)
-                                      .on("drag", dragMove)
-                                      .on("dragend", dragEnd);
-
-                 metasvg.call(dragBehavior);
+                 // var dragBehavior = d3.behavior.drag()
+                 //                      .on("dragstart", dragStart)
+                 //                      .on("drag", dragMove)
+                 //                      .on("dragend", dragEnd);
+                 //
+                 // metasvg.call(dragBehavior);
 
              }//init
 
@@ -2668,7 +2738,7 @@ let grid = new w2grid(config.grid)
                      .attr("height", main_yScale.rangeBand())
                      .on("click", function(d) {
 
-                         if ( d3.event.ctrlKey) {
+                         if ( d3.event.shiftKey) {
                              d3.select(".mainGroup").selectAll(".bar")
                                .each(function(b) {
                                    var shouldRemove = true;
@@ -2705,6 +2775,7 @@ let grid = new w2grid(config.grid)
                          }
                          //dataProcess(currentData,currentKeyword);
                          // vec.redisplay();
+                         refreshBars()
                      })
                      .on("mousemove", function(d){
                          tooltip
@@ -2716,12 +2787,14 @@ let grid = new w2grid(config.grid)
                      })
     		     .on("mouseout", function(d){ tooltip.style("display", "none");});;
 
-                 //ENTER
-                 bar.enter().append("rect")
+                 // ENTER
+                 function refreshBars() {
+                     bar.enter().append("rect")
                     .attr("class", "bar")
                     .style("fill",function(d) {
                         var removed = false;
                         var allRemoved = true;
+                        var numremoved = 0;
                         nested.map(function(m) {
                             if(m.key === d.key){
                                 m.values.map(function(v) { if(removedKeys.has(v.Filename+v.ID)){
@@ -2733,6 +2806,8 @@ let grid = new w2grid(config.grid)
                         });
                         var colChoice = allRemoved ? "red" : "url(#gradient-rainbow-main)";
                         var col = removed ? colChoice : "url(#gradient-rainbow-main)";
+                        if(toRemoveAtts.has(d.key))
+                            col ="red"
                         return col;
                     })
                     .style("opacity", function(d) {
@@ -2751,11 +2826,50 @@ let grid = new w2grid(config.grid)
                     .attr("width", function(d) { return main_xScale(d.values); })
                     .attr("y", function(d,i) { return main_yScale(d.key); })
                     .attr("height", main_yScale.rangeBand());
+                 }
+                refreshBars()
+
+
+                 // //ENTER
+                 // bar.enter().append("rect")
+                 //    .attr("class", "bar")
+                 //    .style("fill",function(d) {
+                 //        var removed = false;
+                 //        var allRemoved = true;
+                 //        var numremoved = 0;
+                 //        nested.map(function(m) {
+                 //            if(m.key === d.key){
+                 //                m.values.map(function(v) { if(removedKeys.has(v.Filename+v.ID)){
+                 //                    removed = true;
+                 //                }else{
+                 //                    allRemoved = false;
+                 //                }});
+                 //            };
+                 //        });
+                 //        var colChoice = allRemoved ? "pink" : "pink";
+                 //        var col = removed ? colChoice : "pink";
+                 //        return col;
+                 //    })
+                 //    .style("opacity", function(d) {
+                 //        var removed = false;
+                 //        nested.map(function(m) {
+                 //            if(m.key === d.key){
+                 //                m.values.map(function(v) { if(removedKeys.has(v.Filename+v.ID)){
+                 //                    removed = true;
+                 //                } });
+                 //            };
+                 //        });
+                 //        var opacity =  removed ? 1.0 : 1.0;
+                 //        return opacity;
+                 //    })
+                 //    .attr("x", 0)
+                 //    .attr("width", function(d) { return main_xScale(d.values); })
+                 //    .attr("y", function(d) { return main_xScale(d.values); })
+                 //    .attr("height", main_yScale.rangeBand());
 
                  //EXIT
                  bar.exit()
                     .remove();
-
              }//update
 
              /////////////////////////////////////////////////////////////
@@ -2905,17 +3019,34 @@ let grid = new w2grid(config.grid)
                  var tempdata = elements[0];
                  elements[0]= elements[1];
                  elements[1] = tempdata;
+                 document.getElementById("dropdown").value =elements[0];
 
                  dataProcessMetafacet(elements[0]);
              }
 
-             function dataProcessMetafacet(attribute){
-
+             function dataProcessMetafacet(attribute) {
                  metasvg.selectAll("*").remove();
+                 var temp = initdata
+                 if (attribute === "Organisation"){
+                     for (const dp in initdata) {
+                         orgs =initdata[dp]["Organisation"].split(" ")
+                            if(orgs.length > 1){
+                                //console.log(orgs)
+                                temp[dp]["Organisation"] = orgs[0]
+                                //console.log(temp[dp])
+                                for (let i = 1; i < orgs.length ; i++) {
+                                    var tempItem = temp[dp]
+                                    tempItem["Organisation"] = orgs[i];
+                                    temp.push(tempItem);
+                                }
+                         }
+                     }
+                 }
+
                  var nameCount = d3.nest()
-                                   .key(function(d) { return d[attribute]; })
+                                   .key(function(d) { return d[attribute] })
                                    .rollup(function(v) { return v.length; })
-                                   .entries(initdata);
+                                   .entries(temp);
 
                  if(shouldSort)
                      nameCount= nameCount.sort(function(a, b){ return d3.descending(a.values, b.values); });
@@ -2928,10 +3059,10 @@ let grid = new w2grid(config.grid)
              }
 
              function remove(key){
-                 removedatts.add(key)
+                 toRemoveAtts.add(key)
                  var metatext = document.getElementById("metatextbox")
                  var ihtml = "";
-                 for (const item of removedatts) {
+                 for (const item of toRemoveAtts) {
                     ihtml+= "\'"+item+"\' ";
                  }
                  metatext.innerHTML = ihtml;
@@ -2963,6 +3094,8 @@ let grid = new w2grid(config.grid)
                          });
                      }
                  });
+                 //
+
              }
 
              function hide() {
@@ -2973,9 +3106,21 @@ let grid = new w2grid(config.grid)
                 toberemovedViaMetafacet.forEach(element => {
                     removedViaMetafacet.add(element);
                 });
+                let a = Array.from(toRemoveAtts);
+                 for (const item of a) {
+                     removeAtts.add(item)
+                 }
+                 var metatext1 = document.getElementById("metatextbox1")
+                 var ihtml = "";
+                 for (const item of removeAtts) {
+                    ihtml+= "\'"+item+"\' ";
+                 }
+                 metatext1.innerHTML = ihtml;
+
                  dataProcess(currentData,currentKeyword);
                  dataProcessMosaic(currentData,currentKeyword);
                  buildConcMetadata();
+
                  toberemovedViaMetafacet = new Set();
                  removedKeys = new Set();
              }
@@ -2983,10 +3128,10 @@ let grid = new w2grid(config.grid)
 
 
              function add(key){
-                removedatts.delete(key)
+                toRemoveAtts.delete(key)
                  var metatext = document.getElementById("metatextbox")
                  var ihtml = "";
-                 for (const item of removedatts) {
+                 for (const item of toRemoveAtts) {
                     ihtml+= "\'"+item+"\' ";
                  }
                  metatext.innerHTML = ihtml;
@@ -3004,6 +3149,10 @@ let grid = new w2grid(config.grid)
                          });
                      }
                  });
+                 for (const item of toRemoveAtts) {
+                    remove(item)
+                  }
+                 refreshBars();
              }
 
              function wrap(text, width) {
@@ -3021,7 +3170,7 @@ let grid = new w2grid(config.grid)
                      while (word = words.pop()) {
                          line.push(word);
                          tspan.text(line.join(" "));
-                         if (tspan.node().getComputedTextLength() > width) {
+                         if (tspan.node().getComputedTextLength() > main_width/2.8) {
                              line.pop();
                              tspan.text(line.join(" "));
                              line = [word];
