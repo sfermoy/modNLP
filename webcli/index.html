@@ -2758,11 +2758,18 @@ interact('.panel-resizable-horz1')
                              var allRemoved = true;
                              nested.map(function(m) {
                                  if(m.key === d.key){
-                                     m.values.map(function(v) { if(removedKeys.has(v.Filename+v.ID)){
-                                         removed = true;
-                                     }else{
-                                         allRemoved = false;
-                                     }});
+                                     m.values.map(function(v) {
+                                         if(removedKeys.has(v.Filename+v.ID)){
+                                            removed = true;
+                                            for (var key in v) {
+                                                if(toRemoveAtts.has(v[key]) )
+                                                    toRemoveAtts.delete(v[key])
+                                            }
+                                        }else{
+                                             allRemoved = false;
+                                         }
+                                         
+                                     });
                                  };
                              });
                              var colChoice = allRemoved ?   "url(#gradient-rainbow-main)" :"red";
@@ -2773,7 +2780,7 @@ interact('.panel-resizable-horz1')
                              removed ? add(d.key) : remove(d.key);
                              dataProcess(currentData,currentKeyword);
                          }
-                         //dataProcess(currentData,currentKeyword);
+                         // dataProcess(currentData,currentKeyword);
                          // vec.redisplay();
                          refreshBars()
                      })
@@ -2829,44 +2836,6 @@ interact('.panel-resizable-horz1')
                  }
                 refreshBars()
 
-
-                 // //ENTER
-                 // bar.enter().append("rect")
-                 //    .attr("class", "bar")
-                 //    .style("fill",function(d) {
-                 //        var removed = false;
-                 //        var allRemoved = true;
-                 //        var numremoved = 0;
-                 //        nested.map(function(m) {
-                 //            if(m.key === d.key){
-                 //                m.values.map(function(v) { if(removedKeys.has(v.Filename+v.ID)){
-                 //                    removed = true;
-                 //                }else{
-                 //                    allRemoved = false;
-                 //                }});
-                 //            };
-                 //        });
-                 //        var colChoice = allRemoved ? "pink" : "pink";
-                 //        var col = removed ? colChoice : "pink";
-                 //        return col;
-                 //    })
-                 //    .style("opacity", function(d) {
-                 //        var removed = false;
-                 //        nested.map(function(m) {
-                 //            if(m.key === d.key){
-                 //                m.values.map(function(v) { if(removedKeys.has(v.Filename+v.ID)){
-                 //                    removed = true;
-                 //                } });
-                 //            };
-                 //        });
-                 //        var opacity =  removed ? 1.0 : 1.0;
-                 //        return opacity;
-                 //    })
-                 //    .attr("x", 0)
-                 //    .attr("width", function(d) { return main_xScale(d.values); })
-                 //    .attr("y", function(d) { return main_xScale(d.values); })
-                 //    .attr("height", main_yScale.rangeBand());
-
                  //EXIT
                  bar.exit()
                     .remove();
@@ -2899,7 +2868,6 @@ interact('.panel-resizable-horz1')
                    .call(main_yAxis)
                    .selectAll(".y.axis text")
                    .call(wrap, main_yScale.rangeBand());
-
 
                  /////////////////////////////////////////////////////////////
                  /////////////// Update the mini bar fills ///////////////////
@@ -2994,21 +2962,7 @@ interact('.panel-resizable-horz1')
                      .attr("stop-color", function(d) { return d; });
              }//createGradient
 
-             //Function to generate random strings of 5 letters - for the demo only
-             function makeWord() {
-                 var possible_UC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                 var text = possible_UC.charAt(Math.floor(Math.random() * possible_UC.length));
-
-                 var possible_LC = "abcdefghijklmnopqrstuvwxyz";
-
-                 for( var i=0; i < 5; i++ )
-                     text += possible_LC.charAt(Math.floor(Math.random() * possible_LC.length));
-
-                 return text;
-             }//makeWord
-
              function loadData(arr){
-
                  initdata = arr;
                  // get data length == number of concordance lines
                  numConclines = initdata.length;
@@ -3026,6 +2980,8 @@ interact('.panel-resizable-horz1')
 
              function dataProcessMetafacet(attribute) {
                  metasvg.selectAll("*").remove();
+
+
                  var temp = initdata
                  if (attribute === "Organisation"){
                      for (const dp in initdata) {
@@ -3053,6 +3009,7 @@ interact('.panel-resizable-horz1')
                  nested = d3.nest()
                             .key(function(d) { return d[attribute]; })
                             .entries(initdata);
+                 console.log(nested)
 
                  data = nameCount;
                  init();
@@ -3069,40 +3026,23 @@ interact('.panel-resizable-horz1')
                  nested.map(function(m) {
                      if (m.key === key) {
                          m.values.map(function (v) {
-                             if (v.ID === "ignore") {
-                                 // const collection = Array.from(document.getElementsByClassName(v.Filename + ".xml"));
-                                 // collection.forEach(element => {
-                                 //     element.style.border = "thin solid red";
-                                 //     element.style.borderColor = "red";
-                                 //     element.classList.add("toremove");
-                                      removedKeys.add(v.Filename + v.ID );
-                                     //removedViaMetafacet.add(v.Filename+".xml");
-                                     toberemovedViaMetafacet.add(v.Filename+".xml");
 
-                                 // })
+                             if (v.ID === "ignore") {
+
+                                 removedKeys.add(v.Filename + v.ID );
+                                 toberemovedViaMetafacet.add(v.Filename+".xml");
+
                              } else {
-                                 // const collection = Array.from(document.getElementsByClassName(v.Filename + ".xml" + v.ID));
-                                 // collection.forEach(element => {
-                                 //      element.style.border = "thin solid red";
-                                 //      element.style.borderColor = "red";
-                                 //      element.classList.add("toremove");
-                                      removedKeys.add(v.Filename + v.ID);
-                                      //removedViaMetafacet.add(v.Filename+".xml"+ v.ID);
-                                      toberemovedViaMetafacet.add(v.Filename+".xml"+ v.ID);
-                                 // });
+                                  removedKeys.add(v.Filename + v.ID);
+                                  toberemovedViaMetafacet.add(v.Filename+".xml"+ v.ID);
                              }
                          });
                      }
                  });
-                 //
 
              }
 
              function hide() {
-                 // const collection = document.getElementsByClassName("toremove");
-                 // for (let i = 0; i < collection.length; i++) {
-                 //     collection[i].style.display = "none";
-                 // }
                 toberemovedViaMetafacet.forEach(element => {
                     removedViaMetafacet.add(element);
                 });
@@ -3128,7 +3068,7 @@ interact('.panel-resizable-horz1')
 
 
              function add(key){
-                toRemoveAtts.delete(key)
+                 toRemoveAtts.delete(key)
                  var metatext = document.getElementById("metatextbox")
                  var ihtml = "";
                  for (const item of toRemoveAtts) {
@@ -3149,10 +3089,7 @@ interact('.panel-resizable-horz1')
                          });
                      }
                  });
-                 for (const item of toRemoveAtts) {
-                    remove(item)
-                  }
-                 refreshBars();
+
              }
 
              function wrap(text, width) {
