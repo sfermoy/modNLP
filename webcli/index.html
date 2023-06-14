@@ -680,11 +680,6 @@
 
                                 </div>
 
-·
-
-·
-
-·
                                 <div class="collapse" id="collapseExamplemeta">
                                     <div class="card card-body">
                                         <ul>
@@ -991,7 +986,7 @@ interact('.panel-resizable-horz1')
                  var el = document.getElementById("corpusSelect");
                  var text = el.options[el.selectedIndex].innerHTML;
                  document.getElementById("corpLabel").innerHTML = text;
-                 headersfetched =false;
+                 headersfetched = false;
                  console.log("corpus changed");
              }
 
@@ -1239,9 +1234,10 @@ interact('.panel-resizable-horz1')
                  currentKeyword = keyword;
                  dataProcess(data,keyword);
                  dataProcessMosaic(data,keyword);
+                 console.log(headersfetched)
                  if(!headersfetched) {
                      console.log("getting headers "+corpus)
-                     fetchheader(corpus);
+                      await fetchheader(corpus);
                  }
                  else{
                      buildConcMetadata();
@@ -1639,6 +1635,9 @@ interact('.panel-resizable-horz1')
                                  rightWordtokens.push("zzzz")
                              }
                          }
+                         if(section== "na"){
+                             section ="s1";
+                         }
 
                          if ((removedViaMetafacet.has(fn) || removedViaMetafacet.has(fn + section))) {
                              indextoremove.push(i);
@@ -1866,6 +1865,8 @@ interact('.panel-resizable-horz1')
                              }
 
                          }else{
+                             if(section === "na")
+                                 section ="s1"
                               if( (toberemovedViaMetafacet.has(fn) || toberemovedViaMetafacet.has(fn + section) )){
                                   grid.records.push({
                                      recid: i,
@@ -2337,6 +2338,7 @@ interact('.panel-resizable-horz1')
                  document.getElementById("metatextbox").innerHTML ="";
 
                  toRemoveAtts = new Set();
+                 attrSelected ="Format";
 
                  json = "[";
                  for (let i = 1; i < concrdance.length ; i++) {
@@ -2379,13 +2381,13 @@ interact('.panel-resizable-horz1')
                  dropdown,
                  initdata;
 
-             var attrSelected ="Format";
+
              var removedKeys = new Set();
              var shouldSort = false;
 
              var toRemoveAtts = new Set();
              var removeAtts = new Set();
-
+             var attrSelected ="Format";
 
              //stores the reordered data so we can extraxt metadata assoiated with attribute keys
              var nested;
@@ -2467,13 +2469,15 @@ interact('.panel-resizable-horz1')
 
              var tooltip = d3.select("body").append("div").attr("class", "toolTip");
 
+
+
              function init() {
 
                  /////////////////////////////////////////////////////////////
                  ///////////////// Set-up SVG and wrappers ///////////////////
                  /////////////////////////////////////////////////////////////
 
-
+                 selector.selectAll("option").remove();
                  selector.selectAll("option")
                          .data(elements)
                          .enter().append("option")
@@ -2483,9 +2487,7 @@ interact('.panel-resizable-horz1')
                          .text(function(d){
                              return d;
                          });
-
-
-
+                 selector.property('value', attrSelected);
 
                  var mainGroup = metasvg.append("g")
                                         .attr("class","mainGroupWrapper")
@@ -2731,8 +2733,7 @@ interact('.panel-resizable-horz1')
                              .data(data, function(d) { return d.key; });
 
                  //UPDATE
-                 bar
-                     .attr("x", 0)
+                 bar.attr("x", 0)
                      .attr("width", function(d) { return main_xScale(d.values); })
                      .attr("y", function(d,i) { return main_yScale(d.key); })
                      .attr("height", main_yScale.rangeBand())
@@ -2764,11 +2765,11 @@ interact('.panel-resizable-horz1')
                                             for (var key in v) {
                                                 if(toRemoveAtts.has(v[key]) )
                                                     toRemoveAtts.delete(v[key])
+                                                    console.log(v[key])
                                             }
                                         }else{
                                              allRemoved = false;
                                          }
-                                         
                                      });
                                  };
                              });
@@ -2973,7 +2974,7 @@ interact('.panel-resizable-horz1')
                  var tempdata = elements[0];
                  elements[0]= elements[1];
                  elements[1] = tempdata;
-                 document.getElementById("dropdown").value =elements[0];
+                 document.getElementById("dropdown").value = elements[0];
 
                  dataProcessMetafacet(elements[0]);
              }
@@ -3009,7 +3010,6 @@ interact('.panel-resizable-horz1')
                  nested = d3.nest()
                             .key(function(d) { return d[attribute]; })
                             .entries(initdata);
-                 console.log(nested)
 
                  data = nameCount;
                  init();
@@ -3017,6 +3017,8 @@ interact('.panel-resizable-horz1')
 
              function remove(key){
                  toRemoveAtts.add(key)
+                 console.log("remove function")
+                 console.log(key)
                  var metatext = document.getElementById("metatextbox")
                  var ihtml = "";
                  for (const item of toRemoveAtts) {
@@ -3033,6 +3035,8 @@ interact('.panel-resizable-horz1')
                                  toberemovedViaMetafacet.add(v.Filename+".xml");
 
                              } else {
+                                  console.log("here")
+                                  console.log(v.Filename+".xml"+ v.ID)
                                   removedKeys.add(v.Filename + v.ID);
                                   toberemovedViaMetafacet.add(v.Filename+".xml"+ v.ID);
                              }
