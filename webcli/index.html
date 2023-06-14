@@ -1234,7 +1234,6 @@ interact('.panel-resizable-horz1')
                  currentKeyword = keyword;
                  dataProcess(data,keyword);
                  dataProcessMosaic(data,keyword);
-                 console.log(headersfetched)
                  if(!headersfetched) {
                      console.log("getting headers "+corpus)
                       await fetchheader(corpus);
@@ -2765,7 +2764,6 @@ interact('.panel-resizable-horz1')
                                             for (var key in v) {
                                                 if(toRemoveAtts.has(v[key]) )
                                                     toRemoveAtts.delete(v[key])
-                                                    console.log(v[key])
                                             }
                                         }else{
                                              allRemoved = false;
@@ -3017,8 +3015,6 @@ interact('.panel-resizable-horz1')
 
              function remove(key){
                  toRemoveAtts.add(key)
-                 console.log("remove function")
-                 console.log(key)
                  var metatext = document.getElementById("metatextbox")
                  var ihtml = "";
                  for (const item of toRemoveAtts) {
@@ -3035,8 +3031,6 @@ interact('.panel-resizable-horz1')
                                  toberemovedViaMetafacet.add(v.Filename+".xml");
 
                              } else {
-                                  console.log("here")
-                                  console.log(v.Filename+".xml"+ v.ID)
                                   removedKeys.add(v.Filename + v.ID);
                                   toberemovedViaMetafacet.add(v.Filename+".xml"+ v.ID);
                              }
