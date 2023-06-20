@@ -746,11 +746,12 @@ let flistConfig = {
         recordHeight : 20,
         show: {
             footer: false,
-            toolbar: true
+            toolbar: true,
+            lineNumbers: true
         },
         columns: [
             { field: 'rank', text: 'Rank', sortable: true, resizable: true },
-            { field: 'type', text: 'Type', sortable: true, resizable: true,  attr: 'align=left' },
+            { field: 'type', text: 'Type', sortable: true,  attr: 'align=left', editable: { type: 'text' } },
             { field: 'count', text: 'Count', sortable: true, resizable: true, attr: 'align=left' }
         ]
     }
@@ -965,13 +966,13 @@ interact('.panel-resizable-horz1')
                      subcorpenabled = true;
                  }
              }
+
              function ProcessMosaicClick(pos,wordpos){
                  highlightWord(pos, wordpos);
                  sort(pos);
              }
 
              function checkboxClick(){
-
                  updateTextBox();
              }
 
@@ -1012,12 +1013,12 @@ interact('.panel-resizable-horz1')
                      for (const selitm of varselecteditems) {
                          if (txtstring === "" || txtstring === "and " || txtstring === "or ") {
                              if (cbox.checked){
-                                 txtstring += "(not ($s/" + attElement + "=%27" + selitm.trim().replaceAll(" ","_") + "%27";
+                                 txtstring += "(not ($s/" + attElement + "=%27" + selitm.trim().replaceAll(" ","%20").replaceAll(".","%2E").replaceAll("_","%5F") + "%27";
                              }else{
-                                 txtstring += "($s/" + attElement + "=%27" + selitm.trim().replaceAll(" ","_") + "%27";
+                                 txtstring += "($s/" + attElement + "=%27" + selitm.trim().replaceAll(" ","%20").replaceAll(".","%2E").replaceAll("_","%5F") + "%27";
                              }
                          } else {
-                             txtstring += " or $s/" + attElement + "=%27" + selitm.trim().replaceAll(" ","_") + "%27";
+                             txtstring += " or $s/" + attElement + "=%27" + selitm.trim().replaceAll(" ","%20").replaceAll(".","%2E").replaceAll("_","%5F") + "%27";
                          }
                      }
                      if (varselecteditems.length > 0) {
@@ -1175,8 +1176,19 @@ interact('.panel-resizable-horz1')
                  form.insertAdjacentHTML( 'beforeend',selectHtml.replaceAll("theclass",selector).replaceAll("titleText",title))
                  try {
                      let response = await fetch(text4,requestOptions)
-                     attoption = (await response.text()).replaceAll("_"," ");
+                     attoption = (await response.text());
                      attoption = attoption.split(',');
+                     for (let i = 0; i <attoption.length ; i++) {
+                         let att = attoption[i];
+                         if(att.charAt(0) ==="_"){
+                             att = att.replace("_", "");
+                         }
+                         if(att.charAt(att.length-1) ==="_"){
+                             att = att.substring(0, att.length-1);
+                         }
+                         attoption[i] = att;
+                     }
+
                  }
                  catch (e) {
                      return e.message;
@@ -1328,6 +1340,7 @@ interact('.panel-resizable-horz1')
                      text4 = text4.concat("&xquerywhere=" + document.getElementById("supcorptextbox").value)
                  }
                  try {
+                     grid1.clear()
                      let response = await fetch(text4,requestOptions)
                      data = await response.text();
 
@@ -1342,10 +1355,12 @@ interact('.panel-resizable-horz1')
 
                            line = lines[i].toString();
                            linesplit = line.split("<sep/>")
+
+                           console.log(linesplit[1])
                            grid1.records.push({
                                  recid: i-2,
                                  rank: Number(linesplit[0]),
-                                 type: linesplit[1],
+                                 type: String(linesplit[1]),
                                  count: Number(linesplit[2])
 
                              });
@@ -1358,21 +1373,6 @@ interact('.panel-resizable-horz1')
                  catch (e) {
                      return e.message;
                  }
-                 // $('th').click(function(){
-                 //        var table = $(this).parents('table').eq(0)
-                 //        var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
-                 //        this.asc = !this.asc
-                 //        if (!this.asc){rows = rows.reverse()}
-                 //        for (var i = 0; i < rows.length; i++){table.append(rows[i])}
-                 //    })
-                 //
-                 //    function comparer(index) {
-                 //        return function(a, b) {
-                 //            var valA = getCellValue(a, index), valB = getCellValue(b, index)
-                 //            return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
-                 //        }
-                 //    }
-                 //    function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
 
              }
 
@@ -2963,12 +2963,12 @@ interact('.panel-resizable-horz1')
 
              function loadData(arr){
                  initdata = arr;
-                 // get data length == number of concordance lines
                  numConclines = initdata.length;
                  removedKeys = new Set();
-                 // vec.updateVector();
                  data = initdata[0];
                  elements = Object.keys(data);
+                 elements.splice(elements.indexOf('ID'), 1);
+                 elements.splice(elements.indexOf('Title'), 1);
                  var tempdata = elements[0];
                  elements[0]= elements[1];
                  elements[1] = tempdata;
@@ -2979,8 +2979,6 @@ interact('.panel-resizable-horz1')
 
              function dataProcessMetafacet(attribute) {
                  metasvg.selectAll("*").remove();
-
-
                  var temp = initdata
                  if (attribute === "Organisation"){
                      for (const dp in initdata) {
@@ -2999,7 +2997,10 @@ interact('.panel-resizable-horz1')
                  }
 
                  var nameCount = d3.nest()
-                                   .key(function(d) { return d[attribute] })
+                                   .key(function(d) {
+                                   if(d[attribute].trim() === ""){
+                                       return "N/A"
+                                   }else{ return d[attribute] }})
                                    .rollup(function(v) { return v.length; })
                                    .entries(temp);
 
