@@ -1346,24 +1346,25 @@ interact('.panel-resizable-horz1')
 
 
                      // var output = document.getElementById('flistdiv');
-                     var lines = data.split("\n")
+
+                     var lines = data.replaceAll(".", '').replaceAll(",", '').replaceAll("%", '').split("\n");
                      htmlstr = "<h3> Number of Tokens: "
                      htmlstr += lines[0].split("<sep/>")[2]+"</h3>>"
-
+                     let rid =0
                        for (let i = 2; i < lines.length ; i++) {
-
-
                            line = lines[i].toString();
                            linesplit = line.split("<sep/>")
+                           isnum = /^\d+$/.test(linesplit[1])
+                           if (!isnum) {
+                               grid1.records.push({
+                                   recid: rid,
+                                   rank: Number(linesplit[0]),
+                                   type: linesplit[1],
+                                   count: Number(linesplit[2])
 
-                           console.log(linesplit[1])
-                           grid1.records.push({
-                                 recid: i-2,
-                                 rank: Number(linesplit[0]),
-                                 type: String(linesplit[1]),
-                                 count: Number(linesplit[2])
-
-                             });
+                               });
+                               rid+=1;
+                           }
                        }
                      //htmlstr += "</tbody></table>"
                      // output.innerHTML = htmlstr;
