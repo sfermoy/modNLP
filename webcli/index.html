@@ -335,11 +335,11 @@
         <div class="offcanvas-body">
             <div class="border rounded my-2 p-2">
                 <h4>Selection Tools</h4>
-                <div class="form-check form-switch" style="margin-left: 10px;">
-                    <input class="form-check-input" type="checkbox" id="flexSwitchsubcorpus" onclick="subcorpusSwitch()">
-                    <label class="form-check-label" for="flexSwitchsubcorpus">Activate/Deactivate Subcorpus Selection</label>
-                </div>
-                <button class="btn btn-secondary" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+<!--                <div class="form-check form-switch" style="margin-left: 10px;">-->
+<!--&lt;!&ndash;                    <input class="form-check-input" type="checkbox" id="flexSwitchsubcorpus" onclick="subcorpusSwitch()">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <label class="form-check-label" for="flexSwitchsubcorpus">Activate/Deactivate Subcorpus Selection</label>&ndash;&gt;-->
+<!--                </div>-->
+                <button class="btn btn-secondary" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="activateSubcorpus()">
                     Corpus Selection
                 </button>
             </div>
@@ -398,8 +398,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="activateSubcorpus()">Save changes</button>
+                    <button type="button" class="btn btn-secondary"  onclick="clearSubcorpus()">Clear</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save Selection</button>
+
                 </div>
             </div>
         </div>
@@ -958,7 +959,6 @@ interact('.panel-resizable-horz1')
 
              function subcorpusSwitch()
              {
-                 var checkbox = document.getElementById('flexSwitchsubcorpus');
                  if (checkbox.checked != true)
                  {
                      subcorpenabled = false;
@@ -977,8 +977,17 @@ interact('.panel-resizable-horz1')
              }
 
              function activateSubcorpus(){
-                 $("#flexSwitchsubcorpus").prop('checked', true);
                  subcorpenabled = true;
+             }
+
+
+             function clearSubcorpus(){
+                 document.getElementById("supcorptextbox").value = "";
+                 let corp = document.getElementById("corpusSelect").value;
+                 fetchSubcorpusAttributesd(corp)
+                 var el = document.getElementById("corpusSelect");
+                 var text = el.options[el.selectedIndex].innerHTML;
+                 document.getElementById("corpLabel").innerHTML = text;
              }
 
              function corpChanged(){
@@ -1336,7 +1345,7 @@ interact('.panel-resizable-horz1')
                  let text1 =text0.concat(document.getElementById("corpusSelect").value).concat('/freqlist//')
                  let text2 =text1.concat("?casesensitive=FALSE&maxlistsize=0&request=freqlist&skipfirst=0")
                  let text4 = text2
-                 if(subcorpenabled) {
+                 if(subcorpenabled && document.getElementById("supcorptextbox").value != "" ) {
                      text4 = text4.concat("&xquerywhere=" + document.getElementById("supcorptextbox").value)
                  }
                  try {
@@ -2990,9 +2999,7 @@ interact('.panel-resizable-horz1')
                      for (const dp in initdata) {
                          orgs =initdata[dp]["Organisation"].split(" ")
                             if(orgs.length > 1){
-                                //console.log(orgs)
                                 temp[dp]["Organisation"] = orgs[0]
-                                //console.log(temp[dp])
                                 for (let i = 1; i < orgs.length ; i++) {
                                     var tempItem = temp[dp]
                                     tempItem["Organisation"] = orgs[i];
