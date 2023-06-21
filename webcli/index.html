@@ -2758,7 +2758,7 @@ interact('.panel-resizable-horz1')
                              var removed = false;
                              var allRemoved = true;
                              nested.map(function(m) {
-                                 if(m.key === d.key){
+                                 if(m.key === d.key || (d.key === "N/A" && m.key.trim() === "")){
                                      m.values.map(function(v) {
                                          if(removedKeys.has(v.Filename+v.ID)){
                                             removed = true;
@@ -2777,7 +2777,12 @@ interact('.panel-resizable-horz1')
                              var opacity =  allRemoved ? 1.0 : 1.0;
                              d3.select(this).style("fill", currentColor);
                              d3.select(this).style("opacity", opacity);
-                             removed ? add(d.key) : remove(d.key);
+                             if(d.key === "N/A"){
+                                 removed ? add("") : remove("");
+                             }else{
+                                removed ? add(d.key) : remove(d.key);
+                             }
+
                              dataProcess(currentData,currentKeyword);
                          }
                          // dataProcess(currentData,currentKeyword);
@@ -3020,7 +3025,11 @@ interact('.panel-resizable-horz1')
                  var metatext = document.getElementById("metatextbox")
                  var ihtml = "";
                  for (const item of toRemoveAtts) {
-                    ihtml+= "\'"+item+"\' ";
+                    if(item === ""){
+                         ihtml+= "\'"+"N/A"+"\' ";
+                     }else{
+                         ihtml+= "\'"+item+"\' ";
+                     }
                  }
                  metatext.innerHTML = ihtml;
                  nested.map(function(m) {
@@ -3053,7 +3062,12 @@ interact('.panel-resizable-horz1')
                  var metatext1 = document.getElementById("metatextbox1")
                  var ihtml = "";
                  for (const item of removeAtts) {
-                    ihtml+= "\'"+item+"\' ";
+                     if(item === ""){
+                         ihtml+= "\'"+"N/A"+"\' ";
+                     }else{
+                         ihtml+= "\'"+item+"\' ";
+                     }
+
                  }
                  metatext1.innerHTML = ihtml;
 
