@@ -336,8 +336,7 @@
             <div class="border rounded my-2 p-2">
                 <h4>Selection Tools</h4>
 <!--                <div class="form-check form-switch" style="margin-left: 10px;">-->
-<!--&lt;!&ndash;                    <input class="form-check-input" type="checkbox" id="flexSwitchsubcorpus" onclick="subcorpusSwitch()">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <label class="form-check-label" for="flexSwitchsubcorpus">Activate/Deactivate Subcorpus Selection</label>&ndash;&gt;-->
+
 <!--                </div>-->
                 <button class="btn btn-secondary" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="activateSubcorpus()">
                     Corpus Selection
@@ -359,6 +358,11 @@
                     Load Concordance
                 </button>
                 </div>
+            </div>
+            <div class="border rounded my-2 p-2">
+                <h4>Corpus Settings</h4>
+                <input class="form-check-input" type="checkbox" id="checkCase">
+                <label class="form-check-label" for="checkCase">Case/diacritic sensitive</label>
             </div>
 
             <!-- <h5 class="offcanvas-title" id="offcanvasExampleLabelsub">Components</h5>-->
@@ -435,35 +439,27 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
+                    <h3 class="mt-5">Extract Controls</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="card card-body col">
 
-                        <div class="col fade show" id="extract" role="tabpanel" aria-labelledby="home-tab">
-                            <div class="container">
-                                <h1 class="mt-5">Extract Controls</h1>
+                </div>
+                <div class="modal-body card card-body col">
+
                                 <div class="border rounded">
                                     <div class="form-outline" style="width: 22rem;">
-                                        <label class="form-label" for="extractnumber">Extract Size (number of characters)</label>
-                                        <div class="input-group">
+                                        <label class="form-label m-1" for="extractnumber">Extract Size (number of characters)</label>
+                                        <div class="input-group m-1">
                                             <input value="300" type="number" max="1000" id="extractnumber" class="form-control" />
-                                            <br>
                                             <button type="button" class="btn btn-primary mr-1" id="updateExtract" onclick="updateExtract()">Update</button>
                                         </div>
-                                        <br>
                                     </div>
                                 </div>
 
                                 <div  class="border rounded">
-                                    <br>
                                     <p id="extractDiv" class="text-center">Extract will display here. Please select a line in the concordance view.</p>
-
                                 </div>
-                            </div>
-                        </div>
 
-                    </div>
+
                 </div>
                 <div class="modal-footer">
                 </div>
@@ -478,17 +474,16 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
+                                                    <h3 class="mt-5">Metadata View</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="card card-body col">
                         <div class="col fade show" id="metadata" role="tabpanel" aria-labelledby="home-tab">
                             <div class="container">
-                                <h1 class="mt-5">Metadata View</h1>
-                                <div  class="border rounded">
-                                    <br>
+
                                     <p id="metadatadiv" class="text-left">Metadata will display here. Please select a line in the concordance view.</p>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -1218,7 +1213,11 @@ interact('.panel-resizable-horz1')
                  let text0 = 'https://genealogies.mvm.ed.ac.uk'
                  let text1 =text0.concat(corpus).concat('/concordancer?sgml=').concat(markdowSelect).concat('&keyword=')
                  let text2 =text1.concat(keyword.replaceAll("+","%2b"))
+                 var checkbox = document.getElementById('checkCase');
                  let text3 ='&case=insensitive&context=130&request=concord'
+                 if (checkbox.checked != false) {
+                     text3 ='&case=sensitive&context=130&request=concord'
+                 }
                  let text4 = text2.concat(text3)
 
                  if(subcorpenabled && document.getElementById("supcorptextbox").value != "" ) {
@@ -1611,7 +1610,7 @@ interact('.panel-resizable-horz1')
                  }else {
                      for (var i = 1; i < concobj.length - 1; i++) {
                          conc = concobj[i]['text'].split("|")
-                         conc[3] = conc.slice(3).join('');
+                         conc[3] = conc.slice(3).join('|');
 
                          var outkey =""
                          if(keyword.includes("*") || keyword.includes("-") || keyword.match(/\".+?\"/g) ){
@@ -1688,7 +1687,7 @@ interact('.panel-resizable-horz1')
                          }
 
                          conc = concobj[i]['text'].split("|")
-                         conc[3] = conc.slice(3).join('');
+                         conc[3] = conc.slice(3).join('|');
                          concobj[i]['filename'] = fn;
                          concobj[i]['keyword'] = splitKeyword;
                      }
@@ -1720,14 +1719,14 @@ interact('.panel-resizable-horz1')
 
                      var color ='white'// i % 2===0 ? "lightgrey": "grey";
                      conc = concobj[i]['text'].split("|")
-                     conc[3] = conc.slice(3).join('');
+                     conc[3] = conc.slice(3).join('|');
                      var outkey =""
                      if(keyword.includes("*") || keyword.includes("-") || keyword.match(/\".+?\"/g) ){
                          splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("/")[0];
                          outkey = splitKeyword;
                      }else if ( keyword.includes("+") ){
                          splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("/")[0];
-                         outkey = splitKeyword.replaceAll(/[.,\/#!$%\^&\*;?”\":\-{}\'=\>_`\‘\"~\<()]/g, "");;
+                         outkey = splitKeyword.replaceAll(/[.,\/#!$%\^&\*;?”\":\-{}\'=\>_`\‘\"~\<()]/g, "");
                      }
                      else{
                          splitKeyword = conc[3].slice(130 , conc[3].length).trim().split(' ')[0].split("-")[0].split("/")[0];
@@ -1766,7 +1765,7 @@ interact('.panel-resizable-horz1')
                          }
                          if (dontSkipleft) {
                              if (lftWordtokens.length - j - leftincrement >= 0) {
-                                 if(keyword.includes("+") && ( lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase() === (keyword.split("+")[0]) ) ){
+                                 if(keyword.includes("+") && ( lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "") === (keyword.split("+")[0]) ) ){
                                      if("left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`~\<()]/g, "")===Mosaicword){
                                           lftWordtokens[lftWordtokens.length - j - leftincrement] = "<b><span style=\"color:purple\" class='left" + j + " left" + j + lftWordtokens[lftWordtokens.length - j - leftincrement].toLowerCase().replaceAll(/[.,\/#!$%\^“&\*;?\':\-{}=_\>`\‘\"~\<()]/g, "") + " kwhilight'>" + lftWordtokens[lftWordtokens.length - j - leftincrement] + "</span></b>"
                                           if( firstpos === false){
@@ -2050,7 +2049,7 @@ interact('.panel-resizable-horz1')
 
                  for (var i = 1; i < concobj.length-1; i++) {
                      var conc = concobj[i]['text'].split("|")
-                     conc[3] = conc.slice(3).join('');
+                     conc[3] = conc.slice(3).join('|');
                      var fn = conc[0].split("/")
                      fn=fn[fn.length -1];
                      concobj[i]['filename'] = fn;
@@ -2074,7 +2073,7 @@ interact('.panel-resizable-horz1')
 
                  for (var i = 1; i < concobj.length-1; i++){
                      conc = concobj[i]['text'].split("|")
-                     conc[3] = conc.slice(3).join('');
+                     conc[3] = conc.slice(3).join('|');
                      var fn = concobj[i]['filename']
                      if (!removedViaDelete.has(fn+i)) {
                          leftctx += conc[3].slice(0, 130) + '<br> ';
