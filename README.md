@@ -1,4 +1,12 @@
 ## MODNLP: Modular Suite of NLP Tools for Corpus Aanalysis
+modnlp aims to provide a modular architecture and tools for natural language processing written (mainly) in Java.
+It provides an API and tools for (inverted) indexing, storage and retrieval of large amounts of text, with (XML-based) handling of meta-data,
+tools for text categorisation, including, functionality for XML parsing, term set reduction (and basic keyword extraction), probabilistic classifier induction, sample classification tools, and evaluation modules, a suite of corpus management, curation and distributed access tools.
+
+If you use the tool please consider referencing it using the following article:
+
+Luz, S., & Sheehan, S. (2020). Methods and visualization tools for the analysis of medical, political and scientific concepts in Genealogies of Knowledge. Palgrave Communications, 6(1), 1-20.
+
 
 The modnlp suite is distributed under the GNU General Public
 License. See COPYING (in the distribution tar archives for details).
@@ -39,7 +47,4 @@ pre-configured for GoK corpus.
     
     - 0.2.1: stable teccli 0.8.6, idx 0.8.5, tecser 0.1.4 releases.
     
-
-
--- S. Luz (luzs@acm.org)
 
