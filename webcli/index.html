@@ -449,7 +449,7 @@
                                     <div class="form-outline" style="width: 22rem;">
                                         <label class="form-label m-1" for="extractnumber">Extract Size (number of characters)</label>
                                         <div class="input-group m-1">
-                                            <input value="300" type="number" max="1000" id="extractnumber" class="form-control" />
+                                            <input value="300" type="number" max="1000"  step="50" id="extractnumber" class="form-control" />
                                             <button type="button" class="btn btn-primary mr-1" id="updateExtract" onclick="updateExtract()">Update</button>
                                         </div>
                                     </div>
@@ -2074,8 +2074,12 @@ interact('.panel-resizable-horz1')
                  for (var i = 1; i < concobj.length-1; i++){
                      conc = concobj[i]['text'].split("|")
                      conc[3] = conc.slice(3).join('|');
+                     var section = conc[2];
+                         if(section== "na"){
+                             section ="s1";
+                         }
                      var fn = concobj[i]['filename']
-                     if (!removedViaDelete.has(fn+i)) {
+                     if (!removedViaDelete.has(fn+i) && !(removedViaMetafacet.has(fn) || removedViaMetafacet.has(fn + section))) {
                          leftctx += conc[3].slice(0, 130) + '<br> ';
                          keywordctx += conc[3].slice(130, (130 + keyword.length)) + '<br> ';
                          rightctx += conc[3].slice((130 + keyword.length), conc[3].length) + '<br> ';
